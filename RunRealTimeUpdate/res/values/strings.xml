@@ -4,6 +4,11 @@
     <string name="app_name">RunRealTimeUpdate</string>
     <string name="action_settings">Settings</string>
     <string name="str_title_main">速報アプリ</string>
+    <string name="str_title_raceentry">大会登録</string>
+    <string name="str_msg_inputurl">URL入力</string>
+    <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
     <string name="str_btn_entry">新規大会登録</string>
+    <string name="str_btn_decide">決定</string>
+    <string name="str_btn_back">戻る</string>
 
 </resources>
