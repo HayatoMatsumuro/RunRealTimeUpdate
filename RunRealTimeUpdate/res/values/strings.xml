@@ -3,6 +3,7 @@
 
     <string name="app_name">RunRealTimeUpdate</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="str_title_main">速報アプリ</string>
+    <string name="str_btn_entry">新規大会登録</string>
 
 </resources>
