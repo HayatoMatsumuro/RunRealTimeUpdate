@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class RaceEntryActivity extends Activity {
 	
@@ -25,5 +26,10 @@ public class RaceEntryActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+        
+        // URL入力エディットボックス
+        EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
+        urlEdit.setText(R.string.str_txt_defaulturl);
+        urlEdit.setSelection(urlEdit.getText().length());
 	}
 }
