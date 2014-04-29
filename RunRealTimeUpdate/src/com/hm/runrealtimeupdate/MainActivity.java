@@ -2,6 +2,7 @@ package com.hm.runrealtimeupdate;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +23,9 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO ‘å‰ï“o˜^‰æ–Ê‚É‘JˆÚ
+				// ‘å‰ï“o˜^‰æ–Ê‘JˆÚ
+				Intent intent = new Intent(MainActivity.this, RaceEntryActivity.class);
+				startActivity(intent);
 			}
 		});
     }
