@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate;
+ï»¿package com.hm.runrealtimeupdate;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -15,15 +15,15 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        // ‘å‰ï“o˜^ƒ{ƒ^ƒ“
-        // TODO: ‘å‰ï“o˜^”‚ª5ˆÈã‚Ìê‡‚ÍA”ñ•\¦
+        // å¤§ä¼šç™»éŒ²ãƒœã‚¿ãƒ³
+        // TODO: å¤§ä¼šç™»éŒ²æ•°ãŒ5ä»¥ä¸Šã®å ´åˆã¯ã€éè¡¨ç¤º
         
         Button entryBtn = (Button)findViewById(R.id.id_main_btn_entry);
         entryBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// ‘å‰ï“o˜^‰æ–Ê‘JˆÚ
+				// å¤§ä¼šç™»éŒ²ç”»é¢é·ç§»
 				Intent intent = new Intent(MainActivity.this, RaceEntryActivity.class);
 				startActivity(intent);
 			}

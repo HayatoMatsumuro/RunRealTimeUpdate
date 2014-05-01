@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate.logic.parser;
+ï»¿package com.hm.runrealtimeupdate.logic.parser;
 
 import java.io.IOException;
 
@@ -8,14 +8,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 /**
- * ƒ‰ƒ“ƒi[ƒYƒAƒbƒvƒf[ƒg‚©‚çî•ñ‚ğæ“¾
+ * ãƒ©ãƒ³ãƒŠãƒ¼ã‚ºã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‹ã‚‰æƒ…å ±ã‚’å–å¾—
  * @author Hayato Matsumuro
  *
  */
 public class RunnersUpdateParser {
 
 	/**
-	 * ‘å‰ïî•ñ‚ğHttp‚Åæ“¾
+	 * å¤§ä¼šæƒ…å ±ã‚’Httpã§å–å¾—
 	 * @param url URL
 	 * @return
 	 */
@@ -29,18 +29,18 @@ public class RunnersUpdateParser {
 				throw new ParserException("URL Error.");
 			}
 			
-			// ƒ^ƒCƒgƒ‹ƒuƒƒbƒNæ“¾
+			// ã‚¿ã‚¤ãƒˆãƒ«ãƒ–ãƒ­ãƒƒã‚¯å–å¾—
 			Element titleBlockElement = doc.select("div#titleBlock").get(0);
 			
 			if( titleBlockElement == null ){
 				throw new ParserException("Page Error.");
 			}
 			
-			// ƒ^ƒCƒgƒ‹æ“¾
+			// ã‚¿ã‚¤ãƒˆãƒ«å–å¾—
 			Elements h2Elements = titleBlockElement.getElementsByTag("h2");
 			String title = h2Elements.get(0).text();
 			
-			// ŠJÃ“úAŠJÃ’næ“¾
+			// é–‹å‚¬æ—¥ã€é–‹å‚¬åœ°å–å¾—
 			Elements ddElements = titleBlockElement.getElementsByTag("dd");
 			String date = ddElements.get(0).text();
 			String location = ddElements.get(1).text();

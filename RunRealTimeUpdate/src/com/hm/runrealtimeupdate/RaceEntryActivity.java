@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate;
+ï»¿package com.hm.runrealtimeupdate;
 
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RaceInfo;
@@ -23,24 +23,24 @@ public class RaceEntryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raceentry);
         
-        // –ß‚éƒ{ƒ^ƒ“
+        // æˆ»ã‚‹ãƒœã‚¿ãƒ³
         Button backBtn = (Button)findViewById(R.id.id_raceentry_btn_back);
         backBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// ‘å‰ï“o˜^‰æ–Ê‘JˆÚ
+				// å¤§ä¼šç™»éŒ²ç”»é¢é·ç§»
 				Intent intent = new Intent(RaceEntryActivity.this, MainActivity.class);
 				startActivity(intent);
 			}
 		});
         
-        // URL“ü—ÍƒGƒfƒBƒbƒgƒ{ƒbƒNƒX
+        // URLå…¥åŠ›ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒœãƒƒã‚¯ã‚¹
         EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
         urlEdit.setText(R.string.str_txt_defaulturl);
         urlEdit.setSelection(urlEdit.getText().length());
         
-        // Œˆ’èƒ{ƒ^ƒ“
+        // æ±ºå®šãƒœã‚¿ãƒ³
         Button decideBtn = (Button)findViewById(R.id.id_raceentry_btn_decide);
         decideBtn.setOnClickListener(new OnClickListener() {
 			
@@ -49,7 +49,7 @@ public class RaceEntryActivity extends Activity {
 				
 				String[] params = { null, null };
 				
-				// URL“ü—ÍƒGƒfƒBƒbƒgƒ{ƒbƒNƒX‚©‚ç“ü—Í’læ“¾
+				// URLå…¥åŠ›ã‚¨ãƒ‡ã‚£ãƒƒãƒˆãƒœãƒƒã‚¯ã‚¹ã‹ã‚‰å…¥åŠ›å€¤å–å¾—
 				EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
 				params[0] = urlEdit.getText().toString();
 				
@@ -77,7 +77,7 @@ public class RaceEntryActivity extends Activity {
 		protected void onPostExecute(RaceInfo result)
 		{
 			if( result == null ){
-				Toast.makeText(RaceEntryActivity.this, "‘å‰ïî•ñæ“¾‚É¸”s‚µ‚Ü‚µ‚½B", Toast.LENGTH_SHORT).show();
+				Toast.makeText(RaceEntryActivity.this, "å¤§ä¼šæƒ…å ±å–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", Toast.LENGTH_SHORT).show();
 			}
 			
 			AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
@@ -89,7 +89,7 @@ public class RaceEntryActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int width)
 				{
-					// TODO ©“®¶¬‚³‚ê‚½ƒƒ\ƒbƒhEƒXƒ^ƒu
+					// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ãƒ»ã‚¹ã‚¿ãƒ–
 					
 				}
 			});
@@ -98,7 +98,7 @@ public class RaceEntryActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO ©“®¶¬‚³‚ê‚½ƒƒ\ƒbƒhEƒXƒ^ƒu
+					// TODO è‡ªå‹•ç”Ÿæˆã•ã‚ŒãŸãƒ¡ã‚½ãƒƒãƒ‰ãƒ»ã‚¹ã‚¿ãƒ–
 					
 				}
 				
