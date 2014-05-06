@@ -26,6 +26,10 @@
            android:name="com.hm.runrealtimeupdate.RaceEntryActivity"
            android:label="@string/app_name"  >
         </activity>
+        <provider
+            android:exported="false"
+            android:name="com.hm.runrealtimeupdate.logic.sqlite.RaceProvider"
+            android:authorities="com.hm.runrealtimeupdate.logic.sqlite.raceprovider" />
     </application>
 
 </manifest>

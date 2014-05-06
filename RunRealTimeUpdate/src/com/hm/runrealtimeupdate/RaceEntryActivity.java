@@ -1,5 +1,6 @@
 ﻿package com.hm.runrealtimeupdate;
 
+import com.hm.runrealtimeupdate.logic.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnersUpdateParser;
@@ -59,14 +60,36 @@ public class RaceEntryActivity extends Activity {
 		});
 	}
 	
+	/**
+	 * 大会情報取得タスク
+	 * @author Hayato Matsumuro
+	 *
+	 */
 	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
 
+		/**
+		 * サイトのURL
+		 */
+		private String m_Url;
+		
+		/**
+		 * 大会情報
+		 */
+		private RaceInfo m_RaceInfo;
+		
+		/**
+		 * 
+		 * @param String params[0] 大会のURL
+		 * @return
+		 */
 		@Override
 		protected RaceInfo doInBackground(String... params) {
 			
 			RaceInfo raceInfo = null;
 			try {
 				raceInfo = RunnersUpdateParser.getRaceInfo(params[0]);
+				m_Url = params[0];
+				m_RaceInfo = raceInfo;
 				
 			} catch (ParserException e) {
 				e.printStackTrace();
@@ -89,9 +112,23 @@ public class RaceEntryActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int width)
 				{
-					// TODO 自動生成されたメソッド・スタブ
+					// TODO:二重登録の確認
 					
+					// RaceId取得
+					String raceId = getRaceIdByUrl(m_Url);
+					
+					// データベース登録
+					DataBaseAccess.entryRace(
+							getContentResolver(),
+							raceId,
+							m_RaceInfo.getName(),
+							m_RaceInfo.getDate(),
+							m_RaceInfo.getLocation());
+					
+					Toast.makeText(RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
 				}
+				
+				
 			});
 			
 			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
@@ -123,6 +160,26 @@ public class RaceEntryActivity extends Activity {
 			builder.append(raceInfo.getLocation());
 			
 			return builder.toString();
+		}
+		
+		/**
+		 * URLからRaceIdを取得する
+		 * @param url URL
+		 * @return
+		 */
+		private String getRaceIdByUrl( String url ){
+			
+			// URLからデフォルトのURLを削除
+			int defUrlLen = getString(R.string.str_txt_defaulturl).length();
+			String raceId = url.substring(defUrlLen, url.length());
+			
+			// 最後が/だった場合は取り除く
+			String lastStr = raceId.substring(raceId.length()-1, raceId.length());
+			if( lastStr.equals("/")){
+				raceId = raceId.substring(0,raceId.length()-1);
+			}
+			
+			return raceId;
 		}
 	}
 }
