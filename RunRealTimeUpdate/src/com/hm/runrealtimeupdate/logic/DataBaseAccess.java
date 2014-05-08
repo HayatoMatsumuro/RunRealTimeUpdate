@@ -1,9 +1,13 @@
 package com.hm.runrealtimeupdate.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.sqlite.RaceProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
 
 public class DataBaseAccess {
 	
@@ -27,10 +31,47 @@ public class DataBaseAccess {
 		
 		values.put(RaceProvider.STR_DB_COLUMN_RACEID, raceId );
 		values.put(RaceProvider.STR_DB_COLUMN_RACENAME, raceName);
+		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, raceDate);
 		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, raceLocation);
 		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, RaceProvider.STR_UPDATEFLG_OFF);
 		
 		contentResolver.insert(RaceProvider.URI_DB, values);
 		return;
+	}
+	
+	/**
+	 * 全大会情報を取得する
+	 * @param contentResolver
+	 * @return
+	 */
+	public static List<DataBaseRaceInfo> getAllRaceInfo( ContentResolver contentResolver ){
+		
+		List<DataBaseRaceInfo> list = new ArrayList<DataBaseRaceInfo>();
+		
+		String[] projection = {RaceProvider.STR_DB_COLUMN_RACEID, RaceProvider.STR_DB_COLUMN_RACENAME, RaceProvider.STR_DB_COLUMN_RACEDATE, RaceProvider.STR_DB_COLUMN_RACELOCATION, RaceProvider.STR_DB_COLUMN_UPDATEFLG};
+		
+		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, null, null, null);
+		
+		while(c.moveToNext()){
+			// データ取り出し
+			String id = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEID));
+			String name = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACENAME));
+			String date = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEDATE));
+			String location = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACELOCATION));
+			String updateFlg = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_UPDATEFLG));
+			
+			// データ設定
+			DataBaseRaceInfo info = new DataBaseRaceInfo();
+			info.setRaceId(id);
+			info.setRaceName(name);
+			info.setRaceDate(date);
+			info.setRaceLocation(location);
+			info.setUpdateFlg(updateFlg);
+			list.add(info);
+		}
+
+		c.close();
+		
+		return list;
 	}
 }

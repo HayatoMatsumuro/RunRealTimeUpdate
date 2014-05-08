@@ -1,12 +1,24 @@
 ﻿package com.hm.runrealtimeupdate;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hm.runrealtimeupdate.logic.DataBaseAccess;
+import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
+
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
@@ -14,6 +26,24 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        // 大会情報
+        List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getAllRaceInfo(getContentResolver());
+        List<RaceInfoItem> itemList = new ArrayList<RaceInfoItem>();
+        
+        // アダプタ設定
+        for( DataBaseRaceInfo dbRaceInfo:dbRaceInfoList){
+        	RaceInfoItem item = new RaceInfoItem();
+        	item.setRaceId(dbRaceInfo.getRaceId());
+        	item.setRaceName(dbRaceInfo.getRaceName());
+        	item.setRaceDate(dbRaceInfo.getRaceDate());
+        	item.setRaceLocation(dbRaceInfo.getRaceLocation());
+        	item.setUpdateFlg(dbRaceInfo.getUpdateFlg());
+        	itemList.add(item);
+        }
+        RaceInfoAdapter raceInfoAdapter = new RaceInfoAdapter( this, itemList);
+        ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
+        raceInfoListView.setAdapter(raceInfoAdapter);
         
         // 大会登録ボタン
         // TODO: 大会登録数が5以上の場合は、非表示
@@ -38,4 +68,43 @@ public class MainActivity extends Activity {
         return true;
     }
     
+    private class RaceInfoAdapter extends ArrayAdapter<RaceInfoItem>{
+
+    	LayoutInflater inflater;
+    	
+		public RaceInfoAdapter(Context context, List<RaceInfoItem> objects) {
+			super(context, 0, objects);
+			
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent){
+			
+			TextView raceNameTextView;
+			TextView raceDateTextView;
+			TextView raceLocationTextView;
+			
+			if( convertView == null ){
+				convertView = this.inflater.inflate(R.layout.list_item_raceinfo, parent, false);
+				
+				raceNameTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racename);
+				raceDateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racedate);
+				raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
+				
+				RaceInfoItem item = getItem(position);
+				
+				raceNameTextView.setText(item.getRaceName());
+				raceDateTextView.setText(item.getRaceDate());
+				raceLocationTextView.setText(item.getRaceLocation());
+				
+			}
+			
+			return convertView;
+			
+		}
+    	
+    }
+    private class RaceInfoItem extends DataBaseRaceInfo{
+    }
 }
