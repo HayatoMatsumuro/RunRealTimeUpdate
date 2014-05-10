@@ -15,12 +15,19 @@ import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+	
+	/**
+	 * 大会情報リスト
+	 */
+	private List<RaceInfoItem> m_RaceInfoList;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +36,7 @@ public class MainActivity extends Activity {
         
         // 大会情報
         List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getAllRaceInfo(getContentResolver());
-        List<RaceInfoItem> itemList = new ArrayList<RaceInfoItem>();
+        m_RaceInfoList = new ArrayList<RaceInfoItem>();
         
         // アダプタ設定
         for( DataBaseRaceInfo dbRaceInfo:dbRaceInfoList){
@@ -39,11 +46,23 @@ public class MainActivity extends Activity {
         	item.setRaceDate(dbRaceInfo.getRaceDate());
         	item.setRaceLocation(dbRaceInfo.getRaceLocation());
         	item.setUpdateFlg(dbRaceInfo.getUpdateFlg());
-        	itemList.add(item);
+        	m_RaceInfoList.add(item);
         }
-        RaceInfoAdapter raceInfoAdapter = new RaceInfoAdapter( this, itemList);
+        RaceInfoAdapter raceInfoAdapter = new RaceInfoAdapter( this, m_RaceInfoList);
         ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
         raceInfoListView.setAdapter(raceInfoAdapter);
+        
+        // リストのアイテム短押し
+        raceInfoListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
+				RaceInfoItem item = m_RaceInfoList.get(position);
+				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
+				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, item.getRaceDate());
+				startActivity(intent);
+			}
+		});
         
         // 大会登録ボタン
         // TODO: 大会登録数が5以上の場合は、非表示
