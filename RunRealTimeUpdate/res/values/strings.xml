@@ -13,10 +13,15 @@
     <string name="str_dialog_msg_NG">やめる</string>
     <string name="str_msg_inputurl">URL入力</string>
     <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
-    <string name="str_txt_defaultracename">大会名</string>
+    <string name="str_txt_racename">大会名</string>
     <string name="str_txt_racedate">開催日:</string>
     <string name="str_txt_racelocation">開催地:</string>
+    <string name="str_txt_runnername">選手名</string>
     <string name="str_btn_entry">新規大会登録</string>
+    <string name="str_btn_updatestart">速報開始</string>
+    <string name="str_btn_updatestop">速報停止</string>
+    <string name="str_btn_updatelist">速報リスト</string>
+    <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>
     <string name="str_btn_back">戻る</string>
 
