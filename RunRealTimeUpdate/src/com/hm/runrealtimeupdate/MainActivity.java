@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long id) {
 				RaceInfoItem item = m_RaceInfoList.get(position);
 				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, item.getRaceDate());
+				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, item.getRaceId());
 				startActivity(intent);
 			}
 		});
