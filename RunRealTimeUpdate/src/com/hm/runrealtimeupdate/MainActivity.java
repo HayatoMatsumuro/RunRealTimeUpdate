@@ -5,10 +5,13 @@ import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
+import com.hm.runrealtimeupdate.logic.parser.RaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -64,6 +68,19 @@ public class MainActivity extends Activity {
 			}
 		});
         
+        // リストのアイテム長押し
+        raceInfoListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
+				RaceInfoItem item = m_RaceInfoList.get(position);
+				
+				// 削除ダイアログ表示
+				raceInfoDeleteDialog(item);
+				
+				return true;
+			}
+		});
         // 大会登録ボタン
         // TODO: 大会登録数が5以上の場合は、非表示
         
@@ -79,7 +96,45 @@ public class MainActivity extends Activity {
 		});
     }
 
+    private void raceInfoDeleteDialog( RaceInfoItem raceInfoItem ){
+    	// ダイアログ表示
+		AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+		dialog.setTitle(getString(R.string.str_dialog_title_deleterace));
+		dialog.setMessage(createDialogMessage(raceInfoItem));
+		
+		// 削除するボタン
+		dialog.setPositiveButton(getString(R.string.str_dialog_msg_DEL), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO 自動生成されたメソッド・スタブ
+				
+			}
 
+		});
+		
+		//　やめるボタン
+		dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO 自動生成されたメソッド・スタブ
+				
+			}
+		});
+		
+		dialog.show();
+    }
+
+    private String createDialogMessage( RaceInfoItem raceInfoItem ){
+    	StringBuilder builder = new StringBuilder();
+    	builder.append(getString(R.string.str_dialog_msg_name));
+		builder.append("\n");
+		builder.append(raceInfoItem.getRaceName());
+		builder.append("\n");
+		
+		return builder.toString();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
