@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.parser.RaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -25,6 +24,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
@@ -32,6 +32,16 @@ public class MainActivity extends Activity {
 	 * 大会情報リスト
 	 */
 	private List<RaceInfoItem> m_RaceInfoList;
+	
+	/**
+	 * 大会情報アダプタ
+	 */
+	private RaceInfoAdapter m_RaceInfoAdapter;
+	
+	/**
+	 * 削除する大会ID
+	 */
+	private RaceInfoItem m_DeleteRaceInfoItem = null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +62,9 @@ public class MainActivity extends Activity {
         	item.setUpdateFlg(dbRaceInfo.getUpdateFlg());
         	m_RaceInfoList.add(item);
         }
-        RaceInfoAdapter raceInfoAdapter = new RaceInfoAdapter( this, m_RaceInfoList);
+        m_RaceInfoAdapter = new RaceInfoAdapter( this, m_RaceInfoList);
         ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
-        raceInfoListView.setAdapter(raceInfoAdapter);
+        raceInfoListView.setAdapter(m_RaceInfoAdapter);
         
         // リストのアイテム短押し
         raceInfoListView.setOnItemClickListener(new OnItemClickListener() {
@@ -74,6 +84,9 @@ public class MainActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
 				RaceInfoItem item = m_RaceInfoList.get(position);
+				
+				// 削除する大会ID設定
+				m_DeleteRaceInfoItem = item;
 				
 				// 削除ダイアログ表示
 				raceInfoDeleteDialog(item);
@@ -107,8 +120,19 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO 自動生成されたメソッド・スタブ
 				
+				// 大会削除
+				DataBaseAccess.deleteRaceInfoByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
+				
+				//　リストから大会情報削除
+				m_RaceInfoList.remove(m_DeleteRaceInfoItem);
+
+				// 表示リストを更新
+				m_RaceInfoAdapter.notifyDataSetChanged();
+				
+				Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+				
+				//TODO: 速報中ならタイマーを停止するもしくは削除を禁止にする
 			}
 
 		});

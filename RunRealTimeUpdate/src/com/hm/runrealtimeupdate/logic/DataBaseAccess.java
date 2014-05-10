@@ -84,6 +84,18 @@ public class DataBaseAccess {
 		return raceInfo;
 	}
 	
+	/**
+	 * 大会IDから大会情報を削除する
+	 * @param contentResolver 
+	 * @param raceId 大会ID
+	 */
+	public static void deleteRaceInfoByRaceId( ContentResolver contentResolver, String raceId ){
+		String selection = RaceProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		contentResolver.delete(RaceProvider.URI_DB, selection, null);
+		
+		return;
+	}
+	
 	private static DataBaseRaceInfo getRaceInfoByCursor(Cursor c){
 		
 		// データ取り出し
