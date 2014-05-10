@@ -6,6 +6,9 @@ import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class RaceDetailActivity extends Activity {
@@ -33,6 +36,19 @@ public class RaceDetailActivity extends Activity {
         // 開催地
         TextView raceLocationTextView = (TextView)findViewById(R.id.id_racedetail_txt_racelocation);
         raceLocationTextView.setText(dbRaceInfo.getRaceLocation());
+        
+        // 戻るボタン
+        Button backButton = (Button)findViewById(R.id.id_racedetail_btn_back);
+        backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// 大会登録画面遷移
+				Intent intent = new Intent(RaceDetailActivity.this, MainActivity.class);
+				startActivity(intent);
+				
+			}
+		});
         
 	}
 
