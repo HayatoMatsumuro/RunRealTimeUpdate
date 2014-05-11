@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/id_runnerentry_txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/str_title_runnerentry"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/id_runnerentry_btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/str_btn_back" />
+
+    <TextView
+        android:id="@+id/id_runnerentry_txt_inputNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_runnerentry_txt_title"
+        android:layout_below="@+id/id_runnerentry_txt_title"
+        android:layout_marginTop="20dp"
+        android:text="@string/str_msg_inputNo" />
+
+    <EditText
+        android:id="@+id/id_runnerentry_edit_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_runnerentry_txt_title"
+        android:layout_below="@+id/id_runnerentry_txt_inputNo"
+        android:layout_marginTop="20dp"
+        android:ems="5"
+        android:inputType="textPersonName" >
+    </EditText>
+
+    <Button
+        android:id="@+id/id_runnerentry_btn_decide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/id_runnerentry_edit_no"
+        android:layout_alignBottom="@+id/id_runnerentry_edit_no"
+        android:layout_marginLeft="33dp"
+        android:layout_toRightOf="@+id/id_runnerentry_txt_inputNo"
+        android:text="@string/str_btn_decide" />
+
+</RelativeLayout>
