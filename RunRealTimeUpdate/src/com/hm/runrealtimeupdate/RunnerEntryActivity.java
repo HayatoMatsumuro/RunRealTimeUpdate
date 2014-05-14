@@ -1,10 +1,13 @@
 package com.hm.runrealtimeupdate;
 
+import com.hm.runrealtimeupdate.logic.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
 
@@ -53,6 +57,16 @@ public class RunnerEntryActivity extends Activity {
 	}
 	
 	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
+		
+		/**
+		 * 大会ID
+		 */
+		private String m_RaceId;
+		
+		/**
+		 * 選手情報
+		 */
+		private RunnerInfo m_RunnerInfo;
 
 		@Override
 		/**
@@ -66,12 +80,68 @@ public class RunnerEntryActivity extends Activity {
 			
 			try{
 				runnerInfo = RunnerInfoParser.getRunnerInfo(params[0], params[1], params[2]);
+				
+				m_RaceId = params[1];
 			}catch (ParserException e) {
 				e.printStackTrace();
 			}
 			return runnerInfo;
 		}
 		
+		@Override
+		protected void onPostExecute(RunnerInfo info){
+			
+			if(info == null){
+				Toast.makeText(RunnerEntryActivity.this, "選手情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			m_RunnerInfo = info;
+			AlertDialog.Builder dialog = new AlertDialog.Builder(RunnerEntryActivity.this);
+			dialog.setTitle(getString(R.string.str_dialog_title_runnerentry));
+			dialog.setMessage(createDialogMessage(info));
+			
+			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// TODO:二重登録の確認
+					
+					// データベース登録
+					DataBaseAccess.entryRunner(getContentResolver(), m_RaceId, m_RunnerInfo.getNumber(), m_RunnerInfo.getName(), m_RunnerInfo.getSection());
+					
+					Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+				}
+			});
+			
+			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					
+				}
+				
+			});
+			dialog.show();
+		}
+		
+		private String createDialogMessage( RunnerInfo raceInfo ){
+			StringBuilder builder = new StringBuilder();
+			
+			builder.append(getString(R.string.str_txt_racename));
+			builder.append(":");
+			builder.append(raceInfo.getName());
+			builder.append("\n");
+			builder.append(getString(R.string.str_txt_no));
+			builder.append(":");
+			builder.append(raceInfo.getNumber());
+			builder.append("\n");
+			builder.append(getString(R.string.str_txt_section));
+			builder.append(":");
+			builder.append(raceInfo.getSection());
+			builder.append("\n");
+			return builder.toString();
+		}
 	}
 
 }

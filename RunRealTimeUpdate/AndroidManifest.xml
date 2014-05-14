@@ -38,6 +38,10 @@
             android:exported="false"
             android:name="com.hm.runrealtimeupdate.logic.sqlite.RaceProvider"
             android:authorities="com.hm.runrealtimeupdate.logic.sqlite.raceprovider" />
+        <provider
+            android:exported="false"
+            android:name="com.hm.runrealtimeupdate.logic.sqlite.RunnerProvider"
+            android:authorities="com.hm.runrealtimeupdate.logic.sqlite.runnerprovider" />
     </application>
 
 </manifest>

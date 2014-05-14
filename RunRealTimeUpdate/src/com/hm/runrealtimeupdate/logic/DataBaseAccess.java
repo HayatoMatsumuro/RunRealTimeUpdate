@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.sqlite.RaceProvider;
+import com.hm.runrealtimeupdate.logic.sqlite.RunnerProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -96,6 +97,30 @@ public class DataBaseAccess {
 		return;
 	}
 	
+	public static void entryRunner(
+			ContentResolver contentResolver,
+			String raceId,
+			String number,
+			String name,
+			String section )
+	{
+		// データベースに登録
+		ContentValues values = new ContentValues();
+		
+		values.put(RunnerProvider.STR_DB_COLUMN_RACEID, raceId);
+		values.put(RunnerProvider.STR_DB_COLUMN_NUMBER, number);
+		values.put(RunnerProvider.STR_DB_COLUMN_NAME, name);
+		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, section);
+		
+		contentResolver.insert(RunnerProvider.URI_DB, values);
+		return;
+	}
+	
+	/**
+	 * 大会情報取得
+	 * @param c
+	 * @return
+	 */
 	private static DataBaseRaceInfo getRaceInfoByCursor(Cursor c){
 		
 		// データ取り出し

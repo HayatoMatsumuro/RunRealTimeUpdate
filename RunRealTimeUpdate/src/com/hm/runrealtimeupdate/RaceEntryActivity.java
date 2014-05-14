@@ -101,6 +101,7 @@ public class RaceEntryActivity extends Activity {
 		{
 			if( result == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
+				return;
 			}
 			
 			AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
