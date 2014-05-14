@@ -47,8 +47,8 @@ public class RunnerEntryActivity extends Activity {
 				
 				// ゼッケンNo取得
 				// URL入力エディットボックスから入力値取得
-				EditText urlEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
-				params[2] = urlEdit.getText().toString();
+				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
+				params[2] = noEdit.getText().toString();
 				
 				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask();
 				task.execute(params);
@@ -109,6 +109,10 @@ public class RunnerEntryActivity extends Activity {
 					
 					// データベース登録
 					DataBaseAccess.entryRunner(getContentResolver(), m_RaceId, m_RunnerInfo.getNumber(), m_RunnerInfo.getName(), m_RunnerInfo.getSection());
+					
+					// 入力をクリアする
+					EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
+					noEdit.setText("");
 					
 					Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
 				}
