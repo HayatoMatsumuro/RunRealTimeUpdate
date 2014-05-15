@@ -30,6 +30,20 @@ public class RunnerEntryActivity extends Activity {
         Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         
+        // 戻るボタン
+        Button backButton =(Button)findViewById(R.id.id_runnerentry_btn_back);
+        backButton.setTag(raceId);
+        backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// 大会詳細画面遷移
+				Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
+				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, (String)v.getTag());
+				startActivity(intent);
+			}
+		});
+        
         // 決定ボタン
         Button decideButton = (Button)findViewById(R.id.id_runnerentry_btn_decide);
         decideButton.setTag(raceId);
