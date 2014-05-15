@@ -97,6 +97,14 @@ public class DataBaseAccess {
 		return;
 	}
 	
+	/**
+	 * 選手情報を登録する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 * @param name
+	 * @param section
+	 */
 	public static void entryRunner(
 			ContentResolver contentResolver,
 			String raceId,
@@ -114,6 +122,36 @@ public class DataBaseAccess {
 		
 		contentResolver.insert(RunnerProvider.URI_DB, values);
 		return;
+	}
+	
+	/**
+	 * 大会IDの大会に登録されている選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @return
+	 */
+	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceId( ContentResolver contentResolver, String raceId){
+		List<DataBaseRunnerInfo> list = new ArrayList<DataBaseRunnerInfo>();
+		
+		String[] projection = {
+				RunnerProvider.STR_DB_COLUMN_RACEID,
+				RunnerProvider.STR_DB_COLUMN_NUMBER,
+				RunnerProvider.STR_DB_COLUMN_NAME,
+				RunnerProvider.STR_DB_COLUMN_SECTION
+		};
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"'";
+		
+		Cursor c = contentResolver.query(RunnerProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			// データ設定
+			DataBaseRunnerInfo info = getRunnerInfoByCursor(c);
+			list.add(info);
+		}
+
+		c.close();
+		
+		return list;
 	}
 	
 	/**
@@ -139,5 +177,28 @@ public class DataBaseAccess {
 		info.setUpdateFlg(updateFlg);
 		
 		return info;
+	}
+	
+	/**
+	 * 選手情報取得
+	 * @param c
+	 * @return
+	 */
+	private static DataBaseRunnerInfo getRunnerInfoByCursor(Cursor c){
+		// データ取り出し
+		String raceId = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_RACEID));
+		String number = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NUMBER));
+		String name = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NAME));
+		String section = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_SECTION));
+		
+		// データ設定
+		DataBaseRunnerInfo info = new DataBaseRunnerInfo();
+		info.setRaceId(raceId);
+		info.setNumber(number);
+		info.setName(name);
+		info.setSection(section);
+		
+		return info;
+		
 	}
 }
