@@ -133,6 +133,8 @@ public class MainActivity extends Activity {
 				Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 				
 				//TODO: 速報中ならタイマーを停止するもしくは削除を禁止にする
+				
+				//TODO: 紐付く選手情報も削除する
 			}
 
 		});
@@ -179,24 +181,19 @@ public class MainActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
 			
-			TextView raceNameTextView;
-			TextView raceDateTextView;
-			TextView raceLocationTextView;
-			
 			if( convertView == null ){
 				convertView = this.inflater.inflate(R.layout.list_item_raceinfo, parent, false);
-				
-				raceNameTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racename);
-				raceDateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racedate);
-				raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
-				
-				RaceInfoItem item = getItem(position);
-				
-				raceNameTextView.setText(item.getRaceName());
-				raceDateTextView.setText(item.getRaceDate());
-				raceLocationTextView.setText(item.getRaceLocation());
-				
 			}
+			
+			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racename);
+			TextView raceDateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racedate);
+			TextView raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
+			
+			RaceInfoItem item = getItem(position);
+			
+			raceNameTextView.setText(item.getRaceName());
+			raceDateTextView.setText(item.getRaceDate());
+			raceLocationTextView.setText(item.getRaceLocation());
 			
 			return convertView;
 			

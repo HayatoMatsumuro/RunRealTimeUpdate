@@ -179,6 +179,20 @@ public class DataBaseAccess {
 		return info;
 	}
 	
+
+	/**
+	 * 大会IDとゼッケンNOから選手情報を削除する
+	 * @param contentResolver 
+	 * @param raceId 大会ID
+	 * @param no　ゼッケンNO
+	 */
+	public static void deleteRunnerInfoByNo( ContentResolver contentResolver, String raceId, String no){
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + no + "'";
+		contentResolver.delete(RunnerProvider.URI_DB, selection, null);
+		
+		return;
+	}
+	
 	/**
 	 * 選手情報取得
 	 * @param c
@@ -201,4 +215,5 @@ public class DataBaseAccess {
 		return info;
 		
 	}
+	
 }

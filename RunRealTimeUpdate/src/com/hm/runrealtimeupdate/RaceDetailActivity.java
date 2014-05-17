@@ -8,21 +8,32 @@ import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.DataBaseRunnerInfo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class RaceDetailActivity extends Activity {
 	
 	public static String STR_INTENT_RACEID = "raceid";
+	
+	
+	/**
+	 * 削除するランナーのポジション
+	 */
+	private RunnerInfoItem m_DeleteRunnerInfoItem;
 	
 	/**
 	 * 選手情報リスト
@@ -76,6 +87,7 @@ public class RaceDetailActivity extends Activity {
         // アダプタ設定
         for( DataBaseRunnerInfo info:dbRunnerInfoList ){
         	RunnerInfoItem item = new RunnerInfoItem();
+        	item.setRaceId(info.getRaceId());
         	item.setName(info.getName());
         	item.setNumber(info.getNumber());
         	item.setSection(info.getSection());
@@ -85,6 +97,24 @@ public class RaceDetailActivity extends Activity {
         
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_racedetail_listview_runner);
         runnerInfoListView.setAdapter(m_RunnerInfoAdapter);
+        
+        // リストのアイテム長押し
+        runnerInfoListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
+				RunnerInfoItem item = m_RunnerInfoItemList.get(position);
+				
+				// 削除する選手情報設定
+				m_DeleteRunnerInfoItem = item;
+				
+				// 削除ダイアログ表示
+				runnerInfoDeleteDialog(item);
+				
+				return true;
+			}
+        	
+        });
         
         // 選手登録ボタン
         Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
@@ -102,6 +132,63 @@ public class RaceDetailActivity extends Activity {
 			}
 		});
         
+        
+	}
+	
+	private void runnerInfoDeleteDialog( RunnerInfoItem runnerInfoItem ){
+		
+		// ダイアログ表示
+		AlertDialog.Builder dialog = new AlertDialog.Builder(RaceDetailActivity.this);
+		dialog.setTitle(getString(R.string.str_dialog_title_deleterunner));
+		dialog.setMessage(createDialogMessage(runnerInfoItem));
+		
+		// 削除するボタン
+		dialog.setPositiveButton(getString(R.string.str_dialog_msg_DEL), new DialogInterface.OnClickListener() {
+					
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				
+				// 選手削除
+				DataBaseAccess.deleteRunnerInfoByNo(getContentResolver(), m_DeleteRunnerInfoItem.getRaceId(), m_DeleteRunnerInfoItem.getNumber());
+				
+				// リストから選手情報を削除する
+				m_RunnerInfoItemList.remove(m_DeleteRunnerInfoItem);
+				m_RunnerInfoAdapter.remove(m_DeleteRunnerInfoItem);
+				
+				// 表示リストを更新する
+				m_RunnerInfoAdapter.notifyDataSetChanged();
+				
+				Toast.makeText(RaceDetailActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+			}
+		});
+		
+		// やめるボタン
+		dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO 自動生成されたメソッド・スタブ
+			}
+		});
+		
+		dialog.show();
+
+	}
+	
+	/**
+	 * ダイアログのメッセージを作成する
+	 * @param runnerInfoItem
+	 * @return
+	 */
+	private String createDialogMessage( RunnerInfoItem runnerInfoItem ){
+		StringBuilder builder = new StringBuilder();
+		builder.append(runnerInfoItem.getName());
+		builder.append("\n");
+		builder.append(runnerInfoItem.getNumber());
+		builder.append("\n");
+		builder.append(runnerInfoItem.getSection());
+		
+		return builder.toString();
 	}
 	
 	private class RunnerInfoAdapter extends ArrayAdapter<RunnerInfoItem>{
@@ -120,17 +207,18 @@ public class RaceDetailActivity extends Activity {
 			
 			if( convertView == null ){
 				convertView = this.inflater.inflate(R.layout.list_item_runnerinfo, parent, false);
-				
-				TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_name);
-				TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_no);
-				TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_section);
-				
-				RunnerInfoItem item = getItem(position);
-				
-				runnerNameTextView.setText(item.getName());
-				runnerNoTextView.setText(item.getNumber());
-				runnerSectionTextView.setText(item.getSection());
 			}
+			
+			TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_name);
+			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_no);
+			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_section);
+			
+			RunnerInfoItem item = getItem(position);
+				
+			runnerNameTextView.setText(item.getName());
+			runnerNoTextView.setText(item.getNumber());
+			runnerSectionTextView.setText(item.getSection());
+			
 			return convertView;
 		}
 		
