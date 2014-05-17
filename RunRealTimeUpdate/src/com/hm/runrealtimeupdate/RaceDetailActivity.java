@@ -47,7 +47,7 @@ public class RaceDetailActivity extends Activity {
 	/**
 	 * 速報フラグ
 	 */
-	private String m_UpdateStatus;
+	//private String m_UpdateStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
