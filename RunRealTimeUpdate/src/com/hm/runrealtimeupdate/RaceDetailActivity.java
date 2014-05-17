@@ -29,7 +29,6 @@ public class RaceDetailActivity extends Activity {
 	
 	public static String STR_INTENT_RACEID = "raceid";
 	
-	
 	/**
 	 * 削除するランナーのポジション
 	 */
@@ -44,6 +43,11 @@ public class RaceDetailActivity extends Activity {
 	 * 選手情報アダプタ
 	 */
 	private RunnerInfoAdapter m_RunnerInfoAdapter;
+
+	/**
+	 * 速報フラグ
+	 */
+	private String m_UpdateStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +136,24 @@ public class RaceDetailActivity extends Activity {
 			}
 		});
         
-        
+        // 速報開始停止ボタン
+        Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
+        updateButton.setTag(raceId);
+        updateButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO 他の大会の速報中は、速報を行わない
+				// TODO 速報ボタンの処理後、停止ボタンにする
+				
+				String raceId = (String)v.getTag();
+				
+				Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+				intent.putExtra(UpdateService.STR_INTENT_RACEID, raceId);
+				
+				startService(intent);
+			}
+		});
 	}
 	
 	private void runnerInfoDeleteDialog( RunnerInfoItem runnerInfoItem ){
