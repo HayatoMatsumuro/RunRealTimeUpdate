@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.sqlite.RaceProvider;
 import com.hm.runrealtimeupdate.logic.sqlite.RunnerProvider;
+import com.hm.runrealtimeupdate.logic.sqlite.TimelistProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -153,6 +154,85 @@ public class DataBaseAccess {
 		
 		return list;
 	}
+
+	/**
+	 * 大会IDとゼッケンNOから選手情報を削除する
+	 * @param contentResolver 
+	 * @param raceId 大会ID
+	 * @param no　ゼッケンNO
+	 */
+	public static void deleteRunnerInfoByNo( ContentResolver contentResolver, String raceId, String no){
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + no + "'";
+		contentResolver.delete(RunnerProvider.URI_DB, selection, null);
+		
+		return;
+	}
+	
+	/**
+	 * タイム情報を登録する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 * @param point
+	 * @param split
+	 * @param lap
+	 * @param currentTime
+	 */
+	public static void entryTimeList(
+			ContentResolver contentResolver,
+			String raceId,
+			String number,
+			String point,
+			String split,
+			String lap,
+			String currentTime)
+	{
+		// データベースに登録
+		ContentValues values = new ContentValues();
+		
+		values.put(TimelistProvider.STR_DB_COLUMN_RACEID, raceId);
+		values.put(TimelistProvider.STR_DB_COLUMN_NUMBER, number);
+		values.put(TimelistProvider.STR_DB_COLUMN_POINT, point);
+		values.put(TimelistProvider.STR_DB_COLUMN_SPLIT, split);
+		values.put(TimelistProvider.STR_DB_COLUMN_LAP, lap);
+		values.put(TimelistProvider.STR_DB_COLUMN_CURRENTTIME, currentTime);
+		
+		contentResolver.insert(TimelistProvider.URI_DB, values);
+		return;
+	}
+	
+	/**
+	 * 大会IDとゼッケンNo.から選手のタイムリストを取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param number ゼッケンNo.
+	 * @return
+	 */
+	public static List<DataBaseTimeList> getTimeListByRaceIdandNo( ContentResolver contentResolver, String raceId, String number){
+		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
+		
+		String[] projection = {
+			TimelistProvider.STR_DB_COLUMN_RACEID,
+			TimelistProvider.STR_DB_COLUMN_NUMBER,
+			TimelistProvider.STR_DB_COLUMN_POINT,
+			TimelistProvider.STR_DB_COLUMN_SPLIT,
+			TimelistProvider.STR_DB_COLUMN_LAP,
+			TimelistProvider.STR_DB_COLUMN_CURRENTTIME
+		};
+		
+		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
+		
+		Cursor c = contentResolver.query(TimelistProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			DataBaseTimeList timeList = getTimeListByCursor(c);
+			list.add(timeList);
+		}
+		
+		c.close();
+		
+		return list;
+	}
 	
 	/**
 	 * 大会情報取得
@@ -179,20 +259,6 @@ public class DataBaseAccess {
 		return info;
 	}
 	
-
-	/**
-	 * 大会IDとゼッケンNOから選手情報を削除する
-	 * @param contentResolver 
-	 * @param raceId 大会ID
-	 * @param no　ゼッケンNO
-	 */
-	public static void deleteRunnerInfoByNo( ContentResolver contentResolver, String raceId, String no){
-		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + no + "'";
-		contentResolver.delete(RunnerProvider.URI_DB, selection, null);
-		
-		return;
-	}
-	
 	/**
 	 * 選手情報取得
 	 * @param c
@@ -214,6 +280,32 @@ public class DataBaseAccess {
 		
 		return info;
 		
+	}
+	
+	/**
+	 * タイムリスト取得
+	　* @param c
+	 * @return
+	 */
+	private static DataBaseTimeList getTimeListByCursor( Cursor c ){
+		// データ取り出し
+		String raceId = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_RACEID));
+		String number = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_NUMBER));
+		String point = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_POINT));
+		String split = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_SPLIT));
+		String lap = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_LAP));
+		String currentTime = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_CURRENTTIME));
+		
+		// データ設定
+		DataBaseTimeList timelist = new DataBaseTimeList();
+		timelist.setRaceId(raceId);
+		timelist.setNumber(number);
+		timelist.setPoint(point);
+		timelist.setSplit(split);
+		timelist.setLap(lap);
+		timelist.setCurrentTime(currentTime);
+		
+		return timelist;
 	}
 	
 }

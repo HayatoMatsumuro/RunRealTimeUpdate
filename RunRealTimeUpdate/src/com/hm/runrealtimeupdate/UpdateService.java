@@ -7,6 +7,7 @@ import java.util.TimerTask;
 
 import com.hm.runrealtimeupdate.logic.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.DataBaseRunnerInfo;
+import com.hm.runrealtimeupdate.logic.DataBaseTimeList;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
@@ -24,12 +25,13 @@ public class UpdateService extends Service {
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 120000;
+	private static int INT_TIMER_INTERVAL = 2000;
 	
+	//TODO: 暫定値
 	/**
 	 * タイマー開始遅延時間
 	 */
-	private static int INT_TIMER_DELAY = 100000;
+	private static int INT_TIMER_DELAY = 0;
 	
 	/**
 	 * タイマー
@@ -94,21 +96,80 @@ public class UpdateService extends Service {
 				
 				@Override
 				public void run() {
-					// 選手情報取得
-					List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
-					for(DataBaseRunnerInfo info:m_RunnerInfoList){
+					
+					List<DataBaseRunnerInfo> dBRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
+					
+					// データベースから選手情報取得
+					List<RunnerInfo> oldRunnerInfoList = new ArrayList<RunnerInfo>();
+					for( DataBaseRunnerInfo info : dBRunnerInfoList){
+						
+						//TODO: データベースからのタイムリストの取得ができない cがNULLになる
+						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
+						
+						RunnerInfo runnerInfo = new RunnerInfo();
+						runnerInfo.setNumber(info.getNumber());
+						
+						for( DataBaseTimeList timelist : dBTimeList){
+							RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+							
+							timeList.setPoint(timelist.getPoint());
+							timeList.setSplit(timelist.getSplit());
+							timeList.setLap(timelist.getLap());
+							timeList.setCurrentTime(timelist.getCurrentTime());
+							runnerInfo.addTimeList(timeList);
+						}
+						oldRunnerInfoList.add(runnerInfo);
+						
+					}
+					
+					// ランネットサーバーから選手情報取得
+					List<RunnerInfo> newRunnerInfoList = new ArrayList<RunnerInfo>();
+					for(DataBaseRunnerInfo info:dBRunnerInfoList){
 						
 						try {
 							RunnerInfo runnerInfo = RunnerInfoParser.getRunnerInfo(getString(R.string.str_txt_defaulturl), m_RaceId, info.getNumber());
-							runnerInfoList.add(runnerInfo);
+							newRunnerInfoList.add(runnerInfo);
 						} catch (ParserException e) {
 							// TODO 自動生成された catch ブロック
 							e.printStackTrace();
 							
 							// とりあえず空リストを作成する
 							RunnerInfo runnerInfo = new RunnerInfo();
-							runnerInfoList.add(runnerInfo);
+							newRunnerInfoList.add(runnerInfo);
 						}
+					}
+					
+					// データが更新されている場合は、データベースに書き込む
+					boolean updateFlg = false;
+					int runnerNum = dBRunnerInfoList.size();
+					for( int i=0; i < runnerNum; i++){
+						RunnerInfo newInfo = newRunnerInfoList.get(i);
+						RunnerInfo oldInfo = oldRunnerInfoList.get(i);
+						
+						int newInfoTimeListSize = newInfo.getTimeList().size();
+						int oldInfoTimeListSize = oldInfo.getTimeList().size();
+						
+						if( newInfoTimeListSize > oldInfoTimeListSize ){
+							int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
+							
+							for(int j=0; j < updateCnt; j++){
+								DataBaseAccess.entryTimeList(
+									getContentResolver(),
+									m_RaceId,
+									newInfo.getNumber(),
+									newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
+									newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
+									newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
+									newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+								);
+							}
+							updateFlg = true;
+						}
+					}
+					
+					// 更新がある場合は通知
+					if(updateFlg){
+						// TODO:処理
 					}
 				}
 			});
