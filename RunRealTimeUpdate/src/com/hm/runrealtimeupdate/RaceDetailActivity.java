@@ -154,6 +154,22 @@ public class RaceDetailActivity extends Activity {
 				startService(intent);
 			}
 		});
+        
+        // 速報リストボタン
+        Button updatelistButton = (Button)findViewById(R.id.id_racedetail_btn_updatelist);
+        updatelistButton.setTag(raceId);
+        updatelistButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String raceId = (String)v.getTag();
+				
+				Intent intent = new Intent( RaceDetailActivity.this, UpdateListActivity.class );
+				intent.putExtra( UpdateListActivity.STR_INTENT_RACEID, raceId );
+				
+				startActivity(intent);
+			}
+		});
 	}
 	
 	private void runnerInfoDeleteDialog( RunnerInfoItem runnerInfoItem ){
