@@ -49,6 +49,10 @@
             android:exported="false"
             android:name="com.hm.runrealtimeupdate.logic.sqlite.TimelistProvider"
             android:authorities="com.hm.runrealtimeupdate.logic.sqlite.timelistprovider" />
+        <provider
+            android:exported="false"
+            android:name="com.hm.runrealtimeupdate.logic.sqlite.UpdateDataProvider"
+            android:authorities="com.hm.runrealtimeupdate.logic.sqlite.updatedataprovider" />
     </application>
 
 </manifest>

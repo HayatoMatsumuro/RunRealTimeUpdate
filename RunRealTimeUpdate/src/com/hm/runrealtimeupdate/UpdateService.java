@@ -153,6 +153,7 @@ public class UpdateService extends Service {
 							int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
 							
 							for(int j=0; j < updateCnt; j++){
+								// タイムリスト書き込み
 								DataBaseAccess.entryTimeList(
 									getContentResolver(),
 									m_RaceId,
@@ -161,6 +162,19 @@ public class UpdateService extends Service {
 									newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
 									newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
 									newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+								);
+								
+								// 速報データ書き込み
+								DataBaseAccess.entryUpdateData(
+										getContentResolver(),
+										m_RaceId,
+										newInfo.getNumber(),
+										newInfo.getName(),
+										newInfo.getSection(),
+										newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
+										newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
+										newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
+										newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
 								);
 							}
 							updateFlg = true;

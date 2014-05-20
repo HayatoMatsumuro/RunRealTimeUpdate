@@ -6,6 +6,7 @@ import java.util.List;
 import com.hm.runrealtimeupdate.logic.sqlite.RaceProvider;
 import com.hm.runrealtimeupdate.logic.sqlite.RunnerProvider;
 import com.hm.runrealtimeupdate.logic.sqlite.TimelistProvider;
+import com.hm.runrealtimeupdate.logic.sqlite.UpdateDataProvider;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -232,6 +233,45 @@ public class DataBaseAccess {
 		c.close();
 		
 		return list;
+	}
+	
+	/**
+	 * 速報情報を登録する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 * @param name
+	 * @param section
+	 * @param point
+	 * @param split
+	 * @param lap
+	 * @param currentTime
+	 */
+	public static void entryUpdateData(
+		ContentResolver contentResolver,
+		String raceId,
+		String number,
+		String name,
+		String section,
+		String point,
+		String split,
+		String lap,
+		String currentTime)
+	{
+		// データベースに登録
+		ContentValues values = new ContentValues();
+		
+		values.put( UpdateDataProvider.STR_DB_COLUMN_RACEID, raceId );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NUMBER, number);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NAME, name);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SECTION, section);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_POINT, point);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, split);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, lap);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, currentTime);
+
+		contentResolver.insert(UpdateDataProvider.URI_DB, values);
+		return;
 	}
 	
 	/**
