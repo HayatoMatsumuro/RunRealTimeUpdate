@@ -14,8 +14,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -65,6 +67,22 @@ public class UpdateListActivity extends Activity {
         ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
         updateListView.setAdapter(m_UpdateDataAdapter);
         
+        // 大会詳細ボタン
+        Button raceDetailButton = (Button)findViewById(R.id.id_updatelist_btn_detail);
+        raceDetailButton.setTag(raceId);
+        raceDetailButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String raceId = (String)v.getTag();
+				
+				// 大会詳細画面遷移
+				Intent intent = new Intent(UpdateListActivity.this, RaceDetailActivity.class);
+				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
+				startActivity(intent);
+				
+			}
+		});
         return;
 	}
 	
