@@ -27,6 +27,7 @@
     <string name="str_txt_section">部門</string>
     <string name="str_txt_updatemain">速報データメイン</string>
     <string name="str_txt_updatesub">速報データサブ</string>
+    <string name="str_txt_runner">選手</string>
     <string name="str_btn_entry">新規大会登録</string>
     <string name="str_btn_updatestart">速報開始</string>
     <string name="str_btn_updatestop">速報停止</string>

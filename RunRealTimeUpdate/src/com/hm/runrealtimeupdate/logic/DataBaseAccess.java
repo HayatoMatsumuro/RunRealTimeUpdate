@@ -275,6 +275,37 @@ public class DataBaseAccess {
 	}
 	
 	/**
+	 * 大会IDから速報情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @return
+	 */
+	public static List<DataBaseUpdateData> getUpdateDataByRaceId( ContentResolver contentResolver, String raceId){
+		List<DataBaseUpdateData> list = new ArrayList<DataBaseUpdateData>();
+		
+		String[] projection = {
+			UpdateDataProvider.STR_DB_COLUMN_RACEID,
+			UpdateDataProvider.STR_DB_COLUMN_NUMBER,
+			UpdateDataProvider.STR_DB_COLUMN_NAME,
+			UpdateDataProvider.STR_DB_COLUMN_SECTION,
+			UpdateDataProvider.STR_DB_COLUMN_POINT,
+			UpdateDataProvider.STR_DB_COLUMN_SPLIT,
+			UpdateDataProvider.STR_DB_COLUMN_LAP,
+			UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME
+		};
+		
+		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		
+		Cursor c = contentResolver.query(UpdateDataProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			DataBaseUpdateData updateData = getUpdateDataByCursor(c);
+			list.add(updateData);
+		}
+		return list;
+	}
+	
+	/**
 	 * 大会情報取得
 	 * @param c
 	 * @return
@@ -348,4 +379,34 @@ public class DataBaseAccess {
 		return timelist;
 	}
 	
+	/**
+	 * 速報情報取得
+	 * @param c
+	 * @return
+	 */
+	private static DataBaseUpdateData getUpdateDataByCursor( Cursor c){
+		
+		// データ取り出し
+		String raceId = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_RACEID));
+		String number = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NUMBER));
+		String name = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NAME));
+		String section = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SECTION));
+		String point = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_POINT));
+		String split = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SPLIT));
+		String lap = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_LAP));
+		String currentTime = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME));
+		
+		// データ設定
+		DataBaseUpdateData updateData = new DataBaseUpdateData();
+		updateData.setRaceId(raceId);
+		updateData.setNumber(number);
+		updateData.setName(name);
+		updateData.setSection(section);
+		updateData.setPoint(point);
+		updateData.setSplit(split);
+		updateData.setLap(lap);
+		updateData.setCurrentTime(currentTime);
+		
+		return updateData;
+	}
 }
