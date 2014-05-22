@@ -12,6 +12,9 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
@@ -25,7 +28,7 @@ public class UpdateService extends Service {
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 2000;
+	private static int INT_TIMER_INTERVAL = 10000;
 	
 	//TODO: 暫定値
 	/**
@@ -103,7 +106,6 @@ public class UpdateService extends Service {
 					List<RunnerInfo> oldRunnerInfoList = new ArrayList<RunnerInfo>();
 					for( DataBaseRunnerInfo info : dBRunnerInfoList){
 						
-						//TODO: データベースからのタイムリストの取得ができない cがNULLになる
 						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
 						
 						RunnerInfo runnerInfo = new RunnerInfo();
@@ -183,7 +185,19 @@ public class UpdateService extends Service {
 					
 					// 更新がある場合は通知
 					if(updateFlg){
-						// TODO:処理
+						
+						Notification notification = new Notification( R.drawable.ic_runner, getString(R.string.str_msg_updaterunner), System.currentTimeMillis());
+						notification.flags = Notification.FLAG_AUTO_CANCEL;
+						
+						Intent notifiIntent = new Intent(UpdateService.this, UpdateListActivity.class);
+						notifiIntent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceId);
+						
+						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+						
+						notification.setLatestEventInfo(getApplicationContext(), getString(R.string.app_name), getString(R.string.str_msg_updaterunner), pendIntent);
+						
+						NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+						manager.notify(R.string.app_name, notification);
 					}
 				}
 			});
