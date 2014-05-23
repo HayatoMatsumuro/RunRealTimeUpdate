@@ -28,7 +28,7 @@ public class UpdateService extends Service {
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 10000;
+	private static int INT_TIMER_INTERVAL = 20000;
 	
 	//TODO: 暫定値
 	/**
@@ -59,8 +59,9 @@ public class UpdateService extends Service {
 
 	@Override
 	public void onDestroy() {
-		// TODO 自動生成されたメソッド・スタブ
 		super.onDestroy();
+		
+		m_IntervalTimer.cancel();
 	}
 
 	@Override

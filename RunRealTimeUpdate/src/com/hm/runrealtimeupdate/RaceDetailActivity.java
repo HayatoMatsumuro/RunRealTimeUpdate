@@ -197,7 +197,9 @@ public class RaceDetailActivity extends Activity {
 							updateButtonTag.getRaceId(),
 							DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
 					
-					// TODO: 速報停止
+					// 速報停止
+					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+					stopService(intent);
 					
 					// タグ設定
 					updateButtonTag.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
