@@ -138,20 +138,74 @@ public class RaceDetailActivity extends Activity {
         
         // 速報開始停止ボタン
         Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
-        updateButton.setTag(raceId);
+        
+        // 速報開始停止ボタンのタグ設定
+        UpdateButtonTag updateButtonTag = new UpdateButtonTag();
+        updateButtonTag.setRaceId(raceId);
+        updateButtonTag.setUpdateFlg(dbRaceInfo.getUpdateFlg());
+        updateButton.setTag(updateButtonTag);
+        
+        // 速報開始停止ボタンの表示設定
+        if( dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON) ){
+        	updateButton.setText(getString(R.string.str_btn_updatestop));
+        } else {
+        	updateButton.setText(getString(R.string.str_btn_updatestart));
+        	
+        	// 他の大会が速報中の場合は、ボタンを無効化する
+        	List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getUpdateExeRaceInfo(getContentResolver());
+        	if( !dbRaceInfoList.isEmpty() ){
+        		updateButton.setEnabled(false);
+            };
+        }
+        
+        // 速報開始停止ボタンの処理設定
         updateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO 他の大会の速報中は、速報を行わない
-				// TODO 速報ボタンの処理後、停止ボタンにする
 				
-				String raceId = (String)v.getTag();
+				UpdateButtonTag updateButtonTag = (UpdateButtonTag)v.getTag();
 				
-				Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-				intent.putExtra(UpdateService.STR_INTENT_RACEID, raceId);
-				
-				startService(intent);
+				if( updateButtonTag.getUpdateFlg().equals( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF )){
+					// 速報開始ボタン押し
+					
+					// データベース変更
+					DataBaseAccess.setRaceUpdate(
+							getContentResolver(),
+							updateButtonTag.getRaceId(),
+							DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
+					
+					// 速報開始
+					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+					intent.putExtra(UpdateService.STR_INTENT_RACEID, updateButtonTag.getRaceId());
+					startService(intent);
+					
+					// タグ設定
+					updateButtonTag.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
+					v.setTag(updateButtonTag);
+					
+					// 表示変更
+					((Button)v).setText(getString(R.string.str_btn_updatestop));
+					
+					
+				} else {
+					// 速報停止ボタン押し
+					
+					// データベース変更
+					DataBaseAccess.setRaceUpdate(
+							getContentResolver(),
+							updateButtonTag.getRaceId(),
+							DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+					
+					// TODO: 速報停止
+					
+					// タグ設定
+					updateButtonTag.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+					v.setTag(updateButtonTag);
+					
+					// 表示変更
+					((Button)v).setText(getString(R.string.str_btn_updatestart));
+				}
 			}
 		});
         
@@ -263,5 +317,28 @@ public class RaceDetailActivity extends Activity {
 	
 	private class RunnerInfoItem extends DataBaseRunnerInfo{
 		
+	}
+	
+	private class UpdateButtonTag {
+		
+		private String raceId;
+
+		private String updateFlg;
+		
+		public String getRaceId() {
+			return raceId;
+		}
+
+		public void setRaceId(String raceId) {
+			this.raceId = raceId;
+		}
+
+		public String getUpdateFlg() {
+			return updateFlg;
+		}
+
+		public void setUpdateFlg(String updateFlg) {
+			this.updateFlg = updateFlg;
+		}
 	}
 }

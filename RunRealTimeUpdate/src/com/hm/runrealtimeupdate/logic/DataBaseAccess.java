@@ -14,6 +14,10 @@ import android.database.Cursor;
 
 public class DataBaseAccess {
 	
+	public static final String STR_DBA_RACE_UPDATEFLG_ON = RaceProvider.STR_UPDATEFLG_ON;
+	
+	public static final String STR_DBA_RACE_UPDATEFLG_OFF = RaceProvider.STR_UPDATEFLG_OFF;
+	
 	/**
 	 * 大会情報をデータベースに登録
 	 * @param contentResolver
@@ -43,6 +47,56 @@ public class DataBaseAccess {
 	}
 	
 	/**
+	 * 指定の大会の速報状態設定
+	 * @param contentResolver
+	 * @param raceId
+	 */
+	public static void setRaceUpdate( ContentResolver contentResolver, String raceId, String update ){
+		
+		ContentValues values = new ContentValues();
+		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, update );
+		
+		String selection = RaceProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		
+		contentResolver.update(RaceProvider.URI_DB, values, selection, null );
+		
+		return;
+	}
+	
+	/**
+	 * 速報中の大会をすべて取得する。
+	 * 速報中の大会がないならば、空リストを取得する
+	 * @param contentResolver
+	 * @return
+	 */
+	public static List<DataBaseRaceInfo> getUpdateExeRaceInfo( ContentResolver contentResolver ){
+		
+		List<DataBaseRaceInfo> list = new ArrayList<DataBaseRaceInfo>();
+		
+		String[] projection = {
+				RaceProvider.STR_DB_COLUMN_RACEID,
+				RaceProvider.STR_DB_COLUMN_RACENAME,
+				RaceProvider.STR_DB_COLUMN_RACEDATE,
+				RaceProvider.STR_DB_COLUMN_RACELOCATION,
+				RaceProvider.STR_DB_COLUMN_UPDATEFLG
+		};
+		
+		String selection = RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_ON +"'";
+		
+		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			// データ設定
+			DataBaseRaceInfo info = getRaceInfoByCursor(c);
+			list.add(info);
+		}
+
+		c.close();
+		
+		return list;
+	}
+	
+	/**
 	 * 全大会情報を取得する
 	 * @param contentResolver
 	 * @return 大会情報。存在しない場合は空のリスト。
@@ -51,7 +105,13 @@ public class DataBaseAccess {
 		
 		List<DataBaseRaceInfo> list = new ArrayList<DataBaseRaceInfo>();
 		
-		String[] projection = {RaceProvider.STR_DB_COLUMN_RACEID, RaceProvider.STR_DB_COLUMN_RACENAME, RaceProvider.STR_DB_COLUMN_RACEDATE, RaceProvider.STR_DB_COLUMN_RACELOCATION, RaceProvider.STR_DB_COLUMN_UPDATEFLG};
+		String[] projection = {
+				RaceProvider.STR_DB_COLUMN_RACEID,
+				RaceProvider.STR_DB_COLUMN_RACENAME,
+				RaceProvider.STR_DB_COLUMN_RACEDATE,
+				RaceProvider.STR_DB_COLUMN_RACELOCATION,
+				RaceProvider.STR_DB_COLUMN_UPDATEFLG
+		};
 		
 		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, null, null, null);
 		
