@@ -127,6 +127,8 @@ public class RaceEntryActivity extends Activity {
 							m_RaceInfo.getLocation());
 					
 					Toast.makeText(RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+					
+					// TODO:大会数が最大を超えた場合、入力できないようにする
 				}
 				
 				

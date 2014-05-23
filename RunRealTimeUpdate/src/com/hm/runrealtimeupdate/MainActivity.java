@@ -29,6 +29,11 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	/**
+	 * 登録できる大会の最大数
+	 */
+	private static final int INT_RACEINFO_NUM_MAX = 5;
+	
+	/**
 	 * 大会情報リスト
 	 */
 	private List<RaceInfoItem> m_RaceInfoList;
@@ -101,7 +106,6 @@ public class MainActivity extends Activity {
 			}
 		});
         // 大会登録ボタン
-        // TODO: 大会登録数が5以上の場合は、非表示
         
         Button entryBtn = (Button)findViewById(R.id.id_main_btn_entry);
         entryBtn.setOnClickListener(new OnClickListener() {
@@ -113,6 +117,9 @@ public class MainActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+        
+        // ボタン状態更新
+		entryButtonEnabled();
     }
 
     private void raceInfoDeleteDialog( RaceInfoItem raceInfoItem ){
@@ -135,6 +142,9 @@ public class MainActivity extends Activity {
 
 				// 表示リストを更新
 				m_RaceInfoAdapter.notifyDataSetChanged();
+				
+				// ボタン状態更新
+				entryButtonEnabled();
 				
 				Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 				
@@ -219,5 +229,14 @@ public class MainActivity extends Activity {
 		public void setUpdateStr(String updateStr) {
 			this.updateStr = updateStr;
 		}
+    }
+    
+    private void entryButtonEnabled(){
+    	Button btn = (Button)findViewById(R.id.id_main_btn_entry);
+    	if( m_RaceInfoList.size() >= INT_RACEINFO_NUM_MAX){
+    		btn.setEnabled(false);
+    	}else{
+    		btn.setEnabled(true);
+    	}
     }
 }
