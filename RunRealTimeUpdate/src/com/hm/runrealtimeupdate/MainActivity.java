@@ -60,6 +60,12 @@ public class MainActivity extends Activity {
         	item.setRaceDate(dbRaceInfo.getRaceDate());
         	item.setRaceLocation(dbRaceInfo.getRaceLocation());
         	item.setUpdateFlg(dbRaceInfo.getUpdateFlg());
+        	
+        	if( dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON) ){
+        		item.setUpdateStr(getString(R.string.str_txt_updateexe));
+        	}else{
+        		item.setUpdateStr("");
+        	}
         	m_RaceInfoList.add(item);
         }
         m_RaceInfoAdapter = new RaceInfoAdapter( this, m_RaceInfoList);
@@ -188,12 +194,14 @@ public class MainActivity extends Activity {
 			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racename);
 			TextView raceDateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racedate);
 			TextView raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
+			TextView raceUpdateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_update);
 			
 			RaceInfoItem item = getItem(position);
 			
 			raceNameTextView.setText(item.getRaceName());
 			raceDateTextView.setText(item.getRaceDate());
 			raceLocationTextView.setText(item.getRaceLocation());
+			raceUpdateTextView.setText(item.getUpdateStr());
 			
 			return convertView;
 			
@@ -201,5 +209,15 @@ public class MainActivity extends Activity {
     	
     }
     private class RaceInfoItem extends DataBaseRaceInfo{
+    	
+    	private String updateStr;
+
+		public String getUpdateStr() {
+			return updateStr;
+		}
+
+		public void setUpdateStr(String updateStr) {
+			this.updateStr = updateStr;
+		}
     }
 }
