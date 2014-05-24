@@ -7,6 +7,7 @@
     <string name="str_title_runnerentry">選手登録</string>
     <string name="str_title_updatelist">速報リスト</string>
     <string name="str_title_passlist">通過情報</string>
+    <string name="str_title_passlistsection">通過情報 詳細</string>
     <string name="str_dialog_title_race">大会登録確認</string>
     <string name="str_dialog_title_deleterace">大会削除確認</string>
     <string name="str_dialog_title_runnerentry">選手登録確認</string>
@@ -27,8 +28,11 @@
     <string name="str_txt_runnername">選手名</string>
     <string name="str_txt_no">ゼッケン番号</string>
     <string name="str_txt_section">部門</string>
+    <string name="str_txt_point">地点</string>
     <string name="str_txt_updatemain">速報データメイン</string>
     <string name="str_txt_updatesub">速報データサブ</string>
+    <string name="str_txt_passdatamain">通過情報メイン</string>
+    <string name="str_txt_passdatasub">通過情報サブ</string>
     <string name="str_txt_runner">選手</string>
     <string name="str_txt_updateexe">*****速報中*****</string>
     <string name="str_btn_entry">新規大会登録</string>

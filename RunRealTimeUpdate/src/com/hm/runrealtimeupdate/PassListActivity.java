@@ -10,14 +10,21 @@ import com.hm.runrealtimeupdate.logic.DataBaseRunnerInfo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class PassListActivity extends Activity {
 
 	public static String STR_INTENT_RACEID = "raceid";
+	
+	private String m_RaceId;
+	
+	private List<String> m_SectionList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +45,16 @@ public class PassListActivity extends Activity {
         List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), raceId);
         
         // 部門リストを作成する
-        List<String> sectionList = new ArrayList<String>();
+        m_SectionList = new ArrayList<String>();
         for( DataBaseRunnerInfo info : dbRunnerInfoList){
         	
         	String section = info.getSection();
         	
-        	if( sectionList.indexOf(section) == -1 ){
-        		sectionList.add(section);
+        	if( m_SectionList.indexOf(section) == -1 ){
+        		m_SectionList.add(section);
         	}
         }
-        String[] sectionArray = (String[])sectionList.toArray(new String[0]);
+        String[] sectionArray = (String[])m_SectionList.toArray(new String[0]);
         
         // リストアダプタを作成
         ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionArray );
@@ -55,6 +62,22 @@ public class PassListActivity extends Activity {
         // リストビューに設定
         ListView listView = (ListView)findViewById(R.id.id_passlist_listview_sectionlist);
         listView.setAdapter(adapter);
+        
+        // リストビュー短押し
+        listView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
+				
+				String section = m_SectionList.get(position);
+				
+				Intent intent = new Intent(PassListActivity.this, PassListSectionActivity.class);
+				intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, m_RaceId);
+				intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
+				startActivity(intent);
+			}
+        	
+        });
         
 	}
 
