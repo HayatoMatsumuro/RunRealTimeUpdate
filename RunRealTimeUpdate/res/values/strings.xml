@@ -6,6 +6,7 @@
     <string name="str_title_raceentry">大会登録</string>
     <string name="str_title_runnerentry">選手登録</string>
     <string name="str_title_updatelist">速報リスト</string>
+    <string name="str_title_passlist">通過情報</string>
     <string name="str_dialog_title_race">大会登録確認</string>
     <string name="str_dialog_title_deleterace">大会削除確認</string>
     <string name="str_dialog_title_runnerentry">選手登録確認</string>
@@ -37,6 +38,6 @@
     <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>
     <string name="str_btn_back">戻る</string>
-    <string name="str_btn_renew">再読込</string>
+    <string name="str_btn_passlist">通過情報</string>
     <string name="str_btn_detail">大会詳細</string>
 </resources>

@@ -83,6 +83,23 @@ public class UpdateListActivity extends Activity {
 				
 			}
 		});
+        
+        // 通過情報ボタン
+        Button passListButton = (Button)findViewById(R.id.id_updatelist_btn_passlist);
+        passListButton.setTag(raceId);
+        passListButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String raceId = (String)v.getTag();
+				
+				// 通過情報画面遷移
+				Intent intent = new Intent(UpdateListActivity.this, PassListActivity.class);
+				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
+				startActivity(intent);
+				
+			}
+		});
         return;
 	}
 	

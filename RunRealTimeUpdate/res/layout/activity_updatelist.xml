@@ -42,11 +42,11 @@
          android:text="@string/str_btn_detail" />
 
      <Button
-         android:id="@+id/id_updatelist_btn_renew"
+         android:id="@+id/id_updatelist_btn_passlist"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_alignParentTop="true"
          android:layout_toLeftOf="@+id/id_updatelist_btn_detail"
-         android:text="@string/str_btn_renew" />
+         android:text="@string/str_btn_passlist" />
 
 </RelativeLayout>
