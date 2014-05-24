@@ -23,7 +23,6 @@ public class PassListActivity extends Activity {
 	public static String STR_INTENT_RACEID = "raceid";
 	
 	private String m_RaceId;
-	
 	private List<String> m_SectionList;
 	
 	@Override
@@ -34,15 +33,15 @@ public class PassListActivity extends Activity {
         
         // 大会ID取得
         Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        m_RaceId = intent.getStringExtra(STR_INTENT_RACEID);
         
         // 大会名表示
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
+        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), m_RaceId);
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlist_txt_name);
         raceNameTextView.setText(dbRaceInfo.getRaceName());
         
         // 大会IDから選手情報を取得
-        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), raceId);
+        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
         
         // 部門リストを作成する
         m_SectionList = new ArrayList<String>();
