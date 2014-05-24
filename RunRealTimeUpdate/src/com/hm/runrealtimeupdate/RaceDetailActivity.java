@@ -164,6 +164,8 @@ public class RaceDetailActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
+				// 速報が自動停止した場合は速報が停止しているが表示は「速報停止」となっている
+				// 動作的に問題ないため、そのままとする
 				UpdateButtonTag updateButtonTag = (UpdateButtonTag)v.getTag();
 				
 				if( updateButtonTag.getUpdateFlg().equals( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF )){

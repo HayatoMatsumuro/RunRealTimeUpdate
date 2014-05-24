@@ -19,16 +19,21 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
+import android.util.Log;
 
 public class UpdateService extends Service {
 
+	/**
+	 * インテント　大会ID
+	 */
 	public static String STR_INTENT_RACEID = "raceid";
+	
 	
 	//TODO: 暫定値
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 20000;
+	private static int INT_TIMER_INTERVAL = 10000;
 	
 	//TODO: 暫定値
 	/**
@@ -37,30 +42,38 @@ public class UpdateService extends Service {
 	private static int INT_TIMER_DELAY = 0;
 	
 	/**
+	 * 速報を行う回数
+	 * 1日で自動的に速報が停止する
+	 */
+	//TODO: 暫定
+	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
+	
+	/**
 	 * タイマー
 	 */
 	private Timer m_IntervalTimer;
 	
 	/**
+	 * 速報の回数
+	 */
+	private int m_IntervalCnt;
+	/**
 	 * 大会ID
 	 */
 	private String m_RaceId;
 	
-	/**
-	 * 選手情報リスト
-	 */
-	private List<DataBaseRunnerInfo> m_RunnerInfoList;
-	
 	@Override
 	public IBinder onBind(Intent arg0) {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		// TODO:
+		Log.d("service", "destroy");
 		
+		// タイマー停止
 		m_IntervalTimer.cancel();
 	}
 
@@ -70,16 +83,13 @@ public class UpdateService extends Service {
 		
 		// 初期化
 		m_IntervalTimer = new Timer();
-		m_RunnerInfoList = new ArrayList<DataBaseRunnerInfo>();
+		m_IntervalCnt = 0;
+		
+		// TODO:
+		Log.d("service", "start");
 		
 		// 大会Id取得
 		m_RaceId = intent.getStringExtra(STR_INTENT_RACEID);
-		
-		//　選手情報リストを取得
-		List<DataBaseRunnerInfo> list = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
-		for(DataBaseRunnerInfo info:list){
-			m_RunnerInfoList.add(info);
-		}
 		
 		// タイマー開始
 		UpdateTimerTask timerTask = new UpdateTimerTask();
@@ -106,6 +116,8 @@ public class UpdateService extends Service {
 					// データベースから選手情報取得
 					List<RunnerInfo> oldRunnerInfoList = new ArrayList<RunnerInfo>();
 					for( DataBaseRunnerInfo info : dBRunnerInfoList){
+						// TODO:
+						Log.d("service", "update");
 						
 						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
 						
@@ -199,6 +211,16 @@ public class UpdateService extends Service {
 						
 						NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 						manager.notify(R.string.app_name, notification);
+					}
+					
+					// 速報回数が最大を超えたら速報を自動停止する
+					m_IntervalCnt++;
+					if( m_IntervalCnt >= INT_TIMER_INTERAVAL_CNT_MAX ){
+						// TODO:
+						Log.d("service", "stopSelf");						
+						// 速報停止状態にする
+						DataBaseAccess.setRaceUpdate(getContentResolver(), m_RaceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+						stopSelf();
 					}
 				}
 			});
