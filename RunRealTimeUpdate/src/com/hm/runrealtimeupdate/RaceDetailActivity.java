@@ -30,6 +30,12 @@ public class RaceDetailActivity extends Activity {
 	public static String STR_INTENT_RACEID = "raceid";
 	
 	/**
+	 * 登録できる選手の数
+	 */
+	//TODO:暫定
+	private static int INT_RUNNER_NUM_MAX = 30;
+	
+	/**
 	 * 削除するランナーのポジション
 	 */
 	private RunnerInfoItem m_DeleteRunnerInfoItem;
@@ -135,6 +141,12 @@ public class RaceDetailActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+        
+        if( dbRunnerInfoList.size() >= INT_RUNNER_NUM_MAX){
+        	runnerEntryButton.setEnabled(false);
+        }else{
+        	runnerEntryButton.setEnabled(true);
+        }
         
         // 速報開始停止ボタン
         Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
@@ -254,6 +266,10 @@ public class RaceDetailActivity extends Activity {
 				m_RunnerInfoAdapter.notifyDataSetChanged();
 				
 				Toast.makeText(RaceDetailActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+				
+				// 削除したら選手登録はできるので、ボタンを有効にする
+				Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
+				runnerEntryButton.setEnabled(true);
 			}
 		});
 		

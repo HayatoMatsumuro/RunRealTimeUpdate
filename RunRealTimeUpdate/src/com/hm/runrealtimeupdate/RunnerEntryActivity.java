@@ -129,6 +129,10 @@ public class RunnerEntryActivity extends Activity {
 					noEdit.setText("");
 					
 					Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+					
+					Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
+					intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, m_RaceId);
+					startActivity(intent);
 				}
 			});
 			
