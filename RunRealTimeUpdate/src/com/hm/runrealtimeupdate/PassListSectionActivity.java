@@ -197,11 +197,15 @@ public class PassListSectionActivity extends Activity {
 				// ランナー情報表示
 				mainTextView.setText(passPointRunner.getPassPointRunnerMain());
 				subTextView.setText(passPointRunner.getPassPointRunnerSub());
+				subTextView.setVisibility(View.VISIBLE);
+				convertView.setBackgroundColor(Color.WHITE);
+				
 			}else{
 				// 見出し 地点情報表示
 				mainTextView.setText(passPointRunner.getPassPoint());
 				subTextView.setVisibility(View.INVISIBLE);
 				convertView.setBackgroundColor(Color.GRAY);
+				
 			}
 			
 			return convertView;
