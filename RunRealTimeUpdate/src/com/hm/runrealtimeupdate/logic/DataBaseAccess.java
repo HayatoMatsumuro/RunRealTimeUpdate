@@ -144,6 +144,9 @@ public class DataBaseAccess {
 		while(c.moveToNext()){
 			raceInfo = getRaceInfoByCursor(c);
 		}
+		
+		c.close();
+		
 		return raceInfo;
 	}
 	
@@ -385,6 +388,9 @@ public class DataBaseAccess {
 			DataBaseUpdateData updateData = getUpdateDataByCursor(c);
 			list.add(updateData);
 		}
+		
+		c.close();
+		
 		return list;
 	}
 	
