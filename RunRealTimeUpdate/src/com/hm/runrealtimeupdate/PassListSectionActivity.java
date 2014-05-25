@@ -14,6 +14,7 @@ import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -175,7 +176,10 @@ public class PassListSectionActivity extends Activity {
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
-		
+		@Override
+		public boolean isEnabled(int position){
+			return false;
+		}
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
@@ -197,6 +201,7 @@ public class PassListSectionActivity extends Activity {
 				// 見出し 地点情報表示
 				mainTextView.setText(passPointRunner.getPassPoint());
 				subTextView.setVisibility(View.INVISIBLE);
+				convertView.setBackgroundColor(Color.GRAY);
 			}
 			
 			return convertView;
