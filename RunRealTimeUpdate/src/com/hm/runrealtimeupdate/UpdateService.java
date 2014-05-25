@@ -113,11 +113,15 @@ public class UpdateService extends Service {
 					
 					List<DataBaseRunnerInfo> dBRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
 					
+					// TODO:
+					Log.d("service", "update　Start");
+					
 					// データベースから選手情報取得
 					List<RunnerInfo> oldRunnerInfoList = new ArrayList<RunnerInfo>();
 					for( DataBaseRunnerInfo info : dBRunnerInfoList){
+						
 						// TODO:
-						Log.d("service", "update");
+						Log.d("service", "update" + info.getNumber());
 						
 						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
 						
@@ -192,6 +196,8 @@ public class UpdateService extends Service {
 										newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
 								);
 							}
+							// TODO:
+							Log.d("service", "update on" + newInfo.getNumber());
 							updateFlg = true;
 						}
 					}

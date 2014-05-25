@@ -2,6 +2,7 @@ package com.hm.runrealtimeupdate;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.DataBaseAccess;
@@ -51,7 +52,7 @@ public class PassListSectionActivity extends Activity {
         List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceIdandSection(getContentResolver(), raceId, section);
         
         // 地点情報リスト作成
-        List<PassPoint> passPointList = new ArrayList<PassPoint>();
+        List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();
         
         for( DataBaseRunnerInfo info:dbRunnerInfoList ){
         	List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
@@ -77,28 +78,50 @@ public class PassListSectionActivity extends Activity {
 			}
 			
 			// 最新の通過位置取得
-			Collections.reverse(runnerInfo.getTimeList());
-			String point = runnerInfo.getTimeList().get(0).getPoint();
-						
-			PassPointRunner passPointRunner = new PassPointRunner();
-			passPointRunner.setPassPointRunnerMain(runnerInfo.getNumber() + "  " + runnerInfo.getName());
-			passPointRunner.setPassPointRunnerSub(runnerInfo.getTimeList().get(0).getSplit());
+			//Collections.reverse(runnerInfo.getTimeList());
+			//String point = runnerInfo.getTimeList().get(0).getPoint();
+			
+			// 現在の通過位置取得
+			int passPointNo = runnerInfo.getTimeList().size()-1;
 			
 			int i = 0;
-			for(i= 0; i < passPointList.size(); i++){
-				
-				if( passPointList.get(i).getPassPoint().equals(point)){
-					passPointList.get(i).getPassPointRunnerList().add(passPointRunner);
+			for( i= 0; i < passPointInfoList.size(); i++){
+				if( passPointInfoList.get(i).getPassPointNo() == passPointNo ){
+					passPointInfoList.get(i).getRunnerInfoList().add(runnerInfo);
 					break;
 				}
 			}
 			
-			if( i == passPointList.size()){
-				PassPoint passPoint = new PassPoint();
-				passPoint.setPassPoint(point);
-				passPoint.getPassPointRunnerList().add(passPointRunner);
-				passPointList.add(passPoint);
+			if( i == passPointInfoList.size()){
+				PassPointInfo passPointInfo = new PassPointInfo();
+				passPointInfo.setPassPointNo(passPointNo);
+				passPointInfo.getRunnerInfoList().add(runnerInfo);
+				passPointInfoList.add(passPointInfo);
 			}
+        }
+        
+        Collections.sort(passPointInfoList, new PassPointInfoComparator());
+        
+        // 地点通過表示リスト作成
+        List<PassPoint> passPointList = new ArrayList<PassPoint>();
+        
+        for( PassPointInfo passPointInfo : passPointInfoList){
+        	
+        	// 見出し
+        	PassPoint passPoint = new PassPoint();
+        	int timelistSize = passPointInfo.getRunnerInfoList().get(0).getTimeList().size();
+        	passPoint.setPassPoint(passPointInfo.getRunnerInfoList().get(0).getTimeList().get(timelistSize-1).getPoint());
+        	
+        	passPointList.add(passPoint);
+        	
+        	// 選手情報
+        	for(RunnerInfo runnerInfo : passPointInfo.getRunnerInfoList()){
+        		PassPoint passPointRunner = new PassPoint();
+        		passPointRunner.setPassPointRunnerMain(runnerInfo.getNumber() + "  " + runnerInfo.getName());
+        		passPointRunner.setPassPointRunnerSub(runnerInfo.getTimeList().get(timelistSize-1).getSplit());
+        		
+        		passPointList.add(passPointRunner);
+        	}
         }
         
         // リストビューの設定
@@ -109,9 +132,41 @@ public class PassListSectionActivity extends Activity {
         return;
 	}
 	
+	private static class PassPointInfoComparator implements Comparator<PassPointInfo>{
+
+		@Override
+		public int compare(PassPointInfo o1, PassPointInfo o2) {
+			
+			if( o1.getPassPointNo() < o2.getPassPointNo() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+		
+	}
+	
+	private class PassPointInfo {
+		
+		int passPointNo;
+		
+		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
+		
+		public int getPassPointNo() {
+			return passPointNo;
+		}
+
+		public void setPassPointNo(int passPointNo) {
+			this.passPointNo = passPointNo;
+		}
+
+		public List<RunnerInfo> getRunnerInfoList() {
+			return runnerInfoList;
+		}
+
+	}
 	
 	private class PassPointAdapter extends ArrayAdapter<PassPoint>{
-
 		LayoutInflater inflater;
 		
 		public PassPointAdapter(Context context, List<PassPoint> objects) {
@@ -120,36 +175,7 @@ public class PassListSectionActivity extends Activity {
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent){
-			
-			if( convertView == null ){
-				convertView = this.inflater.inflate(R.layout.list_item_pass_point, parent, false);
-			}
-			
-			TextView titleTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_title);
-			ListView listView = (ListView)convertView.findViewById(R.id.id_pass_point_listview_pointlist);
-			
-			PassPoint passPoint = getItem(position);
-			
-			titleTextView.setText(passPoint.getPassPoint());
-			PassPointRunnerAdapter adapter = new PassPointRunnerAdapter(PassListSectionActivity.this, passPoint.getPassPointRunnerList());
-			listView.setAdapter(adapter);
-			
-			// リストビューの高さ設定
-			
-			//listView.setLayoutParams(new  LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, lvWrapperHeight)););
-			return convertView;
-		}
-	}
-	private class PassPointRunnerAdapter extends ArrayAdapter<PassPointRunner>{
-		LayoutInflater inflater;
 		
-		public PassPointRunnerAdapter(Context context, List<PassPointRunner> objects) {
-			super(context, 0, objects);
-			
-			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent){
@@ -158,23 +184,41 @@ public class PassListSectionActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_pass_point_runner, parent, false);
 			}
 			
-			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_pass_point_runner_main);
-			TextView subTextView = (TextView)convertView.findViewById(R.id.id_pass_point_runner_sub);
+			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_pass_point_main);
+			TextView subTextView = (TextView)convertView.findViewById(R.id.id_pass_point_sub);
 			
-			PassPointRunner passPointRunner = getItem(position);
+			PassPoint passPointRunner = getItem(position);
 			
-			mainTextView.setText(passPointRunner.getPassPointRunnerMain());
-			subTextView.setText(passPointRunner.getPassPointRunnerSub());
+			if(passPointRunner.getPassPoint() == null){
+				// ランナー情報表示
+				mainTextView.setText(passPointRunner.getPassPointRunnerMain());
+				subTextView.setText(passPointRunner.getPassPointRunnerSub());
+			}else{
+				// 見出し 地点情報表示
+				mainTextView.setText(passPointRunner.getPassPoint());
+				subTextView.setVisibility(View.INVISIBLE);
+			}
 			
 			return convertView;
 		}
 	}
+	
 	private class PassPoint {
 		
+		/**
+		 * 見出し 通過地点、見出しでないときはnullとなる
+		 */
 		private String passPoint;
-
-		private List<PassPointRunner> passPointRunnerList = new ArrayList<PassPointRunner>();
 		
+		private String passPointRunnerMain;
+		
+		private String passPointRunnerSub;
+
+		public PassPoint(){
+			passPoint = null;
+			passPointRunnerMain = null;
+			passPointRunnerSub = null;
+		}
 		public String getPassPoint() {
 			return passPoint;
 		}
@@ -182,17 +226,6 @@ public class PassListSectionActivity extends Activity {
 		public void setPassPoint(String passPoint) {
 			this.passPoint = passPoint;
 		}
-
-		public List<PassPointRunner> getPassPointRunnerList() {
-			return passPointRunnerList;
-		}
-	}
-	
-	private class PassPointRunner {
-		
-		private String passPointRunnerMain;
-		
-		private String passPointRunnerSub;
 
 		public String getPassPointRunnerMain() {
 			return passPointRunnerMain;
@@ -209,5 +242,6 @@ public class PassListSectionActivity extends Activity {
 		public void setPassPointRunnerSub(String passPointRunnerSub) {
 			this.passPointRunnerSub = passPointRunnerSub;
 		}
+
 	}
 }

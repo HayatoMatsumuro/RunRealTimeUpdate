@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_pass_point_runner_main"
+        android:id="@+id/id_pass_point_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -13,12 +13,11 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/id_pass_point_runner_sub"
+        android:id="@+id/id_pass_point_sub"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/id_pass_point_runner_main"
-        android:layout_marginTop="10dp"
-        android:text="@string/str_txt_passdatasub" />
+        android:layout_below="@+id/id_pass_point_main"
+        android:layout_marginTop="10dp"/>
 
 </RelativeLayout>
