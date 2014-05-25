@@ -256,6 +256,18 @@ public class DataBaseAccess {
 	}
 	
 	/**
+	 * 大会IDから選手情報を削除する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 */
+	public static void deleteRunnerInfoByRaceId( ContentResolver contentResolver, String raceId){
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		contentResolver.delete(RunnerProvider.URI_DB, selection, null);
+		
+		return;
+	}
+	
+	/**
 	 * タイム情報を登録する
 	 * @param contentResolver
 	 * @param raceId
@@ -319,6 +331,18 @@ public class DataBaseAccess {
 		c.close();
 		
 		return list;
+	}
+	
+	/**
+	 * 大会IDからタイムリストを削除する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 */
+	public static void deleteTimeListByRaceId( ContentResolver contentResolver, String raceId ){
+		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		contentResolver.delete(TimelistProvider.URI_DB, selection, null);
+		
+		return;
 	}
 	
 	/**
@@ -394,6 +418,15 @@ public class DataBaseAccess {
 		return list;
 	}
 	
+	/**
+	 * 大会IDから速報情報を削除する
+	 */
+	public static void deleteUpdateDataByRaceId( ContentResolver contentResolver, String raceId){
+		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
+		contentResolver.delete(UpdateDataProvider.URI_DB, selection, null);
+		
+		return;
+	}
 	/**
 	 * 大会情報取得
 	 * @param c

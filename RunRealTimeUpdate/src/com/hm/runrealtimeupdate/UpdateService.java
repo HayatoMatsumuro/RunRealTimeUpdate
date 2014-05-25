@@ -113,6 +113,7 @@ public class UpdateService extends Service {
 					
 					List<DataBaseRunnerInfo> dBRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
 					
+					// TODO:インターネットの取得はUIタスクでしない。時間がかかり、操作が固まる。
 					// TODO:
 					Log.d("service", "update　Start");
 					

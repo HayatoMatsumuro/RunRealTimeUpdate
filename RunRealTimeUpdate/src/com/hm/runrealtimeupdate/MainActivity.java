@@ -137,6 +137,15 @@ public class MainActivity extends Activity {
 				// 大会削除
 				DataBaseAccess.deleteRaceInfoByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
 				
+				// 選手削除
+				DataBaseAccess.deleteRunnerInfoByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
+
+				// タイムリスト
+				DataBaseAccess.deleteTimeListByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
+				
+				// 速報データ
+				DataBaseAccess.deleteUpdateDataByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
+				
 				//　リストから大会情報削除
 				m_RaceInfoList.remove(m_DeleteRaceInfoItem);
 
@@ -146,11 +155,16 @@ public class MainActivity extends Activity {
 				// ボタン状態更新
 				entryButtonEnabled();
 				
+				// 速報中なら、速報停止
+				if( m_DeleteRaceInfoItem.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON)){
+					
+					// 速報停止
+					Intent intent = new Intent(MainActivity.this, UpdateService.class);
+					stopService(intent);
+				}
+				
 				Toast.makeText(MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 				
-				//TODO: 速報中ならタイマーを停止するもしくは削除を禁止にする
-				
-				//TODO: 紐付く選手情報も削除する
 			}
 
 		});
@@ -160,8 +174,7 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO 自動生成されたメソッド・スタブ
-				
+				// なにもしない
 			}
 		});
 		
