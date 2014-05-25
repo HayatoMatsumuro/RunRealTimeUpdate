@@ -216,6 +216,29 @@ public class DataBaseAccess {
 		return list;
 	}
 
+	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceIdandSection( ContentResolver contentResolver, String raceId, String section){
+		List<DataBaseRunnerInfo> list = new ArrayList<DataBaseRunnerInfo>();
+		
+		String[] projection = {
+				RunnerProvider.STR_DB_COLUMN_RACEID,
+				RunnerProvider.STR_DB_COLUMN_NUMBER,
+				RunnerProvider.STR_DB_COLUMN_NAME,
+				RunnerProvider.STR_DB_COLUMN_SECTION
+		};
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"' and " + RunnerProvider.STR_DB_COLUMN_SECTION + "='" + section +"'";
+		
+		Cursor c = contentResolver.query(RunnerProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			// データ設定
+			DataBaseRunnerInfo info = getRunnerInfoByCursor(c);
+			list.add(info);
+		}
+
+		c.close();
+		
+		return list;
+	}
 	/**
 	 * 大会IDとゼッケンNOから選手情報を削除する
 	 * @param contentResolver 

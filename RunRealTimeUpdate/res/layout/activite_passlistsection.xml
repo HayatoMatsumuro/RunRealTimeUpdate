@@ -32,7 +32,7 @@
         android:text="@string/str_txt_section" />
 
     <ListView
-        android:id="@+id/id_passlist_listview_sectionlist"
+        android:id="@+id/id_passlistsection_listview_sectionlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/id_passlistsection_txt_section"

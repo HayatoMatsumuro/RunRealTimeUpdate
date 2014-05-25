@@ -33,7 +33,7 @@ public class UpdateService extends Service {
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 10000;
+	private static int INT_TIMER_INTERVAL = 30000;
 	
 	//TODO: 暫定値
 	/**
