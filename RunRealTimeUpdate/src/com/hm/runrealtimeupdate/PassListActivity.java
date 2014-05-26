@@ -31,7 +31,7 @@ public class PassListActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.activite_passlist);
+        setContentView(R.layout.activity_passlist);
         
         // 大会ID取得
         Intent intent = getIntent();

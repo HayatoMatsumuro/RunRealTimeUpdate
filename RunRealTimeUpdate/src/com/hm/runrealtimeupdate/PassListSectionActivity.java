@@ -35,7 +35,7 @@ public class PassListSectionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activite_passlistsection);
+		setContentView(R.layout.activity_passlistsection);
 		
 		Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
