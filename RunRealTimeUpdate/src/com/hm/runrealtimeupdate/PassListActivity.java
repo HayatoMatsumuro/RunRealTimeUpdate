@@ -11,8 +11,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -77,6 +79,19 @@ public class PassListActivity extends Activity {
 			}
         	
         });
+        
+        // 戻るボタン
+        Button backButton = (Button)findViewById(R.id.id_passlist_btn_back);
+        backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(PassListActivity.this, UpdateListActivity.class);
+				intent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceId);
+				startActivity(intent);
+				
+			}
+		});
         
 	}
 
