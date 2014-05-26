@@ -18,8 +18,10 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -130,6 +132,20 @@ public class PassListSectionActivity extends Activity {
         PassPointAdapter adapter = new PassPointAdapter(this, passPointList);
         listView.setAdapter(adapter);
         
+        // 戻るボタン
+        Button backButton = (Button)findViewById(R.id.id_passlistsection_btn_back);
+        backButton.setTag(raceId);
+        backButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String raceId = (String)v.getTag();
+				// 速報リスト画面に遷移
+				Intent intent = new Intent( PassListSectionActivity.this, PassListActivity.class);
+				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
+				startActivity(intent);
+			}
+		});
         return;
 	}
 	
