@@ -105,8 +105,8 @@ public class MainActivity extends Activity {
 				return true;
 			}
 		});
-        // 大会登録ボタン
         
+        // 大会登録ボタン
         Button entryBtn = (Button)findViewById(R.id.id_main_btn_entry);
         entryBtn.setOnClickListener(new OnClickListener() {
 			
