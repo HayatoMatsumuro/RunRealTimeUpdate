@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.DataBaseUpdateData;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
 
 import android.app.Activity;
 import android.content.Context;

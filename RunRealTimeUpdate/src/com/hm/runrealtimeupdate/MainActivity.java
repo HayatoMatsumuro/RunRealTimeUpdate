@@ -3,8 +3,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;

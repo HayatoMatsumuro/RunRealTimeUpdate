@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate.logic;
+package com.hm.runrealtimeupdate.logic.dbaccess;
 
 public class DataBaseTimeList {
 

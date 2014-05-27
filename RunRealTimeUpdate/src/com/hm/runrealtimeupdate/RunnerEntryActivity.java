@@ -1,6 +1,6 @@
 package com.hm.runrealtimeupdate;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;

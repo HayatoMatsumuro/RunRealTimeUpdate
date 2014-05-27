@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.DataBaseRunnerInfo;
-import com.hm.runrealtimeupdate.logic.DataBaseTimeList;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;

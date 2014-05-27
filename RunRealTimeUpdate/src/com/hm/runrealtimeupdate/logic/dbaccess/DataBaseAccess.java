@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate.logic;
+package com.hm.runrealtimeupdate.logic.dbaccess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +12,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+//TODO: 今後削除する。各データベースに統合
 public class DataBaseAccess {
 	
 	public static final String STR_DBA_RACE_UPDATEFLG_ON = RaceProvider.STR_UPDATEFLG_ON;
