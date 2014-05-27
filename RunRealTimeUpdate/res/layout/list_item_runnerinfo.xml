@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/id_runnerinfo_txt_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/str_txt_runnername"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/id_runnerinfo_txt_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_runnerinfo_txt_name"
+        android:text="@string/str_txt_no" />
+
+    <TextView
+        android:id="@+id/id_runnerinfo_txt_section"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/id_runnerinfo_txt_no"
+        android:layout_alignBottom="@+id/id_runnerinfo_txt_no"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/id_runnerinfo_txt_no"
+        android:text="@string/str_txt_section" />
+
+</RelativeLayout>

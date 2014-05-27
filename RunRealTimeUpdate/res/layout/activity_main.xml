@@ -9,8 +9,28 @@
     tools:context=".MainActivity" >
 
     <TextView
+        android:id="@+id/id_main_txt_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:text="@string/str_title_main" />
+
+    <ListView
+        android:id="@+id/id_main_listview_race"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/id_main_txt_title"
+        android:layout_marginTop="10dp" >
+
+    </ListView>
+
+    <Button
+        android:id="@+id/id_main_btn_entry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/id_main_listview_race"
+        android:layout_alignTop="@+id/id_main_txt_title"
+        android:layout_marginRight="0dp"
+        android:text="@string/str_btn_entry" />
 
 </RelativeLayout>
