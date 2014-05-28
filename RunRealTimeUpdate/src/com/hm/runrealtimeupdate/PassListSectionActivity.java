@@ -9,7 +9,7 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
-import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
+import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -61,12 +61,12 @@ public class PassListSectionActivity extends Activity {
         	List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
         	
         	// 選手リスト作成
-        	RunnerInfo runnerInfo = new RunnerInfo();
+        	ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
         	runnerInfo.setName(info.getName());
 			runnerInfo.setNumber(info.getNumber());
 			
 			for( DataBaseTimeList timelist : dBTimeList){
-				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+				ParserRunnerInfo.TimeList timeList = new ParserRunnerInfo().new TimeList();
 				
 				timeList.setPoint(timelist.getPoint());
 				timeList.setSplit(timelist.getSplit());
@@ -118,7 +118,7 @@ public class PassListSectionActivity extends Activity {
         	passPointList.add(passPoint);
         	
         	// 選手情報
-        	for(RunnerInfo runnerInfo : passPointInfo.getRunnerInfoList()){
+        	for(ParserRunnerInfo runnerInfo : passPointInfo.getRunnerInfoList()){
         		PassPoint passPointRunner = new PassPoint();
         		passPointRunner.setPassPointRunnerMain(runnerInfo.getNumber() + "  " + runnerInfo.getName());
         		passPointRunner.setPassPointRunnerSub(runnerInfo.getTimeList().get(timelistSize-1).getSplit());
@@ -167,7 +167,7 @@ public class PassListSectionActivity extends Activity {
 		
 		int passPointNo;
 		
-		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
+		List<ParserRunnerInfo> runnerInfoList = new ArrayList<ParserRunnerInfo>();
 		
 		public int getPassPointNo() {
 			return passPointNo;
@@ -177,7 +177,7 @@ public class PassListSectionActivity extends Activity {
 			this.passPointNo = passPointNo;
 		}
 
-		public List<RunnerInfo> getRunnerInfoList() {
+		public List<ParserRunnerInfo> getRunnerInfoList() {
 			return runnerInfoList;
 		}
 

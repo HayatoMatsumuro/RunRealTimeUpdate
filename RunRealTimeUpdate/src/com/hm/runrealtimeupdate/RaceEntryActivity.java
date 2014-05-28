@@ -2,7 +2,7 @@
 
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
-import com.hm.runrealtimeupdate.logic.parser.RaceInfo;
+import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnersUpdateParser;
 
 import android.app.Activity;
@@ -65,7 +65,7 @@ public class RaceEntryActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
+	class RaceInfoLoaderTask extends AsyncTask<String, Void, ParserRaceInfo>{
 
 		/**
 		 * サイトのURL
@@ -75,7 +75,7 @@ public class RaceEntryActivity extends Activity {
 		/**
 		 * 大会情報
 		 */
-		private RaceInfo m_RaceInfo;
+		private ParserRaceInfo m_RaceInfo;
 		
 		/**
 		 * 
@@ -83,9 +83,9 @@ public class RaceEntryActivity extends Activity {
 		 * @return
 		 */
 		@Override
-		protected RaceInfo doInBackground(String... params) {
+		protected ParserRaceInfo doInBackground(String... params) {
 			
-			RaceInfo raceInfo = null;
+			ParserRaceInfo raceInfo = null;
 			try {
 				raceInfo = RunnersUpdateParser.getRaceInfo(params[0]);
 				m_Url = params[0];
@@ -97,7 +97,7 @@ public class RaceEntryActivity extends Activity {
 			return raceInfo;
 		}
 		@Override
-		protected void onPostExecute(RaceInfo result)
+		protected void onPostExecute(ParserRaceInfo result)
 		{
 			if( result == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
@@ -147,7 +147,7 @@ public class RaceEntryActivity extends Activity {
 			dialog.show();
 		}
 		
-		private String createDialogMessage( RaceInfo raceInfo ){
+		private String createDialogMessage( ParserRaceInfo raceInfo ){
 			
 			StringBuilder builder = new StringBuilder();
 			builder.append(getString(R.string.str_dialog_msg_name));

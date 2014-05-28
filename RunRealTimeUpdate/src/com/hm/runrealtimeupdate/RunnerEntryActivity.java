@@ -2,7 +2,7 @@ package com.hm.runrealtimeupdate;
 
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
-import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
+import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
 
 import android.app.Activity;
@@ -70,7 +70,7 @@ public class RunnerEntryActivity extends Activity {
 		});
 	}
 	
-	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
+	class RunnerInfoLoaderTask extends AsyncTask<String, Void, ParserRunnerInfo>{
 		
 		/**
 		 * 大会ID
@@ -80,7 +80,7 @@ public class RunnerEntryActivity extends Activity {
 		/**
 		 * 選手情報
 		 */
-		private RunnerInfo m_RunnerInfo;
+		private ParserRunnerInfo m_RunnerInfo;
 
 		@Override
 		/**
@@ -88,9 +88,9 @@ public class RunnerEntryActivity extends Activity {
 		 * param[1]:raceID
 		 * param[2]:no
 		 */
-		protected RunnerInfo doInBackground(String... params) {
+		protected ParserRunnerInfo doInBackground(String... params) {
 			
-			RunnerInfo runnerInfo = new RunnerInfo();
+			ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
 			
 			try{
 				runnerInfo = RunnerInfoParser.getRunnerInfo(params[0], params[1], params[2]);
@@ -103,7 +103,7 @@ public class RunnerEntryActivity extends Activity {
 		}
 		
 		@Override
-		protected void onPostExecute(RunnerInfo info){
+		protected void onPostExecute(ParserRunnerInfo info){
 			
 			if(info == null){
 				Toast.makeText(RunnerEntryActivity.this, "選手情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
@@ -147,7 +147,7 @@ public class RunnerEntryActivity extends Activity {
 			dialog.show();
 		}
 		
-		private String createDialogMessage( RunnerInfo raceInfo ){
+		private String createDialogMessage( ParserRunnerInfo raceInfo ){
 			StringBuilder builder = new StringBuilder();
 			
 			builder.append(getString(R.string.str_txt_racename));

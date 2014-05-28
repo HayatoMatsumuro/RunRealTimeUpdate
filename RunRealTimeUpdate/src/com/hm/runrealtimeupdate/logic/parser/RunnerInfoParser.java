@@ -14,9 +14,9 @@ import org.jsoup.select.Elements;
  */
 public class RunnerInfoParser {
 	
-	public static RunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException{
+	public static ParserRunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException{
 		
-		RunnerInfo runnerInfo = new RunnerInfo();
+		ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
 		
 		String runnerInfoURL = createRunnerInfoURL(url,raceId,no);
 		
@@ -66,7 +66,7 @@ public class RunnerInfoParser {
 			for(Element trElement:trElements){
 				Elements tdElements = trElement.getElementsByTag("td");
 							
-				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+				ParserRunnerInfo.TimeList timeList = new ParserRunnerInfo().new TimeList();
 						
 				timeList.setPoint(tdElements.get(0).text());
 				timeList.setSplit(tdElements.get(1).text());

@@ -9,7 +9,7 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
-import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
+import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
 
 import android.app.Notification;
@@ -118,7 +118,7 @@ public class UpdateService extends Service {
 					Log.d("service", "update　Start");
 					
 					// データベースから選手情報取得
-					List<RunnerInfo> oldRunnerInfoList = new ArrayList<RunnerInfo>();
+					List<ParserRunnerInfo> oldRunnerInfoList = new ArrayList<ParserRunnerInfo>();
 					for( DataBaseRunnerInfo info : dBRunnerInfoList){
 						
 						// TODO:
@@ -126,11 +126,11 @@ public class UpdateService extends Service {
 						
 						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
 						
-						RunnerInfo runnerInfo = new RunnerInfo();
+						ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
 						runnerInfo.setNumber(info.getNumber());
 						
 						for( DataBaseTimeList timelist : dBTimeList){
-							RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+							ParserRunnerInfo.TimeList timeList = new ParserRunnerInfo().new TimeList();
 							
 							timeList.setPoint(timelist.getPoint());
 							timeList.setSplit(timelist.getSplit());
@@ -143,18 +143,18 @@ public class UpdateService extends Service {
 					}
 					
 					// ランネットサーバーから選手情報取得
-					List<RunnerInfo> newRunnerInfoList = new ArrayList<RunnerInfo>();
+					List<ParserRunnerInfo> newRunnerInfoList = new ArrayList<ParserRunnerInfo>();
 					for(DataBaseRunnerInfo info:dBRunnerInfoList){
 						
 						try {
-							RunnerInfo runnerInfo = RunnerInfoParser.getRunnerInfo(getString(R.string.str_txt_defaulturl), m_RaceId, info.getNumber());
+							ParserRunnerInfo runnerInfo = RunnerInfoParser.getRunnerInfo(getString(R.string.str_txt_defaulturl), m_RaceId, info.getNumber());
 							newRunnerInfoList.add(runnerInfo);
 						} catch (ParserException e) {
 							// TODO 自動生成された catch ブロック
 							e.printStackTrace();
 							
 							// とりあえず空リストを作成する
-							RunnerInfo runnerInfo = new RunnerInfo();
+							ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
 							newRunnerInfoList.add(runnerInfo);
 						}
 					}
@@ -163,8 +163,8 @@ public class UpdateService extends Service {
 					boolean updateFlg = false;
 					int runnerNum = dBRunnerInfoList.size();
 					for( int i=0; i < runnerNum; i++){
-						RunnerInfo newInfo = newRunnerInfoList.get(i);
-						RunnerInfo oldInfo = oldRunnerInfoList.get(i);
+						ParserRunnerInfo newInfo = newRunnerInfoList.get(i);
+						ParserRunnerInfo oldInfo = oldRunnerInfoList.get(i);
 						
 						int newInfoTimeListSize = newInfo.getTimeList().size();
 						int oldInfoTimeListSize = oldInfo.getTimeList().size();

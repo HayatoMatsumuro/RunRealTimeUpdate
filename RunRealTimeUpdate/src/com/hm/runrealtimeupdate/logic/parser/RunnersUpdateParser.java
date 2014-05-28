@@ -19,7 +19,7 @@ public class RunnersUpdateParser {
 	 * @param url URL
 	 * @return
 	 */
-	public static RaceInfo getRaceInfo( String url ) throws ParserException{
+	public static ParserRaceInfo getRaceInfo( String url ) throws ParserException{
 		
 		try{
 			Document doc = Jsoup.connect(url).get();
@@ -45,7 +45,7 @@ public class RunnersUpdateParser {
 			String date = ddElements.get(0).text();
 			String location = ddElements.get(1).text();
 			
-			RaceInfo raceInfo = new RaceInfo();
+			ParserRaceInfo raceInfo = new ParserRaceInfo();
 			
 			raceInfo.setName(title);
 			raceInfo.setDate(date);
