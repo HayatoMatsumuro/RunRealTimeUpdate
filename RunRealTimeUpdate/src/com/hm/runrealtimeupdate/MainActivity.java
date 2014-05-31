@@ -55,7 +55,6 @@ public class MainActivity extends Activity {
 				Logic.setSelectRaceInfo( item );
 				
 				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, item.getRaceId());
 				startActivity(intent);
 			}
 		});

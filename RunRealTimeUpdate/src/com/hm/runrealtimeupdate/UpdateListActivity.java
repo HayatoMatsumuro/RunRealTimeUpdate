@@ -69,16 +69,13 @@ public class UpdateListActivity extends Activity {
         
         // 大会詳細ボタン
         Button raceDetailButton = (Button)findViewById(R.id.id_updatelist_btn_detail);
-        raceDetailButton.setTag(raceId);
         raceDetailButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String raceId = (String)v.getTag();
 				
 				// 大会詳細画面遷移
 				Intent intent = new Intent(UpdateListActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
 				startActivity(intent);
 				
 			}

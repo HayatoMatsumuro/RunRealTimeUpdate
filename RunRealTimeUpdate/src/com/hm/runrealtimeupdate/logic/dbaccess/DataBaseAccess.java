@@ -12,7 +12,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-//TODO: 今後削除する。各データベースに統合
 public class DataBaseAccess {
 	
 	public static final String STR_DBA_RACE_UPDATEFLG_ON = RaceProvider.STR_UPDATEFLG_ON;
@@ -217,6 +216,13 @@ public class DataBaseAccess {
 		return list;
 	}
 
+	/**
+	 * 大会IDと部門に登録されている選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param section
+	 * @return
+	 */
 	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceIdandSection( ContentResolver contentResolver, String raceId, String section){
 		List<DataBaseRunnerInfo> list = new ArrayList<DataBaseRunnerInfo>();
 		
@@ -240,6 +246,7 @@ public class DataBaseAccess {
 		
 		return list;
 	}
+	
 	/**
 	 * 大会IDとゼッケンNOから選手情報を削除する
 	 * @param contentResolver 
@@ -343,6 +350,16 @@ public class DataBaseAccess {
 		return;
 	}
 	
+	/**
+	 * 大会IDとゼッケン番号からタイムリストを削除する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 */
+	public static void deleteTimeListByRaceIdandNo( ContentResolver contentResolver, String raceId, String number ){
+		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
+		contentResolver.delete(TimelistProvider.URI_DB, selection, null);
+	}
 	/**
 	 * 速報情報を登録する
 	 * @param contentResolver

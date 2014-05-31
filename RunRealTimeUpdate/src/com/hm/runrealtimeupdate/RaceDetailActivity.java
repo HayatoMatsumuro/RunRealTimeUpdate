@@ -1,11 +1,10 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
+import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,33 +26,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class RaceDetailActivity extends Activity {
 	
-	public static String STR_INTENT_RACEID = "raceid";
-	
 	/**
 	 * 登録できる選手の数
 	 */
-	//TODO:暫定
 	private static int INT_RUNNER_NUM_MAX = 30;
-	
-	/**
-	 * 削除するランナーのポジション
-	 */
-	private RunnerInfoItem m_DeleteRunnerInfoItem;
-	
-	/**
-	 * 選手情報リスト
-	 */
-	private List<RunnerInfoItem> m_RunnerInfoItemList;
-	
-	/**
-	 * 選手情報アダプタ
-	 */
-	private RunnerInfoAdapter m_RunnerInfoAdapter;
-
-	/**
-	 * 速報フラグ
-	 */
-	//private String m_UpdateStatus;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +37,22 @@ public class RaceDetailActivity extends Activity {
         setContentView(R.layout.activity_racedetail);
         
         // 大会情報取得
-        Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
+        //Intent intent = getIntent();
+        //String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        RaceInfo raceInfo = Logic.getSelectRaceInfo();
+        //DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
 
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_racedetail_txt_racename);
-        raceNameTextView.setText(dbRaceInfo.getRaceName());
+        raceNameTextView.setText(raceInfo.getRaceName());
         
         // 大会日
         TextView raceDateTextView = (TextView)findViewById(R.id.id_racedetail_txt_racedate);
-        raceDateTextView.setText(dbRaceInfo.getRaceDate());
+        raceDateTextView.setText(raceInfo.getRaceDate());
         
         // 開催地
         TextView raceLocationTextView = (TextView)findViewById(R.id.id_racedetail_txt_racelocation);
-        raceLocationTextView.setText(dbRaceInfo.getRaceLocation());
+        raceLocationTextView.setText(raceInfo.getRaceLocation());
         
         // 戻るボタン
         Button backButton = (Button)findViewById(R.id.id_racedetail_btn_back);
@@ -91,35 +68,26 @@ public class RaceDetailActivity extends Activity {
 		});
         
         // 選手情報
-        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), raceId);
-        m_RunnerInfoItemList = new ArrayList<RunnerInfoItem>();
+        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver());
         
-        // アダプタ設定
-        for( DataBaseRunnerInfo info:dbRunnerInfoList ){
-        	RunnerInfoItem item = new RunnerInfoItem();
-        	item.setRaceId(info.getRaceId());
-        	item.setName(info.getName());
-        	item.setNumber(info.getNumber());
-        	item.setSection(info.getSection());
-        	m_RunnerInfoItemList.add(item);
-        }
-        m_RunnerInfoAdapter = new RunnerInfoAdapter(this, m_RunnerInfoItemList);
-        
+        // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_racedetail_listview_runner);
-        runnerInfoListView.setAdapter(m_RunnerInfoAdapter);
+        RunnerListAdapter adapter = new RunnerListAdapter(this, runnerInfoList);
+        runnerInfoListView.setAdapter(adapter);
         
-        // リストのアイテム長押し
+        // 選手リストのアイテム長押し
         runnerInfoListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View v, int position, long id) {
-				RunnerInfoItem item = m_RunnerInfoItemList.get(position);
+				List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver());
+				RunnerInfo runnerInfo = runnerInfoList.get(position);
 				
 				// 削除する選手情報設定
-				m_DeleteRunnerInfoItem = item;
+				Logic.setSelectRunnerInfo(runnerInfo);
 				
 				// 削除ダイアログ表示
-				runnerInfoDeleteDialog(item);
+				runnerInfoDeleteDialog(runnerInfo);
 				
 				return true;
 			}
@@ -128,7 +96,9 @@ public class RaceDetailActivity extends Activity {
         
         // 選手登録ボタン
         Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
-        runnerEntryButton.setTag(raceId);
+        
+        //TODO: この処理は消す
+        runnerEntryButton.setTag(raceInfo.getRaceId());
         runnerEntryButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -142,7 +112,8 @@ public class RaceDetailActivity extends Activity {
 			}
 		});
         
-        if( dbRunnerInfoList.size() >= INT_RUNNER_NUM_MAX){
+        // 選手登録ボタンのフォーカス設定
+        if( runnerInfoList.size() >= INT_RUNNER_NUM_MAX){
         	runnerEntryButton.setEnabled(false);
         }else{
         	runnerEntryButton.setEnabled(true);
@@ -151,23 +122,21 @@ public class RaceDetailActivity extends Activity {
         // 速報開始停止ボタン
         Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
         
-        // 速報開始停止ボタンのタグ設定
-        UpdateButtonTag updateButtonTag = new UpdateButtonTag();
-        updateButtonTag.setRaceId(raceId);
-        updateButtonTag.setUpdateFlg(dbRaceInfo.getUpdateFlg());
-        updateButton.setTag(updateButtonTag);
-        
         // 速報開始停止ボタンの表示設定
-        if( dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON) ){
-        	updateButton.setText(getString(R.string.str_btn_updatestop));
-        } else {
+        String updateRaceId = Logic.getUpdateRaceId();
+        
+        if( updateRaceId == null ){
+        	// 速報中の大会なし
         	updateButton.setText(getString(R.string.str_btn_updatestart));
-        	
-        	// 他の大会が速報中の場合は、ボタンを無効化する
-        	List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getUpdateExeRaceInfo(getContentResolver());
-        	if( !dbRaceInfoList.isEmpty() ){
-        		updateButton.setEnabled(false);
-            };
+        	updateButton.setEnabled(true);
+        }else if( updateRaceId.equals(raceInfo.getRaceId())){
+        	// 選択中の大会IDと速報中の大会が一致
+        	updateButton.setText(getString(R.string.str_btn_updatestop));
+        	updateButton.setEnabled(true);
+        }else{
+        	// 他の大会が速報中
+        	updateButton.setText(getString(R.string.str_btn_updatestart));
+        	updateButton.setEnabled(false);
         }
         
         // 速報開始停止ボタンの処理設定
@@ -178,25 +147,18 @@ public class RaceDetailActivity extends Activity {
 				
 				// 速報が自動停止した場合は速報が停止しているが表示は「速報停止」となっている
 				// 動作的に問題ないため、そのままとする
-				UpdateButtonTag updateButtonTag = (UpdateButtonTag)v.getTag();
+				String updateRaceId = Logic.getUpdateRaceId();
 				
-				if( updateButtonTag.getUpdateFlg().equals( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF )){
+				if( updateRaceId == null ){
 					// 速報開始ボタン押し
 					
-					// データベース変更
-					DataBaseAccess.setRaceUpdate(
-							getContentResolver(),
-							updateButtonTag.getRaceId(),
-							DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
+					// 大会を速報状態にする
+					Logic.setUpdateOnRaceId(getContentResolver(), updateRaceId);
 					
 					// 速報開始
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, updateButtonTag.getRaceId());
+					intent.putExtra(UpdateService.STR_INTENT_RACEID, updateRaceId);
 					startService(intent);
-					
-					// タグ設定
-					updateButtonTag.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
-					v.setTag(updateButtonTag);
 					
 					// 表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestop));
@@ -206,18 +168,11 @@ public class RaceDetailActivity extends Activity {
 					// 速報停止ボタン押し
 					
 					// データベース変更
-					DataBaseAccess.setRaceUpdate(
-							getContentResolver(),
-							updateButtonTag.getRaceId(),
-							DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+					Logic.setUpdateOffRaceId(getContentResolver(), updateRaceId);
 					
 					// 速報停止
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
 					stopService(intent);
-					
-					// タグ設定
-					updateButtonTag.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
-					v.setTag(updateButtonTag);
 					
 					// 表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestart));
@@ -227,22 +182,22 @@ public class RaceDetailActivity extends Activity {
         
         // 速報リストボタン
         Button updatelistButton = (Button)findViewById(R.id.id_racedetail_btn_updatelist);
-        updatelistButton.setTag(raceId);
         updatelistButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String raceId = (String)v.getTag();
 				
 				Intent intent = new Intent( RaceDetailActivity.this, UpdateListActivity.class );
-				intent.putExtra( UpdateListActivity.STR_INTENT_RACEID, raceId );
+				
+				//TODO: この処理は削除する
+				intent.putExtra( UpdateListActivity.STR_INTENT_RACEID, Logic.getSelectRaceInfo().getRaceId() );
 				
 				startActivity(intent);
 			}
 		});
 	}
 	
-	private void runnerInfoDeleteDialog( RunnerInfoItem runnerInfoItem ){
+	private void runnerInfoDeleteDialog( RunnerInfo runnerInfoItem ){
 		
 		// ダイアログ表示
 		AlertDialog.Builder dialog = new AlertDialog.Builder(RaceDetailActivity.this);
@@ -256,14 +211,12 @@ public class RaceDetailActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				
 				// 選手削除
-				DataBaseAccess.deleteRunnerInfoByNo(getContentResolver(), m_DeleteRunnerInfoItem.getRaceId(), m_DeleteRunnerInfoItem.getNumber());
-				
-				// リストから選手情報を削除する
-				m_RunnerInfoItemList.remove(m_DeleteRunnerInfoItem);
-				m_RunnerInfoAdapter.remove(m_DeleteRunnerInfoItem);
+				Logic.deleteRunnerInfo(getContentResolver());
 				
 				// 表示リストを更新する
-				m_RunnerInfoAdapter.notifyDataSetChanged();
+				ListView listView = (ListView)findViewById(R.id.id_racedetail_listview_runner);
+				RunnerListAdapter adapter = (RunnerListAdapter)listView.getAdapter();
+				adapter.notifyDataSetChanged();
 				
 				Toast.makeText(RaceDetailActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 				
@@ -278,7 +231,7 @@ public class RaceDetailActivity extends Activity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO 自動生成されたメソッド・スタブ
+				// なにもしない
 			}
 		});
 		
@@ -291,22 +244,27 @@ public class RaceDetailActivity extends Activity {
 	 * @param runnerInfoItem
 	 * @return
 	 */
-	private String createDialogMessage( RunnerInfoItem runnerInfoItem ){
+	private String createDialogMessage( RunnerInfo runnerInfo ){
 		StringBuilder builder = new StringBuilder();
-		builder.append(runnerInfoItem.getName());
+		builder.append(runnerInfo.getName());
 		builder.append("\n");
-		builder.append(runnerInfoItem.getNumber());
+		builder.append(runnerInfo.getNumber());
 		builder.append("\n");
-		builder.append(runnerInfoItem.getSection());
+		builder.append(runnerInfo.getSection());
 		
 		return builder.toString();
 	}
 	
-	private class RunnerInfoAdapter extends ArrayAdapter<RunnerInfoItem>{
+	/**
+	 * ランナーリストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RunnerListAdapter extends ArrayAdapter<RunnerInfo>{
 
 		LayoutInflater inflater;
     	
-		public RunnerInfoAdapter(Context context, List<RunnerInfoItem> objects) {
+		public RunnerListAdapter(Context context, List<RunnerInfo> objects) {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -324,7 +282,7 @@ public class RaceDetailActivity extends Activity {
 			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_no);
 			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_section);
 			
-			RunnerInfoItem item = getItem(position);
+			RunnerInfo item = getItem(position);
 				
 			runnerNameTextView.setText(item.getName());
 			runnerNoTextView.setText(item.getNumber());
@@ -333,32 +291,5 @@ public class RaceDetailActivity extends Activity {
 			return convertView;
 		}
 		
-	}
-	
-	private class RunnerInfoItem extends DataBaseRunnerInfo{
-		
-	}
-	
-	private class UpdateButtonTag {
-		
-		private String raceId;
-
-		private String updateFlg;
-		
-		public String getRaceId() {
-			return raceId;
-		}
-
-		public void setRaceId(String raceId) {
-			this.raceId = raceId;
-		}
-
-		public String getUpdateFlg() {
-			return updateFlg;
-		}
-
-		public void setUpdateFlg(String updateFlg) {
-			this.updateFlg = updateFlg;
-		}
 	}
 }

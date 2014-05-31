@@ -1,5 +1,6 @@
 package com.hm.runrealtimeupdate.logic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +25,13 @@ public class RunnerInfo {
 	 * タイムリスト
 	 */
 	private List<TimeList> timeList;
+	
+	/**
+	 * コンストラクタ
+	 */
+	public RunnerInfo(){
+		timeList = new ArrayList<TimeList>();
+	}
 	
 	public String getName() {
 		return name;

@@ -39,7 +39,6 @@ public class RunnerEntryActivity extends Activity {
 			public void onClick(View v) {
 				// 大会詳細画面遷移
 				Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, (String)v.getTag());
 				startActivity(intent);
 			}
 		});
@@ -131,7 +130,6 @@ public class RunnerEntryActivity extends Activity {
 					Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
 					
 					Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-					intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, m_RaceId);
 					startActivity(intent);
 				}
 			});

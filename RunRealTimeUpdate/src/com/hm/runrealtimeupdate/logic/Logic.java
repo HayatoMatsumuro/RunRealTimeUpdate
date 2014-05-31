@@ -35,6 +35,11 @@ public class Logic {
 	 */
 	private static String m_RaceIdUpdate = null;
 	
+	/**
+	 * 選択中の選手情報
+	 */
+	private static RunnerInfo m_SelectRunnerInfo = null;
+	
 	//private static List<RunnerInfo> m_RunnerInfoList = null;
 	
 	/**
@@ -120,6 +125,39 @@ public class Logic {
 	}
 	
 	/**
+	 * 指定の大会を速報状態にする
+	 * @param raceId
+	 */
+	public static void setUpdateOnRaceId( ContentResolver contentResolver, String raceId){
+		
+		// 速報中の大会IDがあるなら速報状態を停止する( ないはず )
+		if( m_RaceIdUpdate != null ){
+			DataBaseAccess.setRaceUpdate(contentResolver, m_RaceIdUpdate, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+			m_RaceIdUpdate = null;
+		}
+		
+		// 指定の大会を速報状態にする
+		DataBaseAccess.setRaceUpdate(contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
+		m_RaceIdUpdate = raceId;
+		
+		return;
+	}
+	
+	/**
+	 * 指定の大会の速報状態を停止する
+	 * @param contentResolver 
+	 * @param raceId 大会ID
+	 */
+	public static void setUpdateOffRaceId(ContentResolver contentResolver, String raceId){
+		
+		// 指定の大会を速報状態にする
+		DataBaseAccess.setRaceUpdate(contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+		m_RaceIdUpdate = null;
+				
+		return;
+	}
+	
+	/**
 	 * 選択中の大会情報を設定する
 	 * @param raceInfo 大会情報
 	 */
@@ -140,6 +178,7 @@ public class Logic {
 	public static RaceInfo getSelectRaceInfo(){
 		return m_SelectRaceInfo;
 	}
+	
 	/**
 	 * 指定の大会IDが登録済みかどうかを検索する
 	 * @param raceId 大会ID
@@ -166,6 +205,7 @@ public class Logic {
 			return false;
 		}
 	}
+	
 	/**
 	 * ネットワークから大会情報を取得する
 	 * @param raceId 大会ID
@@ -198,15 +238,11 @@ public class Logic {
 	 */
 	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver ){
 		
-		if(m_SelectRaceInfo == null){
-			return null;
-		}
 		// 選手情報未取得
-		if( m_RunnerInfoList != null ){
+		if( m_RunnerInfoList == null ){
 			
-			List<DataBaseRunnerInfo> dbRunnerInfoList = new ArrayList<DataBaseRunnerInfo>();
+			List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
 			
-			DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
 			m_RunnerInfoList = new ArrayList<RunnerInfo>();
 			
 			for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
@@ -233,4 +269,38 @@ public class Logic {
 		return m_RunnerInfoList;
 	}
 	
+	/**
+	 * 選択中の選手情報を設定する
+	 * @param runnerInfo 選手情報
+	 */
+	public static void setSelectRunnerInfo( RunnerInfo runnerInfo ){
+		m_SelectRunnerInfo = runnerInfo;
+	}
+	
+	/**
+	 * 選択中の選手情報を削除する
+	 * @param contentResolver
+	 */
+	public static void deleteRunnerInfo( ContentResolver contentResolver ){
+		
+		// タイムリスト削除
+		DataBaseAccess.deleteTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), m_SelectRunnerInfo.getNumber());
+		
+		// 選手情報削除
+		DataBaseAccess.deleteRunnerInfoByNo(contentResolver, m_SelectRaceInfo.getRaceId(), m_SelectRunnerInfo.getNumber());
+		
+		m_RunnerInfoList.remove(m_SelectRunnerInfo);
+		
+		m_SelectRunnerInfo = null;
+		
+		return;
+	}
+	
+	/**
+	 * 選択中の選手情報を取得する
+	 * @return 選手情報
+	 */
+	public static RunnerInfo getSelectRunnerInfo(){
+		return m_SelectRunnerInfo;
+	}
 }
