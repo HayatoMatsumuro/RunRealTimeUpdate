@@ -1,9 +1,8 @@
 ﻿package com.hm.runrealtimeupdate;
 
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.parser.ParserException;
-import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
-import com.hm.runrealtimeupdate.logic.parser.RunnersUpdateParser;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -65,44 +64,35 @@ public class RaceEntryActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class RaceInfoLoaderTask extends AsyncTask<String, Void, ParserRaceInfo>{
+	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
 
-		/**
-		 * サイトのURL
-		 */
-		private String m_Url;
-		
-		/**
-		 * 大会情報
-		 */
-		private ParserRaceInfo m_RaceInfo;
-		
 		/**
 		 * 
 		 * @param String params[0] 大会のURL
 		 * @return
 		 */
 		@Override
-		protected ParserRaceInfo doInBackground(String... params) {
+		protected RaceInfo doInBackground(String... params) {
 			
-			ParserRaceInfo raceInfo = null;
+			RaceInfo raceInfo = null;
 			try {
-				raceInfo = RunnersUpdateParser.getRaceInfo(params[0]);
-				m_Url = params[0];
-				m_RaceInfo = raceInfo;
+				raceInfo = Logic.getNetRaceInfo(getRaceIdByUrl(params[0]));
 				
-			} catch (ParserException e) {
+			} catch (LogicException e) {
 				e.printStackTrace();
 			}
 			return raceInfo;
 		}
 		@Override
-		protected void onPostExecute(ParserRaceInfo result)
+		protected void onPostExecute( RaceInfo result)
 		{
 			if( result == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
 			}
+			
+			// 選択中の大会情報設定
+			Logic.setSelectRaceInfo(result);
 			
 			AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
 			dialog.setTitle(getString(R.string.str_dialog_title_race));
@@ -113,22 +103,21 @@ public class RaceEntryActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int width)
 				{
-					// TODO:二重登録の確認
+					RaceInfo raceInfo = Logic.getSelectRaceInfo();
 					
-					// RaceId取得
-					String raceId = getRaceIdByUrl(m_Url);
+					if( Logic.checkEntryRaceId(getContentResolver(), raceInfo.getRaceId())){
+						// すでに大会が登録済み
+						Toast.makeText(RaceEntryActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT).show();
+					}else{
+						// データベース登録
+						Logic.entryRaceInfo( getContentResolver(), raceInfo);
+						
+						Toast.makeText(RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+						
+						Intent intent = new Intent( RaceEntryActivity.this, MainActivity.class );
+						startActivity(intent);
+					}
 					
-					// データベース登録
-					DataBaseAccess.entryRace(
-							getContentResolver(),
-							raceId,
-							m_RaceInfo.getName(),
-							m_RaceInfo.getDate(),
-							m_RaceInfo.getLocation());
-					
-					Toast.makeText(RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
-					
-					// TODO:大会数が最大を超えた場合、入力できないようにする
 				}
 				
 				
@@ -138,8 +127,7 @@ public class RaceEntryActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO 自動生成されたメソッド・スタブ
-					
+					// なにもしない					
 				}
 				
 			});
@@ -147,20 +135,25 @@ public class RaceEntryActivity extends Activity {
 			dialog.show();
 		}
 		
-		private String createDialogMessage( ParserRaceInfo raceInfo ){
+		/**
+		 * 登録ダイアログのメッセージを作成する
+		 * @param raceInfo 大会情報
+		 * @return メッセージ
+		 */
+		private String createDialogMessage( RaceInfo raceInfo ){
 			
 			StringBuilder builder = new StringBuilder();
 			builder.append(getString(R.string.str_dialog_msg_name));
 			builder.append("\n");
-			builder.append(raceInfo.getName());
+			builder.append(raceInfo.getRaceName());
 			builder.append("\n");
 			builder.append(getString(R.string.str_dialog_msg_date));
 			builder.append("\n");
-			builder.append(raceInfo.getDate());
+			builder.append(raceInfo.getRaceDate());
 			builder.append("\n");
 			builder.append(getString(R.string.str_dialog_msg_location));
 			builder.append("\n");
-			builder.append(raceInfo.getLocation());
+			builder.append(raceInfo.getRaceLocation());
 			
 			return builder.toString();
 		}

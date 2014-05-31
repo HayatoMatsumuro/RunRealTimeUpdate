@@ -15,13 +15,25 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
 
+	/**
+	 * 大会情報リスト
+	 */
 	private static List<RaceInfo> m_RaceInfoList = null;
 	
+	/**
+	 * 選手情報リスト
+	 */
 	private static List<RunnerInfo> m_RunnerInfoList = null;
 	
-	private static String m_RaceIdUpdate = null;
+	/**
+	 * 選択中の大会情報
+	 */
+	private static RaceInfo m_SelectRaceInfo = null;
 	
-	private static RaceInfo m_RaceInfoExe = null;
+	/**
+	 * 速報中の大会情報
+	 */
+	private static String m_RaceIdUpdate = null;
 	
 	//private static List<RunnerInfo> m_RunnerInfoList = null;
 	
@@ -32,8 +44,17 @@ public class Logic {
 	 */
 	public static void entryRaceInfo( ContentResolver contentResolver, RaceInfo raceInfo ){
 		
-		// TODO: 大会登録インターフェース変更後
-		//DataBaseAccess.entryRace(contentResolver, raceId, raceName, raceDate, raceLocation);
+		// 登録情報設定
+		DataBaseRaceInfo dbRaceInfo = new DataBaseRaceInfo();
+		
+		dbRaceInfo.setRaceId(raceInfo.getRaceId());
+		dbRaceInfo.setRaceName(raceInfo.getRaceName());
+		dbRaceInfo.setRaceDate(raceInfo.getRaceDate());
+		dbRaceInfo.setRaceLocation(raceInfo.getRaceLocation());
+		dbRaceInfo.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+		
+		// データベース登録
+		DataBaseAccess.entryRace(contentResolver, dbRaceInfo);
 		
 		if( m_RaceInfoList != null ){
 			m_RaceInfoList.add(raceInfo);
@@ -83,6 +104,69 @@ public class Logic {
 	}
 	
 	/**
+	 * 指定の大会IDが速報中かどうか判定する
+	 * @param raceId 大会ID
+	 * @return　true:速報中、false:速報中でない
+	 */
+	public static boolean checkRaceIdUpdate( String raceId ){
+		
+		if( m_RaceIdUpdate == null ){
+			// 速報中の大会がない
+			return false;
+		}else{
+			// 速報中の大会あり
+			return m_RaceIdUpdate.equals(raceId);
+		}
+	}
+	
+	/**
+	 * 選択中の大会情報を設定する
+	 * @param raceInfo 大会情報
+	 */
+	public static void setSelectRaceInfo( RaceInfo raceInfo){
+		m_SelectRaceInfo = raceInfo;
+		
+		if( m_RunnerInfoList != null){
+			m_RunnerInfoList.clear();
+			m_RunnerInfoList = null;
+		}
+		return;
+	}
+	
+	/**
+	 * 選択中の大会情報を取得する
+	 * @return 大会情報
+	 */
+	public static RaceInfo getSelectRaceInfo(){
+		return m_SelectRaceInfo;
+	}
+	/**
+	 * 指定の大会IDが登録済みかどうかを検索する
+	 * @param raceId 大会ID
+	 * @return false 未登録、true 登録済み
+	 */
+	public static boolean checkEntryRaceId( ContentResolver contentResolver, String raceId){
+		
+		if( m_RaceInfoList == null ){
+			// 大会情報未取得
+			DataBaseRaceInfo info = DataBaseAccess.getRaceInfoByRaceId(contentResolver, raceId);
+			
+			if( info == null ){
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			// 大会情報取得済み
+			for( RaceInfo raceInfo:m_RaceInfoList){
+				if( raceInfo.getRaceId().equals(raceId)){
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	/**
 	 * ネットワークから大会情報を取得する
 	 * @param raceId 大会ID
 	 * @return　取得した大会情報
@@ -107,21 +191,6 @@ public class Logic {
 			throw new LogicException(e.getMessage());
 		}
 	}
-
-	/**
-	 * 選択中の大会情報を設定する
-	 * @param raceInfo 大会情報
-	 */
-	public static void setRaceInfoExe( RaceInfo raceInfo){
-		m_RaceInfoExe = raceInfo;
-		
-		if( m_RunnerInfoList != null){
-			m_RunnerInfoList.clear();
-			m_RunnerInfoList = null;
-		}
-		
-		return;
-	}
 	
 	/**
 	 * 選択中の大会情報を取得する
@@ -129,7 +198,7 @@ public class Logic {
 	 */
 	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver ){
 		
-		if(m_RaceInfoExe == null){
+		if(m_SelectRaceInfo == null){
 			return null;
 		}
 		// 選手情報未取得
@@ -137,7 +206,7 @@ public class Logic {
 			
 			List<DataBaseRunnerInfo> dbRunnerInfoList = new ArrayList<DataBaseRunnerInfo>();
 			
-			DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_RaceInfoExe.getRaceId());
+			DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
 			m_RunnerInfoList = new ArrayList<RunnerInfo>();
 			
 			for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
@@ -147,7 +216,7 @@ public class Logic {
 				runnerInfo.setNumber(dbRunnerInfo.getNumber());
 				runnerInfo.setSection(dbRunnerInfo.getSection());
 				
-				List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, m_RaceInfoExe.getRaceId(), dbRunnerInfo.getNumber());
+				List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), dbRunnerInfo.getNumber());
 				
 				for( DataBaseTimeList dbTimeList:dbTimeListList){
 					RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();

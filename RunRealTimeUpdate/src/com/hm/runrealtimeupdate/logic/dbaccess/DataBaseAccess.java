@@ -29,19 +29,16 @@ public class DataBaseAccess {
 	 */
 	public static void entryRace(
 			ContentResolver contentResolver,
-			String raceId,
-			String raceName,
-			String raceDate,
-			String raceLocation )
+			DataBaseRaceInfo dbRaceInfo )
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(RaceProvider.STR_DB_COLUMN_RACEID, raceId );
-		values.put(RaceProvider.STR_DB_COLUMN_RACENAME, raceName);
-		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, raceDate);
-		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, raceLocation);
-		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, RaceProvider.STR_UPDATEFLG_OFF);
+		values.put(RaceProvider.STR_DB_COLUMN_RACEID, dbRaceInfo.getRaceId() );
+		values.put(RaceProvider.STR_DB_COLUMN_RACENAME, dbRaceInfo.getRaceName());
+		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, dbRaceInfo.getRaceDate());
+		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, dbRaceInfo.getRaceLocation());
+		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, dbRaceInfo.getUpdateFlg());
 		
 		contentResolver.insert(RaceProvider.URI_DB, values);
 		return;
