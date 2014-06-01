@@ -95,6 +95,7 @@ public class RaceDetailActivity extends Activity {
         });
         
         // 選手登録ボタン
+        //TODO: 速報中なら、フォーカスを当てない
         Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
         runnerEntryButton.setOnClickListener(new OnClickListener() {
 			
@@ -152,7 +153,6 @@ public class RaceDetailActivity extends Activity {
 					
 					// 速報開始
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, updateRaceId);
 					startService(intent);
 					
 					// 表示変更

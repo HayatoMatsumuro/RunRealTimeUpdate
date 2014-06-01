@@ -1,16 +1,9 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
-import com.hm.runrealtimeupdate.logic.parser.ParserException;
-import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
-import com.hm.runrealtimeupdate.logic.parser.RunnerInfoParser;
+import com.hm.runrealtimeupdate.logic.Logic;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,12 +15,6 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class UpdateService extends Service {
-
-	/**
-	 * インテント　大会ID
-	 */
-	public static String STR_INTENT_RACEID = "raceid";
-	
 	
 	//TODO: 暫定値
 	/**
@@ -88,14 +75,16 @@ public class UpdateService extends Service {
 		// TODO:
 		Log.d("service", "start");
 		
-		// 大会Id取得
-		m_RaceId = intent.getStringExtra(STR_INTENT_RACEID);
-		
 		// タイマー開始
 		UpdateTimerTask timerTask = new UpdateTimerTask();
 		m_IntervalTimer.schedule(timerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL);
 	}
 	
+	/**
+	 * データ更新タスク
+	 * @author Hayato Matsumuro
+	 *
+	 */
 	private class UpdateTimerTask extends TimerTask {
 
 		private Handler handler;
@@ -106,102 +95,14 @@ public class UpdateService extends Service {
 		
 		@Override
 		public void run() {
+			Logic.loadNetRunnerInfoList();
 			handler.post(new Runnable() {
 				
 				@Override
 				public void run() {
 					
-					List<DataBaseRunnerInfo> dBRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
-					
-					// TODO:インターネットの取得はUIタスクでしない。時間がかかり、操作が固まる。
-					// TODO:
-					Log.d("service", "update　Start");
-					
-					// データベースから選手情報取得
-					List<ParserRunnerInfo> oldRunnerInfoList = new ArrayList<ParserRunnerInfo>();
-					for( DataBaseRunnerInfo info : dBRunnerInfoList){
-						
-						// TODO:
-						Log.d("service", "update" + info.getNumber());
-						
-						List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
-						
-						ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
-						runnerInfo.setNumber(info.getNumber());
-						
-						for( DataBaseTimeList timelist : dBTimeList){
-							ParserRunnerInfo.TimeList timeList = new ParserRunnerInfo().new TimeList();
-							
-							timeList.setPoint(timelist.getPoint());
-							timeList.setSplit(timelist.getSplit());
-							timeList.setLap(timelist.getLap());
-							timeList.setCurrentTime(timelist.getCurrentTime());
-							runnerInfo.addTimeList(timeList);
-						}
-						oldRunnerInfoList.add(runnerInfo);
-						
-					}
-					
-					// ランネットサーバーから選手情報取得
-					List<ParserRunnerInfo> newRunnerInfoList = new ArrayList<ParserRunnerInfo>();
-					for(DataBaseRunnerInfo info:dBRunnerInfoList){
-						
-						try {
-							ParserRunnerInfo runnerInfo = RunnerInfoParser.getRunnerInfo(getString(R.string.str_txt_defaulturl), m_RaceId, info.getNumber());
-							newRunnerInfoList.add(runnerInfo);
-						} catch (ParserException e) {
-							// TODO 自動生成された catch ブロック
-							e.printStackTrace();
-							
-							// とりあえず空リストを作成する
-							ParserRunnerInfo runnerInfo = new ParserRunnerInfo();
-							newRunnerInfoList.add(runnerInfo);
-						}
-					}
-					
-					// データが更新されている場合は、データベースに書き込む
-					boolean updateFlg = false;
-					int runnerNum = dBRunnerInfoList.size();
-					for( int i=0; i < runnerNum; i++){
-						ParserRunnerInfo newInfo = newRunnerInfoList.get(i);
-						ParserRunnerInfo oldInfo = oldRunnerInfoList.get(i);
-						
-						int newInfoTimeListSize = newInfo.getTimeList().size();
-						int oldInfoTimeListSize = oldInfo.getTimeList().size();
-						
-						if( newInfoTimeListSize > oldInfoTimeListSize ){
-							int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
-							
-							for(int j=0; j < updateCnt; j++){
-								// タイムリスト書き込み
-								DataBaseAccess.entryTimeList(
-									getContentResolver(),
-									m_RaceId,
-									newInfo.getNumber(),
-									newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
-									newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
-									newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
-									newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
-								);
-								
-								// 速報データ書き込み
-								DataBaseAccess.entryUpdateData(
-										getContentResolver(),
-										m_RaceId,
-										newInfo.getNumber(),
-										newInfo.getName(),
-										newInfo.getSection(),
-										newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
-										newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
-										newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
-										newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
-								);
-							}
-							// TODO:
-							Log.d("service", "update on" + newInfo.getNumber());
-							updateFlg = true;
-						}
-					}
+					// データアップデート
+					boolean updateFlg = Logic.updateRunnerInfo(getContentResolver());
 					
 					// 更新がある場合は通知
 					if(updateFlg){
@@ -224,9 +125,10 @@ public class UpdateService extends Service {
 					m_IntervalCnt++;
 					if( m_IntervalCnt >= INT_TIMER_INTERAVAL_CNT_MAX ){
 						// TODO:
-						Log.d("service", "stopSelf");						
+						Log.d("service", "stopSelf");
+						
 						// 速報停止状態にする
-						DataBaseAccess.setRaceUpdate(getContentResolver(), m_RaceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+						Logic.setUpdateOffRaceId(getContentResolver(), Logic.getUpdateRaceId());
 						stopSelf();
 					}
 				}

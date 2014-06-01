@@ -106,6 +106,7 @@ public class MainActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which) {
 				
 				//TODO: 大会削除のロジック
+				//TODO: 速報中の大会IDは削除しない
 				// 大会削除
 				//DataBaseAccess.deleteRaceInfoByRaceId(getContentResolver(), m_DeleteRaceInfoItem.getRaceId());
 				

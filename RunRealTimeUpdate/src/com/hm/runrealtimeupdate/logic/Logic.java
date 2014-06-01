@@ -41,6 +41,9 @@ public class Logic {
 	 */
 	private static RunnerInfo m_SelectRunnerInfo = null;
 	
+	
+	private static List<RunnerInfo> m_NetRunnerInfoList = null;
+	
 	/**
 	 * 大会情報を登録する
 	 * @param contentResolver　コンテントリゾルバ
@@ -262,6 +265,97 @@ public class Logic {
 		}
 	}
 	
+	/**
+	 * 選択中の大会IDの選手情報をネットワークから取得する
+	 */
+	public static void loadNetRunnerInfoList(){
+		
+		// 選手情報がないなら何もしない( こないはず )
+		if(m_RunnerInfoList == null){
+			return;
+		}
+		
+		// 古い情報を削除する
+		if(m_NetRunnerInfoList != null){
+			m_NetRunnerInfoList.clear();
+		}
+		
+		m_NetRunnerInfoList = new ArrayList<RunnerInfo>();
+		
+		for( RunnerInfo runnerInfo : m_RunnerInfoList){
+			RunnerInfo netRunnerInfo = null;
+			try {
+				netRunnerInfo = getNetRunnerInfo(runnerInfo.getNumber());
+			} catch (LogicException e) {
+				e.printStackTrace();
+				netRunnerInfo = new RunnerInfo();
+			}
+			m_NetRunnerInfoList.add(netRunnerInfo);
+		}
+	}
+	
+	
+	/**
+	 * ネットワークから取得した選手情報を更新する
+	 * @return true:更新データあり、false:更新データなし
+	 */
+	public static boolean updateRunnerInfo( ContentResolver contentResolver){
+		
+		// ネットワークから未取得ならば、なにもしない
+		if(m_NetRunnerInfoList == null){
+			return false;
+		}
+		
+		// 
+		boolean updateFlg = false;
+		for( int i=0; i < m_RunnerInfoList.size(); i++ ){
+			RunnerInfo newInfo = m_NetRunnerInfoList.get(i);
+			RunnerInfo oldInfo = m_RunnerInfoList.get(i);
+			
+			int newInfoTimeListSize = newInfo.getTimeList().size();
+			int oldInfoTimeListSize = oldInfo.getTimeList().size();
+			
+			// タイムリストが更新されているならば、データベースに書き込み
+			if( newInfoTimeListSize > oldInfoTimeListSize ){
+				int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
+				
+				for(int j=0; j < updateCnt; j++){
+					// タイムリスト書き込み
+					DataBaseAccess.entryTimeList(
+						contentResolver,
+						m_SelectRaceInfo.getRaceId(),
+						newInfo.getNumber(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+					);
+					
+					// 速報データ書き込み
+					DataBaseAccess.entryUpdateData(
+						contentResolver,
+						m_SelectRaceInfo.getRaceId(),
+						newInfo.getNumber(),
+						newInfo.getName(),
+						newInfo.getSection(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
+						newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+					);
+				}
+				
+				updateFlg = true;
+			}
+		}
+		
+		return updateFlg;
+	}
+	/**
+	 * 選手情報を追加する
+	 * @param contentResolver
+	 * @param runnerInfo
+	 */
 	public static void entryRunnerInfo( ContentResolver contentResolver, RunnerInfo runnerInfo ){
 		
 		// 登録情報設定
