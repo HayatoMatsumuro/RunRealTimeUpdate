@@ -168,19 +168,15 @@ public class DataBaseAccess {
 	 * @param section
 	 */
 	public static void entryRunner(
-			ContentResolver contentResolver,
-			String raceId,
-			String number,
-			String name,
-			String section )
+			ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo )
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(RunnerProvider.STR_DB_COLUMN_RACEID, raceId);
-		values.put(RunnerProvider.STR_DB_COLUMN_NUMBER, number);
-		values.put(RunnerProvider.STR_DB_COLUMN_NAME, name);
-		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, section);
+		values.put(RunnerProvider.STR_DB_COLUMN_RACEID, dbRunnerInfo.getRaceId());
+		values.put(RunnerProvider.STR_DB_COLUMN_NUMBER, dbRunnerInfo.getNumber());
+		values.put(RunnerProvider.STR_DB_COLUMN_NAME, dbRunnerInfo.getName());
+		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, dbRunnerInfo.getSection());
 		
 		contentResolver.insert(RunnerProvider.URI_DB, values);
 		return;
@@ -216,6 +212,36 @@ public class DataBaseAccess {
 		return list;
 	}
 
+	/**
+	 * 大会IDとゼッケン番号から選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param number　ゼッケン番号
+	 * @return 選手情報
+	 */
+	public static DataBaseRunnerInfo getRunnerInfoByRaceIdandNumber( ContentResolver contentResolver, String raceId, String number ){
+		DataBaseRunnerInfo dbRunnerInfo = null;
+		
+		String[] projection = {
+				RunnerProvider.STR_DB_COLUMN_RACEID,
+				RunnerProvider.STR_DB_COLUMN_NUMBER,
+				RunnerProvider.STR_DB_COLUMN_NAME,
+				RunnerProvider.STR_DB_COLUMN_SECTION
+		};
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + number +"'";
+		
+		Cursor c = contentResolver.query(RunnerProvider.URI_DB, projection, selection, null, null);
+		
+		while(c.moveToNext()){
+			// データ設定
+			dbRunnerInfo = getRunnerInfoByCursor(c);
+		}
+
+		c.close();
+		
+		return dbRunnerInfo;
+	}
+	
 	/**
 	 * 大会IDと部門に登録されている選手情報を取得する
 	 * @param contentResolver

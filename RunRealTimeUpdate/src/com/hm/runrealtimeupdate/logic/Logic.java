@@ -11,6 +11,7 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
+import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
@@ -39,8 +40,6 @@ public class Logic {
 	 * 選択中の選手情報
 	 */
 	private static RunnerInfo m_SelectRunnerInfo = null;
-	
-	//private static List<RunnerInfo> m_RunnerInfoList = null;
 	
 	/**
 	 * 大会情報を登録する
@@ -233,6 +232,55 @@ public class Logic {
 	}
 	
 	/**
+	 * ネットワークから選手情報を取得する
+	 * @param number ゼッケン番号
+	 */
+	public static RunnerInfo getNetRunnerInfo( String number ) throws LogicException{
+		try {
+			// 選手情報取得
+			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo(m_SelectRaceInfo.getRaceId(), number);
+			
+			//　選手情報設定
+			RunnerInfo runnerInfo = new RunnerInfo();
+			runnerInfo.setName(parserRunnerInfo.getName());
+			runnerInfo.setNumber(parserRunnerInfo.getNumber());
+			runnerInfo.setSection(parserRunnerInfo.getSection());
+			for( ParserRunnerInfo.TimeList timelist:parserRunnerInfo.getTimeList()){
+				RunnerInfo.TimeList infoTimeList = new RunnerInfo().new TimeList();
+				infoTimeList.setPoint(timelist.getPoint());
+				infoTimeList.setSplit(timelist.getSplit());
+				infoTimeList.setLap(timelist.getLap());
+				infoTimeList.setCurrentTime(timelist.getCurrentTime());
+				
+				runnerInfo.getTimeList().add(infoTimeList);
+			}
+			
+			return runnerInfo;
+		} catch (ParserException e) {
+			e.printStackTrace();
+			throw new LogicException(e.getMessage());
+		}
+	}
+	
+	public static void entryRunnerInfo( ContentResolver contentResolver, RunnerInfo runnerInfo ){
+		
+		// 登録情報設定
+		DataBaseRunnerInfo dbRunnerInfo = new DataBaseRunnerInfo();
+
+		dbRunnerInfo.setRaceId(m_SelectRaceInfo.getRaceId());
+		dbRunnerInfo.setName(runnerInfo.getName());
+		dbRunnerInfo.setNumber(runnerInfo.getNumber());
+		dbRunnerInfo.setSection(runnerInfo.getSection());
+		
+		// データベース登録
+		DataBaseAccess.entryRunner(contentResolver, dbRunnerInfo );
+		
+		if( m_RunnerInfoList != null ){
+			m_RunnerInfoList.add(runnerInfo);
+		}
+	}
+	
+	/**
 	 * 選択中の大会情報を取得する
 	 * @return
 	 */
@@ -275,6 +323,37 @@ public class Logic {
 	 */
 	public static void setSelectRunnerInfo( RunnerInfo runnerInfo ){
 		m_SelectRunnerInfo = runnerInfo;
+	}
+	
+	/**
+	 * 指定のゼッケン番号が登録済みかどうかを検索する
+	 * @param contentResolver
+	 * @param number
+	 * @return　false 未登録、true 登録済み
+	 */
+	public static boolean checkEntryRunnerId( ContentResolver contentResolver, String number ){
+		
+		if( m_RunnerInfoList == null ){
+			// 選手情報未取得
+			DataBaseRunnerInfo info = DataBaseAccess.getRunnerInfoByRaceIdandNumber(
+					contentResolver,
+					m_SelectRaceInfo.getRaceId(),
+					m_SelectRunnerInfo.getNumber());
+			
+			if( info == null ){
+				return false;
+			}else{
+				return true;
+			}
+		}else{
+			// 大会情報取得済み
+			for( RunnerInfo runnerInfo:m_RunnerInfoList){
+				if( runnerInfo.getNumber().equals(number)){
+					return true;
+				}
+			}
+			return false;
+		}
 	}
 	
 	/**

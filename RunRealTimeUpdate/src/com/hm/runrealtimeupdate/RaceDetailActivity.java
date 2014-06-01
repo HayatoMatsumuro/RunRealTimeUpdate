@@ -96,18 +96,13 @@ public class RaceDetailActivity extends Activity {
         
         // 選手登録ボタン
         Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
-        
-        //TODO: この処理は消す
-        runnerEntryButton.setTag(raceInfo.getRaceId());
         runnerEntryButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String raceId = (String)v.getTag();
 				
 				// 選手登録画面遷移
 				Intent intent = new Intent(RaceDetailActivity.this, RunnerEntryActivity.class);
-				intent.putExtra(RunnerEntryActivity.STR_INTENT_RACEID, raceId);
 				startActivity(intent);
 			}
 		});
