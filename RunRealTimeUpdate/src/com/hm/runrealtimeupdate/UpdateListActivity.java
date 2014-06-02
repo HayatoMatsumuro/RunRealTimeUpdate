@@ -1,12 +1,9 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,10 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class UpdateListActivity extends Activity {
-
-	public static String STR_INTENT_RACEID = "raceid";
-	
-	private UpdateDataAdapter m_UpdateDataAdapter;
 	
 	
 	@Override
@@ -34,21 +27,17 @@ public class UpdateListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_updatelist);
 		
-		// 大会情報取得
-        Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
-		
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_updatelist_txt_racename);
-        raceNameTextView.setText(dbRaceInfo.getRaceName());
+        raceNameTextView.setText(Logic.getSelectRaceInfo().getRaceName());
         
         // 速報データ取得
-        List<DataBaseUpdateData> updateDataList = DataBaseAccess.getUpdateDataByRaceId(getContentResolver(), raceId);
+        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList(getContentResolver());
         
         // リストの表示データ設定
-        List<UpdateDataDisp> updateDataDispList = new ArrayList<UpdateDataDisp>();
-        
+        //List<UpdateInfo> updateInfoList = new ArrayList<UpdateInfo>();
+        //
+        /*
         for(DataBaseUpdateData dbUpdateData : updateDataList){
         	UpdateDataDisp disp = new UpdateDataDisp();
         	String mainStr = dbUpdateData.getNumber() + " " + dbUpdateData.getSection() + " "+ dbUpdateData.getName() + " 選手 " + dbUpdateData.getPoint();
@@ -57,15 +46,13 @@ public class UpdateListActivity extends Activity {
         	disp.setSubStr(subStr);
         	
         	updateDataDispList.add(disp);
-        }
-        
-        Collections.reverse(updateDataDispList);
+        }*/
         
         // リストビュー設定
-        m_UpdateDataAdapter = new UpdateDataAdapter(this, updateDataDispList);
+        UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
         
         ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
-        updateListView.setAdapter(m_UpdateDataAdapter);
+        updateListView.setAdapter(adapter);
         
         // 大会詳細ボタン
         Button raceDetailButton = (Button)findViewById(R.id.id_updatelist_btn_detail);
@@ -83,16 +70,14 @@ public class UpdateListActivity extends Activity {
         
         // 通過情報ボタン
         Button passListButton = (Button)findViewById(R.id.id_updatelist_btn_passlist);
-        passListButton.setTag(raceId);
         passListButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String raceId = (String)v.getTag();
 				
 				// 通過情報画面遷移
 				Intent intent = new Intent(UpdateListActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
+				intent.putExtra(PassListActivity.STR_INTENT_RACEID, Logic.getSelectRaceInfo().getRaceId());
 				startActivity(intent);
 				
 			}
@@ -100,11 +85,11 @@ public class UpdateListActivity extends Activity {
         return;
 	}
 	
-	private class UpdateDataAdapter extends ArrayAdapter<UpdateDataDisp>{
+	private class UpdateDataAdapter extends ArrayAdapter<UpdateInfo>{
 		
 		LayoutInflater inflater;
 		
-		public UpdateDataAdapter(Context context, List<UpdateDataDisp> objects) {
+		public UpdateDataAdapter(Context context, List<UpdateInfo> objects) {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -119,38 +104,17 @@ public class UpdateListActivity extends Activity {
 			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_main);
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_sub);
 			
-			UpdateDataDisp disp = getItem(position);
 			
-			mainTextView.setText(disp.getMainStr());
-			subTextView.setText(disp.getSubStr());
+        	
+			UpdateInfo updateInfo = getItem(position);
+			String mainStr = updateInfo.getNumber() + " " + updateInfo.getSection() + " "+ updateInfo.getName() + " 選手 " + updateInfo.getPoint();
+        	String subStr = updateInfo.getSplit();
+			mainTextView.setText(mainStr);
+			subTextView.setText(subStr);
 			
 			return convertView;
 		}
 		
-		
-	}
-	
-	private class UpdateDataDisp{
-		
-		private String mainStr;
-		
-		private String subStr;
-
-		public String getMainStr() {
-			return mainStr;
-		}
-
-		public void setMainStr(String mainStr) {
-			this.mainStr = mainStr;
-		}
-
-		public String getSubStr() {
-			return subStr;
-		}
-
-		public void setSubStr(String subStr) {
-			this.subStr = subStr;
-		}
 		
 	}
 }

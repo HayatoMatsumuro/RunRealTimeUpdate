@@ -84,6 +84,7 @@ public class ParserRunnersUpdate {
 			}
 			
 			// 個人情報取得
+			//TODO selectの要素がないとき、落ちる
 			Element personalBlockElement = doc.select("div#personalBlock").get(0);
 									
 			if( personalBlockElement == null){

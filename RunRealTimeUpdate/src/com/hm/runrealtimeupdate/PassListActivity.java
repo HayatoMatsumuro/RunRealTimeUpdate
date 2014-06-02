@@ -87,7 +87,6 @@ public class PassListActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(PassListActivity.this, UpdateListActivity.class);
-				intent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceId);
 				startActivity(intent);
 				
 			}

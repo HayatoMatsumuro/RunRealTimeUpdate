@@ -1,6 +1,7 @@
 package com.hm.runrealtimeupdate.logic;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.ContentResolver;
@@ -9,6 +10,7 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseTimeList;
+import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
@@ -25,6 +27,11 @@ public class Logic {
 	 * 選手情報リスト
 	 */
 	private static List<RunnerInfo> m_RunnerInfoList = null;
+	
+	/**
+	 * 速報リスト
+	 */
+	private static List<UpdateInfo> m_UpdateInfoList = null;
 	
 	/**
 	 * 選択中の大会情報
@@ -166,9 +173,16 @@ public class Logic {
 	public static void setSelectRaceInfo( RaceInfo raceInfo){
 		m_SelectRaceInfo = raceInfo;
 		
+		// 選手情報初期化
 		if( m_RunnerInfoList != null){
 			m_RunnerInfoList.clear();
 			m_RunnerInfoList = null;
+		}
+		
+		// 速報リスト初期化
+		if( m_UpdateInfoList != null ){
+			m_UpdateInfoList.clear();
+			m_UpdateInfoList = null;
 		}
 		return;
 	}
@@ -301,12 +315,16 @@ public class Logic {
 	 */
 	public static boolean updateRunnerInfo( ContentResolver contentResolver){
 		
-		// ネットワークから未取得ならば、なにもしない
+		// ネットワークから未取得ならば、なにもしない( こないはず )
 		if(m_NetRunnerInfoList == null){
 			return false;
 		}
 		
-		// 
+		// 選手情報が未取得ならば、なにもしない( こないはず )
+		if( m_RunnerInfoList == null ){
+			return false;
+		}
+		
 		boolean updateFlg = false;
 		for( int i=0; i < m_RunnerInfoList.size(); i++ ){
 			RunnerInfo newInfo = m_NetRunnerInfoList.get(i);
@@ -320,16 +338,30 @@ public class Logic {
 				int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
 				
 				for(int j=0; j < updateCnt; j++){
+					
+					String point = newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint();
+					String split = newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit();
+					String lap = newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap();
+					String currentTime = newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime();
+					
 					// タイムリスト書き込み
 					DataBaseAccess.entryTimeList(
 						contentResolver,
 						m_SelectRaceInfo.getRaceId(),
 						newInfo.getNumber(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+						point,
+						split,
+						lap,
+						currentTime
 					);
+					
+					// タイムリスト追加
+					RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+					timeList.setPoint(point);
+					timeList.setSplit(split);
+					timeList.setLap(lap);
+					timeList.setCurrentTime(currentTime);
+					oldInfo.getTimeList().add(timeList);
 					
 					// 速報データ書き込み
 					DataBaseAccess.entryUpdateData(
@@ -338,13 +370,26 @@ public class Logic {
 						newInfo.getNumber(),
 						newInfo.getName(),
 						newInfo.getSection(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap(),
-						newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime()
+						point,
+						split,
+						lap,
+						currentTime
 					);
+					
+					// 速報データ追加
+					if( m_UpdateInfoList != null){
+						UpdateInfo updateInfo = new UpdateInfo();
+						updateInfo.setName(newInfo.getName());
+						updateInfo.setSection(newInfo.getSection());
+						updateInfo.setNumber(newInfo.getNumber());
+						updateInfo.setPoint(point);
+						updateInfo.setSplit(split);
+						updateInfo.setLap(lap);
+						updateInfo.setCurrentTime(currentTime);
+						
+						m_UpdateInfoList.add(0, updateInfo);
+					}
 				}
-				
 				updateFlg = true;
 			}
 		}
@@ -475,5 +520,38 @@ public class Logic {
 	 */
 	public static RunnerInfo getSelectRunnerInfo(){
 		return m_SelectRunnerInfo;
+	}
+	
+	/**
+	 * 速報情報を取得する
+	 * @param contentResolver
+	 * @return
+	 */
+	public static List<UpdateInfo> getUpdateInfoList(ContentResolver contentResolver){
+		
+		if( m_UpdateInfoList == null ){
+			// 速報リスト未取得
+			List<DataBaseUpdateData> dbUpdateDataList = DataBaseAccess.getUpdateDataByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
+			
+			m_UpdateInfoList = new ArrayList<UpdateInfo>();
+			
+			for( DataBaseUpdateData dbUpdateData: dbUpdateDataList ){
+				UpdateInfo updateInfo = new UpdateInfo();
+				
+				updateInfo.setName(dbUpdateData.getName());
+				updateInfo.setNumber(dbUpdateData.getNumber());
+				updateInfo.setSection(dbUpdateData.getSection());
+				updateInfo.setPoint(dbUpdateData.getPoint());
+				updateInfo.setSplit(dbUpdateData.getSplit());
+				updateInfo.setLap(dbUpdateData.getLap());
+				updateInfo.setCurrentTime(dbUpdateData.getCurrentTime());
+				
+				m_UpdateInfoList.add(updateInfo);
+			}
+			
+			Collections.reverse(m_UpdateInfoList);
+		}
+		
+		return m_UpdateInfoList;
 	}
 }

@@ -183,10 +183,6 @@ public class RaceDetailActivity extends Activity {
 			public void onClick(View v) {
 				
 				Intent intent = new Intent( RaceDetailActivity.this, UpdateListActivity.class );
-				
-				//TODO: この処理は削除する
-				intent.putExtra( UpdateListActivity.STR_INTENT_RACEID, Logic.getSelectRaceInfo().getRaceId() );
-				
 				startActivity(intent);
 			}
 		});
