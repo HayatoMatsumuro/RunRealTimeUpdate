@@ -44,10 +44,6 @@ public class UpdateService extends Service {
 	 * 速報の回数
 	 */
 	private int m_IntervalCnt;
-	/**
-	 * 大会ID
-	 */
-	private String m_RaceId;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -111,7 +107,6 @@ public class UpdateService extends Service {
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						
 						Intent notifiIntent = new Intent(UpdateService.this, UpdateListActivity.class);
-						notifiIntent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceId);
 						
 						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 						
