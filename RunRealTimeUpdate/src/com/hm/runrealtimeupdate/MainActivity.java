@@ -43,6 +43,7 @@ public class MainActivity extends Activity {
         ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
         raceInfoListView.setAdapter(adapter);
         
+        
         // リストのアイテム短押し
         raceInfoListView.setOnItemClickListener(new OnItemClickListener() {
 
