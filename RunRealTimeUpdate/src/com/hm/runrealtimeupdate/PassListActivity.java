@@ -1,11 +1,9 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,11 +19,6 @@ import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PassListActivity extends Activity {
-
-	public static String STR_INTENT_RACEID = "raceid";
-	
-	private String m_RaceId;
-	private List<String> m_SectionList;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,32 +26,18 @@ public class PassListActivity extends Activity {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passlist);
         
-        // 大会ID取得
-        Intent intent = getIntent();
-        m_RaceId = intent.getStringExtra(STR_INTENT_RACEID);
-        
         // 大会名表示
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), m_RaceId);
+        RaceInfo raceInfo = Logic.getSelectRaceInfo();
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlist_txt_name);
-        raceNameTextView.setText(dbRaceInfo.getRaceName());
+        raceNameTextView.setText(raceInfo.getRaceName());
         
-        // 大会IDから選手情報を取得
-        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(getContentResolver(), m_RaceId);
+        // 部門リストを取得する
+        List<String> sectionList = Logic.getSectionList();
         
-        // 部門リストを作成する
-        m_SectionList = new ArrayList<String>();
-        for( DataBaseRunnerInfo info : dbRunnerInfoList){
-        	
-        	String section = info.getSection();
-        	
-        	if( m_SectionList.indexOf(section) == -1 ){
-        		m_SectionList.add(section);
-        	}
-        }
-        String[] sectionArray = (String[])m_SectionList.toArray(new String[0]);
+        //String[] sectionArray = (String[])m_SectionList.toArray(new String[0]);
         
         // リストアダプタを作成
-        ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionArray );
+        ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionList );
         
         // リストビューに設定
         ListView listView = (ListView)findViewById(R.id.id_passlist_listview_sectionlist);
@@ -70,11 +49,15 @@ public class PassListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
 				
-				String section = m_SectionList.get(position);
+				List<String> sectionList = Logic.getSectionList();
+				String section = sectionList.get(position);
+				
+				Logic.setSelectSection(section);
 				
 				Intent intent = new Intent(PassListActivity.this, PassListSectionActivity.class);
-				intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, m_RaceId);
-				intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
+				// TODO: ここは削除する
+				//intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, m_RaceId);
+				//intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
 				startActivity(intent);
 			}
         	

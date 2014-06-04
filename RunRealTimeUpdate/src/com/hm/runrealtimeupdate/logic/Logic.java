@@ -34,6 +34,11 @@ public class Logic {
 	private static List<UpdateInfo> m_UpdateInfoList = null;
 	
 	/**
+	 * 部門リスト
+	 */
+	private static List<String> m_SectionList = null;
+	
+	/**
 	 * 選択中の大会情報
 	 */
 	private static RaceInfo m_SelectRaceInfo = null;
@@ -47,6 +52,11 @@ public class Logic {
 	 * 選択中の選手情報
 	 */
 	private static RunnerInfo m_SelectRunnerInfo = null;
+	
+	/**
+	 * 選択中の部門
+	 */
+	private static String m_SelectSection = null;
 	
 	
 	private static List<RunnerInfo> m_NetRunnerInfoList = null;
@@ -553,5 +563,38 @@ public class Logic {
 		}
 		
 		return m_UpdateInfoList;
+	}
+	
+	/**
+	 * 選択中の大会の部門リストを作成する
+	 * @return
+	 */
+	public static List<String> getSectionList(){
+		
+		if(m_SectionList != null ){
+			m_SectionList.clear();
+			m_SectionList = null;
+		}
+		
+		m_SectionList = new ArrayList<String>();
+		
+		for( RunnerInfo runnerInfo:m_RunnerInfoList){
+			
+			String section = runnerInfo.getSection();
+			
+			if( m_SectionList.indexOf(section) == -1 ){
+        		m_SectionList.add(section);
+        	}
+		}
+		
+		return m_SectionList;
+	}
+	
+	public static void setSelectSection( String section){
+		m_SelectSection = section;
+	}
+	
+	public static String getSelectSection(){
+		return m_SelectSection;
 	}
 }

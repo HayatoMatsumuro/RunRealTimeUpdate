@@ -134,15 +134,12 @@ public class PassListSectionActivity extends Activity {
         
         // 戻るボタン
         Button backButton = (Button)findViewById(R.id.id_passlistsection_btn_back);
-        backButton.setTag(raceId);
         backButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String raceId = (String)v.getTag();
 				// 速報リスト画面に遷移
 				Intent intent = new Intent( PassListSectionActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
 				startActivity(intent);
 			}
 		});

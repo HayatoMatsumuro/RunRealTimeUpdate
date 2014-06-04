@@ -77,7 +77,6 @@ public class UpdateListActivity extends Activity {
 				
 				// 通過情報画面遷移
 				Intent intent = new Intent(UpdateListActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, Logic.getSelectRaceInfo().getRaceId());
 				startActivity(intent);
 				
 			}
