@@ -17,6 +17,11 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
+
+	/**
+	 * 大会情報リスト
+	 */
+	private static List<RaceInfo> m_RaceInfoList = null;
 	
 	/**
 	 * 選手情報リスト
@@ -64,6 +69,10 @@ public class Logic {
 		
 		// データベース登録
 		DataBaseAccess.entryRace(contentResolver, dbRaceInfo);
+		
+		if( m_RaceInfoList != null ){
+			m_RaceInfoList.add(raceInfo);
+		}
 	}
 	
 	/**
@@ -73,27 +82,30 @@ public class Logic {
 	 */
 	public static List<RaceInfo> getRaceInfoList( ContentResolver contentResolver){
 		
-		List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getAllRaceInfo(contentResolver);
+		// 大会情報リスト未取得
+		if( m_RaceInfoList == null ){
 			
-		List<RaceInfo> raceInfoList = new ArrayList<RaceInfo>();
+			List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getAllRaceInfo(contentResolver);
 			
-		for( DataBaseRaceInfo dbRaceInfo: dbRaceInfoList ){
-			// 大会情報取得
-			RaceInfo raceInfo = new RaceInfo();
-			raceInfo.setRaceId(dbRaceInfo.getRaceId());
-			raceInfo.setRaceName(dbRaceInfo.getRaceName());
-			raceInfo.setRaceDate(dbRaceInfo.getRaceDate());
-			raceInfo.setRaceLocation(dbRaceInfo.getRaceLocation());
+			m_RaceInfoList = new ArrayList<RaceInfo>();
 			
-			raceInfoList.add(raceInfo);
-			
-			// 速報中ならば、ID保持
-			if(dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON)){
-				m_RaceIdUpdate = dbRaceInfo.getRaceId();
+			for( DataBaseRaceInfo dbRaceInfo: dbRaceInfoList ){
+				// 大会情報取得
+				RaceInfo raceInfo = new RaceInfo();
+				raceInfo.setRaceId(dbRaceInfo.getRaceId());
+				raceInfo.setRaceName(dbRaceInfo.getRaceName());
+				raceInfo.setRaceDate(dbRaceInfo.getRaceDate());
+				raceInfo.setRaceLocation(dbRaceInfo.getRaceLocation());
+				
+				m_RaceInfoList.add(raceInfo);
+				// 速報中ならば、ID保持
+				if(dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON)){
+					m_RaceIdUpdate = dbRaceInfo.getRaceId();
+				}
 			}
 		}
 		
-		return raceInfoList;
+		return m_RaceInfoList;
 	}
 	
 	/**
@@ -190,13 +202,23 @@ public class Logic {
 	 */
 	public static boolean checkEntryRaceId( ContentResolver contentResolver, String raceId){
 		
-		// 大会情報未取得
-		DataBaseRaceInfo info = DataBaseAccess.getRaceInfoByRaceId(contentResolver, raceId);
+		if( m_RaceInfoList == null ){
+			// 大会情報未取得
+			DataBaseRaceInfo info = DataBaseAccess.getRaceInfoByRaceId(contentResolver, raceId);
 			
-		if( info == null ){
-			return false;
+			if( info == null ){
+				return false;
+			}else{
+				return true;
+			}
 		}else{
-			return true;
+			// 大会情報取得済み
+			for( RaceInfo raceInfo:m_RaceInfoList){
+				if( raceInfo.getRaceId().equals(raceId)){
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 	
