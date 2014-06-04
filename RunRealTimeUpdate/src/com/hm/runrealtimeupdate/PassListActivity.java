@@ -34,8 +34,6 @@ public class PassListActivity extends Activity {
         // 部門リストを取得する
         List<String> sectionList = Logic.getSectionList();
         
-        //String[] sectionArray = (String[])m_SectionList.toArray(new String[0]);
-        
         // リストアダプタを作成
         ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionList );
         

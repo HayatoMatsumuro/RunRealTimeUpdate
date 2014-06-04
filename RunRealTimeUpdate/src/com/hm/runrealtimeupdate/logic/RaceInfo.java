@@ -2,13 +2,15 @@ package com.hm.runrealtimeupdate.logic;
 
 public class RaceInfo {
 
-	String raceId;
+	private String raceId;
 	
-	String raceName;
+	private String raceName;
 	
-	String raceDate;
+	private String raceDate;
 	
-	String raceLocation;
+	private String raceLocation;
+	
+	private boolean raceUpdate;
 
 	public String getRaceId() {
 		return raceId;
@@ -40,5 +42,13 @@ public class RaceInfo {
 
 	public void setRaceLocation(String raceLocation) {
 		this.raceLocation = raceLocation;
+	}
+	
+	public boolean isRaceUpdate() {
+		return raceUpdate;
+	}
+
+	public void setRaceUpdate(boolean raceUpdate) {
+		this.raceUpdate = raceUpdate;
 	}
 }
