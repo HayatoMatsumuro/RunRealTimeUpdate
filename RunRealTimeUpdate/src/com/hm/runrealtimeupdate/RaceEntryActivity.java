@@ -6,6 +6,8 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -86,78 +88,16 @@ public class RaceEntryActivity extends Activity {
 			return raceInfo;
 		}
 		@Override
-		protected void onPostExecute( RaceInfo result)
+		protected void onPostExecute( RaceInfo raceInfo)
 		{
-			if( result == null ){
+			if( raceInfo == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
+			}else{
+				RaceEntryDialog raceEntryDialog = new RaceEntryDialog( RaceEntryActivity.this, getContentResolver(), raceInfo);
+				raceEntryDialog.onDialog();
 			}
 			
-			// 選択中の大会情報設定
-			Logic.setSelectRaceInfo(result);
-			
-			AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
-			dialog.setTitle(getString(R.string.str_dialog_title_race));
-			dialog.setMessage(createDialogMessage(result));
-			
-			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
-
-				@Override
-				public void onClick(DialogInterface dialog, int width)
-				{
-					RaceInfo raceInfo = Logic.getSelectRaceInfo();
-					
-					if( Logic.checkEntryRaceId(getContentResolver(), raceInfo.getRaceId())){
-						// すでに大会が登録済み
-						Toast.makeText(RaceEntryActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT).show();
-					}else{
-						// データベース登録
-						Logic.entryRaceInfo( getContentResolver(), raceInfo);
-						
-						Toast.makeText(RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
-						
-						Intent intent = new Intent( RaceEntryActivity.this, MainActivity.class );
-						startActivity(intent);
-					}
-					
-				}
-				
-				
-			});
-			
-			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// なにもしない					
-				}
-				
-			});
-			
-			dialog.show();
-		}
-		
-		/**
-		 * 登録ダイアログのメッセージを作成する
-		 * @param raceInfo 大会情報
-		 * @return メッセージ
-		 */
-		private String createDialogMessage( RaceInfo raceInfo ){
-			
-			StringBuilder builder = new StringBuilder();
-			builder.append(getString(R.string.str_dialog_msg_name));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceName());
-			builder.append("\n");
-			builder.append(getString(R.string.str_dialog_msg_date));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceDate());
-			builder.append("\n");
-			builder.append(getString(R.string.str_dialog_msg_location));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceLocation());
-			
-			return builder.toString();
 		}
 		
 		/**
@@ -178,6 +118,103 @@ public class RaceEntryActivity extends Activity {
 			}
 			
 			return raceId;
+		}
+	}
+	
+	/**
+	 * 大会登録ダイアログ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RaceEntryDialog{
+		
+		/**
+    	 * コンテキスト
+    	 */
+    	private Context m_Context;
+    	
+    	/**
+    	 * コンテントリゾルバ
+    	 */
+    	private ContentResolver m_ContentResolver;
+    	
+    	/**
+    	 * 大会情報
+    	 */
+    	private RaceInfo m_RaceInfo;
+    	
+    	/**
+    	 * コンストラクタ
+    	 * @param context
+    	 * @param contentResolver
+    	 * @param raceInfo
+    	 */
+    	public RaceEntryDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo ){
+    		// 初期化
+    		m_Context = context;
+    		m_ContentResolver = contentResolver;
+    		m_RaceInfo = raceInfo;
+    	}
+    	
+    	public void onDialog(){
+    		AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
+			dialog.setTitle(getString(R.string.str_dialog_title_race));
+			dialog.setMessage(createDialogMessage(m_RaceInfo));
+			
+			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int width)
+				{
+					
+					if( Logic.checkEntryRaceId( m_ContentResolver, m_RaceInfo.getRaceId() ) ){
+						// すでに大会が登録済み
+						Toast.makeText( m_Context, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT).show();
+					}else{
+						// データベース登録
+						Logic.entryRaceInfo( m_ContentResolver, m_RaceInfo );
+						
+						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT ).show();
+						
+						Intent intent = new Intent( m_Context, MainActivity.class );
+						startActivity(intent);
+					}
+				}
+			});
+			
+			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// なにもしない					
+				}
+				
+			});
+			
+			dialog.show();
+    	}
+    	
+    	/**
+		 * 登録ダイアログのメッセージを作成する
+		 * @param raceInfo 大会情報
+		 * @return メッセージ
+		 */
+		private String createDialogMessage( RaceInfo raceInfo ){
+			
+			StringBuilder builder = new StringBuilder();
+			builder.append(getString(R.string.str_dialog_msg_name));
+			builder.append("\n");
+			builder.append(raceInfo.getRaceName());
+			builder.append("\n");
+			builder.append(getString(R.string.str_dialog_msg_date));
+			builder.append("\n");
+			builder.append(raceInfo.getRaceDate());
+			builder.append("\n");
+			builder.append(getString(R.string.str_dialog_msg_location));
+			builder.append("\n");
+			builder.append(raceInfo.getRaceLocation());
+			
+			return builder.toString();
 		}
 	}
 }

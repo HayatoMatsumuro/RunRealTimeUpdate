@@ -108,6 +108,11 @@ public class Logic {
 		return raceInfoList;
 	}
 	
+	/**
+	 * 大会情報を削除する
+	 * @param contentResolver
+	 * @param raceInfo 削除する大会情報
+	 */
 	public static void deleteRaceInfo( ContentResolver contentResolver, RaceInfo raceInfo ){
 		
 		// 速報データ
