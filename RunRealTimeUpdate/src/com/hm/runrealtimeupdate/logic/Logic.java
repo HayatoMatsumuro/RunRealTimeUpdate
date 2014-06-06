@@ -243,6 +243,7 @@ public class Logic {
 	
 	/**
 	 * ネットワークから大会情報を取得する
+	 * @param url URL
 	 * @param raceId 大会ID
 	 * @return　取得した大会情報
 	 * @throws LogicException 大会情報取得失敗
@@ -269,12 +270,14 @@ public class Logic {
 	
 	/**
 	 * ネットワークから選手情報を取得する
+	 * @param url アップデートサイトのURL
+	 * @param raceId 大会ID
 	 * @param number ゼッケン番号
 	 */
-	public static RunnerInfo getNetRunnerInfo( String number ) throws LogicException{
+	public static RunnerInfo getNetRunnerInfo( String url, String raceId, String number ) throws LogicException{
 		try {
 			// 選手情報取得
-			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo(m_SelectRaceInfo.getRaceId(), number);
+			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo( raceId, number);
 			
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();
@@ -408,14 +411,15 @@ public class Logic {
 	/**
 	 * 選手情報を追加する
 	 * @param contentResolver
+	 * @param raceInfo
 	 * @param runnerInfo
 	 */
-	public static void entryRunnerInfo( ContentResolver contentResolver, RunnerInfo runnerInfo ){
+	public static void entryRunnerInfo( ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo ){
 		
 		// 登録情報設定
 		DataBaseRunnerInfo dbRunnerInfo = new DataBaseRunnerInfo();
 
-		dbRunnerInfo.setRaceId(m_SelectRaceInfo.getRaceId());
+		dbRunnerInfo.setRaceId(raceInfo.getRaceId());
 		dbRunnerInfo.setName(runnerInfo.getName());
 		dbRunnerInfo.setNumber(runnerInfo.getNumber());
 		dbRunnerInfo.setSection(runnerInfo.getSection());
@@ -428,12 +432,12 @@ public class Logic {
 	/**
 	 * 選手情報リストを取得する
 	 * @param contentResolver
-	 * @param raceId　大会ID
+	 * @param raceInfo 大会情報
 	 * @return
 	 */
-	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver, String raceId ){
+	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver, RaceInfo raceInfo ){
 		
-		List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
+		List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, raceInfo.getRaceId());
 		
 		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
 		
@@ -444,7 +448,7 @@ public class Logic {
 			runnerInfo.setNumber(dbRunnerInfo.getNumber());
 			runnerInfo.setSection(dbRunnerInfo.getSection());
 				
-			List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), dbRunnerInfo.getNumber());
+			List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, raceInfo.getRaceId(), dbRunnerInfo.getNumber());
 				
 			for( DataBaseTimeList dbTimeList:dbTimeListList){
 				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
@@ -455,6 +459,8 @@ public class Logic {
 					
 				runnerInfo.getTimeList().add(timeList);
 			}
+			
+			runnerInfoList.add(runnerInfo);
 		}
 		return runnerInfoList;
 	}

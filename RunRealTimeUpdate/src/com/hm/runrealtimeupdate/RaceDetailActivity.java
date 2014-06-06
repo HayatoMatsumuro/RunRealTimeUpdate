@@ -70,7 +70,7 @@ public class RaceDetailActivity extends Activity {
 		});
         
         // 選手情報
-        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
+        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo);
         
         // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_racedetail_listview_runner);
@@ -111,13 +111,16 @@ public class RaceDetailActivity extends Activity {
         
         // 選手登録ボタン
         Button runnerEntryButton = (Button)findViewById(R.id.id_racedetail_btn_runnerentry);
+        runnerEntryButton.setTag(raceInfo);
         runnerEntryButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				RaceInfo raceInfo = (RaceInfo)v.getTag();
 				
 				// 選手登録画面遷移
 				Intent intent = new Intent(RaceDetailActivity.this, RunnerEntryActivity.class);
+				intent.putExtra(RunnerEntryActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
 				startActivity(intent);
 			}
 		});

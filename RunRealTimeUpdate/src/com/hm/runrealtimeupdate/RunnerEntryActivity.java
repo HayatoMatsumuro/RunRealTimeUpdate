@@ -2,10 +2,13 @@ package com.hm.runrealtimeupdate;
 
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.LogicException;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -18,10 +21,17 @@ import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
 	
+	public static final String STR_INTENT_RACEID = "raceid";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_runnerentry);
+        
+        // 大会情報取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 戻るボタン
         Button backButton =(Button)findViewById(R.id.id_runnerentry_btn_back);
@@ -37,18 +47,27 @@ public class RunnerEntryActivity extends Activity {
         
         // 決定ボタン
         Button decideButton = (Button)findViewById(R.id.id_runnerentry_btn_decide);
+        decideButton.setTag(raceInfo);
         decideButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				String[] params = { null };
+
+				String[] params = { null, null, null };
+				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
+				// 大会情報取得
+				RaceInfo raceInfo = (RaceInfo)v.getTag();
+				params[1] = raceInfo.getRaceId();
 				
 				// ゼッケンNo取得
 				// URL入力エディットボックスから入力値取得
 				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
-				params[0] = noEdit.getText().toString();
+				params[2] = noEdit.getText().toString();
 				
-				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask();
+				// 選手情報取得タスク起動
+				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
 				task.execute(params);
 			}
 		});
@@ -61,17 +80,25 @@ public class RunnerEntryActivity extends Activity {
 	 */
 	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
 		
-
+		private RaceInfo m_RaceInfo;
+		
+		public RunnerInfoLoaderTask(RaceInfo raceInfo){
+			super();
+			m_RaceInfo = raceInfo;
+		}
+		
 		@Override
 		/**
-		 * param[0]:ゼッケン番号
+		 * params[0]:アップデートサイトURL
+		 * params[1]:大会ID
+		 * params[2]:ゼッケン番号
 		 */
 		protected RunnerInfo doInBackground(String... params) {
 			
 			RunnerInfo runnerInfo = null;
 			
 			try{
-				runnerInfo = Logic.getNetRunnerInfo(params[0]);
+				runnerInfo = Logic.getNetRunnerInfo( params[0], params[1], params[2] );
 			}catch (LogicException e) {
 				e.printStackTrace();
 			}
@@ -86,31 +113,82 @@ public class RunnerEntryActivity extends Activity {
 				return;
 			}
 			
-			Logic.setSelectRunnerInfo(runnerInfo);
-			AlertDialog.Builder dialog = new AlertDialog.Builder(RunnerEntryActivity.this);
+			// 大会情報ダイアログ表示
+			RunnerEntryDialog dialog
+				= new RunnerEntryDialog(
+						RunnerEntryActivity.this,
+						getContentResolver(),
+						m_RaceInfo,
+						runnerInfo);
+			dialog.onDialog();
+		}
+	}
+	
+	/**
+	 * 選手情報登録ダイアログ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RunnerEntryDialog{
+		
+		/**
+    	 * コンテキスト
+    	 */
+    	private Context m_Context;
+    	
+    	/**
+    	 * コンテントリゾルバ
+    	 */
+    	private ContentResolver m_ContentResolver;
+    	
+    	/**
+    	 * 大会情報
+    	 */
+    	private RaceInfo m_RaceInfo;
+    	
+    	/**
+    	 * 選手情報
+    	 */
+    	private RunnerInfo m_RunnerInfo;
+    	
+    	/**
+    	 * コンストラクタ
+    	 * @param context
+    	 * @param contentResolver
+    	 * @param raceInfo
+    	 * @param runnerInfo
+    	 */
+    	RunnerEntryDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
+    		m_Context = context;
+    		m_ContentResolver = contentResolver;
+    		m_RaceInfo = raceInfo;
+    		m_RunnerInfo = runnerInfo;
+    	}
+    	
+    	public void onDialog(){
+    		AlertDialog.Builder dialog = new AlertDialog.Builder(RunnerEntryActivity.this);
 			dialog.setTitle(getString(R.string.str_dialog_title_runnerentry));
-			dialog.setMessage(createDialogMessage(runnerInfo));
+			dialog.setMessage(createDialogMessage(m_RunnerInfo));
 			
 			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					//RunnerInfo runnerInfo = Logic.getSelectRunnerInfo();
-					//if( Logic.checkEntryRunnerId(getContentResolver(), runnerInfo.getNumber())){
-						// 登録済みのゼッケン番号
-					//	Toast.makeText(RunnerEntryActivity.this, "すでに登録済みです", Toast.LENGTH_SHORT).show();
-						
-					//} else {
-						
+					
+					if( !Logic.checkEntryRunnerId( m_ContentResolver, m_RaceInfo, m_RunnerInfo )){
 						// データベース登録
-						//Logic.entryRunnerInfo(getContentResolver(), runnerInfo);
+						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
 						
-						//Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
 						
-						//Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-						//startActivity(intent);
-						
-					//}
+						Intent intent = new Intent( m_Context, RaceDetailActivity.class);
+						intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
+						startActivity(intent);
+
+						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT).show();
+					}else{
+						// 登録済みのゼッケン番号
+						Toast.makeText( m_Context, "すでに登録済みです", Toast.LENGTH_SHORT).show();
+					}	
 				}
 			});
 			
@@ -123,9 +201,14 @@ public class RunnerEntryActivity extends Activity {
 				
 			});
 			dialog.show();
-		}
-		
-		private String createDialogMessage( RunnerInfo runnerInfo ){
+    	}
+    	
+    	/**
+    	 * ダイアログのメッセージ作成
+    	 * @param runnerInfo 選手情報
+    	 * @return
+    	 */
+    	private String createDialogMessage( RunnerInfo runnerInfo ){
 			StringBuilder builder = new StringBuilder();
 			
 			builder.append(getString(R.string.str_txt_racename));
@@ -143,5 +226,4 @@ public class RunnerEntryActivity extends Activity {
 			return builder.toString();
 		}
 	}
-
 }
