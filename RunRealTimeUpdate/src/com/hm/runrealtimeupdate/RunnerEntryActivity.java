@@ -95,22 +95,22 @@ public class RunnerEntryActivity extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					RunnerInfo runnerInfo = Logic.getSelectRunnerInfo();
-					if( Logic.checkEntryRunnerId(getContentResolver(), runnerInfo.getNumber())){
+					//RunnerInfo runnerInfo = Logic.getSelectRunnerInfo();
+					//if( Logic.checkEntryRunnerId(getContentResolver(), runnerInfo.getNumber())){
 						// 登録済みのゼッケン番号
-						Toast.makeText(RunnerEntryActivity.this, "すでに登録済みです", Toast.LENGTH_SHORT).show();
+					//	Toast.makeText(RunnerEntryActivity.this, "すでに登録済みです", Toast.LENGTH_SHORT).show();
 						
-					} else {
+					//} else {
 						
 						// データベース登録
-						Logic.entryRunnerInfo(getContentResolver(), runnerInfo);
+						//Logic.entryRunnerInfo(getContentResolver(), runnerInfo);
 						
-						Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+						//Toast.makeText(RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
 						
-						Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-						startActivity(intent);
+						//Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
+						//startActivity(intent);
 						
-					}
+					//}
 				}
 			});
 			

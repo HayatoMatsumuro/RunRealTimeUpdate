@@ -123,7 +123,8 @@ public class UpdateService extends Service {
 						Log.d("service", "stopSelf");
 						
 						// 速報停止状態にする
-						Logic.setUpdateOffRaceId(getContentResolver(), Logic.getUpdateRaceId());
+						//TODO:
+						//Logic.setUpdateOffRaceId(getContentResolver(), Logic.getUpdateRaceId());
 						stopSelf();
 					}
 				}

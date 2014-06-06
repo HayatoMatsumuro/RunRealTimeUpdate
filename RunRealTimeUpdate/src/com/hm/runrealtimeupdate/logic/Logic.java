@@ -19,11 +19,6 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 public class Logic {
 	
 	/**
-	 * 選手情報リスト
-	 */
-	private static List<RunnerInfo> m_RunnerInfoList = null;
-	
-	/**
 	 * 速報リスト
 	 */
 	private static List<UpdateInfo> m_UpdateInfoList = null;
@@ -37,11 +32,6 @@ public class Logic {
 	 * 選択中の大会情報
 	 */
 	private static RaceInfo m_SelectRaceInfo = null;
-	
-	/**
-	 * 速報中の大会情報
-	 */
-	private static String m_RaceIdUpdate = null;
 	
 	/**
 	 * 選択中の選手情報
@@ -78,7 +68,7 @@ public class Logic {
 	}
 	
 	/**
-	 * 大会情報を取得する
+	 * 大会情報リストを取得する
 	 * @param contentResolver コンテントリゾルバ
 	 * @return
 	 */
@@ -90,24 +80,45 @@ public class Logic {
 			
 		for( DataBaseRaceInfo dbRaceInfo: dbRaceInfoList ){
 			// 大会情報取得
-			RaceInfo raceInfo = new RaceInfo();
-			raceInfo.setRaceId(dbRaceInfo.getRaceId());
-			raceInfo.setRaceName(dbRaceInfo.getRaceName());
-			raceInfo.setRaceDate(dbRaceInfo.getRaceDate());
-			raceInfo.setRaceLocation(dbRaceInfo.getRaceLocation());
-			
-			if(dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON)){
-				raceInfo.setRaceUpdate(true);
-			}else{
-				raceInfo.setRaceUpdate(false);
-			}
-			
+			RaceInfo raceInfo = getRaceInfoBydbRaceInfo(dbRaceInfo);
 			raceInfoList.add(raceInfo);
 		}
 		
 		return raceInfoList;
 	}
 	
+	/**
+	 * 大会IDの大会情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @return
+	 */
+	public static RaceInfo getRaceInfo( ContentResolver contentResolver, String raceId ){
+		
+		DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(contentResolver, raceId);
+		
+		return getRaceInfoBydbRaceInfo(dbRaceInfo);
+	}
+	
+	/**
+	 * 大会情報を取得する
+	 * @param dbRaceInfo
+	 * @return
+	 */
+	private static RaceInfo getRaceInfoBydbRaceInfo( DataBaseRaceInfo dbRaceInfo ){
+		RaceInfo raceInfo = new RaceInfo();
+		raceInfo.setRaceId(dbRaceInfo.getRaceId());
+		raceInfo.setRaceName(dbRaceInfo.getRaceName());
+		raceInfo.setRaceDate(dbRaceInfo.getRaceDate());
+		raceInfo.setRaceLocation(dbRaceInfo.getRaceLocation());
+		
+		if(dbRaceInfo.getUpdateFlg().equals(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON)){
+			raceInfo.setRaceUpdate(true);
+		}else{
+			raceInfo.setRaceUpdate(false);
+		}
+		return raceInfo;
+	}
 	/**
 	 * 大会情報を削除する
 	 * @param contentResolver
@@ -135,8 +146,17 @@ public class Logic {
 	 *  大会IDがない場合、または大会情報を未取得ならばnull を返す
 	 * @return 速報中の大会ID
 	 */
-	public static String getUpdateRaceId(){
-		return m_RaceIdUpdate;
+	public static RaceInfo getUpdateRaceId( ContentResolver contentResolver ){
+		
+		List<DataBaseRaceInfo> dbRaceInfoList = DataBaseAccess.getUpdateExeRaceInfo( contentResolver );
+		
+		RaceInfo raceInfo = null;
+		
+		if( !dbRaceInfoList.isEmpty() ){
+			// 速報リストは一つだけのはず
+			raceInfo = getRaceInfoBydbRaceInfo(dbRaceInfoList.get(0));
+		}
+		return raceInfo;
 	}
 	
 	/**
@@ -146,30 +166,24 @@ public class Logic {
 	 */
 	public static boolean checkRaceIdUpdate( String raceId ){
 		
-		if( m_RaceIdUpdate == null ){
+		//if( m_RaceIdUpdate == null ){
 			// 速報中の大会がない
-			return false;
-		}else{
+		//	return false;
+		//}else{
 			// 速報中の大会あり
-			return m_RaceIdUpdate.equals(raceId);
-		}
+		//	return m_RaceIdUpdate.equals(raceId);
+		//}
+		return true;
 	}
 	
 	/**
 	 * 指定の大会を速報状態にする
 	 * @param raceId
 	 */
-	public static void setUpdateOnRaceId( ContentResolver contentResolver, String raceId){
-		
-		// 速報中の大会IDがあるなら速報状態を停止する( ないはず )
-		if( m_RaceIdUpdate != null ){
-			DataBaseAccess.setRaceUpdate(contentResolver, m_RaceIdUpdate, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
-			m_RaceIdUpdate = null;
-		}
+	public static void setUpdateOnRaceId( ContentResolver contentResolver, RaceInfo raceInfo){
 		
 		// 指定の大会を速報状態にする
-		DataBaseAccess.setRaceUpdate(contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
-		m_RaceIdUpdate = raceId;
+		DataBaseAccess.setRaceUpdate(contentResolver, raceInfo.getRaceId(), DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON);
 		
 		return;
 	}
@@ -179,11 +193,10 @@ public class Logic {
 	 * @param contentResolver 
 	 * @param raceId 大会ID
 	 */
-	public static void setUpdateOffRaceId(ContentResolver contentResolver, String raceId){
+	public static void setUpdateOffRaceId(ContentResolver contentResolver, RaceInfo raceInfo){
 		
 		// 指定の大会を速報状態にする
-		DataBaseAccess.setRaceUpdate(contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
-		m_RaceIdUpdate = null;
+		DataBaseAccess.setRaceUpdate(contentResolver, raceInfo.getRaceId(), DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
 				
 		return;
 	}
@@ -194,12 +207,6 @@ public class Logic {
 	 */
 	public static void setSelectRaceInfo( RaceInfo raceInfo){
 		m_SelectRaceInfo = raceInfo;
-		
-		// 選手情報初期化
-		if( m_RunnerInfoList != null){
-			m_RunnerInfoList.clear();
-			m_RunnerInfoList = null;
-		}
 		
 		// 速報リスト初期化
 		if( m_UpdateInfoList != null ){
@@ -296,11 +303,6 @@ public class Logic {
 	 */
 	public static void loadNetRunnerInfoList(){
 		
-		// 選手情報がないなら何もしない( こないはず )
-		if(m_RunnerInfoList == null){
-			return;
-		}
-		
 		// 古い情報を削除する
 		if(m_NetRunnerInfoList != null){
 			m_NetRunnerInfoList.clear();
@@ -308,16 +310,16 @@ public class Logic {
 		
 		m_NetRunnerInfoList = new ArrayList<RunnerInfo>();
 		
-		for( RunnerInfo runnerInfo : m_RunnerInfoList){
-			RunnerInfo netRunnerInfo = null;
-			try {
-				netRunnerInfo = getNetRunnerInfo(runnerInfo.getNumber());
-			} catch (LogicException e) {
-				e.printStackTrace();
-				netRunnerInfo = new RunnerInfo();
-			}
-			m_NetRunnerInfoList.add(netRunnerInfo);
-		}
+		//for( RunnerInfo runnerInfo : m_RunnerInfoList){
+		//	RunnerInfo netRunnerInfo = null;
+		//	try {
+		//		netRunnerInfo = getNetRunnerInfo(runnerInfo.getNumber());
+		//	} catch (LogicException e) {
+		//		e.printStackTrace();
+		//		netRunnerInfo = new RunnerInfo();
+		//	}
+		//	m_NetRunnerInfoList.add(netRunnerInfo);
+		//}
 	}
 	
 	
@@ -332,79 +334,74 @@ public class Logic {
 			return false;
 		}
 		
-		// 選手情報が未取得ならば、なにもしない( こないはず )
-		if( m_RunnerInfoList == null ){
-			return false;
-		}
-		
 		boolean updateFlg = false;
-		for( int i=0; i < m_RunnerInfoList.size(); i++ ){
-			RunnerInfo newInfo = m_NetRunnerInfoList.get(i);
-			RunnerInfo oldInfo = m_RunnerInfoList.get(i);
+		//for( int i=0; i < m_RunnerInfoList.size(); i++ ){
+		//	RunnerInfo newInfo = m_NetRunnerInfoList.get(i);
+		//	RunnerInfo oldInfo = m_RunnerInfoList.get(i);
 			
-			int newInfoTimeListSize = newInfo.getTimeList().size();
-			int oldInfoTimeListSize = oldInfo.getTimeList().size();
+		//	int newInfoTimeListSize = newInfo.getTimeList().size();
+		//	int oldInfoTimeListSize = oldInfo.getTimeList().size();
 			
 			// タイムリストが更新されているならば、データベースに書き込み
-			if( newInfoTimeListSize > oldInfoTimeListSize ){
-				int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
+		//	if( newInfoTimeListSize > oldInfoTimeListSize ){
+		//		int updateCnt = newInfoTimeListSize - oldInfoTimeListSize;
 				
-				for(int j=0; j < updateCnt; j++){
+		//		for(int j=0; j < updateCnt; j++){
 					
-					String point = newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint();
-					String split = newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit();
-					String lap = newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap();
-					String currentTime = newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime();
-					
+		//			String point = newInfo.getTimeList().get(oldInfoTimeListSize+j).getPoint();
+		//			String split = newInfo.getTimeList().get(oldInfoTimeListSize+j).getSplit();
+		//			String lap = newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap();
+		//			String currentTime = newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime();
+		//			
 					// タイムリスト書き込み
-					DataBaseAccess.entryTimeList(
-						contentResolver,
-						m_SelectRaceInfo.getRaceId(),
-						newInfo.getNumber(),
-						point,
-						split,
-						lap,
-						currentTime
-					);
+		//			DataBaseAccess.entryTimeList(
+		//				contentResolver,
+		//				m_SelectRaceInfo.getRaceId(),
+		//				newInfo.getNumber(),
+		//				point,
+		//				split,
+		//				lap,
+		//				currentTime
+		//			);
 					
 					// タイムリスト追加
-					RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
-					timeList.setPoint(point);
-					timeList.setSplit(split);
-					timeList.setLap(lap);
-					timeList.setCurrentTime(currentTime);
-					oldInfo.getTimeList().add(timeList);
+		//			RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+		//			timeList.setPoint(point);
+		//			timeList.setSplit(split);
+		//			timeList.setLap(lap);
+		//			timeList.setCurrentTime(currentTime);
+		//			oldInfo.getTimeList().add(timeList);
 					
 					// 速報データ書き込み
-					DataBaseAccess.entryUpdateData(
-						contentResolver,
-						m_SelectRaceInfo.getRaceId(),
-						newInfo.getNumber(),
-						newInfo.getName(),
-						newInfo.getSection(),
-						point,
-						split,
-						lap,
-						currentTime
-					);
+		//			DataBaseAccess.entryUpdateData(
+		//				contentResolver,
+		//				m_SelectRaceInfo.getRaceId(),
+		//				newInfo.getNumber(),
+		//				newInfo.getName(),
+		//				newInfo.getSection(),
+		//				point,
+		//				split,
+		//				lap,
+		//				currentTime
+		//			);
 					
 					// 速報データ追加
-					if( m_UpdateInfoList != null){
-						UpdateInfo updateInfo = new UpdateInfo();
-						updateInfo.setName(newInfo.getName());
-						updateInfo.setSection(newInfo.getSection());
-						updateInfo.setNumber(newInfo.getNumber());
-						updateInfo.setPoint(point);
-						updateInfo.setSplit(split);
-						updateInfo.setLap(lap);
-						updateInfo.setCurrentTime(currentTime);
+		//			if( m_UpdateInfoList != null){
+		//				UpdateInfo updateInfo = new UpdateInfo();
+		//				updateInfo.setName(newInfo.getName());
+		//				updateInfo.setSection(newInfo.getSection());
+		//				updateInfo.setNumber(newInfo.getNumber());
+		//				updateInfo.setPoint(point);
+		//				updateInfo.setSplit(split);
+		//				updateInfo.setLap(lap);
+		//				updateInfo.setCurrentTime(currentTime);
 						
-						m_UpdateInfoList.add(0, updateInfo);
-					}
-				}
-				updateFlg = true;
-			}
-		}
+		//				m_UpdateInfoList.add(0, updateInfo);
+		//			}
+		//		}
+		//		updateFlg = true;
+		//	}
+		//}
 		
 		return updateFlg;
 	}
@@ -426,46 +423,40 @@ public class Logic {
 		// データベース登録
 		DataBaseAccess.entryRunner(contentResolver, dbRunnerInfo );
 		
-		if( m_RunnerInfoList != null ){
-			m_RunnerInfoList.add(runnerInfo);
-		}
 	}
 	
 	/**
-	 * 選択中の大会情報を取得する
+	 * 選手情報リストを取得する
+	 * @param contentResolver
+	 * @param raceId　大会ID
 	 * @return
 	 */
-	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver ){
+	public static List<RunnerInfo> getRunnerInfoList( ContentResolver contentResolver, String raceId ){
 		
-		// 選手情報未取得
-		if( m_RunnerInfoList == null ){
-			
-			List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
-			
-			m_RunnerInfoList = new ArrayList<RunnerInfo>();
-			
-			for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
-				RunnerInfo runnerInfo = new RunnerInfo();
+		List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, m_SelectRaceInfo.getRaceId());
+		
+		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
+		
+		for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
+			RunnerInfo runnerInfo = new RunnerInfo();
 				
-				runnerInfo.setName(dbRunnerInfo.getName());
-				runnerInfo.setNumber(dbRunnerInfo.getNumber());
-				runnerInfo.setSection(dbRunnerInfo.getSection());
+			runnerInfo.setName(dbRunnerInfo.getName());
+			runnerInfo.setNumber(dbRunnerInfo.getNumber());
+			runnerInfo.setSection(dbRunnerInfo.getSection());
 				
-				List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), dbRunnerInfo.getNumber());
+			List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), dbRunnerInfo.getNumber());
 				
-				for( DataBaseTimeList dbTimeList:dbTimeListList){
-					RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
-					timeList.setPoint(dbTimeList.getPoint());
-					timeList.setSplit(dbTimeList.getSplit());
-					timeList.setLap(dbTimeList.getLap());
-					timeList.setCurrentTime(dbTimeList.getCurrentTime());
+			for( DataBaseTimeList dbTimeList:dbTimeListList){
+				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+				timeList.setPoint(dbTimeList.getPoint());
+				timeList.setSplit(dbTimeList.getSplit());
+				timeList.setLap(dbTimeList.getLap());
+				timeList.setCurrentTime(dbTimeList.getCurrentTime());
 					
-					runnerInfo.getTimeList().add(timeList);
-				}
-				m_RunnerInfoList.add(runnerInfo);
+				runnerInfo.getTimeList().add(timeList);
 			}
 		}
-		return m_RunnerInfoList;
+		return runnerInfoList;
 	}
 	
 	/**
@@ -479,49 +470,40 @@ public class Logic {
 	/**
 	 * 指定のゼッケン番号が登録済みかどうかを検索する
 	 * @param contentResolver
-	 * @param number
+	 * @param raceInfo
+	 * @param runnerInfo
 	 * @return　false 未登録、true 登録済み
 	 */
-	public static boolean checkEntryRunnerId( ContentResolver contentResolver, String number ){
+	public static boolean checkEntryRunnerId( ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo ){
 		
-		if( m_RunnerInfoList == null ){
-			// 選手情報未取得
-			DataBaseRunnerInfo info = DataBaseAccess.getRunnerInfoByRaceIdandNumber(
-					contentResolver,
-					m_SelectRaceInfo.getRaceId(),
-					m_SelectRunnerInfo.getNumber());
+		// 選手情報未取得
+		DataBaseRunnerInfo info = DataBaseAccess.getRunnerInfoByRaceIdandNumber(
+				contentResolver,
+				raceInfo.getRaceId(),
+				runnerInfo.getNumber());
 			
-			if( info == null ){
-				return false;
-			}else{
-				return true;
-			}
-		}else{
-			// 大会情報取得済み
-			for( RunnerInfo runnerInfo:m_RunnerInfoList){
-				if( runnerInfo.getNumber().equals(number)){
-					return true;
-				}
-			}
+		if( info == null ){
 			return false;
+		}else{
+			return true;
 		}
+		
 	}
 	
 	/**
-	 * 選択中の選手情報を削除する
+	 * 選手情報を削除する
 	 * @param contentResolver
+	 * @param runnerInfo
 	 */
-	public static void deleteRunnerInfo( ContentResolver contentResolver ){
+	public static void deleteRunnerInfo( ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo ){
+		
+		// TODO: 速報リスト削除
 		
 		// タイムリスト削除
-		DataBaseAccess.deleteTimeListByRaceIdandNo(contentResolver, m_SelectRaceInfo.getRaceId(), m_SelectRunnerInfo.getNumber());
+		DataBaseAccess.deleteTimeListByRaceIdandNo(contentResolver, raceInfo.getRaceId(), runnerInfo.getNumber());
 		
 		// 選手情報削除
 		DataBaseAccess.deleteRunnerInfoByNo(contentResolver, m_SelectRaceInfo.getRaceId(), m_SelectRunnerInfo.getNumber());
-		
-		m_RunnerInfoList.remove(m_SelectRunnerInfo);
-		
-		m_SelectRunnerInfo = null;
 		
 		return;
 	}
@@ -580,14 +562,14 @@ public class Logic {
 		
 		m_SectionList = new ArrayList<String>();
 		
-		for( RunnerInfo runnerInfo:m_RunnerInfoList){
+		//for( RunnerInfo runnerInfo:m_RunnerInfoList){
 			
-			String section = runnerInfo.getSection();
+		//	String section = runnerInfo.getSection();
 			
-			if( m_SectionList.indexOf(section) == -1 ){
-        		m_SectionList.add(section);
-        	}
-		}
+		//	if( m_SectionList.indexOf(section) == -1 ){
+        //		m_SectionList.add(section);
+        //	}
+		//}
 		
 		return m_SectionList;
 	}

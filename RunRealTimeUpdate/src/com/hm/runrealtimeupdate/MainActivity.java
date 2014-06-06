@@ -40,6 +40,7 @@ public class MainActivity extends Activity {
         // 大会情報
         List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
         
+        // 大会情報リスト設定
         RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList);
         ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
         raceInfoListView.setAdapter(adapter);
@@ -56,7 +57,7 @@ public class MainActivity extends Activity {
 				
 				// 画面遷移
 				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceEntryActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
 				startActivity(intent);
 			}
 		});
@@ -75,7 +76,13 @@ public class MainActivity extends Activity {
 				RaceListAdapter adapter = ( RaceListAdapter )listView.getAdapter();
 				
 				// 削除ダイアログ表示
-				RaceDeleteDialog raceDeleteDialog = new RaceDeleteDialog( MainActivity.this, getContentResolver(), raceInfo, adapter);
+				RaceDeleteDialog raceDeleteDialog
+					= new RaceDeleteDialog(
+							MainActivity.this,
+							getContentResolver(),
+							raceInfo,
+							adapter,
+							(Button)findViewById(R.id.id_main_btn_entry));
 				raceDeleteDialog.onDialog();
 				
 				return true;
@@ -94,25 +101,13 @@ public class MainActivity extends Activity {
 			}
 		});
         
-        // ボタン状態更新
-		entryButtonEnabled();
-    }
-    
-    /**
-     * ボタン状態を更新する
-     */
-    private void entryButtonEnabled(){
-    	
-    	Button btn = (Button)findViewById(R.id.id_main_btn_entry);
-    	
-    	ListView listView = (ListView)findViewById(R.id.id_main_listview_race);
-    	int size = listView.getAdapter().getCount();
-    	
-    	if( size >= INT_RACEINFO_NUM_MAX){
-    		btn.setEnabled(false);
-    	}else{
-    		btn.setEnabled(true);
-    	}
+        // 大会登録ボタンの表示状態設定
+        int raceInfoNum = raceInfoListView.getAdapter().getCount();
+        if( raceInfoNum >= INT_RACEINFO_NUM_MAX ){
+        	entryBtn.setEnabled(false);
+        }else{
+        	entryBtn.setEnabled(true);
+        }
     }
 
     /**
@@ -143,19 +138,26 @@ public class MainActivity extends Activity {
     	private RaceListAdapter m_Adapter;
     	
     	/**
+    	 * 大会登録のボタンID
+    	 */
+    	private Button m_EntryButton;
+    	
+    	/**
     	 * コンストラクタ
     	 * @param context コンテキスト
     	 * @param contentResolver コンテントリゾルバ
     	 * @param raceInfo 大会情報
     	 * @param adapter 大会リストアダプタ
+    	 * @param button 大会登録ボタン
     	 */
-    	RaceDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RaceListAdapter adapter ){
+    	RaceDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RaceListAdapter adapter, Button button ){
     		
     		// 初期化
     		m_Context = context;
     		m_ContentResolver = contentResolver;
     		m_RaceInfo = raceInfo;
     		m_Adapter = adapter;
+    		m_EntryButton = button;
     	}
     	
     	public void onDialog(){
@@ -177,11 +179,16 @@ public class MainActivity extends Activity {
 						Logic.deleteRaceInfo(m_ContentResolver, m_RaceInfo);
 						
 						// リストから大会削除
-						m_Adapter.remove(m_RaceInfo);
-						m_Adapter.notifyDataSetChanged();
+						if( m_Adapter != null ){
+
+							m_Adapter.remove(m_RaceInfo);
+							m_Adapter.notifyDataSetChanged();
+						}
 						
-						// ボタン状態更新
-						entryButtonEnabled();
+						// ボタンを表示にする
+						if( m_EntryButton != null ){
+							m_EntryButton.setEnabled(true);
+						}
 						
 						Toast.makeText(m_Context, "削除しました", Toast.LENGTH_SHORT).show();
 					}else{
@@ -245,14 +252,14 @@ public class MainActivity extends Activity {
 			TextView raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
 			TextView raceUpdateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_update);
 			
-			RaceInfo item = getItem(position);
+			RaceInfo raceInfo = getItem(position);
 			
-			raceNameTextView.setText(item.getRaceName());
-			raceDateTextView.setText(item.getRaceDate());
-			raceLocationTextView.setText(item.getRaceLocation());
+			raceNameTextView.setText(raceInfo.getRaceName());
+			raceDateTextView.setText(raceInfo.getRaceDate());
+			raceLocationTextView.setText(raceInfo.getRaceLocation());
 			
 			// 速報中の大会ならば、速報中と表示
-			if(Logic.checkRaceIdUpdate(item.getRaceId())){
+			if(raceInfo.isRaceUpdate()){
 				raceUpdateTextView.setText(getString(R.string.str_txt_updateexe));
 			}
 			
