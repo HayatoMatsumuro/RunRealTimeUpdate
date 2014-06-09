@@ -2,6 +2,7 @@ package com.hm.runrealtimeupdate.logic.parser;
 
 import java.io.IOException;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,8 +28,13 @@ public class ParserRunnersUpdate {
 		try {
 			// ランネットサーバーアクセス
 			String url = createRaceInfoURL( raceId );
-			Document doc = Jsoup.connect(url).get();
 			
+			Connection connection = Jsoup.connect(url);
+			if( connection == null ){
+				throw new ParserException("接続に失敗しました。");
+			}
+			
+			Document doc = connection.get();
 			if( doc == null )
 			{
 				throw new ParserException("URLが不正です。");
@@ -61,6 +67,9 @@ public class ParserRunnersUpdate {
 		} catch (IOException e) {
 			e.printStackTrace();
 			throw new ParserException("IOException.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ParserException("Exception.");
 		}
 	}
 	
@@ -76,24 +85,35 @@ public class ParserRunnersUpdate {
 		
 		try {
 			String url = createRunnerInfoURL(raceId, no);
-			Document doc = Jsoup.connect(url).get();
 			
+			Connection connection = Jsoup.connect(url);
+			if( connection == null ){
+				throw new ParserException("接続に失敗しました。");
+			}
+			
+			Document doc = connection.get();
 			if( doc == null )
 			{
-				throw new ParserException("ゼッケンNOが不正です。");
+				throw new ParserException("データ取得に失敗しました。");
 			}
 			
 			// 個人情報取得
-			//TODO selectの要素がないとき、落ちる
-			Element personalBlockElement = doc.select("div#personalBlock").get(0);
-									
+			Elements personalBlock = doc.select("div#personalBlock");
+			if( ( personalBlock == null ) || ( personalBlock.isEmpty() ) ){
+				throw new ParserException("データ取得に失敗しました。");
+			}
+			
+			Element personalBlockElement = personalBlock.get(0);						
 			if( personalBlockElement == null){
 				throw new ParserException("ゼッケンNOが不正です。");
 			}
 			
-			ParserRunnerInfo parserRunnerInfo = new ParserRunnerInfo();
-			
 			Elements ddElements = personalBlockElement.getElementsByTag("dd");
+			if( ( ddElements == null ) || ( ddElements.isEmpty() )  ){
+				throw new ParserException("ゼッケンNOが不正です。");
+			}
+			
+			ParserRunnerInfo parserRunnerInfo = new ParserRunnerInfo();
 			
 			// 名前取得
 			StringBuilder strName = new StringBuilder( ddElements.get(0).text() );
@@ -111,8 +131,12 @@ public class ParserRunnersUpdate {
 			parserRunnerInfo.setSection(strSection.toString());
 									
 			// スプリット情報取得
-			Element mainBlockElement = doc.select("div#mainBlock").get(0);
-									
+			Elements mainBlock = doc.select("div#mainBlock");
+			if( ( mainBlock == null ) || ( mainBlock.isEmpty() ) ){
+				throw new ParserException("スプリットが不正です。");
+			}
+			
+			Element mainBlockElement = mainBlock.get(0);						
 			if( mainBlockElement == null){
 				throw new ParserException("スプリットが不正です。");
 			}
@@ -140,6 +164,9 @@ public class ParserRunnersUpdate {
 			
 			e.printStackTrace();
 			throw new ParserException("IOException.");
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new ParserException("Exception.");
 		}
 		
 	}
