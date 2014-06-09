@@ -70,7 +70,12 @@ public class Logic {
 		
 		DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(contentResolver, raceId);
 		
-		return getRaceInfoBydbRaceInfo(dbRaceInfo);
+		if( dbRaceInfo == null){
+			return null;
+		}else{
+			return getRaceInfoBydbRaceInfo( dbRaceInfo );
+		}
+		
 	}
 	
 	/**
