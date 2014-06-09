@@ -176,7 +176,7 @@ public class MainActivity extends Activity {
 					if( !m_RaceInfo.isRaceUpdate()){
 						
 						// 大会削除
-						Logic.deleteRaceInfo(m_ContentResolver, m_RaceInfo);
+						Logic.deleteRaceInfo(m_ContentResolver, m_RaceInfo.getRaceId());
 						
 						// リストから大会削除
 						if( m_Adapter != null ){

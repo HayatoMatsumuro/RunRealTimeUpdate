@@ -20,19 +20,25 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class PassListActivity extends Activity {
 	
+	public static final String STR_INTENT_RACEID = "raceid";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_passlist);
         
+        // 大会情報取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
+        
         // 大会名表示
-        RaceInfo raceInfo = Logic.getSelectRaceInfo();
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlist_txt_name);
         raceNameTextView.setText(raceInfo.getRaceName());
         
         // 部門リストを取得する
-        List<String> sectionList = Logic.getSectionList();
+        List<String> sectionList = Logic.getSectionList(getContentResolver(), raceId);
         
         // リストアダプタを作成
         ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionList );
@@ -40,22 +46,23 @@ public class PassListActivity extends Activity {
         // リストビューに設定
         ListView listView = (ListView)findViewById(R.id.id_passlist_listview_sectionlist);
         listView.setAdapter(adapter);
+        listView.setTag(raceId);
         
         // リストビュー短押し
         listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long arg3) {
+				// 大会ID取得
+				String raceId = (String)parent.getTag();
 				
-				List<String> sectionList = Logic.getSectionList();
-				String section = sectionList.get(position);
-				
-				Logic.setSelectSection(section);
+				// 部門取得
+				ListView listView = (ListView)parent;
+				String section = (String)listView.getItemAtPosition(position);
 				
 				Intent intent = new Intent(PassListActivity.this, PassListSectionActivity.class);
-				// TODO: ここは削除する
-				//intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, m_RaceId);
-				//intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
+				intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, raceId);
+				intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
 				startActivity(intent);
 			}
         	
@@ -63,11 +70,15 @@ public class PassListActivity extends Activity {
         
         // 戻るボタン
         Button backButton = (Button)findViewById(R.id.id_passlist_btn_back);
+        backButton.setTag(raceId);
         backButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				String raceId = (String)v.getTag();
+				
 				Intent intent = new Intent(PassListActivity.this, UpdateListActivity.class);
+				intent.putExtra(UpdateListActivity.STR_INTENT_RACEID, raceId);
 				startActivity(intent);
 				
 			}

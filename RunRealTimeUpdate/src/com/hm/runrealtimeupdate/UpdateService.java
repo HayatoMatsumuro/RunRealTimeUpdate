@@ -1,20 +1,26 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
+import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
 public class UpdateService extends Service {
+	
+	public static final String STR_INTENT_RACEID = "raceid";
 	
 	//TODO: 暫定値
 	/**
@@ -68,11 +74,18 @@ public class UpdateService extends Service {
 		m_IntervalTimer = new Timer();
 		m_IntervalCnt = 0;
 		
+		// 大会情報取得
+        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
+        
+        // 選手情報取得
+        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
+        
 		// TODO:
 		Log.d("service", "start");
 		
 		// タイマー開始
-		UpdateTimerTask timerTask = new UpdateTimerTask();
+		UpdateTimerTask timerTask = new UpdateTimerTask( getContentResolver(), raceInfo, runnerInfoList);
 		m_IntervalTimer.schedule(timerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL);
 	}
 	
@@ -83,22 +96,62 @@ public class UpdateService extends Service {
 	 */
 	private class UpdateTimerTask extends TimerTask {
 
-		private Handler handler;
+		/**
+		 * ハンドラ
+		 */
+		private Handler m_Handler;
 		
-		UpdateTimerTask(){
-			handler = new Handler();
+		/**
+		 * コンテントリゾルバ
+		 */
+		private ContentResolver m_ContentResolver;
+		
+		/**
+		 * 大会情報
+		 */
+		private RaceInfo m_RaceInfo;
+		
+		/**
+		 * ゼッケン番号リスト
+		 */
+		private List<RunnerInfo> m_RunnerInfoList;
+		
+		/**
+		 * ネットワークから取得した選手情報
+		 */
+		private List<RunnerInfo> m_NetRunnerInfoList;
+		
+		/**
+		 * コンストラクタ
+		 * @param raceInfo 大会情報
+		 * @param numberList ゼッケン番号リスト
+		 */
+		UpdateTimerTask( ContentResolver contentResolver, RaceInfo raceInfo, List<RunnerInfo> runnerInfoList ){
+			m_Handler = new Handler();
+			m_ContentResolver = contentResolver;
+			m_RaceInfo = raceInfo;
+			m_RunnerInfoList = runnerInfoList;
+			m_NetRunnerInfoList = null;
 		}
 		
 		@Override
 		public void run() {
-			Logic.loadNetRunnerInfoList();
-			handler.post(new Runnable() {
+			
+			// ネットワークから選手情報を取得する
+			if( m_NetRunnerInfoList != null ){
+				m_NetRunnerInfoList.clear();
+				m_NetRunnerInfoList = null;
+			}
+			
+			String url = getString(R.string.str_txt_defaulturl);
+			m_NetRunnerInfoList = Logic.getNetRunnerInfoList(url, m_RaceInfo.getRaceId(), m_RunnerInfoList);
+			m_Handler.post(new Runnable() {
 				
 				@Override
 				public void run() {
 					
 					// データアップデート
-					boolean updateFlg = Logic.updateRunnerInfo(getContentResolver());
+					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
 					
 					// 更新がある場合は通知
 					if(updateFlg){
@@ -123,8 +176,7 @@ public class UpdateService extends Service {
 						Log.d("service", "stopSelf");
 						
 						// 速報停止状態にする
-						//TODO:
-						//Logic.setUpdateOffRaceId(getContentResolver(), Logic.getUpdateRaceId());
+						Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId());
 						stopSelf();
 					}
 				}

@@ -70,7 +70,7 @@ public class RaceDetailActivity extends Activity {
 		});
         
         // 選手情報
-        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo);
+        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo.getRaceId());
         
         // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_racedetail_listview_runner);
@@ -167,12 +167,13 @@ public class RaceDetailActivity extends Activity {
 					// 速報開始ボタン押し
 					
 					// 大会を速報状態にする
-					Logic.setUpdateOnRaceId(getContentResolver(), raceInfo);
+					Logic.setUpdateOnRaceId(getContentResolver(), raceInfo.getRaceId());
 					
 					raceInfo.setRaceUpdate(true);
 					
 					// 速報開始
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
 					startService(intent);
 					
 					// 表示変更
@@ -183,12 +184,13 @@ public class RaceDetailActivity extends Activity {
 					// 速報停止ボタン押し
 					
 					// データベース変更
-					Logic.setUpdateOffRaceId(getContentResolver(), raceInfo);
+					Logic.setUpdateOffRaceId(getContentResolver(), raceInfo.getRaceId());
 
 					raceInfo.setRaceUpdate(false);
 					
 					// 速報停止
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
 					stopService(intent);
 					
 					// 表示変更
@@ -199,12 +201,16 @@ public class RaceDetailActivity extends Activity {
         
         // 速報リストボタン
         Button updatelistButton = (Button)findViewById(R.id.id_racedetail_btn_updatelist);
+        updatelistButton.setTag(raceId);
         updatelistButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
+				String raceId = (String)v.getTag();
+				
 				Intent intent = new Intent( RaceDetailActivity.this, UpdateListActivity.class );
+				intent.putExtra(UpdateListActivity.STR_INTENT_RACEID, raceId);
 				startActivity(intent);
 			}
 		});
@@ -282,7 +288,7 @@ public class RaceDetailActivity extends Activity {
     			public void onClick(DialogInterface dialog, int which) {
     				
     				// 選手削除
-        			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo );
+        			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_RunnerInfo.getNumber() );
         				
         			// 表示リストを更新する
         			if( m_Adapter != null ){

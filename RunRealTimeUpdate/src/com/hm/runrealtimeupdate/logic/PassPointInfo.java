@@ -1,21 +1,24 @@
 package com.hm.runrealtimeupdate.logic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PassPointInfo {
-	
-	/**
-	 * 地点以外は、pointはnullを設定する
-	 */
+
+	private int passPointNo;
+
 	private String point;
 	
-	private String name;
+	private List<PassPointRunnerInfo> passPointRunnerInfoList = new ArrayList<PassPointRunnerInfo>();
 	
-	private String no;
 	
-	private String split;
-	
-	private String lap;
-	
-	private String currentTime;
+	public int getPassPointNo() {
+		return passPointNo;
+	}
+
+	public void setPassPointNo(int passPointNo) {
+		this.passPointNo = passPointNo;
+	}
 
 	public String getPoint() {
 		return point;
@@ -24,44 +27,67 @@ public class PassPointInfo {
 	public void setPoint(String point) {
 		this.point = point;
 	}
-
-	public String getName() {
-		return name;
+	
+	public List<PassPointRunnerInfo> getPassPointRunnerInfoList() {
+		return passPointRunnerInfoList;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setPassPointRunnerInfoList(List<PassPointRunnerInfo> passPointRunnerInfoList) {
+		this.passPointRunnerInfoList = passPointRunnerInfoList;
 	}
 
-	public String getNo() {
-		return no;
-	}
 
-	public void setNo(String no) {
-		this.no = no;
-	}
 
-	public String getSplit() {
-		return split;
-	}
+	public class PassPointRunnerInfo{
+		
+		private String name;
 
-	public void setSplit(String split) {
-		this.split = split;
-	}
+		private String number;
+		
+		private String split;
+		
+		private String lap;
+		
+		private String currentTime;
+		
+		public String getName() {
+			return name;
+		}
 
-	public String getLap() {
-		return lap;
-	}
+		public void setName(String name) {
+			this.name = name;
+		}
 
-	public void setLap(String lap) {
-		this.lap = lap;
-	}
+		public String getNumber() {
+			return number;
+		}
 
-	public String getCurrentTime() {
-		return currentTime;
-	}
+		public void setNumber(String number) {
+			this.number = number;
+		}
 
-	public void setCurrentTime(String currentTime) {
-		this.currentTime = currentTime;
+		public String getSplit() {
+			return split;
+		}
+
+		public void setSplit(String split) {
+			this.split = split;
+		}
+
+		public String getLap() {
+			return lap;
+		}
+
+		public void setLap(String lap) {
+			this.lap = lap;
+		}
+
+		public String getCurrentTime() {
+			return currentTime;
+		}
+
+		public void setCurrentTime(String currentTime) {
+			this.currentTime = currentTime;
+		}
 	}
 }

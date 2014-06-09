@@ -14,17 +14,20 @@ import android.database.Cursor;
 
 public class DataBaseAccess {
 	
+	/**
+	 * 大会速報中
+	 */
 	public static final String STR_DBA_RACE_UPDATEFLG_ON = RaceProvider.STR_UPDATEFLG_ON;
 	
+	/**
+	 * 大会速報中でない
+	 */
 	public static final String STR_DBA_RACE_UPDATEFLG_OFF = RaceProvider.STR_UPDATEFLG_OFF;
 	
 	/**
 	 * 大会情報をデータベースに登録
 	 * @param contentResolver
-	 * @param raceId
-	 * @param raceName
-	 * @param raceDate
-	 * @param raceLocation
+	 * @param deRaceInfo 大会情報
 	 */
 	public static void entryRace(
 			ContentResolver contentResolver,
@@ -46,7 +49,7 @@ public class DataBaseAccess {
 	/**
 	 * 指定の大会の速報状態設定
 	 * @param contentResolver
-	 * @param raceId
+	 * @param raceId 大会ID
 	 */
 	public static void setRaceUpdate( ContentResolver contentResolver, String raceId, String update ){
 		
@@ -64,7 +67,7 @@ public class DataBaseAccess {
 	 * 速報中の大会をすべて取得する。
 	 * 速報中の大会がないならば、空リストを取得する
 	 * @param contentResolver
-	 * @return
+	 * @return　速報中の大会。ない場合は空リスト。
 	 */
 	public static List<DataBaseRaceInfo> getUpdateExeRaceInfo( ContentResolver contentResolver ){
 		
@@ -162,13 +165,9 @@ public class DataBaseAccess {
 	/**
 	 * 選手情報を登録する
 	 * @param contentResolver
-	 * @param raceId
-	 * @param number
-	 * @param name
-	 * @param section
+	 * @param dbRunnerInfo 選手情報
 	 */
-	public static void entryRunner(
-			ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo )
+	public static void entryRunner( ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo )
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
@@ -219,7 +218,7 @@ public class DataBaseAccess {
 	 * @param number　ゼッケン番号
 	 * @return 選手情報
 	 */
-	public static DataBaseRunnerInfo getRunnerInfoByRaceIdandNumber( ContentResolver contentResolver, String raceId, String number ){
+	public static DataBaseRunnerInfo getRunnerInfoByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number ){
 		DataBaseRunnerInfo dbRunnerInfo = null;
 		
 		String[] projection = {
@@ -245,8 +244,8 @@ public class DataBaseAccess {
 	/**
 	 * 大会IDと部門に登録されている選手情報を取得する
 	 * @param contentResolver
-	 * @param raceId
-	 * @param section
+	 * @param raceId　大会ID
+	 * @param section　部門
 	 * @return
 	 */
 	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceIdandSection( ContentResolver contentResolver, String raceId, String section){
@@ -277,10 +276,10 @@ public class DataBaseAccess {
 	 * 大会IDとゼッケンNOから選手情報を削除する
 	 * @param contentResolver 
 	 * @param raceId 大会ID
-	 * @param no　ゼッケンNO
+	 * @param number ゼッケン番号
 	 */
-	public static void deleteRunnerInfoByNo( ContentResolver contentResolver, String raceId, String no){
-		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + no + "'";
+	public static void deleteRunnerInfoByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number ){
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
 		contentResolver.delete(RunnerProvider.URI_DB, selection, null);
 		
 		return;
@@ -301,44 +300,33 @@ public class DataBaseAccess {
 	/**
 	 * タイム情報を登録する
 	 * @param contentResolver
-	 * @param raceId
-	 * @param number
-	 * @param point
-	 * @param split
-	 * @param lap
-	 * @param currentTime
+	 * @param dbTimeList　タイム情報
 	 */
-	public static void entryTimeList(
-			ContentResolver contentResolver,
-			String raceId,
-			String number,
-			String point,
-			String split,
-			String lap,
-			String currentTime)
+	public static void entryTimeList( ContentResolver contentResolver, DataBaseTimeList dbTimeList )
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(TimelistProvider.STR_DB_COLUMN_RACEID, raceId);
-		values.put(TimelistProvider.STR_DB_COLUMN_NUMBER, number);
-		values.put(TimelistProvider.STR_DB_COLUMN_POINT, point);
-		values.put(TimelistProvider.STR_DB_COLUMN_SPLIT, split);
-		values.put(TimelistProvider.STR_DB_COLUMN_LAP, lap);
-		values.put(TimelistProvider.STR_DB_COLUMN_CURRENTTIME, currentTime);
+		values.put(TimelistProvider.STR_DB_COLUMN_RACEID, dbTimeList.getRaceId());
+		values.put(TimelistProvider.STR_DB_COLUMN_NUMBER, dbTimeList.getNumber());
+		values.put(TimelistProvider.STR_DB_COLUMN_POINT, dbTimeList.getPoint());
+		values.put(TimelistProvider.STR_DB_COLUMN_SPLIT, dbTimeList.getSplit());
+		values.put(TimelistProvider.STR_DB_COLUMN_LAP, dbTimeList.getLap());
+		values.put(TimelistProvider.STR_DB_COLUMN_CURRENTTIME, dbTimeList.getCurrentTime());
 		
 		contentResolver.insert(TimelistProvider.URI_DB, values);
 		return;
 	}
 	
+	
 	/**
 	 * 大会IDとゼッケンNo.から選手のタイムリストを取得する
 	 * @param contentResolver
 	 * @param raceId 大会ID
-	 * @param number ゼッケンNo.
+	 * @param number ゼッケン番号
 	 * @return
 	 */
-	public static List<DataBaseTimeList> getTimeListByRaceIdandNo( ContentResolver contentResolver, String raceId, String number){
+	public static List<DataBaseTimeList> getTimeListByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number){
 		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
 		
 		String[] projection = {
@@ -364,6 +352,7 @@ public class DataBaseAccess {
 		return list;
 	}
 	
+	
 	/**
 	 * 大会IDからタイムリストを削除する
 	 * @param contentResolver
@@ -376,50 +365,38 @@ public class DataBaseAccess {
 		return;
 	}
 	
+	
 	/**
 	 * 大会IDとゼッケン番号からタイムリストを削除する
 	 * @param contentResolver
-	 * @param raceId
-	 * @param number
+	 * @param raceId　大会ID
+	 * @param number　ゼッケン番号
 	 */
-	public static void deleteTimeListByRaceIdandNo( ContentResolver contentResolver, String raceId, String number ){
+	public static void deleteTimeListByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number ){
 		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
 		contentResolver.delete(TimelistProvider.URI_DB, selection, null);
+		
+		return;
 	}
+	
 	/**
 	 * 速報情報を登録する
 	 * @param contentResolver
-	 * @param raceId
-	 * @param number
-	 * @param name
-	 * @param section
-	 * @param point
-	 * @param split
-	 * @param lap
-	 * @param currentTime
+	 * @param dbUpdateData 速報情報
 	 */
-	public static void entryUpdateData(
-		ContentResolver contentResolver,
-		String raceId,
-		String number,
-		String name,
-		String section,
-		String point,
-		String split,
-		String lap,
-		String currentTime)
+	public static void entryUpdateData( ContentResolver contentResolver, DataBaseUpdateData dbUpdateData )
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put( UpdateDataProvider.STR_DB_COLUMN_RACEID, raceId );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_NUMBER, number);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_NAME, name);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_SECTION, section);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_POINT, point);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, split);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, lap);
-		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, currentTime);
+		values.put( UpdateDataProvider.STR_DB_COLUMN_RACEID, dbUpdateData.getRaceId() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NUMBER, dbUpdateData.getNumber() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NAME, dbUpdateData.getName() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SECTION, dbUpdateData.getSection());
+		values.put( UpdateDataProvider.STR_DB_COLUMN_POINT, dbUpdateData.getPoint() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, dbUpdateData.getSplit() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, dbUpdateData.getLap() );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, dbUpdateData.getCurrentTime());
 
 		contentResolver.insert(UpdateDataProvider.URI_DB, values);
 		return;
@@ -461,6 +438,8 @@ public class DataBaseAccess {
 	
 	/**
 	 * 大会IDから速報情報を削除する
+	 * @param contentResolver
+	 * @param raceId　大会ID
 	 */
 	public static void deleteUpdateDataByRaceId( ContentResolver contentResolver, String raceId){
 		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
@@ -468,6 +447,20 @@ public class DataBaseAccess {
 		
 		return;
 	}
+	
+	/**
+	 * 大会IDとゼッケン番号から速報情報を削除する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param number　ゼッケン番号
+	 */
+	public static void deleteUpdateDataByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number ){
+		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + UpdateDataProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
+		contentResolver.delete(UpdateDataProvider.URI_DB, selection, null);
+		
+		return;
+	}
+	
 	/**
 	 * 大会情報取得
 	 * @param c
