@@ -40,6 +40,13 @@ public class PassListSectionActivity extends Activity {
         // 大会情報取得
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(PassListSectionActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
+        }
+        
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlistsection_txt_racename);
         raceNameTextView.setText(raceInfo.getRaceName());

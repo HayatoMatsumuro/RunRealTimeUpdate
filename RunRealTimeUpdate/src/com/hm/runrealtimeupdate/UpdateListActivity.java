@@ -34,7 +34,12 @@ public class UpdateListActivity extends Activity {
         String raceId = intent.getStringExtra( STR_INTENT_RACEID );
         RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId);
         
-        // TODO:大会IDが削除されている場合を考慮
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(UpdateListActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
+        }
         
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_updatelist_txt_racename);

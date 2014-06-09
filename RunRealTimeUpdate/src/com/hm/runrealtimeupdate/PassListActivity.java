@@ -33,6 +33,13 @@ public class PassListActivity extends Activity {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(PassListActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
+        }
+        
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlist_txt_name);
         raceNameTextView.setText(raceInfo.getRaceName());

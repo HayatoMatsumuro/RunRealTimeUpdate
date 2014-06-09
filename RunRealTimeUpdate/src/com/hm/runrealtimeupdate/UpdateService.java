@@ -78,6 +78,12 @@ public class UpdateService extends Service {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
+        // 大会情報が取得できないなら、停止する
+        if( raceInfo == null ){
+        	stopSelf();
+        	return;
+        }
+        
         // 選手情報取得
         List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
         

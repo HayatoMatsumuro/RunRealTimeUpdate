@@ -33,6 +33,13 @@ public class RunnerEntryActivity extends Activity {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(RunnerEntryActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
+        }
+        
         // 戻るボタン
         Button backButton =(Button)findViewById(R.id.id_runnerentry_btn_back);
         backButton.setTag(raceId);
