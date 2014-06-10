@@ -182,16 +182,16 @@ public class Logic {
 	
 	/**
 	 * ネットワークから大会情報を取得する
-	 * @param url URL
+	 * @param url アップデートサイトURL
 	 * @param raceId 大会ID
 	 * @return　取得した大会情報
 	 * @throws LogicException 大会情報取得失敗
 	 */
-	public static RaceInfo getNetRaceInfo( String raceId ) throws LogicException{
+	public static RaceInfo getNetRaceInfo( String url, String raceId ) throws LogicException{
 		
 		try {
 			// 大会情報取得
-			ParserRaceInfo parserRaceInfo = ParserRunnersUpdate.getRaceInfo(raceId);
+			ParserRaceInfo parserRaceInfo = ParserRunnersUpdate.getRaceInfo( url, raceId );
 			
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
@@ -217,7 +217,7 @@ public class Logic {
 	public static RunnerInfo getNetRunnerInfo( String url, String raceId, String number ) throws LogicException{
 		try {
 			// 選手情報取得
-			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo( raceId, number);
+			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo( url, raceId, number);
 			
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();

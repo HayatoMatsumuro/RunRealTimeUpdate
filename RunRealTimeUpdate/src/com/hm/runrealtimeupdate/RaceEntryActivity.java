@@ -51,14 +51,36 @@ public class RaceEntryActivity extends Activity {
 				
 				String[] params = { null, null };
 				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
 				// URL入力エディットボックスから入力値取得
 				EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
-				params[0] = urlEdit.getText().toString();
+				params[1] = getRaceIdByUrl(urlEdit.getText().toString());
 				
 				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
 				task.execute(params);
 			}
 		});
+	}
+	
+	/**
+	 * URLからRaceIdを取得する
+	 * @param url URL
+	 * @return
+	 */
+	private String getRaceIdByUrl( String url ){
+		
+		// URLからデフォルトのURLを削除
+		int defUrlLen = getString(R.string.str_txt_defaulturl).length();
+		String raceId = url.substring(defUrlLen, url.length());
+		
+		// 最後が/だった場合は取り除く
+		String lastStr = raceId.substring(raceId.length()-1, raceId.length());
+		if( lastStr.equals("/")){
+			raceId = raceId.substring(0,raceId.length()-1);
+		}
+		
+		return raceId;
 	}
 	
 	/**
@@ -70,7 +92,7 @@ public class RaceEntryActivity extends Activity {
 
 		/**
 		 * 
-		 * @param String params[0] 大会のURL
+		 * @param String params[0] アップデートサイトURL、param[1] 大会ID
 		 * @return
 		 */
 		@Override
@@ -78,7 +100,7 @@ public class RaceEntryActivity extends Activity {
 			
 			RaceInfo raceInfo = null;
 			try {
-				raceInfo = Logic.getNetRaceInfo(getRaceIdByUrl(params[0]));
+				raceInfo = Logic.getNetRaceInfo( params[0], params[1] );
 				
 			} catch (LogicException e) {
 				e.printStackTrace();
@@ -96,26 +118,6 @@ public class RaceEntryActivity extends Activity {
 				raceEntryDialog.onDialog();
 			}
 			
-		}
-		
-		/**
-		 * URLからRaceIdを取得する
-		 * @param url URL
-		 * @return
-		 */
-		private String getRaceIdByUrl( String url ){
-			
-			// URLからデフォルトのURLを削除
-			int defUrlLen = getString(R.string.str_txt_defaulturl).length();
-			String raceId = url.substring(defUrlLen, url.length());
-			
-			// 最後が/だった場合は取り除く
-			String lastStr = raceId.substring(raceId.length()-1, raceId.length());
-			if( lastStr.equals("/")){
-				raceId = raceId.substring(0,raceId.length()-1);
-			}
-			
-			return raceId;
 		}
 	}
 	

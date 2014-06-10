@@ -15,21 +15,21 @@ import org.jsoup.select.Elements;
  */
 public class ParserRunnersUpdate {
 
-	private static final String STR_URL_RUNNERSUPDATE = "http://update.runnet.jp/";
 	
 	/**
 	 * ランナーズアップデートのサイトから大会情報を取得する
+	 * @param url アップデートサイトのURL
 	 * @param raceId 大会ID
 	 * @return 大会情報
 	 * @throws ParserException
 	 */
-	public static ParserRaceInfo getRaceInfo( String raceId ) throws ParserException{
+	public static ParserRaceInfo getRaceInfo( String url, String raceId ) throws ParserException{
 		
 		try {
 			// ランネットサーバーアクセス
-			String url = createRaceInfoURL( raceId );
+			String raceInfoUrl = createRaceInfoURL( url, raceId );
 			
-			Connection connection = Jsoup.connect(url);
+			Connection connection = Jsoup.connect( raceInfoUrl );
 			if( connection == null ){
 				throw new ParserException("接続に失敗しました。");
 			}
@@ -75,18 +75,19 @@ public class ParserRunnersUpdate {
 	
 	/**
 	 * ランナーズアップデートのサイトからランナー情報を取得する
+	 * @param url アップデートサイトURL
 	 * @param raceId　大会ID
 	 * @param no ゼッケンNo.
-	 * @return
+	 * @return 取得した選手情報
 	 * @throws ParserException
 	 */
-	public static ParserRunnerInfo getRunnerInfo( String raceId, String no) throws ParserException{
+	public static ParserRunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException{
 		
 		
 		try {
-			String url = createRunnerInfoURL(raceId, no);
+			String runnerInfoUrl = createRunnerInfoURL(url, raceId, no);
 			
-			Connection connection = Jsoup.connect(url);
+			Connection connection = Jsoup.connect(runnerInfoUrl);
 			if( connection == null ){
 				throw new ParserException("接続に失敗しました。");
 			}
@@ -173,12 +174,13 @@ public class ParserRunnersUpdate {
 	
 	/**
 	 * 大会情報を取得するURLを作成する
-	 * @param raceId
+	 * @param url アップデートサイトURL
+	 * @param raceId 大会ID
 	 * @return　大会情報アクセスURL
 	 */
-	private static String createRaceInfoURL( String raceId ){
+	private static String createRaceInfoURL( String url, String raceId ){
 		StringBuilder builder = new StringBuilder();
-		builder.append(STR_URL_RUNNERSUPDATE);
+		builder.append(url);
 		builder.append(raceId);
 		
 		return builder.toString();
@@ -186,14 +188,15 @@ public class ParserRunnersUpdate {
 	
 	/**
 	 * ランナー情報を取得するURLを作成する
+	 * @param url アップデートサイトURL
 	 * @param raceId　大会ID
 	 * @param no　ゼッケンNo.
 	 * @return　選手情報アクセスURL
 	 */
-	private static String createRunnerInfoURL( String raceId, String no){
+	private static String createRunnerInfoURL( String url, String raceId, String no){
 		
 		StringBuilder builder = new StringBuilder();
-		builder.append(STR_URL_RUNNERSUPDATE);
+		builder.append(url);
 		builder.append(raceId);
 		builder.append("/numberfile/");
 		builder.append(no);
