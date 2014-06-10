@@ -37,11 +37,6 @@ public class RaceEntryActivity extends Activity {
 			}
 		});
         
-        // URL入力エディットボックス
-        EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
-        urlEdit.setText(R.string.str_txt_defaulturl);
-        urlEdit.setSelection(urlEdit.getText().length());
-        
         // 決定ボタン
         Button decideBtn = (Button)findViewById(R.id.id_raceentry_btn_decide);
         decideBtn.setOnClickListener(new OnClickListener() {
@@ -55,7 +50,7 @@ public class RaceEntryActivity extends Activity {
 				
 				// URL入力エディットボックスから入力値取得
 				EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
-				params[1] = getRaceIdByUrl(urlEdit.getText().toString());
+				params[1] = formatRaceId(urlEdit.getText().toString());
 				
 				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
 				task.execute(params);
@@ -64,20 +59,18 @@ public class RaceEntryActivity extends Activity {
 	}
 	
 	/**
-	 * URLからRaceIdを取得する
-	 * @param url URL
+	 * 入力された大会IDのフォーマットをする
+	 * @param String inputRaceId
 	 * @return
 	 */
-	private String getRaceIdByUrl( String url ){
+	private String formatRaceId( String inputRaceId ){
 		
-		// URLからデフォルトのURLを削除
-		int defUrlLen = getString(R.string.str_txt_defaulturl).length();
-		String raceId = url.substring(defUrlLen, url.length());
+		String raceId = inputRaceId;
 		
 		// 最後が/だった場合は取り除く
-		String lastStr = raceId.substring(raceId.length()-1, raceId.length());
+		String lastStr = inputRaceId.substring(inputRaceId.length()-1, inputRaceId.length());
 		if( lastStr.equals("/")){
-			raceId = raceId.substring(0,raceId.length()-1);
+			raceId = inputRaceId.substring(0,inputRaceId.length()-1);
 		}
 		
 		return raceId;
