@@ -143,12 +143,13 @@ public class UpdateService extends Service {
 		@Override
 		public void run() {
 			
-			// ネットワークから選手情報を取得する
+			
 			if( m_NetRunnerInfoList != null ){
-				m_NetRunnerInfoList.clear();
-				m_NetRunnerInfoList = null;
+				// ネットワーク選手リストが有効ならば更新をしない
+				return;
 			}
 			
+			// ネットワークから選手情報を取得する
 			String url = getString(R.string.str_txt_defaulturl);
 			m_NetRunnerInfoList = Logic.getNetRunnerInfoList(url, m_RaceInfo.getRaceId(), m_RunnerInfoList);
 			m_Handler.post(new Runnable() {
@@ -185,6 +186,9 @@ public class UpdateService extends Service {
 						Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId());
 						stopSelf();
 					}
+					
+					m_NetRunnerInfoList.clear();
+					m_NetRunnerInfoList = null;
 				}
 			});
 		}
