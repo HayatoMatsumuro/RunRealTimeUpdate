@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.ContentResolver;
 
+import com.hm.runrealtimeupdate.logic.PassPointInfo.PassPointRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
@@ -528,6 +529,11 @@ public class Logic {
         }
         
         Collections.sort( passPointInfoList, new PassPointInfoComparator());
+        
+        // タイム順に並び替え
+        for( PassPointInfo info : passPointInfoList ){
+        	Collections.sort( info.getPassPointRunnerInfoList() , new PassPointInfoSplitComparator() );
+        }
 		return passPointInfoList;
 	}
     
@@ -557,5 +563,18 @@ public class Logic {
 			}
 		}
 		
+	}
+	
+	private static class PassPointInfoSplitComparator implements Comparator<PassPointInfo.PassPointRunnerInfo>{
+
+		@Override
+		public int compare(PassPointRunnerInfo o1, PassPointRunnerInfo o2) {
+			
+			if( o1.getSplitLong() > o2.getSplitLong() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
 	}
 }
