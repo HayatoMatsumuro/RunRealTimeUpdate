@@ -20,4 +20,17 @@
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/id_pass_point_main"/>
 
+    <TextView
+        android:id="@+id/id_pass_point_updatenew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="22dp"
+        android:text="@string/str_txt_updatenew"
+        android:textColor="@color/red"
+        android:textStyle="italic"
+        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>
