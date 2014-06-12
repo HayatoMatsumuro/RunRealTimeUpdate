@@ -17,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
         android:layout_below="@+id/id_pass_point_main"/>
 
 </RelativeLayout>

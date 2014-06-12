@@ -139,7 +139,7 @@ public class PassListSectionActivity extends Activity {
 			}else{
 				// ランナー情報表示
 				mainTextView.setText(element.getNumber() + " " + element.getName());
-				subTextView.setText(element.getSplit());
+				subTextView.setText(getString(R.string.str_txt_split) + element.getSplit());
 				subTextView.setVisibility(View.VISIBLE);
 				convertView.setBackgroundColor(Color.WHITE);
 			}
