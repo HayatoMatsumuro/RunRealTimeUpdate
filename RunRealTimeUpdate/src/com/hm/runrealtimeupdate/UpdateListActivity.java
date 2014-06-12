@@ -115,14 +115,20 @@ public class UpdateListActivity extends Activity {
 			
 			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_main);
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_sub);
+			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
+			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
 			
+        	UpdateInfo updateInfo = getItem(position);
 			
+        	String mainStr = updateInfo.getSection() + " " + updateInfo.getPoint();
+        	String subStr = updateInfo.getNumber() + " " + updateInfo.getName();
+			String splitStr = getString(R.string.str_txt_split) + updateInfo.getSplit();
+			String currentTimeStr = getString(R.string.str_txt_currenttime) + updateInfo.getCurrentTime();
         	
-			UpdateInfo updateInfo = getItem(position);
-			String mainStr = updateInfo.getNumber() + " " + updateInfo.getSection() + " "+ updateInfo.getName() + " 選手 " + updateInfo.getPoint();
-        	String subStr = updateInfo.getSplit();
-			mainTextView.setText(mainStr);
+        	mainTextView.setText(mainStr);
 			subTextView.setText(subStr);
+			splitTextView.setText(splitStr);
+			currentTimeTextView.setText(currentTimeStr);
 			
 			return convertView;
 		}
