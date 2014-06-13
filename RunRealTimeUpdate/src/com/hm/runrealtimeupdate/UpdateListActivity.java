@@ -23,6 +23,7 @@ public class UpdateListActivity extends Activity {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
+	private static final long LONG_RESENT_TIME = 300000;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -46,7 +47,7 @@ public class UpdateListActivity extends Activity {
         raceNameTextView.setText( raceInfo.getRaceName());
         
         // 速報データ取得
-        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId );
+        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
         
         // リストビュー設定
         UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
@@ -117,6 +118,7 @@ public class UpdateListActivity extends Activity {
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_sub);
 			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
 			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
+			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_updatenuew);
 			
         	UpdateInfo updateInfo = getItem(position);
 			
@@ -130,6 +132,12 @@ public class UpdateListActivity extends Activity {
 			splitTextView.setText(splitStr);
 			currentTimeTextView.setText(currentTimeStr);
 			
+			// New 表示
+			if( updateInfo.isRecentFlg()){
+				updateNewTextView.setVisibility(View.VISIBLE);
+			}else{
+				updateNewTextView.setVisibility(View.INVISIBLE);
+			}
 			return convertView;
 		}
 		

@@ -1,14 +1,18 @@
 package com.hm.runrealtimeupdate.logic;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+
 import com.hm.runrealtimeupdate.logic.PassPointInfo.PassPointRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
@@ -23,7 +27,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 public class Logic {
 	
 	@SuppressLint("SimpleDateFormat")
-	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
 	/**
 	 * 大会情報を登録する
@@ -43,8 +47,9 @@ public class Logic {
 		
 		// 日付設定
 		Calendar cal = Calendar.getInstance();
-		String date = DATEFORMAT.format(cal.getTime());
-		dbRaceInfo.setDate(date);
+		Date date = cal.getTime();
+		String dateStr = DATEFORMAT.format(date);
+		dbRaceInfo.setDate(dateStr);
 		
 		// データベース登録
 		DataBaseAccess.entryRace(contentResolver, dbRaceInfo);
@@ -316,7 +321,8 @@ public class Logic {
 					
 					// 日付設定
 					Calendar cal = Calendar.getInstance();
-					String date = DATEFORMAT.format(cal.getTime());
+					Date date = cal.getTime();
+					String dateStr = DATEFORMAT.format(date);
 					
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
@@ -326,7 +332,7 @@ public class Logic {
 					dbTimeList.setSplit(split);
 					dbTimeList.setLap(lap);
 					dbTimeList.setCurrentTime(currentTime);
-					dbTimeList.setDate(date);
+					dbTimeList.setDate(dateStr);
 					DataBaseAccess.entryTimeList( contentResolver, dbTimeList );
 					
 					// 速報データ書き込み
@@ -339,7 +345,7 @@ public class Logic {
 					dbUpdateData.setSplit(split);
 					dbUpdateData.setLap(lap);
 					dbUpdateData.setCurrentTime(currentTime);
-					dbUpdateData.setDate(date);
+					dbUpdateData.setDate(dateStr);
 					DataBaseAccess.entryUpdateData( contentResolver, dbUpdateData );
 				}
 				updateFlg = true;
@@ -367,8 +373,9 @@ public class Logic {
 		
 		// 日付設定
 		Calendar cal = Calendar.getInstance();
-		String date = DATEFORMAT.format(cal.getTime());
-		dbRunnerInfo.setDate(date);
+		Date date = cal.getTime();
+		String dateStr = DATEFORMAT.format(date);
+		dbRunnerInfo.setDate(dateStr);
 		
 		// データベース登録
 		DataBaseAccess.entryRunner(contentResolver, dbRunnerInfo );
@@ -456,13 +463,19 @@ public class Logic {
 	 * 速報情報を取得する( 新しい順 )
 	 * @param contentResolver
 	 * @param raceId 大会ID
+	 * @param recentTime 現在の日付からこの時間前ならば、recentFlgがtrue( ミリ秒 )
 	 * @return
 	 */
-	public static List<UpdateInfo> getUpdateInfoList( ContentResolver contentResolver, String raceId ){
+	public static List<UpdateInfo> getUpdateInfoList( ContentResolver contentResolver, String raceId, long recentTime ){
 		
 		List<DataBaseUpdateData> dbUpdateDataList = DataBaseAccess.getUpdateDataByRaceId(contentResolver, raceId );
 		
 		List<UpdateInfo> updateInfoList = new ArrayList<UpdateInfo>();
+		
+		// 現在の時刻の秒取得
+		Calendar cal = Calendar.getInstance();
+		Date nowDate = cal.getTime();
+		long nowTime = nowDate.getTime();
 		
 		for( DataBaseUpdateData dbUpdateData: dbUpdateDataList ){
 			UpdateInfo updateInfo = new UpdateInfo();
@@ -474,6 +487,20 @@ public class Logic {
 			updateInfo.setSplit(dbUpdateData.getSplit());
 			updateInfo.setLap(dbUpdateData.getLap());
 			updateInfo.setCurrentTime(dbUpdateData.getCurrentTime());
+			
+			try {
+				Date date = DATEFORMAT.parse(dbUpdateData.getDate());
+				long updateTime = date.getTime();
+				
+				if( nowTime - updateTime < recentTime ){
+					updateInfo.setRecentFlg(true);
+				}else{
+					updateInfo.setRecentFlg(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				updateInfo.setRecentFlg(false);
+			}
 				
 			updateInfoList.add(updateInfo);
 		}

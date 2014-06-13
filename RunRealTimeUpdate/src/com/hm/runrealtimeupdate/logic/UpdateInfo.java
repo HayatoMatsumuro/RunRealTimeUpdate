@@ -16,6 +16,8 @@ public class UpdateInfo {
 	
 	private String currentTime;
 
+	private boolean recentFlg;
+
 	public String getName() {
 		return name;
 	}
@@ -71,5 +73,12 @@ public class UpdateInfo {
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
 	}
+	
+	public boolean isRecentFlg() {
+		return recentFlg;
+	}
 
+	public void setRecentFlg(boolean recentFlg) {
+		this.recentFlg = recentFlg;
+	}
 }
