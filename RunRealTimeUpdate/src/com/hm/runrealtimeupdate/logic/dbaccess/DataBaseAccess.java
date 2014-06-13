@@ -41,6 +41,7 @@ public class DataBaseAccess {
 		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, dbRaceInfo.getRaceDate());
 		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, dbRaceInfo.getRaceLocation());
 		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, dbRaceInfo.getUpdateFlg());
+		values.put(RaceProvider.STR_DB_COLUMN_DATE, dbRaceInfo.getDate());
 		
 		contentResolver.insert(RaceProvider.URI_DB, values);
 		return;
@@ -78,7 +79,8 @@ public class DataBaseAccess {
 				RaceProvider.STR_DB_COLUMN_RACENAME,
 				RaceProvider.STR_DB_COLUMN_RACEDATE,
 				RaceProvider.STR_DB_COLUMN_RACELOCATION,
-				RaceProvider.STR_DB_COLUMN_UPDATEFLG
+				RaceProvider.STR_DB_COLUMN_UPDATEFLG,
+				RaceProvider.STR_DB_COLUMN_DATE
 		};
 		
 		String selection = RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_ON +"'";
@@ -110,7 +112,8 @@ public class DataBaseAccess {
 				RaceProvider.STR_DB_COLUMN_RACENAME,
 				RaceProvider.STR_DB_COLUMN_RACEDATE,
 				RaceProvider.STR_DB_COLUMN_RACELOCATION,
-				RaceProvider.STR_DB_COLUMN_UPDATEFLG
+				RaceProvider.STR_DB_COLUMN_UPDATEFLG,
+				RaceProvider.STR_DB_COLUMN_DATE
 		};
 		
 		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, null, null, null);
@@ -136,7 +139,14 @@ public class DataBaseAccess {
 		
 		DataBaseRaceInfo raceInfo = null;
 		
-		String[] projection = {RaceProvider.STR_DB_COLUMN_RACEID, RaceProvider.STR_DB_COLUMN_RACENAME, RaceProvider.STR_DB_COLUMN_RACEDATE, RaceProvider.STR_DB_COLUMN_RACELOCATION, RaceProvider.STR_DB_COLUMN_UPDATEFLG};
+		String[] projection = {
+				RaceProvider.STR_DB_COLUMN_RACEID,
+				RaceProvider.STR_DB_COLUMN_RACENAME,
+				RaceProvider.STR_DB_COLUMN_RACEDATE,
+				RaceProvider.STR_DB_COLUMN_RACELOCATION,
+				RaceProvider.STR_DB_COLUMN_UPDATEFLG,
+				RaceProvider.STR_DB_COLUMN_DATE
+		};
 		String selection = RaceProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"'";
 		
 		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, selection, null, null);
@@ -176,6 +186,7 @@ public class DataBaseAccess {
 		values.put(RunnerProvider.STR_DB_COLUMN_NUMBER, dbRunnerInfo.getNumber());
 		values.put(RunnerProvider.STR_DB_COLUMN_NAME, dbRunnerInfo.getName());
 		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, dbRunnerInfo.getSection());
+		values.put(RunnerProvider.STR_DB_COLUMN_DATE, dbRunnerInfo.getDate());
 		
 		contentResolver.insert(RunnerProvider.URI_DB, values);
 		return;
@@ -194,7 +205,8 @@ public class DataBaseAccess {
 				RunnerProvider.STR_DB_COLUMN_RACEID,
 				RunnerProvider.STR_DB_COLUMN_NUMBER,
 				RunnerProvider.STR_DB_COLUMN_NAME,
-				RunnerProvider.STR_DB_COLUMN_SECTION
+				RunnerProvider.STR_DB_COLUMN_SECTION,
+				RunnerProvider.STR_DB_COLUMN_DATE
 		};
 		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"'";
 		
@@ -225,7 +237,8 @@ public class DataBaseAccess {
 				RunnerProvider.STR_DB_COLUMN_RACEID,
 				RunnerProvider.STR_DB_COLUMN_NUMBER,
 				RunnerProvider.STR_DB_COLUMN_NAME,
-				RunnerProvider.STR_DB_COLUMN_SECTION
+				RunnerProvider.STR_DB_COLUMN_SECTION,
+				RunnerProvider.STR_DB_COLUMN_DATE
 		};
 		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"' and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + number +"'";
 		
@@ -255,7 +268,8 @@ public class DataBaseAccess {
 				RunnerProvider.STR_DB_COLUMN_RACEID,
 				RunnerProvider.STR_DB_COLUMN_NUMBER,
 				RunnerProvider.STR_DB_COLUMN_NAME,
-				RunnerProvider.STR_DB_COLUMN_SECTION
+				RunnerProvider.STR_DB_COLUMN_SECTION,
+				RunnerProvider.STR_DB_COLUMN_DATE
 		};
 		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId+"' and " + RunnerProvider.STR_DB_COLUMN_SECTION + "='" + section +"'";
 		
@@ -313,6 +327,7 @@ public class DataBaseAccess {
 		values.put(TimelistProvider.STR_DB_COLUMN_SPLIT, dbTimeList.getSplit());
 		values.put(TimelistProvider.STR_DB_COLUMN_LAP, dbTimeList.getLap());
 		values.put(TimelistProvider.STR_DB_COLUMN_CURRENTTIME, dbTimeList.getCurrentTime());
+		values.put(TimelistProvider.STR_DB_COLUMN_DATE, dbTimeList.getDate());
 		
 		contentResolver.insert(TimelistProvider.URI_DB, values);
 		return;
@@ -335,7 +350,8 @@ public class DataBaseAccess {
 			TimelistProvider.STR_DB_COLUMN_POINT,
 			TimelistProvider.STR_DB_COLUMN_SPLIT,
 			TimelistProvider.STR_DB_COLUMN_LAP,
-			TimelistProvider.STR_DB_COLUMN_CURRENTTIME
+			TimelistProvider.STR_DB_COLUMN_CURRENTTIME,
+			TimelistProvider.STR_DB_COLUMN_DATE
 		};
 		
 		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
@@ -397,8 +413,9 @@ public class DataBaseAccess {
 		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, dbUpdateData.getSplit() );
 		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, dbUpdateData.getLap() );
 		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, dbUpdateData.getCurrentTime());
-
+		values.put( UpdateDataProvider.STR_DB_COLUMN_DATE, dbUpdateData.getDate());
 		contentResolver.insert(UpdateDataProvider.URI_DB, values);
+		
 		return;
 	}
 	
@@ -419,7 +436,8 @@ public class DataBaseAccess {
 			UpdateDataProvider.STR_DB_COLUMN_POINT,
 			UpdateDataProvider.STR_DB_COLUMN_SPLIT,
 			UpdateDataProvider.STR_DB_COLUMN_LAP,
-			UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME
+			UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME,
+			UpdateDataProvider.STR_DB_COLUMN_DATE
 		};
 		
 		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'";
@@ -470,18 +488,20 @@ public class DataBaseAccess {
 		
 		// データ取り出し
 		String id = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEID));
-		String name = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACENAME));
-		String date = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEDATE));
-		String location = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACELOCATION));
+		String raceName = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACENAME));
+		String raceDate = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEDATE));
+		String raceLocation = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACELOCATION));
 		String updateFlg = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_UPDATEFLG));
+		String date = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_DATE));
 		
 		// データ設定
 		DataBaseRaceInfo info = new DataBaseRaceInfo();
 		info.setRaceId(id);
-		info.setRaceName(name);
-		info.setRaceDate(date);
-		info.setRaceLocation(location);
+		info.setRaceName(raceName);
+		info.setRaceDate(raceDate);
+		info.setRaceLocation(raceLocation);
 		info.setUpdateFlg(updateFlg);
+		info.setDate(date);
 		
 		return info;
 	}
@@ -497,6 +517,7 @@ public class DataBaseAccess {
 		String number = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NUMBER));
 		String name = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NAME));
 		String section = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_SECTION));
+		String date = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_DATE));
 		
 		// データ設定
 		DataBaseRunnerInfo info = new DataBaseRunnerInfo();
@@ -504,6 +525,7 @@ public class DataBaseAccess {
 		info.setNumber(number);
 		info.setName(name);
 		info.setSection(section);
+		info.setDate(date);
 		
 		return info;
 		
@@ -522,6 +544,7 @@ public class DataBaseAccess {
 		String split = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_SPLIT));
 		String lap = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_LAP));
 		String currentTime = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_CURRENTTIME));
+		String date = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_DATE));
 		
 		// データ設定
 		DataBaseTimeList timelist = new DataBaseTimeList();
@@ -531,6 +554,7 @@ public class DataBaseAccess {
 		timelist.setSplit(split);
 		timelist.setLap(lap);
 		timelist.setCurrentTime(currentTime);
+		timelist.setDate(date);
 		
 		return timelist;
 	}
@@ -551,6 +575,7 @@ public class DataBaseAccess {
 		String split = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SPLIT));
 		String lap = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_LAP));
 		String currentTime = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME));
+		String date = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_DATE));
 		
 		// データ設定
 		DataBaseUpdateData updateData = new DataBaseUpdateData();
@@ -562,6 +587,7 @@ public class DataBaseAccess {
 		updateData.setSplit(split);
 		updateData.setLap(lap);
 		updateData.setCurrentTime(currentTime);
+		updateData.setDate(date);
 		
 		return updateData;
 	}

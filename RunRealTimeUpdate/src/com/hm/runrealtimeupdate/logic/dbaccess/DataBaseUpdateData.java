@@ -17,6 +17,8 @@ public class DataBaseUpdateData {
 	private String lap;
 	
 	private String currentTime;
+	
+	private String date;
 
 	public String getRaceId() {
 		return raceId;
@@ -80,5 +82,13 @@ public class DataBaseUpdateData {
 
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 }

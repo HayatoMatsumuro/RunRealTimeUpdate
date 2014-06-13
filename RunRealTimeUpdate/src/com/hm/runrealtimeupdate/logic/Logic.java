@@ -1,12 +1,14 @@
 package com.hm.runrealtimeupdate.logic;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-
 import com.hm.runrealtimeupdate.logic.PassPointInfo.PassPointRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
@@ -19,6 +21,9 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
+	
+	@SuppressLint("SimpleDateFormat")
+	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
 	
 	/**
 	 * 大会情報を登録する
@@ -35,6 +40,11 @@ public class Logic {
 		dbRaceInfo.setRaceDate(raceInfo.getRaceDate());
 		dbRaceInfo.setRaceLocation(raceInfo.getRaceLocation());
 		dbRaceInfo.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+		
+		// 日付設定
+		Calendar cal = Calendar.getInstance();
+		String date = DATEFORMAT.format(cal.getTime());
+		dbRaceInfo.setDate(date);
 		
 		// データベース登録
 		DataBaseAccess.entryRace(contentResolver, dbRaceInfo);
@@ -304,6 +314,10 @@ public class Logic {
 					String lap = newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap();
 					String currentTime = newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime();
 					
+					// 日付設定
+					Calendar cal = Calendar.getInstance();
+					String date = DATEFORMAT.format(cal.getTime());
+					
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
 					dbTimeList.setRaceId(raceId);
@@ -312,6 +326,7 @@ public class Logic {
 					dbTimeList.setSplit(split);
 					dbTimeList.setLap(lap);
 					dbTimeList.setCurrentTime(currentTime);
+					dbTimeList.setDate(date);
 					DataBaseAccess.entryTimeList( contentResolver, dbTimeList );
 					
 					// 速報データ書き込み
@@ -324,6 +339,7 @@ public class Logic {
 					dbUpdateData.setSplit(split);
 					dbUpdateData.setLap(lap);
 					dbUpdateData.setCurrentTime(currentTime);
+					dbUpdateData.setDate(date);
 					DataBaseAccess.entryUpdateData( contentResolver, dbUpdateData );
 				}
 				updateFlg = true;
@@ -348,6 +364,11 @@ public class Logic {
 		dbRunnerInfo.setName(runnerInfo.getName());
 		dbRunnerInfo.setNumber(runnerInfo.getNumber());
 		dbRunnerInfo.setSection(runnerInfo.getSection());
+		
+		// 日付設定
+		Calendar cal = Calendar.getInstance();
+		String date = DATEFORMAT.format(cal.getTime());
+		dbRunnerInfo.setDate(date);
 		
 		// データベース登録
 		DataBaseAccess.entryRunner(contentResolver, dbRunnerInfo );

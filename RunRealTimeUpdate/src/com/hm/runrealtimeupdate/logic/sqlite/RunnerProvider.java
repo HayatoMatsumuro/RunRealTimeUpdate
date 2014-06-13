@@ -10,8 +10,8 @@ import android.net.Uri;
 
 /**
  * DB名:runner
- * | key                 | raceid | number | name | section |
- * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT | TEXT    |
+ * | key                 | raceid | number | name | section | date                        |
+ * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT | TEXT    | TEXT( YYYY-MM-DD hh:mm:ss ) |
  * @author Hayato Matsumuro
  *
  */
@@ -27,8 +27,9 @@ public class RunnerProvider extends ContentProvider {
 	public static final String STR_DB_COLUMN_NUMBER = "number";
 	public static final String STR_DB_COLUMN_NAME = "name";
 	public static final String STR_DB_COLUMN_SECTION = "section";
+	public static final String STR_DB_COLUMN_DATE = "date";
 	
-	private static final int VERSION = 1;
+	private static final int VERSION = 2;
 	
 	@Override
 	public boolean onCreate() {
@@ -102,7 +103,8 @@ public class RunnerProvider extends ContentProvider {
 					+ STR_DB_COLUMN_RACEID + " TEXT,"
 					+ STR_DB_COLUMN_NUMBER + " TEXT,"
 					+ STR_DB_COLUMN_NAME + " TEXT,"
-					+ STR_DB_COLUMN_SECTION + " TEXT"
+					+ STR_DB_COLUMN_SECTION + " TEXT,"
+					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
 			db.execSQL(sql);
 		}
