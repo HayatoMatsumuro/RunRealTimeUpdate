@@ -34,6 +34,13 @@ public class UpdateService extends Service {
 	 */
 	private static int INT_TIMER_DELAY = 0;
 	
+	//TODO: 暫定値
+	/**
+	 * バイブ 
+	 *  [ON時間, OFF時間, ・・・]
+	 */
+	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
+	
 	/**
 	 * 速報を行う回数
 	 * 1日で自動的に速報が停止する
@@ -170,7 +177,11 @@ public class UpdateService extends Service {
 						
 						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 						
+						// ステータスバー
 						notification.setLatestEventInfo(getApplicationContext(), getString(R.string.app_name), getString(R.string.str_msg_updaterunner), pendIntent);
+						
+						// バイブ
+						notification.vibrate = LONG_BIVRATION;
 						
 						NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 						manager.notify(R.string.app_name, notification);
