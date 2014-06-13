@@ -156,7 +156,6 @@ public class UpdateService extends Service {
 				
 				@Override
 				public void run() {
-					// TODO: ステータスバーからリンクすると、何も表示されない
 					// データアップデート
 					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
 					
@@ -167,6 +166,7 @@ public class UpdateService extends Service {
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						
 						Intent notifiIntent = new Intent(UpdateService.this, UpdateListActivity.class);
+						notifiIntent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
 						
 						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 						
