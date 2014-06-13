@@ -24,6 +24,7 @@ public class UpdateListActivity extends Activity {
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	private static final long LONG_RESENT_TIME = 300000;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		

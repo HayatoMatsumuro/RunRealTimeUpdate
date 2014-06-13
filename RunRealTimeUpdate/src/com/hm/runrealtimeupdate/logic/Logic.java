@@ -536,13 +536,18 @@ public class Logic {
 		return sectionList;
 	}
 	
-	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section ){
+	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section, long recentTime ){
 		
 		List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();
 		
 		// 部門の選手リストを取得
         List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceIdandSection( contentResolver, raceId, section);
         
+        // 現在の時刻の秒取得
+     	Calendar cal = Calendar.getInstance();
+     	Date nowDate = cal.getTime();
+     	long nowTime = nowDate.getTime();
+     	
         for( DataBaseRunnerInfo dbRunnerInfo : dbRunnerInfoList){
         	
         	List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, raceId, dbRunnerInfo.getNumber());
@@ -562,6 +567,20 @@ public class Logic {
 			runnerInfo.setSplit(dbTimeList.getSplit());
 			runnerInfo.setLap(dbTimeList.getLap());
 			runnerInfo.setCurrentTime(dbTimeList.getCurrentTime());
+			
+			try {
+				Date date = DATEFORMAT.parse(dbRunnerInfo.getDate());
+				long updateTime = date.getTime();
+				
+				if( nowTime - updateTime < recentTime ){
+					runnerInfo.setRecentFlg(true);
+				}else{
+					runnerInfo.setRecentFlg(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				runnerInfo.setRecentFlg(false);
+			}
 			
 			int idx = getPassPointInfoListIdx(dbTimeList.getPoint(), passPointInfoList);
         	if( idx == -1){
