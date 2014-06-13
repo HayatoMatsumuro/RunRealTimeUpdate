@@ -10,8 +10,8 @@ import android.net.Uri;
 
 /**
  * DB名:timelist
- * | key                 | raceid | number | point | split | lap  | currenttime |
- * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT  | TEXT  | TEXT | TEXT        |
+ * | key                 | raceid | number | point | split | lap  | currenttime | date                        |
+ * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT  | TEXT  | TEXT | TEXT        | TEXT( YYYY-MM-DD hh:mm:ss ) |
  * @author Hayato Matsumuro
  *
  */
@@ -27,8 +27,9 @@ public class TimelistProvider extends ContentProvider {
 	public static final String STR_DB_COLUMN_SPLIT = "split";
 	public static final String STR_DB_COLUMN_LAP = "lap";
 	public static final String STR_DB_COLUMN_CURRENTTIME = "currenttime";
+	public static final String STR_DB_COLUMN_DATE = "date";
 	
-	private static final int VERSION = 1;
+	private static final int VERSION = 2;
 	
 	private TimeListDatabaseHelper timeListDatabaseHelper = null;
 	
@@ -103,7 +104,8 @@ public class TimelistProvider extends ContentProvider {
 					+ STR_DB_COLUMN_POINT + " TEXT,"
 					+ STR_DB_COLUMN_SPLIT + " TEXT,"
 					+ STR_DB_COLUMN_LAP + " TEXT,"
-					+ STR_DB_COLUMN_CURRENTTIME + " TEXT"
+					+ STR_DB_COLUMN_CURRENTTIME + " TEXT,"
+					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
 			db.execSQL(sql);
 			

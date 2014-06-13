@@ -8,6 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+/**
+ * DB名:updatedata
+ * | key                 | raceid | number | name | section | point | split | lap  | currenttime | date                        |
+ * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT | TEXT    | TEXT  | TEXT  | TEXT | TEXT        | TEXT( YYYY-MM-DD hh:mm:ss ) |
+ * @author Hayato Matsumuro
+ *
+ */
 public class UpdateDataProvider extends ContentProvider {
 
 public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.logic.sqlite.updatedataprovider");
@@ -22,10 +29,11 @@ public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.l
 	public static final String STR_DB_COLUMN_SPLIT = "split";
 	public static final String STR_DB_COLUMN_LAP = "lap";
 	public static final String STR_DB_COLUMN_CURRENTTIME = "currenttime";
+	public static final String STR_DB_COLUMN_DATE = "date";
 	
 	private UpdateInfoDatabaseHelper updateinfoDatabaseHelper = null;
 	
-	private static final int VERSION = 1;
+	private static final int VERSION = 2;
 	
 	@Override
 	public int delete(Uri arg0, String selection, String[] selectionArgs) {
@@ -98,7 +106,8 @@ public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.l
 					+ STR_DB_COLUMN_POINT + " TEXT,"
 					+ STR_DB_COLUMN_SPLIT + " TEXT,"
 					+ STR_DB_COLUMN_LAP + " TEXT,"
-					+ STR_DB_COLUMN_CURRENTTIME + " TEXT"
+					+ STR_DB_COLUMN_CURRENTTIME + " TEXT,"
+					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
 			db.execSQL(sql);
 			

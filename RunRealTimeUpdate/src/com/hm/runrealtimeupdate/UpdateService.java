@@ -156,7 +156,7 @@ public class UpdateService extends Service {
 				
 				@Override
 				public void run() {
-					
+					// TODO: ステータスバーからリンクすると、何も表示されない
 					// データアップデート
 					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
 					

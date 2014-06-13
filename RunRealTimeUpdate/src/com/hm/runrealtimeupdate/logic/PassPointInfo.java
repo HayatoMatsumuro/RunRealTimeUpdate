@@ -35,9 +35,7 @@ public class PassPointInfo {
 	public void setPassPointRunnerInfoList(List<PassPointRunnerInfo> passPointRunnerInfoList) {
 		this.passPointRunnerInfoList = passPointRunnerInfoList;
 	}
-
-
-
+	
 	public class PassPointRunnerInfo{
 		
 		private String name;
@@ -49,6 +47,8 @@ public class PassPointInfo {
 		private String lap;
 		
 		private String currentTime;
+		
+		private boolean recentFlg;
 		
 		public String getName() {
 			return name;
@@ -102,6 +102,14 @@ public class PassPointInfo {
 			}
 		}
 		
+		public boolean isRecentFlg() {
+			return recentFlg;
+		}
+
+		public void setRecentFlg(boolean recentFlg) {
+			this.recentFlg = recentFlg;
+		}
+		
 		/**
 		 * 秒単位の時間を取得する
 		 * @param timeStr　HH:MM:SS 形式
@@ -120,8 +128,7 @@ public class PassPointInfo {
 			}catch( Exception e){
 				
 				throw new PassPointException();
-			}
-			
+			}	
 		}
 	}
 	

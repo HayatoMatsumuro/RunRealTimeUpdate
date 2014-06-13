@@ -26,6 +26,8 @@ public class PassListSectionActivity extends Activity {
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	public static final String STR_INTENT_SECTION = "section";
+
+	private static final long LONG_RESENT_TIME = 300000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,7 @@ public class PassListSectionActivity extends Activity {
         sectionTextView.setText(section);
         
         // 地点通過情報取得
-        List<PassPointInfo> passPointInfoList = Logic.getPassPointInfoList(getContentResolver(), raceId, section);
+        List<PassPointInfo> passPointInfoList = Logic.getPassPointInfoList(getContentResolver(), raceId, section, LONG_RESENT_TIME);
         
         List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
         
@@ -76,6 +78,7 @@ public class PassListSectionActivity extends Activity {
         		rElement.setSplit(runnerInfo.getSplit());
         		rElement.setLap(runnerInfo.getLap());
         		rElement.setCurrentTime(runnerInfo.getCurrentTime());
+        		rElement.setRecentFlg(runnerInfo.isRecentFlg());
         		passPointList.add(rElement);
         	}
         }
@@ -127,6 +130,7 @@ public class PassListSectionActivity extends Activity {
 			
 			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_pass_point_main);
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_pass_point_sub);
+			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_pass_point_updatenew);
 			
 			PassPointListElement element = getItem(position);
 			
@@ -135,6 +139,7 @@ public class PassListSectionActivity extends Activity {
 				mainTextView.setText(element.getPoint());
 				subTextView.setVisibility(View.INVISIBLE);
 				convertView.setBackgroundColor(Color.GRAY);
+				updateNewTextView.setVisibility(View.INVISIBLE);
 				
 			}else{
 				// ランナー情報表示
@@ -142,6 +147,12 @@ public class PassListSectionActivity extends Activity {
 				subTextView.setText(getString(R.string.str_txt_split) + element.getSplit());
 				subTextView.setVisibility(View.VISIBLE);
 				convertView.setBackgroundColor(Color.WHITE);
+				
+				if(element.isRecentFlg()){
+					updateNewTextView.setVisibility(View.VISIBLE);
+				}else{
+					updateNewTextView.setVisibility(View.INVISIBLE);
+				}
 			}
 			
 			return convertView;
@@ -168,6 +179,8 @@ public class PassListSectionActivity extends Activity {
 		
 		private String currentTime;
 		
+		private boolean recentFlg;
+
 		public String getSts() {
 			return sts;
 		}
@@ -224,6 +237,14 @@ public class PassListSectionActivity extends Activity {
 
 		public void setNumber(String number) {
 			this.number = number;
+		}
+		
+		public boolean isRecentFlg() {
+			return recentFlg;
+		}
+
+		public void setRecentFlg(boolean recentFlg) {
+			this.recentFlg = recentFlg;
 		}
 	}
 }

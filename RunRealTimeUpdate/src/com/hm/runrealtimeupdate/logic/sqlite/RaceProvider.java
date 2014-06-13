@@ -10,8 +10,8 @@ import android.net.Uri;
 
 /**
  * DB名:race
- * | key                 | raceid | racename | racedate | racelocation | updateflg |
- * | INTEGER PRIMARY KEY | TEXT   | TEXT     | TEXT     | TEXT         | TEXT      |
+ * | key                 | raceid | racename | racedate | racelocation | updateflg | date                        |
+ * | INTEGER PRIMARY KEY | TEXT   | TEXT     | TEXT     | TEXT         | TEXT      | TEXT( YYYY-MM-DD hh:mm:ss ) |
  * @author Hayato Matsumuro
  *
  */
@@ -26,11 +26,12 @@ public class RaceProvider extends ContentProvider {
 	public static final String STR_DB_COLUMN_RACEDATE = "racedate";
 	public static final String STR_DB_COLUMN_RACELOCATION = "racelocation";
 	public static final String STR_DB_COLUMN_UPDATEFLG = "updateflg";
+	public static final String STR_DB_COLUMN_DATE = "date";
 	
 	public static final String STR_UPDATEFLG_OFF = "0";
 	public static final String STR_UPDATEFLG_ON = "1";
 	
-	private static final int VERSION = 1;
+	private static final int VERSION = 2;
 	
 	private UpdateRaceDatabaseHelper updateRaceDatabaseHelper = null;
 	
@@ -101,7 +102,8 @@ public class RaceProvider extends ContentProvider {
 					+ STR_DB_COLUMN_RACENAME + " TEXT,"
 					+ STR_DB_COLUMN_RACEDATE + " TEXT,"
 					+ STR_DB_COLUMN_RACELOCATION + " TEXT,"
-					+ STR_DB_COLUMN_UPDATEFLG + " TEXT"
+					+ STR_DB_COLUMN_UPDATEFLG + " TEXT,"
+					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
 			db.execSQL(sql);
 		}

@@ -1,10 +1,16 @@
 package com.hm.runrealtimeupdate.logic;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 
 import com.hm.runrealtimeupdate.logic.PassPointInfo.PassPointRunnerInfo;
@@ -19,6 +25,9 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
+	
+	@SuppressLint("SimpleDateFormat")
+	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
 	/**
 	 * 大会情報を登録する
@@ -35,6 +44,12 @@ public class Logic {
 		dbRaceInfo.setRaceDate(raceInfo.getRaceDate());
 		dbRaceInfo.setRaceLocation(raceInfo.getRaceLocation());
 		dbRaceInfo.setUpdateFlg(DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF);
+		
+		// 日付設定
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		String dateStr = DATEFORMAT.format(date);
+		dbRaceInfo.setDate(dateStr);
 		
 		// データベース登録
 		DataBaseAccess.entryRace(contentResolver, dbRaceInfo);
@@ -304,6 +319,11 @@ public class Logic {
 					String lap = newInfo.getTimeList().get(oldInfoTimeListSize+j).getLap();
 					String currentTime = newInfo.getTimeList().get(oldInfoTimeListSize+j).getCurrentTime();
 					
+					// 日付設定
+					Calendar cal = Calendar.getInstance();
+					Date date = cal.getTime();
+					String dateStr = DATEFORMAT.format(date);
+					
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
 					dbTimeList.setRaceId(raceId);
@@ -312,6 +332,7 @@ public class Logic {
 					dbTimeList.setSplit(split);
 					dbTimeList.setLap(lap);
 					dbTimeList.setCurrentTime(currentTime);
+					dbTimeList.setDate(dateStr);
 					DataBaseAccess.entryTimeList( contentResolver, dbTimeList );
 					
 					// 速報データ書き込み
@@ -324,6 +345,7 @@ public class Logic {
 					dbUpdateData.setSplit(split);
 					dbUpdateData.setLap(lap);
 					dbUpdateData.setCurrentTime(currentTime);
+					dbUpdateData.setDate(dateStr);
 					DataBaseAccess.entryUpdateData( contentResolver, dbUpdateData );
 				}
 				updateFlg = true;
@@ -348,6 +370,12 @@ public class Logic {
 		dbRunnerInfo.setName(runnerInfo.getName());
 		dbRunnerInfo.setNumber(runnerInfo.getNumber());
 		dbRunnerInfo.setSection(runnerInfo.getSection());
+		
+		// 日付設定
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		String dateStr = DATEFORMAT.format(date);
+		dbRunnerInfo.setDate(dateStr);
 		
 		// データベース登録
 		DataBaseAccess.entryRunner(contentResolver, dbRunnerInfo );
@@ -435,13 +463,19 @@ public class Logic {
 	 * 速報情報を取得する( 新しい順 )
 	 * @param contentResolver
 	 * @param raceId 大会ID
+	 * @param recentTime 現在の日付からこの時間前ならば、recentFlgがtrue( ミリ秒 )
 	 * @return
 	 */
-	public static List<UpdateInfo> getUpdateInfoList( ContentResolver contentResolver, String raceId ){
+	public static List<UpdateInfo> getUpdateInfoList( ContentResolver contentResolver, String raceId, long recentTime ){
 		
 		List<DataBaseUpdateData> dbUpdateDataList = DataBaseAccess.getUpdateDataByRaceId(contentResolver, raceId );
 		
 		List<UpdateInfo> updateInfoList = new ArrayList<UpdateInfo>();
+		
+		// 現在の時刻の秒取得
+		Calendar cal = Calendar.getInstance();
+		Date nowDate = cal.getTime();
+		long nowTime = nowDate.getTime();
 		
 		for( DataBaseUpdateData dbUpdateData: dbUpdateDataList ){
 			UpdateInfo updateInfo = new UpdateInfo();
@@ -453,12 +487,26 @@ public class Logic {
 			updateInfo.setSplit(dbUpdateData.getSplit());
 			updateInfo.setLap(dbUpdateData.getLap());
 			updateInfo.setCurrentTime(dbUpdateData.getCurrentTime());
+			
+			try {
+				Date date = DATEFORMAT.parse(dbUpdateData.getDate());
+				long updateTime = date.getTime();
+				
+				if( nowTime - updateTime < recentTime ){
+					updateInfo.setRecentFlg(true);
+				}else{
+					updateInfo.setRecentFlg(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				updateInfo.setRecentFlg(false);
+			}
 				
 			updateInfoList.add(updateInfo);
 		}
 		
-		// 順番を逆にする
-		Collections.reverse(updateInfoList);
+		// スプリット順に並べ替え
+		Collections.sort(updateInfoList, new UpdateInfoSplitComparator());
 		
 		return updateInfoList;
 	}
@@ -488,13 +536,18 @@ public class Logic {
 		return sectionList;
 	}
 	
-	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section ){
+	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section, long recentTime ){
 		
 		List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();
 		
 		// 部門の選手リストを取得
         List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceIdandSection( contentResolver, raceId, section);
         
+        // 現在の時刻の秒取得
+     	Calendar cal = Calendar.getInstance();
+     	Date nowDate = cal.getTime();
+     	long nowTime = nowDate.getTime();
+     	
         for( DataBaseRunnerInfo dbRunnerInfo : dbRunnerInfoList){
         	
         	List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, raceId, dbRunnerInfo.getNumber());
@@ -514,6 +567,20 @@ public class Logic {
 			runnerInfo.setSplit(dbTimeList.getSplit());
 			runnerInfo.setLap(dbTimeList.getLap());
 			runnerInfo.setCurrentTime(dbTimeList.getCurrentTime());
+			
+			try {
+				Date date = DATEFORMAT.parse(dbRunnerInfo.getDate());
+				long updateTime = date.getTime();
+				
+				if( nowTime - updateTime < recentTime ){
+					runnerInfo.setRecentFlg(true);
+				}else{
+					runnerInfo.setRecentFlg(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				runnerInfo.setRecentFlg(false);
+			}
 			
 			int idx = getPassPointInfoListIdx(dbTimeList.getPoint(), passPointInfoList);
         	if( idx == -1){
@@ -571,6 +638,19 @@ public class Logic {
 		public int compare(PassPointRunnerInfo o1, PassPointRunnerInfo o2) {
 			
 			if( o1.getSplitLong() > o2.getSplitLong() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+	}
+	
+	private static class UpdateInfoSplitComparator implements Comparator<UpdateInfo>{
+
+		@Override
+		public int compare(UpdateInfo o1, UpdateInfo o2) {
+			
+			if( o1.getSplitLong() < o2.getSplitLong() ){
 				return 1;
 			}else{
 				return -1;

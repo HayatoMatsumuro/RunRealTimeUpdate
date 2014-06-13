@@ -38,6 +38,7 @@
     <string name="str_txt_split">スプリット ： </string>
     <string name="str_txt_currenttime">通過時間 : </string>
     <string name="str_txt_updateexe">*****速報中*****</string>
+    <string name="str_txt_updatenew">New</string>
     <string name="str_btn_entry">新規大会登録</string>
     <string name="str_btn_updatestart">速報開始</string>
     <string name="str_btn_updatestop">速報停止</string>
