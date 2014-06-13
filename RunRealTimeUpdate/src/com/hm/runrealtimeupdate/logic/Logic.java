@@ -505,8 +505,8 @@ public class Logic {
 			updateInfoList.add(updateInfo);
 		}
 		
-		// 順番を逆にする
-		Collections.reverse(updateInfoList);
+		// スプリット順に並べ替え
+		Collections.sort(updateInfoList, new UpdateInfoSplitComparator());
 		
 		return updateInfoList;
 	}
@@ -619,6 +619,19 @@ public class Logic {
 		public int compare(PassPointRunnerInfo o1, PassPointRunnerInfo o2) {
 			
 			if( o1.getSplitLong() > o2.getSplitLong() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+	}
+	
+	private static class UpdateInfoSplitComparator implements Comparator<UpdateInfo>{
+
+		@Override
+		public int compare(UpdateInfo o1, UpdateInfo o2) {
+			
+			if( o1.getSplitLong() < o2.getSplitLong() ){
 				return 1;
 			}else{
 				return -1;

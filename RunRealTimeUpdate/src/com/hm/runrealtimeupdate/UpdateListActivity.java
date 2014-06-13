@@ -140,7 +140,5 @@ public class UpdateListActivity extends Activity {
 			}
 			return convertView;
 		}
-		
-		
 	}
 }
