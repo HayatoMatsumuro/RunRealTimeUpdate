@@ -192,6 +192,17 @@ public class DataBaseAccess {
 		return;
 	}
 	
+	public static void setRunnerSection( ContentResolver contentResolver, String raceId, String number, String section ){
+		
+		ContentValues values = new ContentValues();
+		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, section );
+		
+		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'  and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + number +"'";
+		
+		contentResolver.update(RaceProvider.URI_DB, values, selection, null );
+		
+		return;
+	}
 	/**
 	 * 大会IDの大会に登録されている選手情報を取得する
 	 * @param contentResolver

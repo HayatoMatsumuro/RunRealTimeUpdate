@@ -350,6 +350,11 @@ public class Logic {
 				}
 				updateFlg = true;
 			}
+			
+			// 登録時、部門が設定されていない場合があるので、更新時に確認する
+			if( oldInfo.getSection() == null ){
+				DataBaseAccess.setRunnerSection(contentResolver, raceId, newInfo.getNumber(), newInfo.getSection());
+			}
 		}
 		
 		return updateFlg;
