@@ -125,10 +125,15 @@ public class RaceDetailActivity extends Activity {
 			public void onClick(View v) {
 				RaceInfo raceInfo = (RaceInfo)v.getTag();
 				
-				// 選手登録画面遷移
-				Intent intent = new Intent(RaceDetailActivity.this, RunnerEntryActivity.class);
-				intent.putExtra(RunnerEntryActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
-				startActivity(intent);
+				if(!raceInfo.isRaceUpdate()){
+					// 選手登録画面遷移
+					Intent intent = new Intent(RaceDetailActivity.this, RunnerEntryActivity.class);
+					intent.putExtra(RunnerEntryActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+					startActivity(intent);
+				}else{
+					Toast.makeText(RaceDetailActivity.this, "速報中は登録できません", Toast.LENGTH_SHORT).show();
+				}
+				
 			}
 		});
         
@@ -294,21 +299,26 @@ public class RaceDetailActivity extends Activity {
     			@Override
     			public void onClick(DialogInterface dialog, int which) {
     				
-    				// 選手削除
-        			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_RunnerInfo.getNumber() );
-        				
-        			// 表示リストを更新する
-        			if( m_Adapter != null ){
-            			m_Adapter.remove(m_RunnerInfo);
-            			m_Adapter.notifyDataSetChanged();
-        			}
-        				
-        			// 削除したら選手登録はできるので、ボタンを有効にする
-        			if( m_EntryButton != null ){
-            			m_EntryButton.setEnabled(true);
-        			}
-        			
-        			Toast.makeText(RaceDetailActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+    				// 速報中でないなら削除
+    				if( !m_RaceInfo.isRaceUpdate()){
+    					// 選手削除
+            			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_RunnerInfo.getNumber() );
+            				
+            			// 表示リストを更新する
+            			if( m_Adapter != null ){
+                			m_Adapter.remove(m_RunnerInfo);
+                			m_Adapter.notifyDataSetChanged();
+            			}
+            				
+            			// 削除したら選手登録はできるので、ボタンを有効にする
+            			if( m_EntryButton != null ){
+                			m_EntryButton.setEnabled(true);
+            			}
+            			
+            			Toast.makeText(RaceDetailActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+    				}else{
+    					Toast.makeText(RaceDetailActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT).show();
+    				}
     			}
     		});
     		
