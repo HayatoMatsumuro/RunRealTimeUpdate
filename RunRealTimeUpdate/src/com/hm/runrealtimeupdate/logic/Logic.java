@@ -454,6 +454,8 @@ public class Logic {
 	 */
 	public static void deleteRunnerInfo( ContentResolver contentResolver, String raceId, String number ){
 		
+		// 速報リスト削除
+		DataBaseAccess.deleteRunnerInfoByRaceIdAndNumber(contentResolver, raceId, number);
 		
 		// タイムリスト削除
 		DataBaseAccess.deleteTimeListByRaceIdAndNumber(contentResolver, raceId, number);
