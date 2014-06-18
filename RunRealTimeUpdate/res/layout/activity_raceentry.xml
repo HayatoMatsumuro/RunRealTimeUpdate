@@ -31,8 +31,17 @@
         android:layout_below="@+id/id_raceentry_txt_title"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp"
+        android:text="@string/str_txt_defaulturl" />
+    
+    <TextView
+        android:id="@+id/id_raceentry_txt_inputurl_aft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/id_raceentry_edit_inputurl"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/id_raceentry_txt_inputurl"
         android:text="@string/str_msg_inputurl" />
-
+    
     <EditText
         android:id="@+id/id_raceentry_edit_inputurl"
         android:layout_width="wrap_content"
@@ -40,6 +49,7 @@
         android:layout_alignLeft="@+id/id_raceentry_txt_inputurl"
         android:layout_below="@+id/id_raceentry_txt_inputurl"
         android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/id_raceentry_btn_back"
         android:ems="20"
         android:inputType="textPersonName" />
 

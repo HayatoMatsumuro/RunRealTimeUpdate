@@ -1,15 +1,11 @@
 package com.hm.runrealtimeupdate;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.DataBaseRunnerInfo;
-import com.hm.runrealtimeupdate.logic.DataBaseTimeList;
-import com.hm.runrealtimeupdate.logic.parser.RunnerInfo;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.PassPointInfo;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -30,6 +26,8 @@ public class PassListSectionActivity extends Activity {
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	public static final String STR_INTENT_SECTION = "section";
+
+	private static final long LONG_RESENT_TIME = 300000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,89 +39,47 @@ public class PassListSectionActivity extends Activity {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         String section = intent.getStringExtra(STR_INTENT_SECTION);
         
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
+        // 大会情報取得
+        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
+        
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(PassListSectionActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
+        }
         
         // 大会名表示
         TextView raceNameTextView = (TextView)findViewById(R.id.id_passlistsection_txt_racename);
-        raceNameTextView.setText(dbRaceInfo.getRaceName());
+        raceNameTextView.setText(raceInfo.getRaceName());
         
         // 部門名表示
         TextView sectionTextView = (TextView)findViewById(R.id.id_passlistsection_txt_section);
         sectionTextView.setText(section);
         
-        // 部門の選手リストを取得
-        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceIdandSection(getContentResolver(), raceId, section);
+        // 地点通過情報取得
+        List<PassPointInfo> passPointInfoList = Logic.getPassPointInfoList(getContentResolver(), raceId, section, LONG_RESENT_TIME);
         
-        // 地点情報リスト作成
-        List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();
+        List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
         
-        for( DataBaseRunnerInfo info:dbRunnerInfoList ){
-        	List<DataBaseTimeList> dBTimeList = DataBaseAccess.getTimeListByRaceIdandNo(getContentResolver(), info.getRaceId(), info.getNumber());
+        for( PassPointInfo passPointInfo:passPointInfoList){
+        	// タイトル
+        	PassPointListElement element = new PassPointListElement();
+        	element.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_TITLE);
+        	element.setPoint(passPointInfo.getPoint());
+        	passPointList.add(element);
         	
-        	// 選手リスト作成
-        	RunnerInfo runnerInfo = new RunnerInfo();
-        	runnerInfo.setName(info.getName());
-			runnerInfo.setNumber(info.getNumber());
-			
-			for( DataBaseTimeList timelist : dBTimeList){
-				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
-				
-				timeList.setPoint(timelist.getPoint());
-				timeList.setSplit(timelist.getSplit());
-				timeList.setLap(timelist.getLap());
-				timeList.setCurrentTime(timelist.getCurrentTime());
-				runnerInfo.addTimeList(timeList);
-			}
-			
-			// タイムリストが空の場合は、処理を行わない
-			if( runnerInfo.getTimeList().isEmpty()){
-				continue;
-			}
-			
-			// 最新の通過位置取得
-			//Collections.reverse(runnerInfo.getTimeList());
-			//String point = runnerInfo.getTimeList().get(0).getPoint();
-			
-			// 現在の通過位置取得
-			int passPointNo = runnerInfo.getTimeList().size()-1;
-			
-			int i = 0;
-			for( i= 0; i < passPointInfoList.size(); i++){
-				if( passPointInfoList.get(i).getPassPointNo() == passPointNo ){
-					passPointInfoList.get(i).getRunnerInfoList().add(runnerInfo);
-					break;
-				}
-			}
-			
-			if( i == passPointInfoList.size()){
-				PassPointInfo passPointInfo = new PassPointInfo();
-				passPointInfo.setPassPointNo(passPointNo);
-				passPointInfo.getRunnerInfoList().add(runnerInfo);
-				passPointInfoList.add(passPointInfo);
-			}
-        }
-        
-        Collections.sort(passPointInfoList, new PassPointInfoComparator());
-        
-        // 地点通過表示リスト作成
-        List<PassPoint> passPointList = new ArrayList<PassPoint>();
-        
-        for( PassPointInfo passPointInfo : passPointInfoList){
-        	
-        	// 見出し
-        	PassPoint passPoint = new PassPoint();
-        	int timelistSize = passPointInfo.getRunnerInfoList().get(0).getTimeList().size();
-        	passPoint.setPassPoint(passPointInfo.getRunnerInfoList().get(0).getTimeList().get(timelistSize-1).getPoint());
-        	
-        	passPointList.add(passPoint);
-        	
-        	// 選手情報
-        	for(RunnerInfo runnerInfo : passPointInfo.getRunnerInfoList()){
-        		PassPoint passPointRunner = new PassPoint();
-        		passPointRunner.setPassPointRunnerMain(runnerInfo.getNumber() + "  " + runnerInfo.getName());
-        		passPointRunner.setPassPointRunnerSub(runnerInfo.getTimeList().get(timelistSize-1).getSplit());
-        		
-        		passPointList.add(passPointRunner);
+        	// 選手
+        	for( PassPointInfo.PassPointRunnerInfo runnerInfo : passPointInfo.getPassPointRunnerInfoList() ){
+        		PassPointListElement rElement = new PassPointListElement();
+        		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
+        		rElement.setName(runnerInfo.getName());
+        		rElement.setNumber(runnerInfo.getNumber());
+        		rElement.setSplit(runnerInfo.getSplit());
+        		rElement.setLap(runnerInfo.getLap());
+        		rElement.setCurrentTime(runnerInfo.getCurrentTime());
+        		rElement.setRecentFlg(runnerInfo.isRecentFlg());
+        		passPointList.add(rElement);
         	}
         }
         
@@ -140,6 +96,7 @@ public class PassListSectionActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				String raceId = (String)v.getTag();
+				
 				// 速報リスト画面に遷移
 				Intent intent = new Intent( PassListSectionActivity.this, PassListActivity.class);
 				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
@@ -149,44 +106,11 @@ public class PassListSectionActivity extends Activity {
         return;
 	}
 	
-	private static class PassPointInfoComparator implements Comparator<PassPointInfo>{
-
-		@Override
-		public int compare(PassPointInfo o1, PassPointInfo o2) {
-			
-			if( o1.getPassPointNo() < o2.getPassPointNo() ){
-				return 1;
-			}else{
-				return -1;
-			}
-		}
-		
-	}
 	
-	private class PassPointInfo {
-		
-		int passPointNo;
-		
-		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
-		
-		public int getPassPointNo() {
-			return passPointNo;
-		}
-
-		public void setPassPointNo(int passPointNo) {
-			this.passPointNo = passPointNo;
-		}
-
-		public List<RunnerInfo> getRunnerInfoList() {
-			return runnerInfoList;
-		}
-
-	}
-	
-	private class PassPointAdapter extends ArrayAdapter<PassPoint>{
+	private class PassPointAdapter extends ArrayAdapter<PassPointListElement>{
 		LayoutInflater inflater;
 		
-		public PassPointAdapter(Context context, List<PassPoint> objects) {
+		public PassPointAdapter(Context context, List<PassPointListElement> objects) {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -206,67 +130,121 @@ public class PassListSectionActivity extends Activity {
 			
 			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_pass_point_main);
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_pass_point_sub);
+			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_pass_point_updatenew);
 			
-			PassPoint passPointRunner = getItem(position);
+			PassPointListElement element = getItem(position);
 			
-			if(passPointRunner.getPassPoint() == null){
+			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_TITLE )){
+				// 見出し 地点情報表示
+				mainTextView.setText(element.getPoint());
+				subTextView.setVisibility(View.INVISIBLE);
+				convertView.setBackgroundColor(Color.GRAY);
+				updateNewTextView.setVisibility(View.INVISIBLE);
+				
+			}else{
 				// ランナー情報表示
-				mainTextView.setText(passPointRunner.getPassPointRunnerMain());
-				subTextView.setText(passPointRunner.getPassPointRunnerSub());
+				mainTextView.setText(element.getNumber() + " " + element.getName());
+				subTextView.setText(getString(R.string.str_txt_split) + element.getSplit());
 				subTextView.setVisibility(View.VISIBLE);
 				convertView.setBackgroundColor(Color.WHITE);
 				
-			}else{
-				// 見出し 地点情報表示
-				mainTextView.setText(passPointRunner.getPassPoint());
-				subTextView.setVisibility(View.INVISIBLE);
-				convertView.setBackgroundColor(Color.GRAY);
-				
+				if(element.isRecentFlg()){
+					updateNewTextView.setVisibility(View.VISIBLE);
+				}else{
+					updateNewTextView.setVisibility(View.INVISIBLE);
+				}
 			}
 			
 			return convertView;
 		}
 	}
 	
-	private class PassPoint {
+	private class PassPointListElement{
 		
-		/**
-		 * 見出し 通過地点、見出しでないときはnullとなる
-		 */
-		private String passPoint;
+		public static final String STR_PASSPOINTLISTELEMENT_TITLE = "title";
 		
-		private String passPointRunnerMain;
+		public static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
 		
-		private String passPointRunnerSub;
+		private String sts;
 
-		public PassPoint(){
-			passPoint = null;
-			passPointRunnerMain = null;
-			passPointRunnerSub = null;
-		}
-		public String getPassPoint() {
-			return passPoint;
-		}
+		private String point;
+		
+		private String number;
+		
+		private String name;
+		
+		private String split;
+		
+		private String lap;
+		
+		private String currentTime;
+		
+		private boolean recentFlg;
 
-		public void setPassPoint(String passPoint) {
-			this.passPoint = passPoint;
-		}
-
-		public String getPassPointRunnerMain() {
-			return passPointRunnerMain;
-		}
-
-		public void setPassPointRunnerMain(String passPointRunnerMain) {
-			this.passPointRunnerMain = passPointRunnerMain;
+		public String getSts() {
+			return sts;
 		}
 
-		public String getPassPointRunnerSub() {
-			return passPointRunnerSub;
+		public void setSts(String sts) {
+			this.sts = sts;
 		}
 
-		public void setPassPointRunnerSub(String passPointRunnerSub) {
-			this.passPointRunnerSub = passPointRunnerSub;
+		public String getPoint() {
+			return point;
 		}
 
+		public void setPoint(String point) {
+			this.point = point;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getSplit() {
+			return split;
+		}
+
+		public void setSplit(String split) {
+			this.split = split;
+		}
+
+		@SuppressWarnings("unused")
+		public String getLap() {
+			return lap;
+		}
+
+		public void setLap(String lap) {
+			this.lap = lap;
+		}
+
+		@SuppressWarnings("unused")
+		public String getCurrentTime() {
+			return currentTime;
+		}
+
+		public void setCurrentTime(String currentTime) {
+			this.currentTime = currentTime;
+		}
+
+		public String getNumber() {
+			return number;
+		}
+
+		public void setNumber(String number) {
+			this.number = number;
+		}
+		
+		public boolean isRecentFlg() {
+			return recentFlg;
+		}
+
+		public void setRecentFlg(boolean recentFlg) {
+			this.recentFlg = recentFlg;
+		}
 	}
 }

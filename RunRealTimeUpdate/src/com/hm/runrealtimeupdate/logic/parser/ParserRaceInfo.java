@@ -1,6 +1,6 @@
 package com.hm.runrealtimeupdate.logic.parser;
 
-public class RaceInfo {
+public class ParserRaceInfo {
 	
 	private String name;
 	

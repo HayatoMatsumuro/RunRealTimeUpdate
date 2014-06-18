@@ -19,7 +19,7 @@
     <string name="str_dialog_msg_OK">登録する</string>
     <string name="str_dialog_msg_DEL">削除する</string>
     <string name="str_dialog_msg_NG">やめる</string>
-    <string name="str_msg_inputurl">URL入力</string>
+    <string name="str_msg_inputurl">以降のURLを入力</string>
     <string name="str_msg_inputNo">ゼッケン番号入力</string>
     <string name="str_msg_updaterunner">速報リストを更新しました。</string>
     <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
@@ -35,7 +35,10 @@
     <string name="str_txt_passdatamain">通過情報メイン</string>
     <string name="str_txt_passdatasub">通過情報サブ</string>
     <string name="str_txt_runner">選手</string>
+    <string name="str_txt_split">スプリット ： </string>
+    <string name="str_txt_currenttime">通過時間 : </string>
     <string name="str_txt_updateexe">*****速報中*****</string>
+    <string name="str_txt_updatenew">New</string>
     <string name="str_btn_entry">新規大会登録</string>
     <string name="str_btn_updatestart">速報開始</string>
     <string name="str_btn_updatestop">速報停止</string>

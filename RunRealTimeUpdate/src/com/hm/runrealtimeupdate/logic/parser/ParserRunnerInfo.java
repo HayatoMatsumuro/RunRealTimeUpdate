@@ -3,7 +3,7 @@ package com.hm.runrealtimeupdate.logic.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RunnerInfo {
+public class ParserRunnerInfo {
 	
 	/**
 	 * 名前
@@ -28,7 +28,7 @@ public class RunnerInfo {
 	/**
 	 * コンストラクタ
 	 */
-	public RunnerInfo(){
+	public ParserRunnerInfo(){
 		this.name = null;
 		this.number = null;
 		this.section = null;

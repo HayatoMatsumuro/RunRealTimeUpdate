@@ -1,4 +1,4 @@
-package com.hm.runrealtimeupdate.logic;
+package com.hm.runrealtimeupdate.logic.dbaccess;
 
 public class DataBaseRunnerInfo {
 	
@@ -10,6 +10,8 @@ public class DataBaseRunnerInfo {
 	
 	private String section;
 
+	private String date;
+	
 	public String getRaceId() {
 		return raceId;
 	}
@@ -40,6 +42,14 @@ public class DataBaseRunnerInfo {
 
 	public void setSection(String section) {
 		this.section = section;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 	
 	

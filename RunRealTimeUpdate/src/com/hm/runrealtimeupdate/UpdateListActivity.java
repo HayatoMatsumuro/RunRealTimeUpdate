@@ -1,12 +1,10 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import com.hm.runrealtimeupdate.logic.DataBaseAccess;
-import com.hm.runrealtimeupdate.logic.DataBaseRaceInfo;
-import com.hm.runrealtimeupdate.logic.DataBaseUpdateData;
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
+import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,11 +20,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class UpdateListActivity extends Activity {
-
-	public static String STR_INTENT_RACEID = "raceid";
 	
-	private UpdateDataAdapter m_UpdateDataAdapter;
+	public static final String STR_INTENT_RACEID = "raceid";
 	
+	private static final long LONG_RESENT_TIME = 300000;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,38 +31,29 @@ public class UpdateListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_updatelist);
 		
-		// 大会情報取得
+		 // 大会情報取得
         Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        DataBaseRaceInfo dbRaceInfo = DataBaseAccess.getRaceInfoByRaceId(getContentResolver(), raceId);
-		
-        // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_updatelist_txt_racename);
-        raceNameTextView.setText(dbRaceInfo.getRaceName());
+        String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+        RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId);
         
-        // 速報データ取得
-        List<DataBaseUpdateData> updateDataList = DataBaseAccess.getUpdateDataByRaceId(getContentResolver(), raceId);
-        
-        // リストの表示データ設定
-        List<UpdateDataDisp> updateDataDispList = new ArrayList<UpdateDataDisp>();
-        
-        for(DataBaseUpdateData dbUpdateData : updateDataList){
-        	UpdateDataDisp disp = new UpdateDataDisp();
-        	String mainStr = dbUpdateData.getNumber() + " " + dbUpdateData.getSection() + " "+ dbUpdateData.getName() + " 選手 " + dbUpdateData.getPoint();
-        	String subStr = dbUpdateData.getSplit();
-        	disp.setMainStr(mainStr);
-        	disp.setSubStr(subStr);
-        	
-        	updateDataDispList.add(disp);
+        // 大会情報が取得できないなら、エラー画面
+        if( raceInfo == null ){
+        	Intent intentErr = new Intent(UpdateListActivity.this, ErrorActivity.class);
+        	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
+        	return;
         }
         
-        Collections.reverse(updateDataDispList);
+        // 大会名表示
+        TextView raceNameTextView = (TextView)findViewById(R.id.id_updatelist_txt_racename);
+        raceNameTextView.setText( raceInfo.getRaceName());
+        
+        // 速報データ取得
+        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
         
         // リストビュー設定
-        m_UpdateDataAdapter = new UpdateDataAdapter(this, updateDataDispList);
-        
+        UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
         ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
-        updateListView.setAdapter(m_UpdateDataAdapter);
+        updateListView.setAdapter(adapter);
         
         // 大会詳細ボタン
         Button raceDetailButton = (Button)findViewById(R.id.id_updatelist_btn_detail);
@@ -74,6 +62,8 @@ public class UpdateListActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				
+				// 大会情報取得
 				String raceId = (String)v.getTag();
 				
 				// 大会詳細画面遷移
@@ -91,6 +81,7 @@ public class UpdateListActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				
 				String raceId = (String)v.getTag();
 				
 				// 通過情報画面遷移
@@ -103,11 +94,16 @@ public class UpdateListActivity extends Activity {
         return;
 	}
 	
-	private class UpdateDataAdapter extends ArrayAdapter<UpdateDataDisp>{
+	/**
+	 * 速報データリストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class UpdateDataAdapter extends ArrayAdapter<UpdateInfo>{
 		
 		LayoutInflater inflater;
 		
-		public UpdateDataAdapter(Context context, List<UpdateDataDisp> objects) {
+		public UpdateDataAdapter(Context context, List<UpdateInfo> objects) {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -121,39 +117,29 @@ public class UpdateListActivity extends Activity {
 			
 			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_main);
 			TextView subTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_sub);
+			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
+			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
+			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_updatenuew);
 			
-			UpdateDataDisp disp = getItem(position);
+        	UpdateInfo updateInfo = getItem(position);
 			
-			mainTextView.setText(disp.getMainStr());
-			subTextView.setText(disp.getSubStr());
+        	String mainStr = updateInfo.getSection() + " " + updateInfo.getPoint();
+        	String subStr = updateInfo.getNumber() + " " + updateInfo.getName();
+			String splitStr = getString(R.string.str_txt_split) + updateInfo.getSplit();
+			String currentTimeStr = getString(R.string.str_txt_currenttime) + updateInfo.getCurrentTime();
+        	
+        	mainTextView.setText(mainStr);
+			subTextView.setText(subStr);
+			splitTextView.setText(splitStr);
+			currentTimeTextView.setText(currentTimeStr);
 			
+			// New 表示
+			if( updateInfo.isRecentFlg()){
+				updateNewTextView.setVisibility(View.VISIBLE);
+			}else{
+				updateNewTextView.setVisibility(View.INVISIBLE);
+			}
 			return convertView;
 		}
-		
-		
-	}
-	
-	private class UpdateDataDisp{
-		
-		private String mainStr;
-		
-		private String subStr;
-
-		public String getMainStr() {
-			return mainStr;
-		}
-
-		public void setMainStr(String mainStr) {
-			this.mainStr = mainStr;
-		}
-
-		public String getSubStr() {
-			return subStr;
-		}
-
-		public void setSubStr(String subStr) {
-			this.subStr = subStr;
-		}
-		
 	}
 }

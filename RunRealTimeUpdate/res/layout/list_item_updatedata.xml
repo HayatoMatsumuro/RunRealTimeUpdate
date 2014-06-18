@@ -18,7 +18,37 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/id_updatedata_txt_main"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/str_txt_updatesub" />
+
+    <TextView
+        android:id="@+id/id_updatedata_txt_split"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_updatedata_txt_sub"
+        android:layout_below="@+id/id_updatedata_txt_sub"
+        android:layout_marginLeft="5dp"
+        android:text="@string/str_txt_split" />
+
+    <TextView
+        android:id="@+id/id_updatedata_txt_currenttime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_updatedata_txt_sub"
+        android:layout_below="@+id/id_updatedata_txt_split"
+        android:layout_marginLeft="5dp"
+        android:text="@string/str_txt_currenttime" />
+
+    <TextView
+        android:id="@+id/id_updatedata_txt_updatenuew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="17dp"
+        android:text="@string/str_txt_updatenew"
+        android:visibility="invisible"
+        android:textColor="@color/red"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

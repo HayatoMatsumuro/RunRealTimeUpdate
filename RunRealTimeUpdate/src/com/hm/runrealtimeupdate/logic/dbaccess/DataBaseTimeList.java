@@ -1,18 +1,20 @@
-package com.hm.runrealtimeupdate.logic;
+package com.hm.runrealtimeupdate.logic.dbaccess;
 
 public class DataBaseTimeList {
 
-	String raceId;
+	private String raceId;
 	
-	String number;
+	private String number;
 	
-	String point;
+	private String point;
 	
-	String split;
+	private String split;
 	
-	String lap;
+	private String lap;
 	
-	String currentTime;
+	private String currentTime;
+	
+	private String date;
 
 	public String getRaceId() {
 		return raceId;
@@ -60,5 +62,13 @@ public class DataBaseTimeList {
 
 	public void setCurrentTime(String currentTime) {
 		this.currentTime = currentTime;
+	}
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
 	}
 }
