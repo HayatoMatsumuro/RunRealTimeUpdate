@@ -26,7 +26,7 @@ public class UpdateService extends Service {
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 30000;
+	private static int INT_TIMER_INTERVAL = 120000;
 	
 	//TODO: 暫定値
 	/**
@@ -158,11 +158,17 @@ public class UpdateService extends Service {
 			
 			// ネットワークから選手情報を取得する
 			String url = getString(R.string.str_txt_defaulturl);
+			// TODO:
+			Log.d("service", "net get Start");
 			m_NetRunnerInfoList = Logic.getNetRunnerInfoList(url, m_RaceInfo.getRaceId(), m_RunnerInfoList);
+			// TODO:
+			Log.d("service", "net get End");
 			m_Handler.post(new Runnable() {
 				
 				@Override
 				public void run() {
+					// TODO:
+					Log.d("service", "update Start");
 					// データアップデート
 					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
 					
@@ -197,6 +203,10 @@ public class UpdateService extends Service {
 						Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId());
 						stopSelf();
 					}
+					
+
+					// TODO:
+					Log.d("service", "update End");
 					
 					m_NetRunnerInfoList.clear();
 					m_NetRunnerInfoList = null;
