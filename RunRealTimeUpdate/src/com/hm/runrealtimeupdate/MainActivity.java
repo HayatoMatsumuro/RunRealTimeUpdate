@@ -65,8 +65,8 @@ public class MainActivity extends Activity {
 				RaceInfo raceInfo = (RaceInfo)listView.getItemAtPosition(position);
 				
 				// 画面遷移
-				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+				Intent intent = new Intent( MainActivity.this, RaceTabActivity.class);
+				intent.putExtra(RaceTabActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
 				startActivity(intent);
 			}
 		});
