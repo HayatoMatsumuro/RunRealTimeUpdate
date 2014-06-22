@@ -3,6 +3,7 @@
     <string name="app_name">RunRealTimeUpdate</string>
     <string name="action_settings">Settings</string>
     <string name="str_title_main">速報アプリ</string>
+    <string name="str_title_raceList">大会一覧</string>
     <string name="str_title_raceentry">大会登録</string>
     <string name="str_title_runnerentry">選手登録</string>
     <string name="str_title_updatelist">速報リスト</string>
@@ -39,7 +40,7 @@
     <string name="str_txt_currenttime">通過時間 : </string>
     <string name="str_txt_updateexe">*****速報中*****</string>
     <string name="str_txt_updatenew">New</string>
-    <string name="str_btn_entry">新規大会登録</string>
+    <string name="str_btn_entry">大会追加</string>
     <string name="str_btn_updatestart">速報開始</string>
     <string name="str_btn_updatestop">速報停止</string>
     <string name="str_btn_updatelist">速報リスト</string>
