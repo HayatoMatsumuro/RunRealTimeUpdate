@@ -4,26 +4,44 @@
     android:layout_height="match_parent" >
 
     <TextView
+        android:id="@+id/id_raceinfo_txt_dot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/id_raceinfo_txt_racename"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:text="@string/str_txt_dot"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/accentColor" />
+
+    <TextView
         android:id="@+id/id_raceinfo_txt_racename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/str_txt_racename" />
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/id_raceinfo_txt_dot"
+        android:text="@string/str_txt_racename"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/id_raceinfo_txt_racedate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_raceinfo_txt_racename"
         android:layout_below="@+id/id_raceinfo_txt_racename"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
         android:text="@string/str_txt_racedate" />
-    
+
     <TextView
         android:id="@+id/id_raceinfo_txt_racelocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_raceinfo_txt_racedate"
         android:layout_below="@+id/id_raceinfo_txt_racedate"
-        android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
         android:text="@string/str_txt_racelocation" />
 
@@ -32,8 +50,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="30dp"
         android:layout_below="@+id/id_raceinfo_txt_racelocation"
+        android:layout_marginLeft="30dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <RelativeLayout
+        android:id="@+id/id_raceinfo_border"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" >
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/id_raceinfo_txt_racedate"
+        android:contentDescription="@string/str_txt_arrow"
+        android:src="@drawable/ic_arrow" />
 
 </RelativeLayout>
