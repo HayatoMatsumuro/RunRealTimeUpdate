@@ -34,7 +34,7 @@
 
 		</RelativeLayout>
         <RelativeLayout
-        	android:id="@+id/id_main_relative_border"
+        	android:id="@+id/id_race_relative_border"
         	android:layout_width="match_parent"
         	android:layout_height="5dp" >
     	</RelativeLayout>
