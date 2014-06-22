@@ -6,6 +6,9 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
 
@@ -38,6 +41,17 @@ public class RaceTabActivity extends TabActivity {
         RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
         borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
         
+        // 大会一覧ボタン
+        Button raceListButton = (Button)findViewById(R.id.id_race_btn_racelist);
+        raceListButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// メイン画面遷移
+				Intent intent = new Intent(RaceTabActivity.this, MainActivity.class);
+				startActivity(intent);
+			}
+		});
 		// タブ設定
 		TabHost tabHost = getTabHost();
 		tabHost.setCurrentTab(0);
