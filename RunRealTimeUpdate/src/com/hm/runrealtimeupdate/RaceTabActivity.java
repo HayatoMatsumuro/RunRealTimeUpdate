@@ -59,6 +59,15 @@ public class RaceTabActivity extends TabActivity {
 		});
 		// タブ設定
 		TabHost tabHost = getTabHost();
+		TabHost.TabSpec spec;
+		Intent tabIntent;
+		
+		// 大会詳細
+		tabIntent = new Intent(this, RaceDetailActivity.class);
+		tabIntent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
+		spec = tabHost.newTabSpec(getString(R.string.str_tab_race_detail)).setIndicator(getString(R.string.str_tab_race_detail)).setContent(tabIntent);
+		tabHost.addTab(spec);
+		
 		tabHost.setCurrentTab(0);
 	}
 
