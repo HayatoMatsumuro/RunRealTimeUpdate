@@ -43,7 +43,7 @@
     <string name="str_txt_updatenew">New</string>
     <string name="str_txt_dot">■</string>
     <string name="str_txt_arrow">矢印</string>
-    <string name="str_btn_entry">大会追加</string>
+    <string name="str_btn_entry">大会登録</string>
     <string name="str_btn_updatestart">速報開始</string>
     <string name="str_btn_updatestop">速報停止</string>
     <string name="str_btn_updatelist">速報リスト</string>

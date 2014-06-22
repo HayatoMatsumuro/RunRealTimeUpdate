@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
@@ -24,6 +25,14 @@ public class RaceEntryActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raceentry);
+
+        // ヘッダー
+        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_header);
+        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
+        
+        // ボーダー
+        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_border);
+        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
         
         // 戻るボタン
         Button backBtn = (Button)findViewById(R.id.id_raceentry_btn_back);
