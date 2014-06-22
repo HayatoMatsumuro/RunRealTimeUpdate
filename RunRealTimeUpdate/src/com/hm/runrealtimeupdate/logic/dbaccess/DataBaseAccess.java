@@ -199,7 +199,7 @@ public class DataBaseAccess {
 		
 		String selection = RunnerProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "'  and " + RunnerProvider.STR_DB_COLUMN_NUMBER + "='" + number +"'";
 		
-		contentResolver.update(RaceProvider.URI_DB, values, selection, null );
+		contentResolver.update(RunnerProvider.URI_DB, values, selection, null );
 		
 		return;
 	}
