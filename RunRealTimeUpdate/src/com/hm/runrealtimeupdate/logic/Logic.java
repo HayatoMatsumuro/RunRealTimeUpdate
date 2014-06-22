@@ -352,7 +352,7 @@ public class Logic {
 			}
 			
 			// 登録時、部門が設定されていない場合があるので、更新時に確認する
-			if( oldInfo.getSection() == null ){
+			if( ( oldInfo.getSection() == null ) || ( oldInfo.getSection().equals("")) ){
 				DataBaseAccess.setRunnerSection(contentResolver, raceId, newInfo.getNumber(), newInfo.getSection());
 			}
 		}
