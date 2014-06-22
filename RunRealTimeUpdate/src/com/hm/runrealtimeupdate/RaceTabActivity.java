@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class RaceTabActivity extends TabActivity {
 	
@@ -40,6 +41,10 @@ public class RaceTabActivity extends TabActivity {
         // ボーダー
         RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
         borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
+        
+        // タイトル表示
+        TextView titleTextView = (TextView)findViewById(R.id.id_race_txt_title);
+        titleTextView.setText(raceInfo.getRaceName());
         
         // 大会一覧ボタン
         Button raceListButton = (Button)findViewById(R.id.id_race_btn_racelist);
