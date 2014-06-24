@@ -1,18 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/id_racedetail_txt_racename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="50dp"
-        android:text="@string/str_txt_racename"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/id_racedetail_txt_racedate"
@@ -32,13 +20,6 @@
         android:layout_marginTop="10dp"
         android:text="@string/str_txt_racelocation" />
 
-    <Button
-        android:id="@+id/id_racedetail_btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/str_btn_back" />
 
     <Button
         android:id="@+id/id_racedetail_btn_updatestartstop"
@@ -86,5 +67,16 @@
         android:layout_alignLeft="@+id/id_racedetail_btn_updatelist"
         android:layout_alignTop="@+id/id_racedetail_txt_runnerlist"
         android:text="@string/str_btn_runnerentry" />
+
+    <TextView
+        android:id="@+id/id_racedetail_txt_racename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/str_txt_racename"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

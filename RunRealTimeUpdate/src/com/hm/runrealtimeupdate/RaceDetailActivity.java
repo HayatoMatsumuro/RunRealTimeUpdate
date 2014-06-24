@@ -63,19 +63,6 @@ public class RaceDetailActivity extends Activity {
         TextView raceLocationTextView = (TextView)findViewById(R.id.id_racedetail_txt_racelocation);
         raceLocationTextView.setText(raceInfo.getRaceLocation());
         
-        // 戻るボタン
-        Button backButton = (Button)findViewById(R.id.id_racedetail_btn_back);
-        backButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// メイン画面遷移
-				Intent intent = new Intent(RaceDetailActivity.this, MainActivity.class);
-				startActivity(intent);
-				
-			}
-		});
-        
         // 選手情報
         List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo.getRaceId());
         
