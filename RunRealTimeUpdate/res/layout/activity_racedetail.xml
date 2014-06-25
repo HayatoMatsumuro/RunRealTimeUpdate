@@ -3,80 +3,60 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_racedetail_txt_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_racename"
-        android:layout_marginTop="10dp"
-        android:text="@string/str_txt_racedate" />
-
-    <TextView
-        android:id="@+id/id_racedetail_txt_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_racedate"
-        android:layout_marginTop="10dp"
-        android:text="@string/str_txt_racelocation" />
-
-
-    <Button
-        android:id="@+id/id_racedetail_btn_updatestartstop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_racelocation"
-        android:layout_marginTop="20dp"
-        android:text="@string/str_btn_updatestart" />
-
-    <Button
-        android:id="@+id/id_racedetail_btn_updatelist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/id_racedetail_btn_updatestartstop"
-        android:layout_alignBottom="@+id/id_racedetail_btn_updatestartstop"
-        android:layout_marginLeft="30dp"
-        android:layout_toRightOf="@+id/id_racedetail_btn_updatestartstop"
-        android:text="@string/str_btn_updatelist" />
-    
-    <TextView
-        android:id="@+id/id_racedetail_txt_runnerlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_btn_updatelist"
-        android:layout_marginTop="30dp"
-        android:text="@string/str_txt_runnername"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-	
-    <ListView
-        android:id="@+id/id_racedetail_listview_runner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_runnerlist"
-        android:layout_marginTop="30dp" >
-
-    </ListView>
-
-    <Button
-        android:id="@+id/id_racedetail_btn_runnerentry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_btn_updatelist"
-        android:layout_alignTop="@+id/id_racedetail_txt_runnerlist"
-        android:text="@string/str_btn_runnerentry" />
-
-    <TextView
         android:id="@+id/id_racedetail_txt_racename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="18dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
         android:text="@string/str_txt_racename"
         android:textAppearance="?android:attr/textAppearanceMedium" />
+ 
+    <ImageView
+        android:id="@+id/id_racedetail_img_racedate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
+        android:layout_below="@+id/id_racedetail_txt_racename"
+        android:layout_marginTop="5dp"
+        android:contentDescription="@string/str_txt_racedate"
+        android:src="@android:drawable/ic_menu_my_calendar" />
+    
+    <TextView
+        android:id="@+id/id_racedetail_txt_racedate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/id_racedetail_img_racedate"
+        android:layout_alignTop="@+id/id_racedetail_img_racedate"
+        android:layout_marginTop="14dp"
+        android:text="@string/str_txt_racedate" />
+        
+    <ImageView
+        android:id="@+id/id_racedetail_img_racelocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_racedetail_img_racedate"
+        android:layout_below="@+id/id_racedetail_img_racedate"
+        android:contentDescription="@string/str_txt_racelocation"
+        android:src="@android:drawable/ic_menu_mylocation" />
+
+    <TextView
+        android:id="@+id/id_racedetail_txt_racelocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/id_racedetail_img_racelocation"
+        android:layout_toRightOf="@+id/id_racedetail_img_racelocation"
+        android:layout_marginTop="14dp"
+        android:text="@string/str_txt_racelocation" />
+
+    <Button
+        android:id="@+id/id_racedetail_btn_updatestartstop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_racedetail_img_racelocation"
+        android:layout_below="@+id/id_racedetail_img_racelocation"
+        android:layout_marginTop="30dp"
+        android:text="@string/str_btn_updatestart" />
 
 </RelativeLayout>

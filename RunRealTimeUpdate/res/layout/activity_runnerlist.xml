@@ -15,7 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/id_runnerlist_txt_runnerentry"
+        android:id="@+id/id_runnerlist_btn_runnerentry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -23,7 +23,7 @@
         android:text="@string/str_btn_runnerentry" />
     
     <ListView
-        android:id="@+id/id_racedetail_listview_runner"
+        android:id="@+id/id_runnerlist_listview_runner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/id_runnerlist_txt_runnerlist"
