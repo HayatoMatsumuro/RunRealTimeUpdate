@@ -543,6 +543,76 @@ public class Logic {
 		return sectionList;
 	}
 	
+	/**
+	 * 部門ごとの選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param noSectionName 部門未取得の場合に格納する選手リストの部門名
+	 * @return
+	 */
+	public static List<SectionRunnerInfo> getSectionRunnerInfo( ContentResolver contentResolver, String raceId, String noSectionName ){
+		
+		List<SectionRunnerInfo> sectionRunnerInfoList = new ArrayList<SectionRunnerInfo>();
+		
+		// 選手リストを取得
+        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId( contentResolver, raceId );
+        
+        boolean searchFlg;
+        
+		for( DataBaseRunnerInfo dbRunnerInfo : dbRunnerInfoList ){
+			
+			searchFlg = false;
+			
+			RunnerInfo runnerInfo = new RunnerInfo();
+			runnerInfo.setNumber(dbRunnerInfo.getNumber());
+			runnerInfo.setName(dbRunnerInfo.getName());
+			
+			for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList){
+				
+				// 部門名が一致する
+				if( sectionRunnerInfo.getSection().equals(dbRunnerInfo.getSection()) ){
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					searchFlg = true;
+					break;
+				}
+				
+				// 部門名がない場合
+				if( sectionRunnerInfo.getSection().equals(noSectionName)){
+					if( (dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals("")){
+						sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+						searchFlg = true;
+						break;
+					}
+				}
+			}
+			
+			// 部門が未登録なら新しく登録する
+			if( !searchFlg ){
+				SectionRunnerInfo sectionRunnerInfo = new SectionRunnerInfo();
+				
+				if( (dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals("")){
+					sectionRunnerInfo.setSection(noSectionName);
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					sectionRunnerInfoList.add(sectionRunnerInfo);
+				}else{
+					sectionRunnerInfo.setSection(dbRunnerInfo.getSection());
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					sectionRunnerInfoList.add(0,sectionRunnerInfo);
+				}
+			}
+		}
+
+		return sectionRunnerInfoList;
+	}
+	
+	/**
+	 * 地点通過情報のリスト取得
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param section　部門
+	 * @param recentTime updateFlgをつけるまでの時間
+	 * @return
+	 */
 	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section, long recentTime ){
 		
 		List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();

@@ -1,34 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"  >
 
-    <TextView
-        android:id="@+id/id_runnerinfo_txt_no"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/id_runnerinfo_relative_section"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/id_runnerinfo_txt_section"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:text="@string/str_txt_no" />
+       	android:background="@color/maincolor" >
+    	<TextView
+        	android:id="@+id/id_runnerinfo_txt_section"
+      		android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+       		android:padding="5dp"
+        	android:text="@string/str_txt_section" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/id_runnerinfo_txt_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/id_runnerinfo_txt_no"
-        android:text="@string/str_txt_runnername" />
+   <RelativeLayout
+        android:id="@+id/id_runnerinfo_relative_runner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/id_runnerinfo_txt_section"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/id_runnerinfo_txt_name"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="0dp"
-        android:text="@string/str_txt_section" />
+        <TextView
+        	android:id="@+id/id_runnerinfo_txt_dot"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentTop="true"
+       		android:padding="10dp"
+        	android:text="@string/str_txt_dot"
+        	android:textColor="@color/accentColor" />
 
-</RelativeLayout>
+    	<TextView
+    	    android:id="@+id/id_runnerinfo_txt_no"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_dot"
+    	    android:layout_marginLeft="5dp"
+    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_dot"
+    	    android:text="@string/str_txt_no" />
+
+    	<TextView
+    	    android:id="@+id/id_runnerinfo_txt_name"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_no"
+    	    android:layout_marginLeft="5dp"
+    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_no"
+    	    android:text="@string/str_txt_runnername" />
+
+    </RelativeLayout>
+</LinearLayout>

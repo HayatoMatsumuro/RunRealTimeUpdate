@@ -1,10 +1,12 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
+import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -46,11 +49,30 @@ public class RunnerListActivity extends Activity {
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
 		// 選手情報
-        List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo.getRaceId());
+        //List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo.getRaceId());
+        List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
+        
+        // 表示用の部門別の選手情報設定
+        int runnerNum = 0;
+        List<SectionRunnerElement> sectionRunnerElementList = new ArrayList<SectionRunnerElement>();
+        for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList ){
+        	
+        	SectionRunnerElement sectionElement = new SectionRunnerElement();
+        	sectionElement.setSection(sectionRunnerInfo.getSection());
+        	sectionRunnerElementList.add(sectionElement);
+        	
+        	for( RunnerInfo runnerInfo : sectionRunnerInfo.getRunnerInfoList() ){
+        		
+        		SectionRunnerElement runnerElement = new SectionRunnerElement();
+        		runnerElement.setRunnerInfo(runnerInfo);
+        		sectionRunnerElementList.add(runnerElement);
+        		runnerNum++;
+        	}
+        }
         
         // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
-        RunnerListAdapter adapter = new RunnerListAdapter(this, runnerInfoList);
+        RunnerListAdapter adapter = new RunnerListAdapter(this, sectionRunnerElementList);
         runnerInfoListView.setAdapter(adapter);
         
         // 選手リストのアイテム長押し
@@ -64,7 +86,12 @@ public class RunnerListActivity extends Activity {
 				RaceInfo raceInfo = (RaceInfo)listView.getTag();
 				
 				// 選手情報取得
-				RunnerInfo runnerInfo = (RunnerInfo)listView.getItemAtPosition(position);
+				SectionRunnerElement element = (SectionRunnerElement)listView.getItemAtPosition(position);
+				RunnerInfo runnerInfo = element.getRunnerInfo();
+				
+				if( runnerInfo == null ){
+					return true;
+				}
 				
 				// アダプタを取得する
 				RunnerListAdapter adapter = ( RunnerListAdapter )listView.getAdapter();
@@ -75,7 +102,7 @@ public class RunnerListActivity extends Activity {
 								RunnerListActivity.this,
 								getContentResolver(),
 								raceInfo,
-								runnerInfo,
+								element,
 								adapter,
 								(Button)findViewById(R.id.id_runnerlist_btn_runnerentry));
 				dialog.onDialog();
@@ -107,7 +134,7 @@ public class RunnerListActivity extends Activity {
 		});
         
         // 選手登録ボタンのフォーカス設定
-        if( runnerInfoList.size() >= INT_RUNNER_NUM_MAX){
+        if( runnerNum >= INT_RUNNER_NUM_MAX){
         	runnerEntryButton.setEnabled(false);
         }else{
         	runnerEntryButton.setEnabled(true);
@@ -140,7 +167,7 @@ public class RunnerListActivity extends Activity {
     	/**
     	 * 選手情報
     	 */
-    	private RunnerInfo m_RunnerInfo;
+    	private SectionRunnerElement m_Element;
     	
     	/**
     	 * 選手情報アダプタ
@@ -161,13 +188,13 @@ public class RunnerListActivity extends Activity {
     	 * @param adapter 大会リストアダプタ
     	 * @param button 登録ボタンのリソースID
     	 */
-    	RunnerDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo, RunnerListAdapter adapter, Button button ){
+    	RunnerDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, SectionRunnerElement element, RunnerListAdapter adapter, Button button ){
     		
     		// 初期化
     		m_Context = context;
     		m_ContentResolver = contentResolver;
     		m_RaceInfo = raceInfo;
-    		m_RunnerInfo = runnerInfo;
+    		m_Element = element;
     		m_Adapter = adapter;
     		m_EntryButton = button;
     		
@@ -177,7 +204,7 @@ public class RunnerListActivity extends Activity {
     		// ダイアログ表示
     		AlertDialog.Builder dialog = new AlertDialog.Builder( m_Context );
     		dialog.setTitle( getString( R.string.str_dialog_title_deleterunner ) );
-    		dialog.setMessage( createDialogMessage( m_RunnerInfo ) );
+    		dialog.setMessage( createDialogMessage( m_Element.getRunnerInfo() ) );
     		
     		// 削除するボタン
     		dialog.setPositiveButton(getString(R.string.str_dialog_msg_DEL), new DialogInterface.OnClickListener() {
@@ -188,11 +215,11 @@ public class RunnerListActivity extends Activity {
     				// 速報中でないなら削除
     				if( !m_RaceInfo.isRaceUpdate()){
     					// 選手削除
-            			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_RunnerInfo.getNumber() );
+            			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_Element.getRunnerInfo().getNumber() );
             				
             			// 表示リストを更新する
             			if( m_Adapter != null ){
-                			m_Adapter.remove(m_RunnerInfo);
+                			m_Adapter.remove(m_Element);
                 			m_Adapter.notifyDataSetChanged();
             			}
             				
@@ -242,11 +269,11 @@ public class RunnerListActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	private class RunnerListAdapter extends ArrayAdapter<RunnerInfo>{
+	private class RunnerListAdapter extends ArrayAdapter<SectionRunnerElement>{
 
 		LayoutInflater inflater;
     	
-		public RunnerListAdapter(Context context, List<RunnerInfo> objects) {
+		public RunnerListAdapter(Context context, List<SectionRunnerElement> objects) {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -261,17 +288,52 @@ public class RunnerListActivity extends Activity {
 			}
 			
 			TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_name);
+			
+			RelativeLayout runnerRelative = (RelativeLayout)convertView.findViewById(R.id.id_runnerinfo_relative_runner);
 			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_no);
 			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_section);
 			
-			RunnerInfo item = getItem(position);
+			SectionRunnerElement item = getItem(position);
+			
+			// 部門
+			if( item.getSection() != null ){
+				runnerSectionTextView.setText(item.getSection());
+				runnerSectionTextView.setVisibility(View.VISIBLE);
+				runnerRelative.setVisibility(View.GONE);
 				
-			runnerNameTextView.setText(item.getName());
-			runnerNoTextView.setText(item.getNumber());
-			runnerSectionTextView.setText(item.getSection());
+			}else{
+				runnerNameTextView.setText(item.runnerInfo.getName());
+				runnerNoTextView.setText(item.runnerInfo.getNumber());
+				runnerSectionTextView.setVisibility(View.GONE);
+				runnerRelative.setVisibility(View.VISIBLE);
+			}
 			
 			return convertView;
 		}
 		
+	}
+	
+	private class SectionRunnerElement {
+		
+		private String section = null;
+		
+		private RunnerInfo runnerInfo = null;
+		
+		public String getSection() {
+			return section;
+		}
+
+		public void setSection(String section) {
+			this.section = section;
+		}
+
+		public RunnerInfo getRunnerInfo() {
+			return runnerInfo;
+		}
+
+		public void setRunnerInfo(RunnerInfo runnerInfo) {
+			this.runnerInfo = runnerInfo;
+		}
+
 	}
 }
