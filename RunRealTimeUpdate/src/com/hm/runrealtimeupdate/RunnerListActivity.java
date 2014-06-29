@@ -125,9 +125,7 @@ public class RunnerListActivity extends Activity {
 				
 				if(!raceInfo.isRaceUpdate()){
 					// 選手登録画面遷移
-					Intent intent = new Intent(RunnerListActivity.this, RunnerEntryActivity.class);
-					intent.putExtra(RunnerEntryActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
-					startActivity(intent);
+					(( RunnerActivityGroup )getParent()).showRunnerEntryActivity(raceInfo.getRaceId());
 				}else{
 					Toast.makeText(RunnerListActivity.this, "速報中は登録できません", Toast.LENGTH_SHORT).show();
 				}

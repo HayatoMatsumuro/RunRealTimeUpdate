@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
 	
+	public static final String STR_ACTIVITY_ID = "runnerEntryActivity";
+	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	@Override

@@ -26,13 +26,24 @@ public class RunnerActivityGroup extends ActivityGroup {
 	}
 
 	public void showRunnerListActivity( String raceId ){
-		RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.id_runner_layout);
+		RelativeLayout relativeLayout = ( RelativeLayout )findViewById( R.id.id_runner_layout );
 		relativeLayout.removeAllViews();
 		
-		Intent intent = new Intent(RunnerActivityGroup.this, RunnerListActivity.class);
-		intent.putExtra(RunnerListActivity.STR_INTENT_RACEID, raceId);
+		Intent intent = new Intent( RunnerActivityGroup.this, RunnerListActivity.class );
+		intent.putExtra( RunnerListActivity.STR_INTENT_RACEID, raceId );
 		
-		Window childActivity = getLocalActivityManager().startActivity(RunnerListActivity.STR_ACTIVITY_ID, intent);
-		relativeLayout.addView(childActivity.getDecorView());
+		Window runnerListdActivity = getLocalActivityManager().startActivity( RunnerListActivity.STR_ACTIVITY_ID, intent );
+		relativeLayout.addView( runnerListdActivity.getDecorView() );
+	}
+	
+	public void showRunnerEntryActivity( String raceId ){
+		RelativeLayout relativeLayout = ( RelativeLayout )findViewById( R.id.id_runner_layout );
+		relativeLayout.removeAllViews();
+		
+		Intent intent = new Intent( RunnerActivityGroup.this, RunnerEntryActivity.class );
+		intent.putExtra( RunnerEntryActivity.STR_INTENT_RACEID, raceId );
+		
+		Window runnerEntryActivity = getLocalActivityManager().startActivity( RunnerEntryActivity.STR_ACTIVITY_ID, intent );
+		relativeLayout.addView( runnerEntryActivity.getDecorView() );
 	}
 }
