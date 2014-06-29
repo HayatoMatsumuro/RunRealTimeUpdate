@@ -53,9 +53,10 @@ public class RunnerEntryActivity extends Activity {
 				String raceId = (String)v.getTag();
 				
 				// 大会詳細画面遷移
-				Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
+				//Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
+				//intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
+				//startActivity(intent);
+				(( RunnerActivityGroup )getParent()).showRunnerListActivity(raceId);
 			}
 		});
         
@@ -131,6 +132,7 @@ public class RunnerEntryActivity extends Activity {
 			RunnerEntryDialog dialog
 				= new RunnerEntryDialog(
 						RunnerEntryActivity.this,
+						getParent(),
 						getContentResolver(),
 						m_RaceInfo,
 						runnerInfo);
@@ -151,6 +153,11 @@ public class RunnerEntryActivity extends Activity {
     	private Context m_Context;
     	
     	/**
+    	 * ダイアログコンテキスト
+    	 */
+    	private Context m_DialogContext;
+    	
+    	/**
     	 * コンテントリゾルバ
     	 */
     	private ContentResolver m_ContentResolver;
@@ -168,19 +175,21 @@ public class RunnerEntryActivity extends Activity {
     	/**
     	 * コンストラクタ
     	 * @param context
+    	 * @param parentContext
     	 * @param contentResolver
     	 * @param raceInfo
     	 * @param runnerInfo
     	 */
-    	RunnerEntryDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
+    	RunnerEntryDialog( Context context, Context dialogContext, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
     		m_Context = context;
+    		m_DialogContext = dialogContext;
     		m_ContentResolver = contentResolver;
     		m_RaceInfo = raceInfo;
     		m_RunnerInfo = runnerInfo;
     	}
     	
     	public void onDialog(){
-    		AlertDialog.Builder dialog = new AlertDialog.Builder(RunnerEntryActivity.this);
+    		AlertDialog.Builder dialog = new AlertDialog.Builder(m_DialogContext);
 			dialog.setTitle(getString(R.string.str_dialog_title_runnerentry));
 			dialog.setMessage(createDialogMessage(m_RunnerInfo));
 			
@@ -193,10 +202,7 @@ public class RunnerEntryActivity extends Activity {
 						// データベース登録
 						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
 						
-						
-						Intent intent = new Intent( m_Context, RaceDetailActivity.class);
-						intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
-						startActivity(intent);
+						(( RunnerActivityGroup )getParent()).showRunnerListActivity(m_RaceInfo.getRaceId());
 
 						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT).show();
 					}else{

@@ -73,6 +73,7 @@ public class RunnerListActivity extends Activity {
         }
         
         // 選手リスト設定
+        //TODO: アクティビティ間の移動だと、表示が更新されない
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
         RunnerListAdapter adapter = new RunnerListAdapter(this, sectionRunnerElementList);
         runnerInfoListView.setAdapter(adapter);
@@ -102,6 +103,7 @@ public class RunnerListActivity extends Activity {
 				RunnerDeleteDialog dialog
 						= new RunnerDeleteDialog(
 								RunnerListActivity.this,
+								getParent(),
 								getContentResolver(),
 								raceInfo,
 								element,
@@ -152,7 +154,14 @@ public class RunnerListActivity extends Activity {
 		/**
     	 * コンテキスト
     	 */
-    	private Context m_Context;
+		// TODO: 暫定
+    	@SuppressWarnings("unused")
+		private Context m_Context;
+    	
+    	/**
+    	 * ダイアログのコンテキスト
+    	 */
+    	private Context m_DialogContext;
     	
     	/**
     	 * コンテントリゾルバ
@@ -182,16 +191,18 @@ public class RunnerListActivity extends Activity {
     	/**
     	 * コンストラクタ
     	 * @param context コンテキスト
+    	 * @param dialogContext ダイアログのコンテキスト
     	 * @param contentResolver コンテントリゾルバ
     	 * @param raceInfo 大会情報
     	 * @param runnerInfo 選手情報
     	 * @param adapter 大会リストアダプタ
     	 * @param button 登録ボタンのリソースID
     	 */
-    	RunnerDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, SectionRunnerElement element, RunnerListAdapter adapter, Button button ){
+    	RunnerDeleteDialog( Context context, Context dialogContext, ContentResolver contentResolver, RaceInfo raceInfo, SectionRunnerElement element, RunnerListAdapter adapter, Button button ){
     		
     		// 初期化
     		m_Context = context;
+    		m_DialogContext = dialogContext;
     		m_ContentResolver = contentResolver;
     		m_RaceInfo = raceInfo;
     		m_Element = element;
@@ -202,7 +213,7 @@ public class RunnerListActivity extends Activity {
     	
     	public void onDialog(){
     		// ダイアログ表示
-    		AlertDialog.Builder dialog = new AlertDialog.Builder( m_Context );
+    		AlertDialog.Builder dialog = new AlertDialog.Builder( m_DialogContext );
     		dialog.setTitle( getString( R.string.str_dialog_title_deleterunner ) );
     		dialog.setMessage( createDialogMessage( m_Element.getRunnerInfo() ) );
     		
