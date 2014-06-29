@@ -30,6 +30,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 public class RunnerListActivity extends Activity {
 
+	public static final String STR_ACTIVITY_ID = "runnerListActivity";
+	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	/**

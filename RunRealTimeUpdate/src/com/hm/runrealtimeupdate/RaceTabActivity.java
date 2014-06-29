@@ -69,8 +69,8 @@ public class RaceTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		// 選手リスト
-		tabIntent = new Intent(this, RunnerListActivity.class);
-		tabIntent.putExtra(RunnerListActivity.STR_INTENT_RACEID, raceId);
+		tabIntent = new Intent(this, RunnerActivityGroup.class);
+		tabIntent.putExtra(RunnerActivityGroup.STR_INTENT_RACEID, raceId);
 		spec = tabHost.newTabSpec(getString(R.string.str_tab_race_runner)).setIndicator(getString(R.string.str_tab_race_runner)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
