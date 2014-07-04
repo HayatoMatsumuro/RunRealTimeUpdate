@@ -76,9 +76,11 @@ public class RunnerEntryActivity extends Activity {
 				RaceInfo raceInfo = (RaceInfo)v.getTag();
 				params[1] = raceInfo.getRaceId();
 				
-				// ゼッケンNo取得
+				// ゼッケンNo.取得
 				// URL入力エディットボックスから入力値取得
-				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
+				// TODO: 取得後は、ゼッケン番号を消す。
+				// TODO: 取得後は、キー入力のバーを消す。
+				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
 				params[2] = noEdit.getText().toString();
 				
 				// 選手情報取得タスク起動

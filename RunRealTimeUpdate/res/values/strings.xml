@@ -23,7 +23,7 @@
     <string name="str_dialog_msg_DEL">削除する</string>
     <string name="str_dialog_msg_NG">やめる</string>
     <string name="str_msg_inputurl">以降のURLを入力</string>
-    <string name="str_msg_inputNo">ゼッケン番号入力</string>
+    <string name="str_msg_inputNumber">ゼッケン番号入力してください。</string>
     <string name="str_msg_updaterunner">速報リストを更新しました。</string>
     <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
     <string name="str_txt_logo">ロゴ</string>

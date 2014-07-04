@@ -9,47 +9,46 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/str_title_runnerentry"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
         android:id="@+id/id_runnerentry_btn_back"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="@string/str_btn_back" />
-
+ 
     <TextView
-        android:id="@+id/id_runnerentry_txt_inputNo"
+        android:id="@+id/id_runnerentry_txt_inputNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/id_runnerentry_txt_title"
-        android:layout_below="@+id/id_runnerentry_txt_title"
-        android:layout_marginTop="20dp"
-        android:text="@string/str_msg_inputNo" />
+        android:layout_below="@+id/id_runnerentry_btn_back"
+        android:layout_marginTop="10dp"
+        android:text="@string/str_msg_inputNumber" />
 
     <EditText
-        android:id="@+id/id_runnerentry_edit_no"
+        android:id="@+id/id_runnerentry_edit_number"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_runnerentry_txt_title"
-        android:layout_below="@+id/id_runnerentry_txt_inputNo"
-        android:layout_marginTop="20dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/id_runnerentry_txt_inputNumber"
+        android:layout_below="@+id/id_runnerentry_txt_inputNumber"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:ems="5"
-        android:inputType="textPersonName" >
-    </EditText>
+        android:inputType="numberSigned" />
 
     <Button
         android:id="@+id/id_runnerentry_btn_decide"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/id_runnerentry_edit_no"
-        android:layout_alignBottom="@+id/id_runnerentry_edit_no"
-        android:layout_marginLeft="33dp"
-        android:layout_toRightOf="@+id/id_runnerentry_txt_inputNo"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/id_runnerentry_edit_number"
+        android:layout_toRightOf="@+id/id_runnerentry_edit_number"
+        android:layout_marginLeft="20dp"
         android:text="@string/str_btn_decide" />
 
 </RelativeLayout>
