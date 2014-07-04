@@ -14,16 +14,6 @@
         	android:layout_width="match_parent"
         	android:layout_height="50dp" >
 
-
-    		<TextView
-    	   		android:id="@+id/id_race_txt_title"
-    	    	android:layout_width="240dp"
-    	    	android:layout_height="wrap_content"
-    	    	android:layout_centerVertical="true"
-    	    	android:layout_marginLeft="5dp"
-    	   		android:text="@string/str_title_race"
-    	    	android:textAppearance="?android:attr/textAppearanceMedium" />
-
     		<Button
     	    	android:id="@+id/id_race_btn_racelist"
     	    	android:layout_width="wrap_content"
