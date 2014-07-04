@@ -50,33 +50,8 @@ public class RunnerListActivity extends Activity {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
-		// 選手情報
-        //List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceInfo.getRaceId());
-        List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
-        
-        // 表示用の部門別の選手情報設定
-        int runnerNum = 0;
-        List<SectionRunnerElement> sectionRunnerElementList = new ArrayList<SectionRunnerElement>();
-        for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList ){
-        	
-        	SectionRunnerElement sectionElement = new SectionRunnerElement();
-        	sectionElement.setSection(sectionRunnerInfo.getSection());
-        	sectionRunnerElementList.add(sectionElement);
-        	
-        	for( RunnerInfo runnerInfo : sectionRunnerInfo.getRunnerInfoList() ){
-        		
-        		SectionRunnerElement runnerElement = new SectionRunnerElement();
-        		runnerElement.setRunnerInfo(runnerInfo);
-        		sectionRunnerElementList.add(runnerElement);
-        		runnerNum++;
-        	}
-        }
-        
         // 選手リスト設定
-        //TODO: アクティビティ間の移動だと、表示が更新されない
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
-        RunnerListAdapter adapter = new RunnerListAdapter(this, sectionRunnerElementList);
-        runnerInfoListView.setAdapter(adapter);
         
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
@@ -135,15 +110,83 @@ public class RunnerListActivity extends Activity {
 			}
 		});
         
-        // 選手登録ボタンのフォーカス設定
-        if( runnerNum >= INT_RUNNER_NUM_MAX){
-        	runnerEntryButton.setEnabled(false);
-        }else{
-        	runnerEntryButton.setEnabled(true);
-        }
 		return;
 	}
 
+	@Override
+	protected void onResume(){
+		super.onResume();
+		
+		Intent intent = getIntent();
+		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+		// リストビュー更新
+		ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
+		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
+		
+		if( adapter != null ){
+			adapter.clear();
+		}
+		
+		List<SectionRunnerElement> sectionRunnerElementList = createSectionRunnerElementList( raceId );
+        adapter = new RunnerListAdapter(this, sectionRunnerElementList);
+        runnerInfoListView.setAdapter(adapter);
+     
+        // 選手登録ボタンのフォーカス設定
+        Button runnerEntryButton = (Button)findViewById(R.id.id_runnerlist_btn_runnerentry);
+        int runnerNum = getAllSectionRunner( sectionRunnerElementList );
+        
+        if( runnerNum >= INT_RUNNER_NUM_MAX){
+           	runnerEntryButton.setEnabled(false);
+        }else{
+           	runnerEntryButton.setEnabled(true);
+        }
+	}
+	
+	/**
+	 * リストビュー用の選手一覧のリストを作成する
+	 * @param raceId 大会ID
+	 * @return　リストビュー用の選手一覧
+	 */
+	private List<SectionRunnerElement> createSectionRunnerElementList( String raceId ){
+		
+		List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
+        
+        // 表示用の部門別の選手情報設定
+        
+        List<SectionRunnerElement> sectionRunnerElementList = new ArrayList<SectionRunnerElement>();
+        for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList ){
+        	
+        	SectionRunnerElement sectionElement = new SectionRunnerElement();
+        	sectionElement.setSection(sectionRunnerInfo.getSection());
+        	sectionRunnerElementList.add(sectionElement);
+        	
+        	for( RunnerInfo runnerInfo : sectionRunnerInfo.getRunnerInfoList() ){
+        		
+        		SectionRunnerElement runnerElement = new SectionRunnerElement();
+        		runnerElement.setRunnerInfo(runnerInfo);
+        		sectionRunnerElementList.add(runnerElement);
+        	}
+        }
+        
+        return sectionRunnerElementList;
+	}
+	
+	/**
+	 * リストビュー用の選手一覧から選手数を取得する
+	 * @param sectionRunnerElementList　リストビュー用の選手一覧
+	 * @return　選手数
+	 */
+	private int getAllSectionRunner( List<SectionRunnerElement> sectionRunnerElementList ){
+		
+		int num = 0;
+		
+		for( SectionRunnerElement element : sectionRunnerElementList ){
+			if( element.getSection() == null){
+				num++;
+			}
+		}
+		return num;
+	}
 	/**
 	 * 選手削除ダイアログ
 	 * @author Hayato Matsumuro
