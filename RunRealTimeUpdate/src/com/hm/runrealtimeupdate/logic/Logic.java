@@ -401,24 +401,7 @@ public class Logic {
 		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
 		
 		for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
-			RunnerInfo runnerInfo = new RunnerInfo();
-				
-			runnerInfo.setName(dbRunnerInfo.getName());
-			runnerInfo.setNumber(dbRunnerInfo.getNumber());
-			runnerInfo.setSection(dbRunnerInfo.getSection());
-				
-			List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, raceId, dbRunnerInfo.getNumber());
-				
-			for( DataBaseTimeList dbTimeList:dbTimeListList){
-				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
-				timeList.setPoint(dbTimeList.getPoint());
-				timeList.setSplit(dbTimeList.getSplit());
-				timeList.setLap(dbTimeList.getLap());
-				timeList.setCurrentTime(dbTimeList.getCurrentTime());
-					
-				runnerInfo.getTimeList().add(timeList);
-			}
-			
+			RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo(contentResolver, dbRunnerInfo);
 			runnerInfoList.add(runnerInfo);
 		}
 		return runnerInfoList;
@@ -445,6 +428,23 @@ public class Logic {
 			return true;
 		}
 		
+	}
+	
+	/**
+	 * 大会IDとゼッケン番号から選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 * @return
+	 */
+	public static RunnerInfo getRunnerInfo( ContentResolver contentResolver, String raceId, String number){
+		
+		// 選手情報取得
+		DataBaseRunnerInfo dbRunnerInfo = DataBaseAccess.getRunnerInfoByRaceIdAndNumber( contentResolver, raceId, number);
+		
+		RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo(contentResolver, dbRunnerInfo);
+		
+		return runnerInfo;
 	}
 	
 	/**
@@ -603,6 +603,26 @@ public class Logic {
 		}
 
 		return sectionRunnerInfoList;
+	}
+	
+	private static RunnerInfo getRunnerInfoByDBRunnerInfo( ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo ){
+		RunnerInfo runnerInfo = new RunnerInfo();
+		runnerInfo.setName(dbRunnerInfo.getName());
+		runnerInfo.setNumber(dbRunnerInfo.getNumber());
+		runnerInfo.setSection(dbRunnerInfo.getSection());
+		
+		List<DataBaseTimeList> dbTimelistList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, dbRunnerInfo.getRaceId(), dbRunnerInfo.getNumber());
+		
+		for( DataBaseTimeList dbTimeList:dbTimelistList){
+			RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+			timeList.setPoint(dbTimeList.getPoint());
+			timeList.setSplit(dbTimeList.getSplit());
+			timeList.setLap(dbTimeList.getLap());
+			timeList.setCurrentTime(dbTimeList.getCurrentTime());
+				
+			runnerInfo.getTimeList().add(timeList);
+		}
+		return runnerInfo;
 	}
 	
 	/**

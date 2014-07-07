@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -90,6 +91,27 @@ public class RunnerListActivity extends Activity {
 			}
         	
         });
+        
+        // 選手リストの短押し
+        runnerInfoListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				
+				// 大会情報取得
+				ListView listView = (ListView)parent;
+				RaceInfo raceInfo = (RaceInfo)listView.getTag();
+				
+				// 選手情報取得
+				SectionRunnerElement element = (SectionRunnerElement)listView.getItemAtPosition(position);
+				if( element.getRunnerInfo() == null ){
+					return;
+				}
+				
+				(( RunnerActivityGroup )getParent()).showRunnerInfoDetailActivity( raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
+			}
+        	
+		});
         
         // 選手登録ボタン
         Button runnerEntryButton = (Button)findViewById(R.id.id_runnerlist_btn_runnerentry);
@@ -187,6 +209,7 @@ public class RunnerListActivity extends Activity {
 		}
 		return num;
 	}
+	
 	/**
 	 * 選手削除ダイアログ
 	 * @author Hayato Matsumuro

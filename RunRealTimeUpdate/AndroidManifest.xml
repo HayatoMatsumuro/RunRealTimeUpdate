@@ -44,6 +44,10 @@
            android:label="@string/app_name" >
         </activity>
         <activity 
+           android:name="com.hm.runrealtimeupdate.RunnerInfoDetailActivity"
+           android:label="@string/app_name" >
+        </activity>
+        <activity 
            android:name="com.hm.runrealtimeupdate.RunnerEntryActivity"
            android:label="@string/app_name" >
         </activity>

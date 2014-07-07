@@ -28,9 +28,10 @@
     <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
     <string name="str_txt_logo">ロゴ</string>
     <string name="str_txt_racename">大会名</string>
-    <string name="str_txt_racedate">開催日:</string>
-    <string name="str_txt_racelocation">開催地:</string>
+    <string name="str_txt_racedate">開催日</string>
+    <string name="str_txt_racelocation">開催地</string>
     <string name="str_txt_runnername">選手名</string>
+    <string name="str_txt_runnerinfo">選手情報</string>
     <string name="str_txt_no">ゼッケン番号</string>
     <string name="str_txt_section">部門</string>
     <string name="str_txt_section_no">部門未設定</string>
@@ -40,8 +41,9 @@
     <string name="str_txt_passdatamain">通過情報メイン</string>
     <string name="str_txt_passdatasub">通過情報サブ</string>
     <string name="str_txt_runner">選手</string>
-    <string name="str_txt_split">スプリット ： </string>
-    <string name="str_txt_currenttime">通過時間 : </string>
+    <string name="str_txt_split">スプリット </string>
+    <string name="str_txt_lap">ラップ</string>
+    <string name="str_txt_currenttime">通過時間 </string>
     <string name="str_txt_updateexe">*****速報中*****</string>
     <string name="str_txt_updatenew">New</string>
     <string name="str_txt_dot">■</string>

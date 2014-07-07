@@ -46,4 +46,17 @@ public class RunnerActivityGroup extends ActivityGroup {
 		Window runnerEntryActivity = getLocalActivityManager().startActivity( RunnerEntryActivity.STR_ACTIVITY_ID, intent );
 		relativeLayout.addView( runnerEntryActivity.getDecorView() );
 	}
+	
+	public void showRunnerInfoDetailActivity( String raceId, String number ){
+		RelativeLayout relativeLayout = ( RelativeLayout )findViewById( R.id.id_runner_layout );
+		relativeLayout.removeAllViews();
+		
+		Intent intent = new Intent( RunnerActivityGroup.this, RunnerInfoDetailActivity.class );
+		intent.putExtra( RunnerInfoDetailActivity.STR_INTENT_RACEID, raceId );
+		intent.putExtra( RunnerInfoDetailActivity.STR_INTENT_NUMBER, number );
+		
+		Window runnerInfoDetailActivity = getLocalActivityManager().startActivity( RunnerInfoDetailActivity.STR_ACTIVITY_ID, intent );
+		relativeLayout.addView( runnerInfoDetailActivity.getDecorView() );
+		
+	}
 }
