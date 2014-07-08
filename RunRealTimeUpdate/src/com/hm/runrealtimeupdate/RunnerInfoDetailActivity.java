@@ -57,17 +57,17 @@ public class RunnerInfoDetailActivity extends Activity {
 			// スプリット
 			TextView splitTextView = new TextView( this );
 			splitTextView.setText(timelist.getSplit());
-			pointTextView.setGravity(Gravity.CENTER);
+			splitTextView.setGravity(Gravity.CENTER);
 			
 			// ラップ
 			TextView lapTextView = new TextView( this );
     		lapTextView.setText(timelist.getLap());
-			pointTextView.setGravity(Gravity.CENTER);
+    		lapTextView.setGravity(Gravity.CENTER);
     		
     		// カレントタイム
     		TextView currentTimeView = new TextView( this );
     		currentTimeView.setText(timelist.getCurrentTime());
-			pointTextView.setGravity(Gravity.CENTER);
+    		currentTimeView.setGravity(Gravity.CENTER);
 			
     		tableRow.addView(pointTextView);
     		tableRow.addView(splitTextView);

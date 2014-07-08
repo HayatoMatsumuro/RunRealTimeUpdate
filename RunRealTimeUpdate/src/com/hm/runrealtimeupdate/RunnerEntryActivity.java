@@ -53,9 +53,6 @@ public class RunnerEntryActivity extends Activity {
 				String raceId = (String)v.getTag();
 				
 				// 大会詳細画面遷移
-				//Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-				//intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
-				//startActivity(intent);
 				(( RunnerActivityGroup )getParent()).showRunnerListActivity(raceId);
 			}
 		});
