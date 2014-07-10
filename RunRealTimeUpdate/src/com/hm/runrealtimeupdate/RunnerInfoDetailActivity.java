@@ -30,6 +30,30 @@ public class RunnerInfoDetailActivity extends Activity {
 		
 		Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        
+		// 戻るボタン
+		Button backButton = ( Button )findViewById(R.id.id_runnerinfodetail_btn_back);
+		backButton.setTag( raceId );
+		backButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				String raceId = (String)v.getTag();
+				
+				// 大会詳細画面遷移
+				(( RunnerActivityGroup )getParent()).showRunnerListActivity( raceId );
+				
+			}
+		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		Intent intent = getIntent();
+        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         String number = intent.getStringExtra(STR_INTENT_NUMBER);
         
         RunnerInfo runnerInfo = Logic.getRunnerInfo(getContentResolver(), raceId, number);
@@ -79,21 +103,5 @@ public class RunnerInfoDetailActivity extends Activity {
     		
     		tableLayout.addView(tableRow, new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT));
 		}
-		
-		// 戻るボタン
-		Button backButton = ( Button )findViewById(R.id.id_runnerinfodetail_btn_back);
-		backButton.setTag( raceId );
-		backButton.setOnClickListener( new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				String raceId = (String)v.getTag();
-				
-				// 大会詳細画面遷移
-				(( RunnerActivityGroup )getParent()).showRunnerListActivity( raceId );
-			}
-		});
 	}
-
 }
