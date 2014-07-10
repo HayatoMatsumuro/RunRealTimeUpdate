@@ -31,6 +31,7 @@ public class RunnerActivityGroup extends ActivityGroup {
 		
 		Intent intent = new Intent( RunnerActivityGroup.this, RunnerListActivity.class );
 		intent.putExtra( RunnerListActivity.STR_INTENT_RACEID, raceId );
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
 		Window runnerListdActivity = getLocalActivityManager().startActivity( RunnerListActivity.STR_ACTIVITY_ID, intent );
 		relativeLayout.addView( runnerListdActivity.getDecorView() );
@@ -42,6 +43,7 @@ public class RunnerActivityGroup extends ActivityGroup {
 		
 		Intent intent = new Intent( RunnerActivityGroup.this, RunnerEntryActivity.class );
 		intent.putExtra( RunnerEntryActivity.STR_INTENT_RACEID, raceId );
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
 		Window runnerEntryActivity = getLocalActivityManager().startActivity( RunnerEntryActivity.STR_ACTIVITY_ID, intent );
 		relativeLayout.addView( runnerEntryActivity.getDecorView() );
@@ -54,6 +56,7 @@ public class RunnerActivityGroup extends ActivityGroup {
 		Intent intent = new Intent( RunnerActivityGroup.this, RunnerInfoDetailActivity.class );
 		intent.putExtra( RunnerInfoDetailActivity.STR_INTENT_RACEID, raceId );
 		intent.putExtra( RunnerInfoDetailActivity.STR_INTENT_NUMBER, number );
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		
 		Window runnerInfoDetailActivity = getLocalActivityManager().startActivity( RunnerInfoDetailActivity.STR_ACTIVITY_ID, intent );
 		relativeLayout.addView( runnerInfoDetailActivity.getDecorView() );
