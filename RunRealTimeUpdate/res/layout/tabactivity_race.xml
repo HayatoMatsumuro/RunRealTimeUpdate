@@ -28,6 +28,14 @@
         	android:layout_width="match_parent"
         	android:layout_height="5dp" >
     	</RelativeLayout>
+    	<TextView
+    	    android:id="@+id/id_race_txt_updateexe"
+        	android:layout_width="match_parent"
+        	android:layout_height="30dp"
+        	android:gravity="center_vertical|center_horizontal"
+        	android:background="@color/subcolor"
+        	android:text="@string/str_txt_updateexe"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
         <TabWidget
       		android:id="@android:id/tabs"
       		android:layout_width="fill_parent"

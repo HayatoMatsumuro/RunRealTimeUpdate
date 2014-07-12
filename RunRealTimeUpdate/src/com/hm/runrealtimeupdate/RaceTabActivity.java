@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 public class RaceTabActivity extends TabActivity {
 	
@@ -36,6 +37,15 @@ public class RaceTabActivity extends TabActivity {
 		// ヘッダー
         RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_race_relative_header);
         headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
+        
+        // 速報中テキスト
+        int visibility = View.INVISIBLE;
+        if( raceInfo.isRaceUpdate() ){
+        	visibility = View.VISIBLE;
+        } else {
+        	visibility = View.GONE;
+        }
+        setVisibilityUpdateExe( visibility );
         
         // ボーダー
         RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
@@ -71,5 +81,14 @@ public class RaceTabActivity extends TabActivity {
 		
 		tabHost.setCurrentTab(0);
 	}
-
+	
+	/**
+	 * 速報中テキストの表示状態設定
+	 * @param visibility
+	 */
+	public void setVisibilityUpdateExe( int visibility ){
+		TextView updateExeTextView = ( TextView )findViewById(R.id.id_race_txt_updateexe);
+		updateExeTextView.setVisibility( visibility );
+		return;
+	}
 }
