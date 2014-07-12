@@ -63,4 +63,5 @@
     <string name="str_tab_race_detail">詳細</string>
     <string name="str_tab_race_runner">選手</string>
     <string name="str_tab_race_update">速報</string>
+    <string name="str_tab_race_pass">地点</string>
 </resources>
