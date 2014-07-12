@@ -36,8 +36,10 @@
     <string name="str_txt_section">部門</string>
     <string name="str_txt_section_no">部門未設定</string>
     <string name="str_txt_point">地点</string>
-    <string name="str_txt_updatemain">速報データメイン</string>
-    <string name="str_txt_updatesub">速報データサブ</string>
+    <string name="str_txt_updaterunner">選手</string>
+    <string name="str_txt_updatepass">通過</string>
+    <string name="str_txt_updatesplit">スプリット</string>
+    <string name="str_txt_updatecurrenttime">通過時間</string>
     <string name="str_txt_passdatamain">通過情報メイン</string>
     <string name="str_txt_passdatasub">通過情報サブ</string>
     <string name="str_txt_runner">選手</string>
