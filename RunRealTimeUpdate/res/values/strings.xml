@@ -49,8 +49,8 @@
     <string name="str_txt_dot">■</string>
     <string name="str_txt_arrow">矢印</string>
     <string name="str_btn_entry">大会登録</string>
-    <string name="str_btn_updatestart">速報開始</string>
-    <string name="str_btn_updatestop">速報停止</string>
+    <string name="str_btn_updatestart">速報を開始する</string>
+    <string name="str_btn_updatestop">速報を停止する</string>
     <string name="str_btn_updatelist">速報リスト</string>
     <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>

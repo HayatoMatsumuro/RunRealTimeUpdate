@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RaceDetailActivity extends Activity {
 
@@ -44,10 +45,10 @@ public class RaceDetailActivity extends Activity {
         TextView raceLocationTextView = (TextView)findViewById(R.id.id_racedetail_txt_racelocation);
         raceLocationTextView.setText(raceInfo.getRaceLocation());
         
-        // 速報開始停止ボタン
+        // 速報ボタン
         Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
         
-        // 速報開始停止ボタンの表示設定
+        // 速報止ボタンの表示設定
         RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver());
         
         if( updateRaceInfo == null ){
@@ -64,7 +65,7 @@ public class RaceDetailActivity extends Activity {
         	updateButton.setEnabled(false);
         }
         
-        // 速報開始停止ボタンの処理設定
+        // 速報ボタンの処理設定
         updateButton.setTag(raceInfo);
         updateButton.setOnClickListener(new OnClickListener() {
 			
@@ -76,7 +77,7 @@ public class RaceDetailActivity extends Activity {
 				RaceInfo raceInfo = ( RaceInfo )v.getTag();
 				
 				if( !raceInfo.isRaceUpdate() ){
-					// 速報開始ボタン押し
+					// 速報を開始する
 					
 					// 大会を速報状態にする
 					Logic.setUpdateOnRaceId(getContentResolver(), raceInfo.getRaceId());
@@ -88,10 +89,14 @@ public class RaceDetailActivity extends Activity {
 					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
 					startService(intent);
 					
-					// 表示変更
+					// 速報中テキスト表示
+					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.VISIBLE );
+					
+					// ボタン表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestop));
 					
-					
+					// Toast表示
+					Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
 				} else {
 					// 速報停止ボタン押し
 					
@@ -105,8 +110,15 @@ public class RaceDetailActivity extends Activity {
 					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
 					stopService(intent);
 					
-					// 表示変更
+					// 速報中テキスト非表示
+					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+					
+					// ボタン表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestart));
+					
+
+					// Toast表示
+					Toast.makeText( RaceDetailActivity.this, "速報を停止しました！", Toast.LENGTH_SHORT ).show();
 				}
 			}
 		});
