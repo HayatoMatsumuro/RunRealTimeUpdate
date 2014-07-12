@@ -270,6 +270,8 @@ public class MainActivity extends Activity {
 			// 速報中の大会ならば、速報中と表示
 			if(raceInfo.isRaceUpdate()){
 				raceUpdateTextView.setText(getString(R.string.str_txt_updateexe));
+			}else{
+				raceUpdateTextView.setText("");
 			}
 			
 			return convertView;
