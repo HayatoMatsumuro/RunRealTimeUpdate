@@ -34,4 +34,17 @@ public class PassActivityGroup extends ActivityGroup {
 		Window passListdActivity = getLocalActivityManager().startActivity( PassListActivity.STR_ACTIVITY_ID, intent );
 		relativeLayout.addView( passListdActivity.getDecorView() );
 	}
+	
+	public void showPassListSectionActivity( String raceId, String section ){
+		RelativeLayout relativeLayout = (RelativeLayout)findViewById(R.id.id_pass_layout);
+		relativeLayout.removeAllViews();
+		
+		Intent intent = new Intent( PassActivityGroup.this, PassListSectionActivity.class );
+		intent.putExtra( PassListSectionActivity.STR_INTENT_RACEID, raceId );
+		intent.putExtra( PassListSectionActivity.STR_INTENT_SECTION, section );
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+		Window passListdActivity = getLocalActivityManager().startActivity( PassListSectionActivity.STR_ACTIVITY_ID, intent );
+		relativeLayout.addView( passListdActivity.getDecorView() );
+	}
 }

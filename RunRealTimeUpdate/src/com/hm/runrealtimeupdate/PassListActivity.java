@@ -62,10 +62,8 @@ public class PassListActivity extends Activity {
 				ListView listView = (ListView)parent;
 				String section = (String)listView.getItemAtPosition(position);
 				
-				Intent intent = new Intent(PassListActivity.this, PassListSectionActivity.class);
-				intent.putExtra(PassListSectionActivity.STR_INTENT_RACEID, raceId);
-				intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
-				startActivity(intent);
+				// 大会詳細画面遷移
+				(( PassActivityGroup )getParent()).showPassListSectionActivity(raceId, section);
 			}
         });
 	}
