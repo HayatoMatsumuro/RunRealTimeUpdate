@@ -62,7 +62,7 @@ public class PassListActivity extends Activity {
 				ListView listView = (ListView)parent;
 				String section = (String)listView.getItemAtPosition(position);
 				
-				// 大会詳細画面遷移
+				// 通過情報部門画面に遷移
 				(( PassActivityGroup )getParent()).showPassListSectionActivity(raceId, section);
 			}
         });

@@ -91,10 +91,8 @@ public class PassListSectionActivity extends Activity {
 			public void onClick(View v) {
 				String raceId = (String)v.getTag();
 				
-				// 速報リスト画面に遷移
-				Intent intent = new Intent( PassListSectionActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
+				// 通過情報画面に遷移
+				(( PassActivityGroup )getParent()).showPassListActivity( raceId );
 			}
 		});
         return;
