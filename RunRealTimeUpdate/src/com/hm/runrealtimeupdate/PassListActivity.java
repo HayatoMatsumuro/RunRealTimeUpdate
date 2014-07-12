@@ -9,13 +9,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class PassListActivity extends Activity {
@@ -41,10 +38,6 @@ public class PassListActivity extends Activity {
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
-        
-        // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_passlist_txt_name);
-        raceNameTextView.setText(raceInfo.getRaceName());
         
         // 部門リストを取得する
         List<String> sectionList = Logic.getSectionList(getContentResolver(), raceId);
@@ -74,25 +67,6 @@ public class PassListActivity extends Activity {
 				intent.putExtra(PassListSectionActivity.STR_INTENT_SECTION, section);
 				startActivity(intent);
 			}
-        	
         });
-        
-        // 戻るボタン
-        Button backButton = (Button)findViewById(R.id.id_passlist_btn_back);
-        backButton.setTag(raceId);
-        backButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				String raceId = (String)v.getTag();
-				
-				Intent intent = new Intent(PassListActivity.this, UpdateListActivity.class);
-				intent.putExtra(UpdateListActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
-				
-			}
-		});
-        
 	}
-
 }
