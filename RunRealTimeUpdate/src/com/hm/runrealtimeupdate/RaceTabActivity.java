@@ -79,6 +79,12 @@ public class RaceTabActivity extends TabActivity {
 		spec = tabHost.newTabSpec(getString(R.string.str_tab_race_runner)).setIndicator(getString(R.string.str_tab_race_runner)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
+		// 速報リスト
+		tabIntent = new Intent(this, UpdateListActivity.class );
+		tabIntent.putExtra( UpdateListActivity.STR_INTENT_RACEID, raceId );
+		spec = tabHost.newTabSpec(getString(R.string.str_tab_race_update)).setIndicator(getString(R.string.str_tab_race_update)).setContent(tabIntent);
+		tabHost.addTab(spec);
+		
 		tabHost.setCurrentTab(0);
 	}
 	
