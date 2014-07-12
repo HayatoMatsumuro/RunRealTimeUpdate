@@ -20,6 +20,8 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class PassListActivity extends Activity {
 	
+	public static final String STR_ACTIVITY_ID = "passListActivity";
+	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	@Override
