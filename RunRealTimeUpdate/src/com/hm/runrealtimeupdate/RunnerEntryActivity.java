@@ -15,6 +15,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -200,6 +201,11 @@ public class RunnerEntryActivity extends Activity {
 					if( !Logic.checkEntryRunnerId( m_ContentResolver, m_RaceInfo, m_RunnerInfo )){
 						// データベース登録
 						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
+						
+						// キーボードを隠す
+						EditText numberEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+				        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 						
 						(( RunnerActivityGroup )getParent()).showRunnerListActivity(m_RaceInfo.getRaceId());
 
