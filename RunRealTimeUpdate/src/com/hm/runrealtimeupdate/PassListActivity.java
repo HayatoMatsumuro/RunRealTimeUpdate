@@ -6,14 +6,17 @@ import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class PassListActivity extends Activity {
 	
@@ -43,7 +46,7 @@ public class PassListActivity extends Activity {
         List<String> sectionList = Logic.getSectionList(getContentResolver(), raceId);
         
         // リストアダプタを作成
-        ListAdapter adapter = (ListAdapter) new ArrayAdapter<String>( this, android.R.layout.simple_list_item_1, sectionList );
+        SectionListAdapter adapter = new SectionListAdapter( this, sectionList );
         
         // リストビューに設定
         ListView listView = (ListView)findViewById(R.id.id_passlist_listview_sectionlist);
@@ -66,5 +69,38 @@ public class PassListActivity extends Activity {
 				(( PassActivityGroup )getParent()).showPassListSectionActivity(raceId, section);
 			}
         });
+	}
+	
+	/**
+	 * 部門リストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class SectionListAdapter extends ArrayAdapter<String>{
+
+		LayoutInflater inflater;
+		
+		public SectionListAdapter(Context context, List<String> objects) {
+			super(context, 0, objects);
+			
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if( convertView == null ){
+				convertView = this.inflater.inflate( R.layout.list_item_section, parent, false);
+			}
+			
+			TextView sectionTextView = ( TextView )convertView.findViewById(R.id.id_section_txt_section);
+			
+			String section = getItem( position );
+			
+			sectionTextView.setText( section );
+			
+			return convertView;
+		}
+		
+		
 	}
 }
