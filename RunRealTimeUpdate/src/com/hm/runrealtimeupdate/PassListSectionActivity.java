@@ -10,7 +10,6 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +18,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PassListSectionActivity extends Activity {
 
+	public static final String STR_ACTIVITY_ID = "passListSectionActivity";
+	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
 	public static final String STR_INTENT_SECTION = "section";
@@ -48,14 +50,6 @@ public class PassListSectionActivity extends Activity {
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
-        
-        // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_passlistsection_txt_racename);
-        raceNameTextView.setText(raceInfo.getRaceName());
-        
-        // 部門名表示
-        TextView sectionTextView = (TextView)findViewById(R.id.id_passlistsection_txt_section);
-        sectionTextView.setText(section);
         
         // 地点通過情報取得
         List<PassPointInfo> passPointInfoList = Logic.getPassPointInfoList(getContentResolver(), raceId, section, LONG_RESENT_TIME);
@@ -97,10 +91,8 @@ public class PassListSectionActivity extends Activity {
 			public void onClick(View v) {
 				String raceId = (String)v.getTag();
 				
-				// 速報リスト画面に遷移
-				Intent intent = new Intent( PassListSectionActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
+				// 通過情報画面に遷移
+				(( PassActivityGroup )getParent()).showPassListActivity( raceId );
 			}
 		});
         return;
@@ -128,25 +120,28 @@ public class PassListSectionActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_pass_point_runner, parent, false);
 			}
 			
-			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_pass_point_main);
-			TextView subTextView = (TextView)convertView.findViewById(R.id.id_pass_point_sub);
+			RelativeLayout pointLayout = (RelativeLayout)convertView.findViewById(R.id.id_pass_point_relative_point);
+			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById(R.id.id_pass_point_relative_runner);
+			
+			TextView pointTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_point);
+			TextView nameTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_name);
+			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_split);
 			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_pass_point_updatenew);
 			
 			PassPointListElement element = getItem(position);
 			
 			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_TITLE )){
-				// 見出し 地点情報表示
-				mainTextView.setText(element.getPoint());
-				subTextView.setVisibility(View.INVISIBLE);
-				convertView.setBackgroundColor(Color.GRAY);
-				updateNewTextView.setVisibility(View.INVISIBLE);
+				// 地点情報表示
+				pointTextView.setText(element.getPoint());
+				pointLayout.setVisibility(View.VISIBLE);
+				runnerLayout.setVisibility(View.GONE);
 				
 			}else{
 				// ランナー情報表示
-				mainTextView.setText(element.getNumber() + " " + element.getName());
-				subTextView.setText(getString(R.string.str_txt_split) + element.getSplit());
-				subTextView.setVisibility(View.VISIBLE);
-				convertView.setBackgroundColor(Color.WHITE);
+				nameTextView.setText(element.getName());
+				splitTextView.setText(getString(R.string.str_txt_split) + " " + element.getSplit());
+				pointLayout.setVisibility(View.GONE);
+				runnerLayout.setVisibility(View.VISIBLE);
 				
 				if(element.isRecentFlg()){
 					updateNewTextView.setVisibility(View.VISIBLE);
@@ -231,6 +226,7 @@ public class PassListSectionActivity extends Activity {
 			this.currentTime = currentTime;
 		}
 
+		@SuppressWarnings("unused")
 		public String getNumber() {
 			return number;
 		}

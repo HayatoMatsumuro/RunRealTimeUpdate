@@ -4,51 +4,62 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_updatedata_txt_main"
+        android:id="@+id/id_updatedata_txt_dot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/str_txt_updatemain"
+        android:layout_marginLeft="5dp"
+        android:text="@string/str_txt_dot"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/accentColor" />
+
+    <TextView
+        android:id="@+id/id_updatedata_txt_runner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/id_updatedata_txt_dot"
+        android:text="@string/str_txt_updaterunner"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/id_updatedata_txt_sub"
+        android:id="@+id/id_updatedata_txt_pass"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/id_updatedata_txt_main"
-        android:layout_marginLeft="10dp"
-        android:text="@string/str_txt_updatesub" />
-
+        android:layout_alignLeft="@+id/id_updatedata_txt_runner"
+        android:layout_below="@+id/id_updatedata_txt_runner"
+        android:text="@string/str_txt_updatepass"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
     <TextView
         android:id="@+id/id_updatedata_txt_split"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_updatedata_txt_sub"
-        android:layout_below="@+id/id_updatedata_txt_sub"
+        android:layout_alignLeft="@+id/id_updatedata_txt_pass"
+        android:layout_below="@+id/id_updatedata_txt_pass"
         android:layout_marginLeft="5dp"
-        android:text="@string/str_txt_split" />
-
+        android:text="@string/str_txt_updatesplit" />
+    
     <TextView
         android:id="@+id/id_updatedata_txt_currenttime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_updatedata_txt_sub"
+        android:layout_alignLeft="@+id/id_updatedata_txt_split"
         android:layout_below="@+id/id_updatedata_txt_split"
-        android:layout_marginLeft="5dp"
-        android:text="@string/str_txt_currenttime" />
+        android:text="@string/str_txt_updatecurrenttime" />
 
     <TextView
         android:id="@+id/id_updatedata_txt_updatenuew"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/id_updatedata_txt_currenttime"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="17dp"
         android:text="@string/str_txt_updatenew"
-        android:visibility="invisible"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/red"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:visibility="invisible" />
 
 </RelativeLayout>

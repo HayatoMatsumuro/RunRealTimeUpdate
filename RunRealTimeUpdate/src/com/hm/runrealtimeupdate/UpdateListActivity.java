@@ -12,10 +12,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -43,10 +41,6 @@ public class UpdateListActivity extends Activity {
         	return;
         }
         
-        // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_updatelist_txt_racename);
-        raceNameTextView.setText( raceInfo.getRaceName());
-        
         // 速報データ取得
         List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
         
@@ -55,42 +49,6 @@ public class UpdateListActivity extends Activity {
         ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
         updateListView.setAdapter(adapter);
         
-        // 大会詳細ボタン
-        Button raceDetailButton = (Button)findViewById(R.id.id_updatelist_btn_detail);
-        raceDetailButton.setTag(raceId);
-        raceDetailButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				// 大会情報取得
-				String raceId = (String)v.getTag();
-				
-				// 大会詳細画面遷移
-				Intent intent = new Intent(UpdateListActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
-				
-			}
-		});
-        
-        // 通過情報ボタン
-        Button passListButton = (Button)findViewById(R.id.id_updatelist_btn_passlist);
-        passListButton.setTag(raceId);
-        passListButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				String raceId = (String)v.getTag();
-				
-				// 通過情報画面遷移
-				Intent intent = new Intent(UpdateListActivity.this, PassListActivity.class);
-				intent.putExtra(PassListActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
-				
-			}
-		});
         return;
 	}
 	
@@ -115,23 +73,23 @@ public class UpdateListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_updatedata, parent, false);
 			}
 			
-			TextView mainTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_main);
-			TextView subTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_sub);
+			TextView runnerTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_runner);
+			TextView passTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_pass);
 			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
 			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
 			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_updatenuew);
 			
         	UpdateInfo updateInfo = getItem(position);
 			
-        	String mainStr = updateInfo.getSection() + " " + updateInfo.getPoint();
-        	String subStr = updateInfo.getNumber() + " " + updateInfo.getName();
-			String splitStr = getString(R.string.str_txt_split) + updateInfo.getSplit();
-			String currentTimeStr = getString(R.string.str_txt_currenttime) + updateInfo.getCurrentTime();
+        	String runnerStr = updateInfo.getName() + " " + getString(R.string.str_txt_updaterunner);
+        	String passStr = updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
+        	String splitStr = getString(R.string.str_txt_split) + " " + updateInfo.getSplit();
+			String currentTimeStr = getString(R.string.str_txt_currenttime) + " " + updateInfo.getCurrentTime();
         	
-        	mainTextView.setText(mainStr);
-			subTextView.setText(subStr);
-			splitTextView.setText(splitStr);
-			currentTimeTextView.setText(currentTimeStr);
+        	runnerTextView.setText(runnerStr);
+        	passTextView.setText(passStr);
+        	splitTextView.setText(splitStr);
+        	currentTimeTextView.setText(currentTimeStr);
 			
 			// New 表示
 			if( updateInfo.isRecentFlg()){

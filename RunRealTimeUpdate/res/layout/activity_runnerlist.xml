@@ -4,31 +4,31 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_passlistsection_txt_title"
+        android:id="@+id/id_runnerlist_txt_runnerlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
-        android:text="@string/str_title_passlistsection"
+        android:text="@string/str_title_runnerlist"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ListView
-        android:id="@+id/id_passlistsection_listview_sectionlist"
+    <Button
+        android:id="@+id/id_runnerlist_btn_runnerentry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_passlistsection_txt_title"
-        android:layout_below="@+id/id_passlistsection_txt_title"
-        android:layout_marginTop="10dp" >
-    </ListView>
-
-    <Button
-        android:id="@+id/id_passlistsection_btn_back"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="@string/str_btn_back" />
+        android:text="@string/str_btn_runnerentry" />
+    
+    <ListView
+        android:id="@+id/id_runnerlist_listview_runner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/id_runnerlist_txt_runnerlist"
+        android:layout_below="@+id/id_runnerlist_txt_runnerlist"
+        android:layout_marginTop="30dp" >
+    </ListView>
 
 </RelativeLayout>

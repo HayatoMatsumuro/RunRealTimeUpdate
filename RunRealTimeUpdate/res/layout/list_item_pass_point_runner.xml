@@ -1,36 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/id_pass_point_main"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/id_pass_point_relative_point"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/str_txt_passdatamain"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+       	android:background="@color/maincolor" >
+       	
+        <TextView
+        	android:id="@+id/id_pass_point_txt_point"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentTop="true"
+        	android:layout_marginLeft="5dp"
+        	android:text="@string/str_txt_point"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
 
-    <TextView
-        android:id="@+id/id_pass_point_sub"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/id_pass_point_main"/>
+    <RelativeLayout
+        android:id="@+id/id_pass_point_relative_runner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+        
+        <TextView
+        	android:id="@+id/id_pass_point_txt_dot"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentTop="true"
+        	android:text="@string/str_txt_dot"
+        	android:layout_marginLeft="5dp"
+        	android:textColor="@color/accentColor" />
+        
+        <TextView
+        	android:id="@+id/id_pass_point_txt_name"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+    	    android:layout_toRightOf="@+id/id_pass_point_txt_dot"
+        	android:layout_marginLeft="5dp"
+        	android:text="@string/str_txt_runner"/>
 
-    <TextView
-        android:id="@+id/id_pass_point_updatenew"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="22dp"
-        android:text="@string/str_txt_updatenew"
-        android:textColor="@color/red"
-        android:textStyle="italic"
-        android:visibility="invisible"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    	<TextView
+    	    android:id="@+id/id_pass_point_txt_split"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignLeft="@+id/id_pass_point_txt_name"
+    	    android:layout_below="@+id/id_pass_point_txt_name"
+        	android:layout_marginLeft="5dp"
+    	    android:text="@string/str_txt_split" />
 
-</RelativeLayout>
+    	<TextView
+       		android:id="@+id/id_pass_point_updatenew"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentRight="true"
+        	android:layout_alignParentTop="true"
+        	android:layout_marginRight="22dp"
+        	android:text="@string/str_txt_updatenew"
+        	android:textColor="@color/red"
+        	android:textStyle="italic"
+        	android:visibility="invisible"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+    
+</LinearLayout>

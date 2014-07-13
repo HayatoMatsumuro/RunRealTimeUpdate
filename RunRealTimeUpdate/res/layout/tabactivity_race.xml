@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <LinearLayout
+    	android:orientation="vertical"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent" >
+
+        <RelativeLayout
+        	android:id="@+id/id_race_relative_header"
+        	android:layout_width="match_parent"
+        	android:layout_height="50dp" >
+
+    		<Button
+    	    	android:id="@+id/id_race_btn_racelist"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+    	    	android:layout_alignParentBottom="true"
+    	    	android:layout_alignParentRight="true"
+    	    	android:text="@string/str_btn_backstart" />
+
+		</RelativeLayout>
+        <RelativeLayout
+        	android:id="@+id/id_race_relative_border"
+        	android:layout_width="match_parent"
+        	android:layout_height="5dp" >
+    	</RelativeLayout>
+    	<TextView
+    	    android:id="@+id/id_race_txt_updateexe"
+        	android:layout_width="match_parent"
+        	android:layout_height="30dp"
+        	android:gravity="center_vertical|center_horizontal"
+        	android:background="@color/subcolor"
+        	android:text="@string/str_txt_updateexe"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+        <TabWidget
+      		android:id="@android:id/tabs"
+      		android:layout_width="fill_parent"
+      		android:layout_height="wrap_content"/>
+        
+        <FrameLayout
+      		android:id="@android:id/tabcontent"
+      		android:layout_width="fill_parent"
+      		android:layout_height="fill_parent"
+     		android:padding="5dp"/>
+    </LinearLayout>
+
+
+
+</TabHost>

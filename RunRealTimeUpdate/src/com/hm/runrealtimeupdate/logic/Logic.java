@@ -401,24 +401,7 @@ public class Logic {
 		List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
 		
 		for( DataBaseRunnerInfo dbRunnerInfo: dbRunnerInfoList ){
-			RunnerInfo runnerInfo = new RunnerInfo();
-				
-			runnerInfo.setName(dbRunnerInfo.getName());
-			runnerInfo.setNumber(dbRunnerInfo.getNumber());
-			runnerInfo.setSection(dbRunnerInfo.getSection());
-				
-			List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, raceId, dbRunnerInfo.getNumber());
-				
-			for( DataBaseTimeList dbTimeList:dbTimeListList){
-				RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
-				timeList.setPoint(dbTimeList.getPoint());
-				timeList.setSplit(dbTimeList.getSplit());
-				timeList.setLap(dbTimeList.getLap());
-				timeList.setCurrentTime(dbTimeList.getCurrentTime());
-					
-				runnerInfo.getTimeList().add(timeList);
-			}
-			
+			RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo(contentResolver, dbRunnerInfo);
 			runnerInfoList.add(runnerInfo);
 		}
 		return runnerInfoList;
@@ -445,6 +428,23 @@ public class Logic {
 			return true;
 		}
 		
+	}
+	
+	/**
+	 * 大会IDとゼッケン番号から選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId
+	 * @param number
+	 * @return
+	 */
+	public static RunnerInfo getRunnerInfo( ContentResolver contentResolver, String raceId, String number){
+		
+		// 選手情報取得
+		DataBaseRunnerInfo dbRunnerInfo = DataBaseAccess.getRunnerInfoByRaceIdAndNumber( contentResolver, raceId, number);
+		
+		RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo(contentResolver, dbRunnerInfo);
+		
+		return runnerInfo;
 	}
 	
 	/**
@@ -543,6 +543,96 @@ public class Logic {
 		return sectionList;
 	}
 	
+	/**
+	 * 部門ごとの選手情報を取得する
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param noSectionName 部門未取得の場合に格納する選手リストの部門名
+	 * @return
+	 */
+	public static List<SectionRunnerInfo> getSectionRunnerInfo( ContentResolver contentResolver, String raceId, String noSectionName ){
+		
+		List<SectionRunnerInfo> sectionRunnerInfoList = new ArrayList<SectionRunnerInfo>();
+		
+		// 選手リストを取得
+        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId( contentResolver, raceId );
+        
+        boolean searchFlg;
+        
+		for( DataBaseRunnerInfo dbRunnerInfo : dbRunnerInfoList ){
+			
+			searchFlg = false;
+			
+			RunnerInfo runnerInfo = new RunnerInfo();
+			runnerInfo.setNumber(dbRunnerInfo.getNumber());
+			runnerInfo.setName(dbRunnerInfo.getName());
+			
+			for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList){
+				
+				// 部門名が一致する
+				if( sectionRunnerInfo.getSection().equals(dbRunnerInfo.getSection()) ){
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					searchFlg = true;
+					break;
+				}
+				
+				// 部門名がない場合
+				if( sectionRunnerInfo.getSection().equals(noSectionName)){
+					if( (dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals("")){
+						sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+						searchFlg = true;
+						break;
+					}
+				}
+			}
+			
+			// 部門が未登録なら新しく登録する
+			if( !searchFlg ){
+				SectionRunnerInfo sectionRunnerInfo = new SectionRunnerInfo();
+				
+				if( (dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals("")){
+					sectionRunnerInfo.setSection(noSectionName);
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					sectionRunnerInfoList.add(sectionRunnerInfo);
+				}else{
+					sectionRunnerInfo.setSection(dbRunnerInfo.getSection());
+					sectionRunnerInfo.getRunnerInfoList().add(runnerInfo);
+					sectionRunnerInfoList.add(0,sectionRunnerInfo);
+				}
+			}
+		}
+
+		return sectionRunnerInfoList;
+	}
+	
+	private static RunnerInfo getRunnerInfoByDBRunnerInfo( ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo ){
+		RunnerInfo runnerInfo = new RunnerInfo();
+		runnerInfo.setName(dbRunnerInfo.getName());
+		runnerInfo.setNumber(dbRunnerInfo.getNumber());
+		runnerInfo.setSection(dbRunnerInfo.getSection());
+		
+		List<DataBaseTimeList> dbTimelistList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, dbRunnerInfo.getRaceId(), dbRunnerInfo.getNumber());
+		
+		for( DataBaseTimeList dbTimeList:dbTimelistList){
+			RunnerInfo.TimeList timeList = new RunnerInfo().new TimeList();
+			timeList.setPoint(dbTimeList.getPoint());
+			timeList.setSplit(dbTimeList.getSplit());
+			timeList.setLap(dbTimeList.getLap());
+			timeList.setCurrentTime(dbTimeList.getCurrentTime());
+				
+			runnerInfo.getTimeList().add(timeList);
+		}
+		return runnerInfo;
+	}
+	
+	/**
+	 * 地点通過情報のリスト取得
+	 * @param contentResolver
+	 * @param raceId 大会ID
+	 * @param section　部門
+	 * @param recentTime updateFlgをつけるまでの時間
+	 * @return
+	 */
 	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section, long recentTime ){
 		
 		List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();

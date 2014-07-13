@@ -15,11 +15,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
+	
+	public static final String STR_ACTIVITY_ID = "runnerEntryActivity";
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
@@ -51,9 +54,7 @@ public class RunnerEntryActivity extends Activity {
 				String raceId = (String)v.getTag();
 				
 				// 大会詳細画面遷移
-				Intent intent = new Intent(RunnerEntryActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceId);
-				startActivity(intent);
+				(( RunnerActivityGroup )getParent()).showRunnerListActivity(raceId);
 			}
 		});
         
@@ -73,9 +74,11 @@ public class RunnerEntryActivity extends Activity {
 				RaceInfo raceInfo = (RaceInfo)v.getTag();
 				params[1] = raceInfo.getRaceId();
 				
-				// ゼッケンNo取得
+				// ゼッケンNo.取得
 				// URL入力エディットボックスから入力値取得
-				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_no);
+				// TODO: 取得後は、ゼッケン番号を消す。
+				// TODO: 取得後は、キー入力のバーを消す。
+				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
 				params[2] = noEdit.getText().toString();
 				
 				// 選手情報取得タスク起動
@@ -129,6 +132,7 @@ public class RunnerEntryActivity extends Activity {
 			RunnerEntryDialog dialog
 				= new RunnerEntryDialog(
 						RunnerEntryActivity.this,
+						getParent(),
 						getContentResolver(),
 						m_RaceInfo,
 						runnerInfo);
@@ -149,6 +153,11 @@ public class RunnerEntryActivity extends Activity {
     	private Context m_Context;
     	
     	/**
+    	 * ダイアログコンテキスト
+    	 */
+    	private Context m_DialogContext;
+    	
+    	/**
     	 * コンテントリゾルバ
     	 */
     	private ContentResolver m_ContentResolver;
@@ -166,19 +175,21 @@ public class RunnerEntryActivity extends Activity {
     	/**
     	 * コンストラクタ
     	 * @param context
+    	 * @param parentContext
     	 * @param contentResolver
     	 * @param raceInfo
     	 * @param runnerInfo
     	 */
-    	RunnerEntryDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
+    	RunnerEntryDialog( Context context, Context dialogContext, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
     		m_Context = context;
+    		m_DialogContext = dialogContext;
     		m_ContentResolver = contentResolver;
     		m_RaceInfo = raceInfo;
     		m_RunnerInfo = runnerInfo;
     	}
     	
     	public void onDialog(){
-    		AlertDialog.Builder dialog = new AlertDialog.Builder(RunnerEntryActivity.this);
+    		AlertDialog.Builder dialog = new AlertDialog.Builder(m_DialogContext);
 			dialog.setTitle(getString(R.string.str_dialog_title_runnerentry));
 			dialog.setMessage(createDialogMessage(m_RunnerInfo));
 			
@@ -191,10 +202,12 @@ public class RunnerEntryActivity extends Activity {
 						// データベース登録
 						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
 						
+						// キーボードを隠す
+						EditText numberEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+				        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 						
-						Intent intent = new Intent( m_Context, RaceDetailActivity.class);
-						intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
-						startActivity(intent);
+						(( RunnerActivityGroup )getParent()).showRunnerListActivity(m_RaceInfo.getRaceId());
 
 						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT).show();
 					}else{

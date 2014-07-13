@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,14 @@ public class MainActivity extends Activity {
         // 大会情報
         List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
         
+        // ヘッダー
+        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_main_relative_header);
+        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
+        
+        // ボーダー
+        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_main_relative_border);
+        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
+        
         // 大会情報リスト設定
         RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList);
         ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
@@ -56,8 +65,9 @@ public class MainActivity extends Activity {
 				RaceInfo raceInfo = (RaceInfo)listView.getItemAtPosition(position);
 				
 				// 画面遷移
-				Intent intent = new Intent( MainActivity.this, RaceDetailActivity.class);
-				intent.putExtra(RaceDetailActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+				Intent intent = new Intent( MainActivity.this, RaceTabActivity.class);
+				intent.putExtra(RaceTabActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+				intent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_DETAIL);
 				startActivity(intent);
 			}
 		});

@@ -178,8 +178,9 @@ public class UpdateService extends Service {
 						Notification notification = new Notification( R.drawable.ic_runner, getString(R.string.str_msg_updaterunner), System.currentTimeMillis());
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						
-						Intent notifiIntent = new Intent(UpdateService.this, UpdateListActivity.class);
-						notifiIntent.putExtra(UpdateListActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
+						Intent notifiIntent = new Intent(UpdateService.this, RaceTabActivity.class);
+						notifiIntent.putExtra(RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
+						notifiIntent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_UPDATE);
 						
 						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 						
