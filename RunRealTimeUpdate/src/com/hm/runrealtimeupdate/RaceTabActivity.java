@@ -17,6 +17,13 @@ public class RaceTabActivity extends TabActivity {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
+	public static final String STR_INTENT_CURRENTTAB = "currenttab";
+	
+	public static final int INT_INTENT_VAL_CURRENTTAB_DETAIL = 0;
+	public static final int INT_INTENT_VAL_CURRENTTAB_RUNNER = 1;
+	public static final int INT_INTENT_VAL_CURRENTTAB_UPDATE = 2;
+	public static final int INT_INTENT_VAL_CURRENTTAB_PASS = 3;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -33,6 +40,9 @@ public class RaceTabActivity extends TabActivity {
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
+        
+        // カレントタブ取得
+        int currentTab = intent.getIntExtra(STR_INTENT_CURRENTTAB, 0);
         
 		// ヘッダー
         RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_race_relative_header);
@@ -91,7 +101,7 @@ public class RaceTabActivity extends TabActivity {
 		spec = tabHost.newTabSpec( getString( R.string.str_tab_race_pass)).setIndicator(getString(R.string.str_tab_race_pass)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
-		tabHost.setCurrentTab(0);
+		tabHost.setCurrentTab( currentTab );
 	}
 	
 	/**

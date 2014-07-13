@@ -54,6 +54,8 @@ public class RunnerListActivity extends Activity {
         // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
         
+        // TODO: 戻るで戻ったら、キー入力ダイアログを閉じる必要がある
+        
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
         runnerInfoListView.setOnItemLongClickListener(new OnItemLongClickListener() {

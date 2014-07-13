@@ -67,6 +67,7 @@ public class MainActivity extends Activity {
 				// 画面遷移
 				Intent intent = new Intent( MainActivity.this, RaceTabActivity.class);
 				intent.putExtra(RaceTabActivity.STR_INTENT_RACEID, raceInfo.getRaceId());
+				intent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_DETAIL);
 				startActivity(intent);
 			}
 		});
