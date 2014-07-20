@@ -33,7 +33,6 @@
         	android:layout_width="match_parent"
         	android:layout_height="30dp"
         	android:gravity="center_vertical|center_horizontal"
-        	android:background="@color/subcolor"
         	android:text="@string/str_txt_updateexe"
         	android:textAppearance="?android:attr/textAppearanceMedium" />
         <TabWidget

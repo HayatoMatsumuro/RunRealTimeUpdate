@@ -31,8 +31,9 @@ public class RaceEntryActivity extends Activity {
         headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
         
         // ボーダー
-        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_border);
-        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
+        // TODO:
+        //RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_border);
+        //borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
         
         // 戻るボタン
         Button backBtn = (Button)findViewById(R.id.id_raceentry_btn_back);

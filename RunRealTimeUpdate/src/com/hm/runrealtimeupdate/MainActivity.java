@@ -22,7 +22,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,17 +40,9 @@ public class MainActivity extends Activity {
         // 大会情報
         List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
         
-        // ヘッダー
-        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_main_relative_header);
-        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
-        
-        // ボーダー
-        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_main_relative_border);
-        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
-        
         // 大会情報リスト設定
         RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList);
-        ListView raceInfoListView = (ListView)findViewById(R.id.id_main_listview_race);
+        ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
         raceInfoListView.setAdapter(adapter);
         
         // リストのアイテム短押し
@@ -92,7 +83,7 @@ public class MainActivity extends Activity {
 							getContentResolver(),
 							raceInfo,
 							adapter,
-							(Button)findViewById(R.id.id_main_btn_entry));
+							(Button)findViewById(R.id.id_activity_main_header_entry_button));
 				raceDeleteDialog.onDialog();
 				
 				return true;
@@ -100,7 +91,7 @@ public class MainActivity extends Activity {
 		});
         
         // 大会登録ボタン
-        Button entryBtn = (Button)findViewById(R.id.id_main_btn_entry);
+        Button entryBtn = (Button)findViewById(R.id.id_activity_main_header_entry_button);
         entryBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -200,6 +191,7 @@ public class MainActivity extends Activity {
 							m_EntryButton.setEnabled(true);
 						}
 						
+						// TODO: リスト数が0ならば、メッセージを表示する
 						Toast.makeText(m_Context, "削除しました", Toast.LENGTH_SHORT).show();
 					}else{
 						Toast.makeText(m_Context, "速報中のため、削除できません。", Toast.LENGTH_SHORT).show();
@@ -257,22 +249,19 @@ public class MainActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_raceinfo, parent, false);
 			}
 			
-			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racename);
-			TextView raceDateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racedate);
-			TextView raceLocationTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_racelocation);
-			TextView raceUpdateTextView = (TextView)convertView.findViewById(R.id.id_raceinfo_txt_update);
+			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_detail_racename_textview);
+			TextView raceUpdateTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_update_textview);
 			
 			RaceInfo raceInfo = getItem(position);
 			
 			raceNameTextView.setText(raceInfo.getRaceName());
-			raceDateTextView.setText(raceInfo.getRaceDate());
-			raceLocationTextView.setText(raceInfo.getRaceLocation());
 			
 			// 速報中の大会ならば、速報中と表示
 			if(raceInfo.isRaceUpdate()){
 				raceUpdateTextView.setText(getString(R.string.str_txt_updateexe));
+				raceUpdateTextView.setVisibility(View.VISIBLE);
 			}else{
-				raceUpdateTextView.setText("");
+				raceUpdateTextView.setVisibility(View.GONE);
 			}
 			
 			return convertView;

@@ -3,5 +3,26 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    
+    <dimen name="com_border_height">5dp</dimen>
+    
+    <dimen name="com_title_padding">10dp</dimen>
+    <dimen name="com_message_padding">20dp</dimen>
+    <dimen name="com_contents_padding">5dp</dimen>
 
+    <dimen name="dim_com_header_layout_height">40dp</dimen>
+    <dimen name="dim_com_header_layout_padding">5dp</dimen>
+    <dimen name="dim_com_header_button_padding">5dp</dimen>
+    
+    <dimen name="dim_com_border_layout_padding">5dp</dimen>
+    
+    <dimen name="dim_com_body_layout_padding">10dp</dimen>
+    <dimen name="dim_com_body_listview_paddaing">10dp</dimen>
+    <dimen name="dim_com_body_textview_message_padding">10dp</dimen>
+    
+    <dimen name="dim_com_list_item_layout_padding">10dp</dimen>
+    
+    <dimen name="dim_list_item_raceinfo_detail_layout_padding">5dp</dimen>
+    <dimen name="dim_list_item_raceinfo_detail_racename_textview_marginleft">5dp</dimen>
+    <dimen name="dim_list_item_raceinfo_update_textview_padding">5dp</dimen>
 </resources>

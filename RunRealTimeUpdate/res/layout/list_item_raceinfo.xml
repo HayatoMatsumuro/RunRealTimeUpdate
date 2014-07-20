@@ -1,72 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_list_item_raceinfo_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <TextView
-        android:id="@+id/id_raceinfo_txt_dot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/id_raceinfo_txt_racename"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:text="@string/str_txt_dot"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/accentColor" />
-
-    <TextView
-        android:id="@+id/id_raceinfo_txt_racename"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_toRightOf="@+id/id_raceinfo_txt_dot"
-        android:text="@string/str_txt_racename"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/id_raceinfo_txt_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_raceinfo_txt_racename"
-        android:layout_below="@+id/id_raceinfo_txt_racename"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/str_txt_racedate" />
-
-    <TextView
-        android:id="@+id/id_raceinfo_txt_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_raceinfo_txt_racedate"
-        android:layout_below="@+id/id_raceinfo_txt_racedate"
-        android:layout_marginTop="5dp"
-        android:text="@string/str_txt_racelocation" />
-
-    <TextView
-        android:id="@+id/id_raceinfo_txt_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/id_raceinfo_txt_racelocation"
-        android:layout_marginLeft="30dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/dim_com_list_item_layout_padding" >
+    	
     <RelativeLayout
-        android:id="@+id/id_raceinfo_border"
-        android:layout_width="match_parent"
-        android:layout_height="5dp" >
+        android:id="@+id/id_list_item_raceinfo_detail_layout"
+		android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:padding="@dimen/dim_list_item_raceinfo_detail_layout_padding">
+    
+    	<TextView
+        	android:id="@+id/id_list_item_raceinfo_detail_dot_textview"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignBaseline="@+id/id_list_item_raceinfo_detail_racename_textview"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentTop="true"
+        	android:text="@string/str_txt_dot"
+        	android:textColor="@color/color_com_list_item_dot_textview_text" />
+
+    	<TextView
+     		android:id="@+id/id_list_item_raceinfo_detail_racename_textview"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+   			android:layout_alignParentTop="true"
+        	android:layout_marginLeft="@dimen/dim_list_item_raceinfo_detail_racename_textview_marginleft"
+        	android:layout_toRightOf="@+id/id_list_item_raceinfo_detail_dot_textview"
+        	android:text="@string/str_txt_racename" />
+
     </RelativeLayout>
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+	<TextView
+        android:id="@+id/id_list_item_raceinfo_update_textview"
+       	android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/id_raceinfo_txt_racedate"
-        android:contentDescription="@string/str_txt_arrow"
-        android:src="@drawable/ic_arrow" />
+    	android:padding="@dimen/dim_list_item_raceinfo_update_textview_padding"
+        android:text="@string/str_txt_updateexe"
+        android:textColor="@color/color_list_item_raceinfo_update_textview_text"
+       	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</RelativeLayout>
+</LinearLayout>

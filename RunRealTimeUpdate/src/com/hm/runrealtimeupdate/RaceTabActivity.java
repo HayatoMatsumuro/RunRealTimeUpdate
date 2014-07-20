@@ -58,8 +58,10 @@ public class RaceTabActivity extends TabActivity {
         setVisibilityUpdateExe( visibility );
         
         // ボーダー
-        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
-        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
+        // TODO:
+        //RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
+        
+        //borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
         
         // 大会一覧ボタン
         Button raceListButton = (Button)findViewById(R.id.id_race_btn_racelist);
