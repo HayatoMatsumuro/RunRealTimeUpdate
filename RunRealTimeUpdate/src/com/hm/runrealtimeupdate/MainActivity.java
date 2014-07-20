@@ -109,6 +109,17 @@ public class MainActivity extends Activity {
         }else{
         	entryBtn.setEnabled(true);
         }
+        
+        
+        // 表示選択
+        TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_norace_textview);
+        if( raceInfoList.size() == 0 ){
+        	raceInfoListView.setVisibility(View.GONE);
+        	noRaceTextView.setVisibility(View.VISIBLE);
+        }else{
+        	raceInfoListView.setVisibility(View.VISIBLE);
+        	noRaceTextView.setVisibility(View.GONE);
+        }
     }
 
     /**
