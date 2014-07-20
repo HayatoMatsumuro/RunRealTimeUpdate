@@ -35,14 +35,6 @@
             android:text="@string/str_btn_entry" />
     </RelativeLayout>
     
-    <!-- ボーダー -->
-    <RelativeLayout
-        android:id="@+id/id_activity_main_border_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dim_com_border_layout_padding"
-        android:background="@color/color_com_border_layout_back" >
-    </RelativeLayout>
-    
     <!-- コンテンツ -->
 	<LinearLayout
 	    android:id="@+id/id_activity_main_body_layout"
@@ -63,7 +55,7 @@
             android:id="@+id/id_activity_main_body_norace_textview"
             android:layout_width="match_parent"
            	android:layout_height="wrap_content"
-	    	android:padding="@dimen/dim_com_body_textview_message_padding"
+	    	android:padding="@dimen/dim_com_body_message_textview_paddaing"
             android:text="@string/str_msg_mainnorace"
 	    	android:background="@color/color_com_body_message_textview_back"
 	    	android:visibility="gone" />

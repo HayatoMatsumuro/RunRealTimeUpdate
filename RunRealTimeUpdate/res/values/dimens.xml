@@ -18,7 +18,18 @@
     
     <dimen name="dim_com_body_layout_padding">10dp</dimen>
     <dimen name="dim_com_body_listview_paddaing">10dp</dimen>
-    <dimen name="dim_com_body_textview_message_padding">10dp</dimen>
+    <dimen name="dim_com_body_message_textview_paddaing">10dp</dimen>
+    <dimen name="dim_com_body_button_padding">5dp</dimen>
+    
+    <dimen name="dim_activity_raceentry_body_urlform_layout_padding">15dp</dimen>
+    
+    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_height">40dp</dimen>
+    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_width">200dp</dimen>
+    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_margintop">15dp</dimen>
+    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_marginleft">10dp</dimen>
+    
+    <dimen name="dim_activity_raceentry_body_urlform_decide_button_marginleft">5dp</dimen>
+    <dimen name="id_activity_raceentry_body_urlform_decide_button_height">40dp</dimen>
     
     <dimen name="dim_com_list_item_layout_padding">10dp</dimen>
     

@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
@@ -26,17 +25,8 @@ public class RaceEntryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raceentry);
 
-        // ヘッダー
-        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_header);
-        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
-        
-        // ボーダー
-        // TODO:
-        //RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_border);
-        //borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
-        
         // 戻るボタン
-        Button backBtn = (Button)findViewById(R.id.id_raceentry_btn_back);
+        Button backBtn = (Button)findViewById(R.id.id_activity_raceentry_header_back_button);
         backBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -48,7 +38,7 @@ public class RaceEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideBtn = (Button)findViewById(R.id.id_raceentry_btn_decide);
+        Button decideBtn = (Button)findViewById(R.id.id_activity_raceentry_body_urlform_decide_button);
         decideBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -59,7 +49,7 @@ public class RaceEntryActivity extends Activity {
 				params[0] = getString(R.string.str_txt_defaulturl);
 				
 				// URL入力エディットボックスから入力値取得
-				EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
+				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_urlform_inputurl_edittext);
 				params[1] = formatRaceId(urlEdit.getText().toString());
 				
 				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
