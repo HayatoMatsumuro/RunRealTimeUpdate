@@ -7,8 +7,6 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,7 +39,7 @@ public class MainActivity extends Activity {
         List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
         
         // 大会情報リスト設定
-        RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList);
+        RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
         ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
         raceInfoListView.setAdapter(adapter);
         
@@ -73,18 +71,15 @@ public class MainActivity extends Activity {
 				ListView listView = (ListView)parent;
 				RaceInfo raceInfo = (RaceInfo)listView.getItemAtPosition(position);
 				
-				// アダプタを取得する
-				RaceListAdapter adapter = ( RaceListAdapter )listView.getAdapter();
-				
 				// 削除ダイアログ表示
-				RaceDeleteDialog raceDeleteDialog
-					= new RaceDeleteDialog(
-							MainActivity.this,
-							getContentResolver(),
-							raceInfo,
-							adapter,
-							(Button)findViewById(R.id.id_activity_main_header_entry_button));
-				raceDeleteDialog.onDialog();
+				InfoDialog<RaceInfo> raceDeleteInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceDeleteButtonCallbackImpl() );
+				raceDeleteInfoDialog.onDialog(
+						MainActivity.this,
+						getString(R.string.str_dialog_title_deleterace),
+						createDialogMessage( raceInfo ),
+						getString(R.string.str_dialog_msg_DEL),
+						getString(R.string.str_dialog_msg_NG)
+				);
 				
 				return true;
 			}
@@ -97,23 +92,36 @@ public class MainActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				// 大会登録画面遷移
-				Intent intent = new Intent(MainActivity.this, RaceEntryActivity.class);
+				Intent intent = new Intent( MainActivity.this, RaceEntryActivity.class );
 				startActivity(intent);
 			}
 		});
         
-        // 大会登録ボタンの表示状態設定
-        int raceInfoNum = raceInfoListView.getAdapter().getCount();
-        if( raceInfoNum >= INT_RACEINFO_NUM_MAX ){
+        // 表示状態設定
+        setViewUI();
+    }
+    
+    /**
+     * ユーザーインターフェースの表示設定
+     */
+    private void setViewUI(){
+    	
+    	ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
+    	
+    	// 登録している大会の個数取得
+    	int raceInfoNum = raceInfoListView.getAdapter().getCount();
+    	
+    	// ボタンの有効無効設定
+    	Button entryBtn = (Button)findViewById(R.id.id_activity_main_header_entry_button);
+    	if( raceInfoNum >= INT_RACEINFO_NUM_MAX ){
         	entryBtn.setEnabled(false);
         }else{
         	entryBtn.setEnabled(true);
         }
-        
-        
-        // 表示選択
-        TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_norace_textview);
-        if( raceInfoList.size() == 0 ){
+    	
+    	// 大会リストまたは大会未登録メッセージの設定
+    	TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_norace_textview);
+        if( raceInfoNum == 0 ){
         	raceInfoListView.setVisibility(View.GONE);
         	noRaceTextView.setVisibility(View.VISIBLE);
         }else{
@@ -121,121 +129,60 @@ public class MainActivity extends Activity {
         	noRaceTextView.setVisibility(View.GONE);
         }
     }
-
+    
     /**
-     *　大会削除ダイアログ
-     * @author Hayato Matsumuro
-     *
-     */
-    private class RaceDeleteDialog {
-    	
-    	/**
-    	 * コンテキスト
-    	 */
-    	private Context m_Context;
-    	
-    	/**
-    	 * コンテントリゾルバ
-    	 */
-    	private ContentResolver m_ContentResolver;
-    	
-    	/**
-    	 * 大会情報
-    	 */
-    	private RaceInfo m_RaceInfo;
-    	
-    	/**
-    	 * 大会情報アダプタ
-    	 */
-    	private RaceListAdapter m_Adapter;
-    	
-    	/**
-    	 * 大会登録のボタンID
-    	 */
-    	private Button m_EntryButton;
-    	
-    	/**
-    	 * コンストラクタ
-    	 * @param context コンテキスト
-    	 * @param contentResolver コンテントリゾルバ
-    	 * @param raceInfo 大会情報
-    	 * @param adapter 大会リストアダプタ
-    	 * @param button 大会登録ボタン
-    	 */
-    	RaceDeleteDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo, RaceListAdapter adapter, Button button ){
-    		
-    		// 初期化
-    		m_Context = context;
-    		m_ContentResolver = contentResolver;
-    		m_RaceInfo = raceInfo;
-    		m_Adapter = adapter;
-    		m_EntryButton = button;
-    	}
-    	
-    	public void onDialog(){
-    		
-    		AlertDialog.Builder dialog = new AlertDialog.Builder(m_Context);
-    		dialog.setTitle(getString(R.string.str_dialog_title_deleterace));
-    		dialog.setMessage(createDialogMessage(m_RaceInfo));
-    		
-    		// 削除するボタン
-    		dialog.setPositiveButton(getString(R.string.str_dialog_msg_DEL), new DialogInterface.OnClickListener() {
+	 * ダイアログメッセージ作成
+	 * @param raceInfo 大会情報
+	 * @return
+	 */
+	private String createDialogMessage( RaceInfo raceInfo ){
+    	StringBuilder builder = new StringBuilder();
+    	builder.append(getString(R.string.str_dialog_msg_name));
+		builder.append("\n");
+		builder.append(raceInfo.getRaceName());
+		builder.append("\n");
+		
+		return builder.toString();
+    }
+    
+	/**
+	 * 削除ダイアログのボタン押しコールバック
+	 * @author Hayato Matsumuro
+	 *
+	 */
+    private class RaceDeleteButtonCallbackImpl implements InfoDialog.ButtonCallback<RaceInfo>{
 
-				@Override
-				public void onClick(DialogInterface arg0, int arg1) {
-					
-					// 速報中でないなら削除する
-					if( !m_RaceInfo.isRaceUpdate()){
-						
-						// 大会削除
-						Logic.deleteRaceInfo(m_ContentResolver, m_RaceInfo.getRaceId());
-						
-						// リストから大会削除
-						if( m_Adapter != null ){
+		@Override
+		public void onClickPositiveButton(DialogInterface dialog, int which, RaceInfo info) {
+			// ポジティブボタン押し
+			// 速報中でないなら削除する
+			if( !info.isRaceUpdate()){
+				
+				// 大会削除
+				Logic.deleteRaceInfo( getContentResolver(), info.getRaceId());
+				
+				// リストから大会削除
+				ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
+				RaceListAdapter adapter = ( RaceListAdapter )raceInfoListView.getAdapter();
+				adapter.remove( info );
+				adapter.notifyDataSetChanged();
+				
+				// 表示状態設定
+		        setViewUI();
+				
+				Toast.makeText( MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+			
+			}else{
+				
+				Toast.makeText( MainActivity.this, "速報中のため、削除できません。", Toast.LENGTH_SHORT).show();
+			}
+			
+		}
 
-							m_Adapter.remove(m_RaceInfo);
-							m_Adapter.notifyDataSetChanged();
-						}
-						
-						// ボタンを表示にする
-						if( m_EntryButton != null ){
-							m_EntryButton.setEnabled(true);
-						}
-						
-						// TODO: リスト数が0ならば、メッセージを表示する
-						Toast.makeText(m_Context, "削除しました", Toast.LENGTH_SHORT).show();
-					}else{
-						Toast.makeText(m_Context, "速報中のため、削除できません。", Toast.LENGTH_SHORT).show();
-					}
-				}
-    		});
-    		
-    		//　やめるボタン
-    		dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener() {
-    			
-    			@Override
-    			public void onClick(DialogInterface dialog, int which) {
-    				// なにもしない
-    			}
-    		});
-    		
-    		dialog.show();
-    	}
+		@Override
+		public void onClickNegativeButton(DialogInterface dialog, int which, RaceInfo info) {
+		}
     	
-    	/**
-    	 * ダイアログメッセージ作成
-    	 * @param raceInfo 大会情報
-    	 * @return
-    	 */
-    	private String createDialogMessage( RaceInfo raceInfo ){
-        	StringBuilder builder = new StringBuilder();
-        	builder.append(getString(R.string.str_dialog_msg_name));
-    		builder.append("\n");
-    		builder.append(raceInfo.getRaceName());
-    		builder.append("\n");
-    		
-    		return builder.toString();
-        }
     }
     
     /**
