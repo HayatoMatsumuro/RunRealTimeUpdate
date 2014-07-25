@@ -5,6 +5,7 @@ import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -80,6 +81,17 @@ public class RaceEntryActivity extends Activity {
 	 */
 	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
 
+		ProgressDialog m_ProgressDialog = null;
+		
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			m_ProgressDialog = new ProgressDialog(RaceEntryActivity.this);
+			m_ProgressDialog.setTitle(getResources().getString(R.string.str_dialog_title_progress_raceinfo));
+			m_ProgressDialog.setMessage(getResources().getString(R.string.str_dialog_msg_get));
+			m_ProgressDialog.show();
+		}
 		/**
 		 * 
 		 * @param String params[0] アップデートサイトURL、param[1] 大会ID
@@ -100,6 +112,9 @@ public class RaceEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute( RaceInfo raceInfo)
 		{
+			//TODO: キャンセルをできるようにしたほうがよい
+			m_ProgressDialog.dismiss();
+			
 			if( raceInfo == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
