@@ -49,7 +49,7 @@ public class InfoDialog<T> {
 		});
 		
 		// ネガティブボタン
-		dialog.setNegativeButton( positive, new DialogInterface.OnClickListener() {
+		dialog.setNegativeButton( negative, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

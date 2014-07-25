@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
     }
     
 	/**
-	 * 削除ダイアログのボタン押しコールバック
+	 * 大会削除ダイアログのボタン押しコールバック
 	 * @author Hayato Matsumuro
 	 *
 	 */
