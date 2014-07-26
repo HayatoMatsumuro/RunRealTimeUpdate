@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -44,10 +43,6 @@ public class RaceTabActivity extends TabActivity {
         // カレントタブ取得
         int currentTab = intent.getIntExtra(STR_INTENT_CURRENTTAB, 0);
         
-		// ヘッダー
-        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_race_relative_header);
-        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
-        
         // 速報中テキスト
         int visibility = View.INVISIBLE;
         if( raceInfo.isRaceUpdate() ){
@@ -57,14 +52,8 @@ public class RaceTabActivity extends TabActivity {
         }
         setVisibilityUpdateExe( visibility );
         
-        // ボーダー
-        // TODO:
-        //RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
-        
-        //borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
-        
         // 大会一覧ボタン
-        Button raceListButton = (Button)findViewById(R.id.id_race_btn_racelist);
+        Button raceListButton = (Button)findViewById(R.id.id_tabactivity_race_header_racelist_button);
         raceListButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -111,7 +100,7 @@ public class RaceTabActivity extends TabActivity {
 	 * @param visibility
 	 */
 	public void setVisibilityUpdateExe( int visibility ){
-		TextView updateExeTextView = ( TextView )findViewById(R.id.id_race_txt_updateexe);
+		TextView updateExeTextView = ( TextView )findViewById(R.id.id_tabactivity_race_updateexe_textview);
 		updateExeTextView.setVisibility( visibility );
 		return;
 	}

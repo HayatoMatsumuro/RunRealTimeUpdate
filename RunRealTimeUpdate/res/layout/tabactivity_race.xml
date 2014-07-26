@@ -5,46 +5,52 @@
     android:layout_height="match_parent" >
     
     <LinearLayout
+        android:id="@+id/id_tabactivity_race_layout"
     	android:orientation="vertical"
     	android:layout_width="fill_parent"
     	android:layout_height="fill_parent" >
 
+        <!-- ヘッダー -->
         <RelativeLayout
-        	android:id="@+id/id_race_relative_header"
+        	android:id="@+id/id_tabactivity_race_header_relative"
         	android:layout_width="match_parent"
-        	android:layout_height="50dp" >
+        	android:layout_height="@dimen/dim_com_header_layout_height"
+        	android:padding="@dimen/dim_com_header_layout_padding"
+        	android:background="@color/color_com_header_layout_back" >
 
     		<Button
-    	    	android:id="@+id/id_race_btn_racelist"
-    	    	android:layout_width="wrap_content"
-    	    	android:layout_height="wrap_content"
-    	    	android:layout_alignParentBottom="true"
-    	    	android:layout_alignParentRight="true"
+    	    	android:id="@+id/id_tabactivity_race_header_racelist_button"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:layout_alignParentLeft="true"
+            	android:layout_centerVertical="true"
+            	android:padding="@dimen/dim_com_header_button_padding"
+            	android:background="@color/color_com_header_button_back"
+            	android:textColor="@color/color_com_header_button_text"
     	    	android:text="@string/str_btn_backstart" />
 
 		</RelativeLayout>
-        <RelativeLayout
-        	android:id="@+id/id_race_relative_border"
-        	android:layout_width="match_parent"
-        	android:layout_height="5dp" >
-    	</RelativeLayout>
+		
+		<!-- 速報中バー -->
     	<TextView
-    	    android:id="@+id/id_race_txt_updateexe"
+    	    android:id="@+id/id_tabactivity_race_updateexe_textview"
         	android:layout_width="match_parent"
-        	android:layout_height="30dp"
+        	android:layout_height="@dimen/dim_tabactivity_race_updateexe_textview_height"
         	android:gravity="center_vertical|center_horizontal"
         	android:text="@string/str_txt_updateexe"
+        	android:background="@color/color_tabactivity_race_updateexe_textview_back"
         	android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+    	<!-- タブ本体 -->
         <TabWidget
       		android:id="@android:id/tabs"
       		android:layout_width="fill_parent"
       		android:layout_height="wrap_content"/>
         
-        <FrameLayout
-      		android:id="@android:id/tabcontent"
-      		android:layout_width="fill_parent"
-      		android:layout_height="fill_parent"
-     		android:padding="5dp"/>
+        	<FrameLayout
+      			android:id="@android:id/tabcontent"
+      			android:layout_width="fill_parent"
+      			android:layout_height="fill_parent"/>
     </LinearLayout>
 
 

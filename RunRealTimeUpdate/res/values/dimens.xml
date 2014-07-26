@@ -29,7 +29,9 @@
     <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_marginleft">10dp</dimen>
     
     <dimen name="dim_activity_raceentry_body_urlform_decide_button_marginleft">5dp</dimen>
-    <dimen name="id_activity_raceentry_body_urlform_decide_button_height">40dp</dimen>
+    <dimen name="dim_activity_raceentry_body_urlform_decide_button_height">40dp</dimen>
+    
+    <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
     
     <dimen name="dim_com_list_item_layout_padding">10dp</dimen>
     

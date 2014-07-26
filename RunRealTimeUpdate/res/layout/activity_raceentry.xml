@@ -81,7 +81,7 @@
 	        <Button
 	            android:id="@+id/id_activity_raceentry_body_urlform_decide_button"
 	            android:layout_width="wrap_content"
-	            android:layout_height="@dimen/id_activity_raceentry_body_urlform_decide_button_height"
+	            android:layout_height="@dimen/dim_activity_raceentry_body_urlform_decide_button_height"
 	            android:layout_toRightOf="@+id/id_activity_raceentry_body_urlform_inputurl_edittext"
 	            android:layout_alignTop="@+id/id_activity_raceentry_body_urlform_inputurl_edittext"
 	            android:layout_marginLeft="@dimen/dim_activity_raceentry_body_urlform_decide_button_marginleft"
