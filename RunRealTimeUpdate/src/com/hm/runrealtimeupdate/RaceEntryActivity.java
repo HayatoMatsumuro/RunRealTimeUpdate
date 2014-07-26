@@ -83,13 +83,25 @@ public class RaceEntryActivity extends Activity {
 
 		ProgressDialog m_ProgressDialog = null;
 		
-		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
+			
+			// 進捗ダイアログ作成
 			m_ProgressDialog = new ProgressDialog(RaceEntryActivity.this);
 			m_ProgressDialog.setTitle(getResources().getString(R.string.str_dialog_title_progress_raceinfo));
 			m_ProgressDialog.setMessage(getResources().getString(R.string.str_dialog_msg_get));
+			m_ProgressDialog.setCancelable(true);
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.str_dialog_msg_cancel), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+					
+				}
+				
+			});
+			
 			m_ProgressDialog.show();
 		}
 		/**
@@ -112,8 +124,10 @@ public class RaceEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute( RaceInfo raceInfo)
 		{
-			//TODO: キャンセルをできるようにしたほうがよい
-			m_ProgressDialog.dismiss();
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
 			
 			if( raceInfo == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
@@ -128,7 +142,17 @@ public class RaceEntryActivity extends Activity {
 						getString(R.string.str_dialog_msg_OK),
 						getString(R.string.str_dialog_msg_NG));
 			}
+		}
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
 			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			Toast.makeText(RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
