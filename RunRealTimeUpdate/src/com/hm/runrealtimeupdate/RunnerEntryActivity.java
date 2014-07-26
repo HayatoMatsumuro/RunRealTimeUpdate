@@ -81,6 +81,10 @@ public class RunnerEntryActivity extends Activity {
 				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
 				params[2] = noEdit.getText().toString();
 				
+				if( params[2] == null || params[2].equals("")){
+					Toast.makeText(RunnerEntryActivity.this, "ゼッケン番号を入力してください。", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				// 選手情報取得タスク起動
 				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
 				task.execute(params);
