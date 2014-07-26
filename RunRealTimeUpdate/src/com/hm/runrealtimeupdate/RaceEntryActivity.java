@@ -48,7 +48,16 @@ public class RaceEntryActivity extends Activity {
 				
 				// URL入力エディットボックスから入力値取得
 				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_urlform_inputurl_edittext);
-				params[1] = formatRaceId(urlEdit.getText().toString());
+				
+				// 何も入力してないならば、以降の処理をしない
+				String inputRaceId = urlEdit.getText().toString();
+				if( inputRaceId == null || inputRaceId.equals("")){
+					Toast.makeText(RaceEntryActivity.this, "urlを入力してください。", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				
+				params[1] = formatRaceId( inputRaceId );
+				
 				
 				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
 				task.execute(params);
