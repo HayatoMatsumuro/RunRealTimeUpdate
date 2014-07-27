@@ -34,19 +34,20 @@ public class RaceDetailActivity extends Activity {
         }
 
         // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_racedetail_txt_racename);
+        TextView raceNameTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racename);
         raceNameTextView.setText(raceInfo.getRaceName());
         
         // 大会日
-        TextView raceDateTextView = (TextView)findViewById(R.id.id_racedetail_txt_racedate);
+        // TODO: レイアウトを変更したいRelativelayout の中にtext、image を入れて、topmarginを使用しない
+        TextView raceDateTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racedate_textview);
         raceDateTextView.setText(raceInfo.getRaceDate());
         
         // 開催地
-        TextView raceLocationTextView = (TextView)findViewById(R.id.id_racedetail_txt_racelocation);
+        TextView raceLocationTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racelocation_textview);
         raceLocationTextView.setText(raceInfo.getRaceLocation());
         
         // 速報ボタン
-        Button updateButton = (Button)findViewById(R.id.id_racedetail_btn_updatestartstop);
+        Button updateButton = (Button)findViewById(R.id.id_activity_racedetail_detailbox_update_button);
         
         // 速報止ボタンの表示設定
         RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver());

@@ -1,63 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?><RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/id_activity_racedetail_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="@dimen/dim_com_body_layout_padding"
+    android:background="@color/color_com_body_layout_back" >
 
-    <TextView
-        android:id="@+id/id_racedetail_txt_racename"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/id_activity_racedetail_detailbox_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/str_txt_racename"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
- 
-    <ImageView
-        android:id="@+id/id_racedetail_img_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_racename"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/str_txt_racedate"
-        android:src="@android:drawable/ic_menu_my_calendar" />
+        android:background="@color/color_activity_racedetail_detailbox_layout_back"
+        android:padding="@dimen/dim_activity_racedetail_detailbox_layout_padding" >
+
+        <TextView
+            android:id="@+id/id_activity_racedetail_detailbox_racename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/str_txt_racename"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+      
+        <ImageView
+            android:id="@+id/id_activity_racedetail_detailbox_racedate_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/id_activity_racedetail_detailbox_racename"
+            android:layout_below="@+id/id_activity_racedetail_detailbox_racename"
+            android:contentDescription="@string/str_txt_racedate"
+            android:src="@android:drawable/ic_menu_my_calendar" />
+
+        <TextView
+            android:id="@+id/id_activity_racedetail_detailbox_racedate_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/id_activity_racedetail_detailbox_racedate_imageview"
+            android:layout_marginTop="@dimen/dim_activity_recedetail_detailbox_racedate_textview_margintop"
+            android:layout_toRightOf="@+id/id_activity_racedetail_detailbox_racedate_imageview"
+            android:text="@string/str_txt_racedate" />
+
+        <ImageView
+            android:id="@+id/id_activity_racedetail_detailbox_racelocation_imageview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/id_activity_racedetail_detailbox_racename"
+            android:layout_below="@+id/id_activity_racedetail_detailbox_racedate_imageview"
+            android:contentDescription="@string/str_txt_racelocation"
+            android:src="@android:drawable/ic_menu_mylocation" />
+
+        <TextView
+            android:id="@+id/id_activity_racedetail_detailbox_racelocation_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/id_activity_racedetail_detailbox_racelocation_imageview"
+            android:layout_marginTop="@dimen/dim_activity_recedetail_detailbox_racelocation_textview_margintop"
+            android:layout_toRightOf="@+id/id_activity_racedetail_detailbox_racelocation_imageview"
+            android:text="@string/str_txt_racelocation" />
+
+        <Button
+            android:id="@+id/id_activity_racedetail_detailbox_update_button"
+            android:layout_width="@dimen/dim_activity_racedetail_detailbox_update_button_width"
+            android:layout_height="@dimen/dim_activity_racedetail_detailbox_update_button_height"
+            android:layout_below="@+id/id_activity_racedetail_detailbox_racelocation_imageview"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dim_activity_racedetail_detailbox_update_button_margintop"
+            android:background="@color/color_activity_racedetail_detailbox_update_button_back"
+            android:text="@string/str_btn_updatestart" />
+    </RelativeLayout>
     
-    <TextView
-        android:id="@+id/id_racedetail_txt_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/id_racedetail_img_racedate"
-        android:layout_alignTop="@+id/id_racedetail_img_racedate"
-        android:layout_marginTop="14dp"
-        android:text="@string/str_txt_racedate" />
-        
-    <ImageView
-        android:id="@+id/id_racedetail_img_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_img_racedate"
-        android:layout_below="@+id/id_racedetail_img_racedate"
-        android:contentDescription="@string/str_txt_racelocation"
-        android:src="@android:drawable/ic_menu_mylocation" />
-
-    <TextView
-        android:id="@+id/id_racedetail_txt_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/id_racedetail_img_racelocation"
-        android:layout_toRightOf="@+id/id_racedetail_img_racelocation"
-        android:layout_marginTop="14dp"
-        android:text="@string/str_txt_racelocation" />
-
-    <Button
-        android:id="@+id/id_racedetail_btn_updatestartstop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_img_racelocation"
-        android:layout_below="@+id/id_racedetail_img_racelocation"
-        android:layout_marginTop="30dp"
-        android:text="@string/str_btn_updatestart" />
-
 </RelativeLayout>
