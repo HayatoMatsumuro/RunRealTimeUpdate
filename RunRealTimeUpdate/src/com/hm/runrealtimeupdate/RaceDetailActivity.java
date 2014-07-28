@@ -38,7 +38,6 @@ public class RaceDetailActivity extends Activity {
         raceNameTextView.setText(raceInfo.getRaceName());
         
         // 大会日
-        // TODO: レイアウトを変更したいRelativelayout の中にtext、image を入れて、topmarginを使用しない
         TextView raceDateTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racedate_textview);
         raceDateTextView.setText(raceInfo.getRaceDate());
         
