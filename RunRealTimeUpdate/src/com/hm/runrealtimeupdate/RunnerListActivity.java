@@ -43,6 +43,7 @@ public class RunnerListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
+		//TODO: レイアウトが変。白の部分が多い
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_runnerlist);
 		
@@ -52,7 +53,7 @@ public class RunnerListActivity extends Activity {
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 選手リスト設定
-        ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
+        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
         
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
@@ -84,7 +85,7 @@ public class RunnerListActivity extends Activity {
 								raceInfo,
 								element,
 								adapter,
-								(Button)findViewById(R.id.id_runnerlist_btn_runnerentry));
+								(Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button));
 				dialog.onDialog();
 				
 				return true;
@@ -114,7 +115,7 @@ public class RunnerListActivity extends Activity {
 		});
         
         // 選手登録ボタン
-        Button runnerEntryButton = (Button)findViewById(R.id.id_runnerlist_btn_runnerentry);
+        Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
         runnerEntryButton.setTag(raceInfo);
         runnerEntryButton.setOnClickListener(new OnClickListener() {
 			
@@ -142,7 +143,7 @@ public class RunnerListActivity extends Activity {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		// リストビュー更新
-		ListView runnerInfoListView = (ListView)findViewById(R.id.id_runnerlist_listview_runner);
+		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
 		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
 		
 		if( adapter != null ){
@@ -154,7 +155,7 @@ public class RunnerListActivity extends Activity {
         runnerInfoListView.setAdapter(adapter);
      
         // 選手登録ボタンのフォーカス設定
-        Button runnerEntryButton = (Button)findViewById(R.id.id_runnerlist_btn_runnerentry);
+        Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
         int runnerNum = getAllSectionRunner( sectionRunnerElementList );
         
         if( runnerNum >= INT_RUNNER_NUM_MAX){
