@@ -9,8 +9,6 @@ import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -73,20 +71,18 @@ public class RunnerListActivity extends Activity {
 					return true;
 				}
 				
-				// アダプタを取得する
-				RunnerListAdapter adapter = ( RunnerListAdapter )listView.getAdapter();
-				
 				// 削除ダイアログ表示
-				RunnerDeleteDialog dialog
-						= new RunnerDeleteDialog(
-								RunnerListActivity.this,
-								getParent(),
-								getContentResolver(),
-								raceInfo,
-								element,
-								adapter,
-								(Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button));
-				dialog.onDialog();
+				RunnerDeleteInfo runnerDeleteInfo = new RunnerDeleteInfo();
+				runnerDeleteInfo.setRaceInfo(raceInfo);
+				runnerDeleteInfo.setSectionRunnerElement(element);
+				
+				InfoDialog<RunnerDeleteInfo> runnerDeleteDialog = new InfoDialog<RunnerDeleteInfo>( runnerDeleteInfo, new RunnerDeleteButtonCallbackImpl() );
+				runnerDeleteDialog.onDialog(
+						getParent(),
+						getString( R.string.str_dialog_title_deleterunner ),
+						createDialogMessage( runnerInfo ),
+						getString( R.string.str_dialog_msg_DEL ),
+						getString(R.string.str_dialog_msg_NG) );
 				
 				return true;
 			}
@@ -166,6 +162,22 @@ public class RunnerListActivity extends Activity {
 	}
 	
 	/**
+	 * ダイアログのメッセージを作成する
+	 * @param runnerInfoItem
+	 * @return
+	 */
+	private String createDialogMessage( RunnerInfo runnerInfo ){
+		StringBuilder builder = new StringBuilder();
+		builder.append(runnerInfo.getName());
+		builder.append("\n");
+		builder.append(runnerInfo.getNumber());
+		builder.append("\n");
+		builder.append(runnerInfo.getSection());
+		
+		return builder.toString();
+	}
+	
+	/**
 	 * リストビュー用の選手一覧のリストを作成する
 	 * @param raceId 大会ID
 	 * @return　リストビュー用の選手一覧
@@ -212,135 +224,74 @@ public class RunnerListActivity extends Activity {
 	}
 	
 	/**
-	 * 選手削除ダイアログ
+	 * 選手削除ダイアログのボタン押しコールバック
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	private class RunnerDeleteDialog{
+	private class RunnerDeleteButtonCallbackImpl implements InfoDialog.ButtonCallback<RunnerDeleteInfo>{
+
+		@Override
+		public void onClickPositiveButton(DialogInterface dialog, int which, RunnerDeleteInfo info) {
+			// ポジティブボタン押し
+			// 速報中でないなら削除
+			RaceInfo raceInfo = info.getRaceInfo();
+			SectionRunnerElement element = info.getSectionRunnerElement();
+			if( !raceInfo.isRaceUpdate()){
+				// 選手削除
+    			Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
+    				
+    			// 表示リストを更新する
+    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
+    			RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
+    			adapter.remove( element );
+    			adapter.notifyDataSetChanged();
+    				
+    			// 削除したら選手登録はできるので、ボタンを有効にする
+    			Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
+    			runnerEntryButton.setEnabled(true);
+    			
+    			Toast.makeText(RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
+			}else{
+				Toast.makeText(RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		@Override
+		public void onClickNegativeButton(DialogInterface dialog, int which, RunnerDeleteInfo info) {
+			// 何もしない
+		}
+		
+	}
+	
+	private class RunnerDeleteInfo{
 		
 		/**
-    	 * コンテキスト
-    	 */
-		// TODO: 暫定
-    	@SuppressWarnings("unused")
-		private Context m_Context;
-    	
-    	/**
-    	 * ダイアログのコンテキスト
-    	 */
-    	private Context m_DialogContext;
-    	
-    	/**
-    	 * コンテントリゾルバ
-    	 */
-    	private ContentResolver m_ContentResolver;
-    	
-    	/**
-    	 * 大会情報
-    	 */
-    	private RaceInfo m_RaceInfo;
-    	
-    	/**
-    	 * 選手情報
-    	 */
-    	private SectionRunnerElement m_Element;
-    	
-    	/**
-    	 * 選手情報アダプタ
-    	 */
-    	private RunnerListAdapter m_Adapter;
-    	
-    	/**
-    	 * 選手登録のボタン
-    	 */
-    	private Button m_EntryButton;
-    	
-    	/**
-    	 * コンストラクタ
-    	 * @param context コンテキスト
-    	 * @param dialogContext ダイアログのコンテキスト
-    	 * @param contentResolver コンテントリゾルバ
-    	 * @param raceInfo 大会情報
-    	 * @param runnerInfo 選手情報
-    	 * @param adapter 大会リストアダプタ
-    	 * @param button 登録ボタンのリソースID
-    	 */
-    	RunnerDeleteDialog( Context context, Context dialogContext, ContentResolver contentResolver, RaceInfo raceInfo, SectionRunnerElement element, RunnerListAdapter adapter, Button button ){
-    		
-    		// 初期化
-    		m_Context = context;
-    		m_DialogContext = dialogContext;
-    		m_ContentResolver = contentResolver;
-    		m_RaceInfo = raceInfo;
-    		m_Element = element;
-    		m_Adapter = adapter;
-    		m_EntryButton = button;
-    		
-    	}
-    	
-    	public void onDialog(){
-    		// ダイアログ表示
-    		AlertDialog.Builder dialog = new AlertDialog.Builder( m_DialogContext );
-    		dialog.setTitle( getString( R.string.str_dialog_title_deleterunner ) );
-    		dialog.setMessage( createDialogMessage( m_Element.getRunnerInfo() ) );
-    		
-    		// 削除するボタン
-    		dialog.setPositiveButton(getString(R.string.str_dialog_msg_DEL), new DialogInterface.OnClickListener() {
-    					
-    			@Override
-    			public void onClick(DialogInterface dialog, int which) {
-    				
-    				// 速報中でないなら削除
-    				if( !m_RaceInfo.isRaceUpdate()){
-    					// 選手削除
-            			Logic.deleteRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), m_Element.getRunnerInfo().getNumber() );
-            				
-            			// 表示リストを更新する
-            			if( m_Adapter != null ){
-                			m_Adapter.remove(m_Element);
-                			m_Adapter.notifyDataSetChanged();
-            			}
-            				
-            			// 削除したら選手登録はできるので、ボタンを有効にする
-            			if( m_EntryButton != null ){
-                			m_EntryButton.setEnabled(true);
-            			}
-            			
-            			Toast.makeText(RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
-    				}else{
-    					Toast.makeText(RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT).show();
-    				}
-    			}
-    		});
-    		
-    		// やめるボタン
-    		dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener() {
-    			
-    			@Override
-    			public void onClick(DialogInterface dialog, int which) {
-    				// なにもしない
-    			}
-    		});
-    		
-    		dialog.show();
-    	}
-    	
-    	/**
-    	 * ダイアログのメッセージを作成する
-    	 * @param runnerInfoItem
-    	 * @return
-    	 */
-    	private String createDialogMessage( RunnerInfo runnerInfo ){
-    		StringBuilder builder = new StringBuilder();
-    		builder.append(runnerInfo.getName());
-    		builder.append("\n");
-    		builder.append(runnerInfo.getNumber());
-    		builder.append("\n");
-    		builder.append(runnerInfo.getSection());
-    		
-    		return builder.toString();
-    	}
+		 * 大会情報
+		 */
+		private RaceInfo raceInfo;
+
+		/**
+		 * リストビューの要素
+		 */
+		private SectionRunnerElement sectionRunnerElement;
+		
+		public RaceInfo getRaceInfo() {
+			return raceInfo;
+		}
+
+		public void setRaceInfo(RaceInfo raceInfo) {
+			this.raceInfo = raceInfo;
+		}
+
+		public SectionRunnerElement getSectionRunnerElement() {
+			return sectionRunnerElement;
+		}
+
+		public void setSectionRunnerElement(SectionRunnerElement sectionRunnerElement) {
+			this.sectionRunnerElement = sectionRunnerElement;
+		}
 	}
+	
 	
 	/**
 	 * ランナーリストアダプタ
