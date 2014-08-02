@@ -46,7 +46,7 @@ public class UpdateListActivity extends Activity {
         
         // リストビュー設定
         UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
-        ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
+        ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_runner_listview);
         updateListView.setAdapter(adapter);
         
         return;
@@ -73,12 +73,11 @@ public class UpdateListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_updatedata, parent, false);
 			}
 			
-			TextView runnerTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_runner);
-			TextView passTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_pass);
-			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
-			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
-			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_updatenuew);
-			
+			TextView runnerTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_runner_textview );
+			TextView passTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_pass_textview );
+			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_split_textview );
+			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_currenttime_textview );
+			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_updatenuew_textview );			
         	UpdateInfo updateInfo = getItem(position);
 			
         	String runnerStr = updateInfo.getName() + " " + getString(R.string.str_txt_updaterunner);

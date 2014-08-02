@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_item_updatedata_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_updatedata_txt_dot"
+        android:id="@+id/id_item_updatedata_dot_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,47 +16,47 @@
         android:textColor="@color/accentColor" />
 
     <TextView
-        android:id="@+id/id_updatedata_txt_runner"
+        android:id="@+id/id_item_updatedata_runner_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/id_updatedata_txt_dot"
+        android:layout_toRightOf="@+id/id_item_updatedata_dot_textview"
         android:text="@string/str_txt_updaterunner"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/id_updatedata_txt_pass"
+        android:id="@+id/id_item_updatedata_pass_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_updatedata_txt_runner"
-        android:layout_below="@+id/id_updatedata_txt_runner"
+        android:layout_alignLeft="@+id/id_item_updatedata_runner_textview"
+        android:layout_below="@+id/id_item_updatedata_runner_textview"
         android:text="@string/str_txt_updatepass"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <TextView
-        android:id="@+id/id_updatedata_txt_split"
+        android:id="@+id/id_item_updatedata_split_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_updatedata_txt_pass"
-        android:layout_below="@+id/id_updatedata_txt_pass"
+        android:layout_alignLeft="@+id/id_item_updatedata_pass_textview"
+        android:layout_below="@+id/id_item_updatedata_pass_textview"
         android:layout_marginLeft="5dp"
         android:text="@string/str_txt_updatesplit" />
     
     <TextView
-        android:id="@+id/id_updatedata_txt_currenttime"
+        android:id="@+id/id_item_updatedata_currenttime_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_updatedata_txt_split"
-        android:layout_below="@+id/id_updatedata_txt_split"
+        android:layout_alignLeft="@+id/id_item_updatedata_split_textview"
+        android:layout_below="@+id/id_item_updatedata_split_textview"
         android:text="@string/str_txt_updatecurrenttime" />
 
     <TextView
-        android:id="@+id/id_updatedata_txt_updatenuew"
+        android:id="@+id/id_item_updatedata_updatenuew_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/id_updatedata_txt_currenttime"
+        android:layout_alignBottom="@+id/id_item_updatedata_currenttime_textview"
         android:layout_alignParentRight="true"
         android:text="@string/str_txt_updatenew"
         android:textAppearance="?android:attr/textAppearanceMedium"
