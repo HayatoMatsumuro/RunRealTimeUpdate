@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/id_activity_runnerlist_contents_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/color_activity_runnerlist_contents_layout_back"
         android:padding="@dimen/dim_activity_runnerlist_contents_layout_padding" >
         
@@ -37,11 +37,22 @@
     		    android:text="@string/str_btn_runnerentry" />
 
         </RelativeLayout>
-    	<ListView
-       		android:id="@+id/id_activity_runnerlist_contents_runnerlist_listview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_below="@+id/id_activity_runnerlist_contents_header_layout">
-    	</ListView>
+    	<LinearLayout
+    	    android:id="@+id/id_activity_runnerlist_contents_body_layout"
+	  		android:layout_width="fill_parent"
+    		android:layout_height="wrap_content"
+    		android:orientation="vertical"
+        	android:layout_below="@+id/id_activity_runnerlist_contents_header_layout"
+        	android:layout_marginTop="@dimen/dim_activity_runnerlist_contents_body_layout_topmargin">
+    	    
+    	    <ListView
+       			android:id="@+id/id_activity_runnerlist_contents_body_runnerlist_listview"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content">
+    		</ListView>
+    		
+    	</LinearLayout>
+    	
     </RelativeLayout>
+    
 </RelativeLayout>

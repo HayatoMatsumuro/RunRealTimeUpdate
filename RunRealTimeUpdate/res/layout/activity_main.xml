@@ -48,14 +48,14 @@
        		android:id="@+id/id_activity_main_body_racelist_listview"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
-	    	android:padding="@dimen/dim_com_body_listview_paddaing"
+	    	android:padding="@dimen/dim_com_body_listview_padding"
 	    	android:background="@color/color_com_body_listview_back"  >
     	</ListView>
         <TextView
             android:id="@+id/id_activity_main_body_norace_textview"
             android:layout_width="match_parent"
            	android:layout_height="wrap_content"
-	    	android:padding="@dimen/dim_com_body_message_textview_paddaing"
+	    	android:padding="@dimen/dim_com_body_message_textview_padding"
             android:text="@string/str_msg_mainnorace"
 	    	android:background="@color/color_com_body_message_textview_back"
 	    	android:visibility="gone" />

@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_list_item_runnerinfo_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"  >
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/id_runnerinfo_relative_section"
+        android:id="@+id/id_list_item_runnerinfo_section_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        	android:background="@color/maincolor" >
     	<TextView
-        	android:id="@+id/id_runnerinfo_txt_section"
+        	android:id="@+id/id_list_item_runnerinfo_section_textview"
       		android:layout_width="match_parent"
         	android:layout_height="wrap_content"
        		android:padding="5dp"
@@ -18,36 +19,37 @@
     </RelativeLayout>
 
    <RelativeLayout
-        android:id="@+id/id_runnerinfo_relative_runner"
+        android:id="@+id/id_list_item_runnerinfo_runner_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+    	android:padding="@dimen/dim_list_item_raceinfo_detail_layout_padding" >
 
         <TextView
-        	android:id="@+id/id_runnerinfo_txt_dot"
+        	android:id="@+id/id_list_item_runnerinfo_runner_dot_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"
         	android:layout_alignParentTop="true"
        		android:padding="10dp"
         	android:text="@string/str_txt_dot"
-        	android:textColor="@color/accentColor" />
+        	android:textColor="@color/color_com_list_item_dot_textview_text" />
 
     	<TextView
-    	    android:id="@+id/id_runnerinfo_txt_no"
+    	    android:id="@+id/id_list_item_runnerinfo_runner_number_textview"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_dot"
+    	    android:layout_alignBaseline="@+id/id_list_item_runnerinfo_runner_dot_textview"
     	    android:layout_marginLeft="5dp"
-    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_dot"
+    	    android:layout_toRightOf="@+id/id_list_item_runnerinfo_runner_dot_textview"
     	    android:text="@string/str_txt_no" />
 
     	<TextView
-    	    android:id="@+id/id_runnerinfo_txt_name"
+    	    android:id="@+id/id_list_item_runnerinfo_runner_name_textview"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_no"
+    	    android:layout_alignBaseline="@+id/id_list_item_runnerinfo_runner_number_textview"
     	    android:layout_marginLeft="5dp"
-    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_no"
+    	    android:layout_toRightOf="@+id/id_list_item_runnerinfo_runner_number_textview"
     	    android:text="@string/str_txt_runnername" />
 
     </RelativeLayout>

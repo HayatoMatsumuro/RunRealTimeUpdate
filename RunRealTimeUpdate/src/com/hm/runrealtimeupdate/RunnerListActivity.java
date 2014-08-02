@@ -51,7 +51,7 @@ public class RunnerListActivity extends Activity {
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 選手リスト設定
-        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
+        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
         
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
@@ -139,7 +139,7 @@ public class RunnerListActivity extends Activity {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		// リストビュー更新
-		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
+		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
 		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
 		
 		if( adapter != null ){
@@ -241,7 +241,7 @@ public class RunnerListActivity extends Activity {
     			Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
     				
     			// 表示リストを更新する
-    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_runnerlist_listview);
+    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
     			RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
     			adapter.remove( element );
     			adapter.notifyDataSetChanged();
@@ -316,11 +316,11 @@ public class RunnerListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_runnerinfo, parent, false);
 			}
 			
-			TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_name);
+			TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_name_textview);
 			
-			RelativeLayout runnerRelative = (RelativeLayout)convertView.findViewById(R.id.id_runnerinfo_relative_runner);
-			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_no);
-			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_runnerinfo_txt_section);
+			RelativeLayout runnerRelative = (RelativeLayout)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_layout);
+			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_number_textview);
+			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_section_textview);
 			
 			SectionRunnerElement item = getItem(position);
 			
