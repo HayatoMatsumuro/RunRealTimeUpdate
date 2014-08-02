@@ -32,7 +32,7 @@ public class RunnerInfoDetailActivity extends Activity {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         
 		// 戻るボタン
-		Button backButton = ( Button )findViewById(R.id.id_runnerinfodetail_btn_back);
+		Button backButton = ( Button )findViewById(R.id.id_activity_runnerinfodetail_contents_back_button);
 		backButton.setTag( raceId );
 		backButton.setOnClickListener( new OnClickListener() {
 			
@@ -59,20 +59,20 @@ public class RunnerInfoDetailActivity extends Activity {
         RunnerInfo runnerInfo = Logic.getRunnerInfo(getContentResolver(), raceId, number);
         
         // ゼッケン番号
-     	TextView numberTextView = (TextView)findViewById(R.id.id_runnerinfodetail_txt_number);
+     	TextView numberTextView = (TextView)findViewById(R.id.id_activity_runnerinfodetail_contents_number_textview);
      	numberTextView.setText("No. " + runnerInfo.getNumber());
      	
      	// 選手名
-     	TextView nameTextView = (TextView)findViewById(R.id.id_runnerinfodetail_txt_name);
+     	TextView nameTextView = (TextView)findViewById(R.id.id_activity_runnerinfodetail_contents_name_textview);
      	nameTextView.setText(runnerInfo.getName());
      		
      	// 部門
-     	TextView sectionTextView = (TextView)findViewById(R.id.id_runnerinfodetail_txt_section);
+     	TextView sectionTextView = (TextView)findViewById(R.id.id_activity_runnerinfodetail_contents_section_textview);
      	sectionTextView.setText(runnerInfo.getSection());
      	
 		
 		// タイムリスト
-		TableLayout tableLayout = (TableLayout)findViewById(R.id.id_runnerinfodetail_table);
+		TableLayout tableLayout = (TableLayout)findViewById(R.id.id_activity_runnerinfodetail_contents_timelist_layout);
 		
 		for( RunnerInfo.TimeList timelist : runnerInfo.getTimeList() ){
 			TableRow tableRow = new TableRow(this);
