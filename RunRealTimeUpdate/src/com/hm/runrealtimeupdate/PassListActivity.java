@@ -49,7 +49,7 @@ public class PassListActivity extends Activity {
         SectionListAdapter adapter = new SectionListAdapter( this, sectionList );
         
         // リストビューに設定
-        ListView listView = (ListView)findViewById(R.id.id_passlist_listview_sectionlist);
+        ListView listView = (ListView)findViewById(R.id.id_activity_passlist_sectionlist_listview);
         listView.setAdapter(adapter);
         listView.setTag(raceId);
         
@@ -92,7 +92,7 @@ public class PassListActivity extends Activity {
 				convertView = this.inflater.inflate( R.layout.list_item_section, parent, false);
 			}
 			
-			TextView sectionTextView = ( TextView )convertView.findViewById(R.id.id_section_txt_section);
+			TextView sectionTextView = ( TextView )convertView.findViewById(R.id.id_item_section_section_textview);
 			
 			String section = getItem( position );
 			

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_item_section_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp" >
     
     <TextView
-      	android:id="@+id/id_section_txt_dot"
+      	android:id="@+id/id_item_section_dot_textview"
        	android:layout_width="wrap_content"
        	android:layout_height="wrap_content"
        	android:layout_alignParentLeft="true"
@@ -14,13 +15,13 @@
        	android:textColor="@color/accentColor" />
 
     <TextView
-        android:id="@+id/id_section_txt_section"
+        android:id="@+id/id_item_section_section_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/id_section_txt_dot"
-        android:layout_alignBottom="@+id/id_section_txt_dot"
+        android:layout_alignBaseline="@+id/id_item_section_dot_textview"
+        android:layout_alignBottom="@+id/id_item_section_dot_textview"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/id_section_txt_dot"
+        android:layout_toRightOf="@+id/id_item_section_dot_textview"
         android:text="@string/str_txt_section" />
 
 </RelativeLayout>
