@@ -16,11 +16,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -36,7 +34,8 @@ public class RunnerListActivity extends Activity {
 	/**
 	 * 登録できる選手の数
 	 */
-	private static int INT_RUNNER_NUM_MAX = 30;
+	//TODO:
+	//private static int INT_RUNNER_NUM_MAX = 30;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class RunnerListActivity extends Activity {
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 選手リスト設定
-        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
+        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
         
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
@@ -110,25 +109,6 @@ public class RunnerListActivity extends Activity {
         	
 		});
         
-        // 選手登録ボタン
-        Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
-        runnerEntryButton.setTag(raceInfo);
-        runnerEntryButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				RaceInfo raceInfo = (RaceInfo)v.getTag();
-				
-				if(!raceInfo.isRaceUpdate()){
-					// 選手登録画面遷移
-					(( RunnerActivityGroup )getParent()).showRunnerEntryActivity(raceInfo.getRaceId());
-				}else{
-					Toast.makeText(RunnerListActivity.this, "速報中は登録できません", Toast.LENGTH_SHORT).show();
-				}
-				
-			}
-		});
-        
 		return;
 	}
 
@@ -139,7 +119,7 @@ public class RunnerListActivity extends Activity {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		// リストビュー更新
-		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
+		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
 		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
 		
 		if( adapter != null ){
@@ -149,16 +129,7 @@ public class RunnerListActivity extends Activity {
 		List<SectionRunnerElement> sectionRunnerElementList = createSectionRunnerElementList( raceId );
         adapter = new RunnerListAdapter(this, sectionRunnerElementList);
         runnerInfoListView.setAdapter(adapter);
-     
-        // 選手登録ボタンのフォーカス設定
-        Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
-        int runnerNum = getAllSectionRunner( sectionRunnerElementList );
         
-        if( runnerNum >= INT_RUNNER_NUM_MAX){
-           	runnerEntryButton.setEnabled(false);
-        }else{
-           	runnerEntryButton.setEnabled(true);
-        }
 	}
 	
 	/**
@@ -211,6 +182,8 @@ public class RunnerListActivity extends Activity {
 	 * @param sectionRunnerElementList　リストビュー用の選手一覧
 	 * @return　選手数
 	 */
+	//TODO: 選手登録できるかどうかの判定は、登録画面で行う
+	/*
 	private int getAllSectionRunner( List<SectionRunnerElement> sectionRunnerElementList ){
 		
 		int num = 0;
@@ -221,7 +194,7 @@ public class RunnerListActivity extends Activity {
 			}
 		}
 		return num;
-	}
+	}*/
 	
 	/**
 	 * 選手削除ダイアログのボタン押しコールバック
@@ -241,14 +214,10 @@ public class RunnerListActivity extends Activity {
     			Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
     				
     			// 表示リストを更新する
-    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_contents_body_runnerlist_listview);
+    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
     			RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
     			adapter.remove( element );
     			adapter.notifyDataSetChanged();
-    				
-    			// 削除したら選手登録はできるので、ボタンを有効にする
-    			Button runnerEntryButton = (Button)findViewById(R.id.id_activity_runnerlist_contents_header_runnerentry_button);
-    			runnerEntryButton.setEnabled(true);
     			
     			Toast.makeText(RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 			}else{

@@ -1,58 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/id_activity_runnerlist_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+   	android:orientation="vertical"
     android:padding="@dimen/dim_com_body_layout_padding"
     android:background="@color/color_com_body_layout_back" >
 
-    <RelativeLayout
-        android:id="@+id/id_activity_runnerlist_contents_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/color_activity_runnerlist_contents_layout_back"
-        android:padding="@dimen/dim_activity_runnerlist_contents_layout_padding" >
-        
-        <RelativeLayout
-            android:id="@+id/id_activity_runnerlist_contents_header_layout"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content" >
-            
-            <TextView
-        		android:id="@+id/id_activity_runnerlist_contents_header_title_textview"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-        		android:layout_alignParentLeft="true"
-        		android:layout_alignParentTop="true"
-        		android:text="@string/str_title_runnerlist"
-        		android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    		<Button
-    		    android:id="@+id/id_activity_runnerlist_contents_header_runnerentry_button"
-    		    android:layout_width="wrap_content"
-    		    android:layout_height="@dimen/dim_activity_runnerlist_contents_header_runnerentry_button_height"
-    		    android:layout_alignParentRight="true"
-    		    android:layout_alignParentTop="true"
-    		    android:text="@string/str_btn_runnerentry" />
-
-        </RelativeLayout>
-    	<LinearLayout
-    	    android:id="@+id/id_activity_runnerlist_contents_body_layout"
-	  		android:layout_width="fill_parent"
-    		android:layout_height="wrap_content"
-    		android:orientation="vertical"
-        	android:layout_below="@+id/id_activity_runnerlist_contents_header_layout"
-        	android:layout_marginTop="@dimen/dim_activity_runnerlist_contents_body_layout_topmargin">
-    	    
-    	    <ListView
-       			android:id="@+id/id_activity_runnerlist_contents_body_runnerlist_listview"
-        		android:layout_width="match_parent"
-        		android:layout_height="wrap_content">
-    		</ListView>
-    		
-    	</LinearLayout>
-    	
-    </RelativeLayout>
+    <ListView
+    	android:id="@+id/id_activity_runnerlist_runnerlist_listview"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+		android:padding="@dimen/dim_com_body_listview_padding"
+	 	android:background="@color/color_com_body_listview_back" >
+    </ListView>
     
-</RelativeLayout>
+</LinearLayout>
