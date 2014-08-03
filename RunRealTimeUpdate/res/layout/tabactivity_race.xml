@@ -28,6 +28,17 @@
             	android:background="@color/color_com_header_button_back"
             	android:textColor="@color/color_com_header_button_text"
     	    	android:text="@string/str_btn_backstart" />
+    		
+    		<Button 
+    		    android:id="@+id/id_tabactivity_race_header_runnerentry_button"
+    		    android:layout_width="wrap_content"
+    		    android:layout_height="wrap_content"
+    		    android:layout_alignParentRight="true"
+            	android:layout_centerVertical="true"
+            	android:padding="@dimen/dim_com_header_button_padding"
+            	android:background="@color/color_com_header_button_back"
+            	android:textColor="@color/color_com_header_button_text"
+    	    	android:text="@string/str_btn_runnerentry" />
 
 		</RelativeLayout>
 		

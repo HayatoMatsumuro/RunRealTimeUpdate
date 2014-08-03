@@ -41,7 +41,7 @@ public class RaceTabActivity extends TabActivity {
         }
         
         // カレントタブ取得
-        int currentTab = intent.getIntExtra(STR_INTENT_CURRENTTAB, 0);
+        int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, INT_INTENT_VAL_CURRENTTAB_DETAIL );
         
         // 速報中テキスト
         int visibility = View.INVISIBLE;
@@ -63,6 +63,28 @@ public class RaceTabActivity extends TabActivity {
 				startActivity(intent);
 			}
 		});
+        
+        // 選手登録ボタン
+        Button runnerEntryButton = ( Button )findViewById( R.id.id_tabactivity_race_header_runnerentry_button );
+        runnerEntryButton.setTag( raceId );
+        runnerEntryButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				String raceId = ( String )v.getTag();
+				
+				TabHost tabHost = getTabHost();
+				int currentTab = tabHost.getCurrentTab();
+				
+				// 選手登録画面遷移
+				Intent intent = new Intent( RaceTabActivity.this, RunnerEntryActivity.class );
+				intent.putExtra( RunnerEntryActivity.STR_INTENT_RACEID, raceId );
+				intent.putExtra( RunnerEntryActivity.STR_INTENT_CURRENTTAB, currentTab );
+				startActivity(intent);		
+			}
+		});
+        
 		// タブ設定
 		TabHost tabHost = getTabHost();
 		TabHost.TabSpec spec;
@@ -94,7 +116,7 @@ public class RaceTabActivity extends TabActivity {
 		
 		tabHost.setCurrentTab( currentTab );
 	}
-	
+
 	/**
 	 * 速報中テキストの表示状態設定
 	 * @param visibility
