@@ -44,7 +44,7 @@ public class RunnerEntryActivity extends Activity {
         }
         
         // 戻るボタン
-        Button backButton =(Button)findViewById(R.id.id_runnerentry_btn_back);
+        Button backButton =(Button)findViewById( R.id.id_activity_runnerentry_back_button );
         backButton.setTag(raceId);
         backButton.setOnClickListener(new OnClickListener() {
 			
@@ -59,7 +59,7 @@ public class RunnerEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideButton = (Button)findViewById(R.id.id_runnerentry_btn_decide);
+        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_decide_button );
         decideButton.setTag(raceInfo);
         decideButton.setOnClickListener(new OnClickListener() {
 			
@@ -78,7 +78,7 @@ public class RunnerEntryActivity extends Activity {
 				// URL入力エディットボックスから入力値取得
 				// TODO: 取得後は、ゼッケン番号を消す。
 				// TODO: 取得後は、キー入力のバーを消す。
-				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+				EditText noEdit = (EditText)findViewById( R.id.id_activity_runnerentry_number_edittext );
 				params[2] = noEdit.getText().toString();
 				
 				if( params[2] == null || params[2].equals("")){
@@ -207,7 +207,7 @@ public class RunnerEntryActivity extends Activity {
 						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
 						
 						// キーボードを隠す
-						EditText numberEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+						EditText numberEdit = (EditText)findViewById(R.id.id_activity_runnerentry_number_edittext);
 				        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 						
