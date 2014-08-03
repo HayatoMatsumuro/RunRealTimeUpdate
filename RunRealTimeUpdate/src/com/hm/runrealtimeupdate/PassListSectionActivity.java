@@ -78,12 +78,12 @@ public class PassListSectionActivity extends Activity {
         }
         
         // リストビューの設定
-        ListView listView = (ListView)findViewById(R.id.id_passlistsection_listview_sectionlist);
+        ListView listView = (ListView)findViewById( R.id.id_activity_passlistsection_sectionlist_listview );
         PassPointAdapter adapter = new PassPointAdapter(this, passPointList);
         listView.setAdapter(adapter);
         
         // 戻るボタン
-        Button backButton = (Button)findViewById(R.id.id_passlistsection_btn_back);
+        Button backButton = (Button)findViewById( R.id.id_activity_passlistsection_back_button );
         backButton.setTag(raceId);
         backButton.setOnClickListener(new OnClickListener() {
 			
@@ -120,13 +120,13 @@ public class PassListSectionActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_pass_point_runner, parent, false);
 			}
 			
-			RelativeLayout pointLayout = (RelativeLayout)convertView.findViewById(R.id.id_pass_point_relative_point);
-			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById(R.id.id_pass_point_relative_runner);
+			RelativeLayout pointLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_point_layout);
+			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_runner_layout);
 			
-			TextView pointTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_point);
-			TextView nameTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_name);
-			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_pass_point_txt_split);
-			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_pass_point_updatenew);
+			TextView pointTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_point_textview );
+			TextView nameTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_name_textview );
+			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_split_textview );
+			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_updatenew_textview );
 			
 			PassPointListElement element = getItem(position);
 			

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_item_pass_point_runner_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <RelativeLayout
-        android:id="@+id/id_pass_point_relative_point"
+        android:id="@+id/id_item_pass_point_runner_point_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        	android:background="@color/maincolor" >
        	
         <TextView
-        	android:id="@+id/id_pass_point_txt_point"
+        	android:id="@+id/id_item_pass_point_runner_point_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"
@@ -22,12 +23,12 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/id_pass_point_relative_runner"
+        android:id="@+id/id_item_pass_point_runner_runner_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
         
         <TextView
-        	android:id="@+id/id_pass_point_txt_dot"
+        	android:id="@+id/id_item_pass_point_runner_runner_dot_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentLeft="true"
@@ -37,24 +38,24 @@
         	android:textColor="@color/accentColor" />
         
         <TextView
-        	android:id="@+id/id_pass_point_txt_name"
+        	android:id="@+id/id_item_pass_point_runner_runner_name_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-    	    android:layout_toRightOf="@+id/id_pass_point_txt_dot"
+    	    android:layout_toRightOf="@+id/id_item_pass_point_runner_runner_dot_textview"
         	android:layout_marginLeft="5dp"
         	android:text="@string/str_txt_runner"/>
 
     	<TextView
-    	    android:id="@+id/id_pass_point_txt_split"
+    	    android:id="@+id/id_item_pass_point_runner_runner_split_textview"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignLeft="@+id/id_pass_point_txt_name"
-    	    android:layout_below="@+id/id_pass_point_txt_name"
+    	    android:layout_alignLeft="@+id/id_item_pass_point_runner_runner_name_textview"
+    	    android:layout_below="@+id/id_item_pass_point_runner_runner_name_textview"
         	android:layout_marginLeft="5dp"
     	    android:text="@string/str_txt_split" />
 
     	<TextView
-       		android:id="@+id/id_pass_point_updatenew"
+       		android:id="@+id/id_item_pass_point_runner_runner_updatenew_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentRight="true"

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_activity_passlistsection_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/id_passlistsection_txt_title"
+        android:id="@+id/id_activity_passlistsection_title_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -15,16 +16,16 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ListView
-        android:id="@+id/id_passlistsection_listview_sectionlist"
+        android:id="@+id/id_activity_passlistsection_sectionlist_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_passlistsection_txt_title"
-        android:layout_below="@+id/id_passlistsection_txt_title"
+        android:layout_alignLeft="@+id/id_activity_passlistsection_title_textview"
+        android:layout_below="@+id/id_activity_passlistsection_title_textview"
         android:layout_marginTop="10dp" >
     </ListView>
 
     <Button
-        android:id="@+id/id_passlistsection_btn_back"
+        android:id="@+id/id_activity_passlistsection_back_button"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
