@@ -1,19 +1,7 @@
 package com.hm.runrealtimeupdate;
 
-import com.hm.runrealtimeupdate.logic.Logic;
-import com.hm.runrealtimeupdate.logic.RunnerInfo;
-
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
 public class RunnerInfoDetailActivity extends Activity {
 
@@ -26,13 +14,13 @@ public class RunnerInfoDetailActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_runnerinfodetail);
+		setContentView(R.layout.dialog_runnerinfodetail);
 		
-		Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+		//Intent intent = getIntent();
+       // String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         
 		// 戻るボタン
-		Button backButton = ( Button )findViewById(R.id.id_activity_runnerinfodetail_contents_back_button);
+		/*Button backButton = ( Button )findViewById(R.id.id_activity_runnerinfodetail_contents_back_button);
 		backButton.setTag( raceId );
 		backButton.setOnClickListener( new OnClickListener() {
 			
@@ -45,19 +33,19 @@ public class RunnerInfoDetailActivity extends Activity {
 				(( RunnerActivityGroup )getParent()).showRunnerListActivity( raceId );
 				
 			}
-		});
+		});*/
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		
-		Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        String number = intent.getStringExtra(STR_INTENT_NUMBER);
+		//Intent intent = getIntent();
+       // String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+       //String number = intent.getStringExtra(STR_INTENT_NUMBER);
         
-        RunnerInfo runnerInfo = Logic.getRunnerInfo(getContentResolver(), raceId, number);
-        
+        //RunnerInfo runnerInfo = Logic.getRunnerInfo(getContentResolver(), raceId, number);
+        /*
         // ゼッケン番号
      	TextView numberTextView = (TextView)findViewById(R.id.id_activity_runnerinfodetail_contents_number_textview);
      	numberTextView.setText("No. " + runnerInfo.getNumber());
@@ -102,6 +90,6 @@ public class RunnerInfoDetailActivity extends Activity {
     		tableRow.addView(currentTimeView);
     		
     		tableLayout.addView(tableRow, new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT));
-		}
+		}*/
 	}
 }

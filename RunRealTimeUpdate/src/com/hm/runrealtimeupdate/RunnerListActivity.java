@@ -9,10 +9,14 @@ import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -94,17 +100,81 @@ public class RunnerListActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				
-				// 大会情報取得
-				ListView listView = (ListView)parent;
-				RaceInfo raceInfo = (RaceInfo)listView.getTag();
-				
 				// 選手情報取得
+				ListView listView = (ListView)parent;
 				SectionRunnerElement element = (SectionRunnerElement)listView.getItemAtPosition(position);
-				if( element.getRunnerInfo() == null ){
+				RunnerInfo runnerInfo = element.getRunnerInfo();
+				
+				// 選手以外のクリックは、無視
+				if( runnerInfo == null ){
 					return;
 				}
 				
-				(( RunnerActivityGroup )getParent()).showRunnerInfoDetailActivity( raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
+				// ダイアログの中身生成
+				LayoutInflater factory = LayoutInflater.from( getParent() );
+				final View inputView = factory.inflate(R.layout.dialog_runnerinfodetail, null);
+				
+				// ゼッケン番号
+		     	TextView numberTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_number_textview);
+		     	numberTextView.setText("No. " + runnerInfo.getNumber());
+		     	
+		     	// 選手名
+		     	TextView nameTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_name_textview);
+		     	nameTextView.setText(runnerInfo.getName());
+		     		
+		     	// 部門
+		     	TextView sectionTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_section_textview);
+		     	sectionTextView.setText(runnerInfo.getSection());
+		     	
+				
+				// タイムリスト
+				TableLayout tableLayout = (TableLayout)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_timelist_layout);
+				
+				for( RunnerInfo.TimeList timelist : runnerInfo.getTimeList() ){
+					TableRow tableRow = new TableRow( getParent() );
+					
+					// 地点
+					TextView pointTextView = new TextView( getParent() );
+					pointTextView.setText(timelist.getPoint());
+					pointTextView.setTextColor(Color.WHITE);
+					
+					// スプリット
+					TextView splitTextView = new TextView( getParent() );
+					splitTextView.setText(timelist.getSplit());
+					splitTextView.setGravity(Gravity.CENTER);
+					splitTextView.setTextColor(Color.WHITE);
+					
+					// ラップ
+					TextView lapTextView = new TextView( getParent() );
+		    		lapTextView.setText(timelist.getLap());
+		    		lapTextView.setGravity(Gravity.CENTER);
+		    		lapTextView.setTextColor(Color.WHITE);
+		    		
+		    		// カレントタイム
+		    		TextView currentTimeView = new TextView( getParent() );
+		    		currentTimeView.setText(timelist.getCurrentTime());
+		    		currentTimeView.setGravity(Gravity.CENTER);
+		    		currentTimeView.setTextColor(Color.WHITE);
+					
+		    		tableRow.addView(pointTextView);
+		    		tableRow.addView(splitTextView);
+		    		tableRow.addView(lapTextView);
+		    		tableRow.addView(currentTimeView);
+		    		
+		    		tableLayout.addView(tableRow, new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT));
+				}
+				AlertDialog.Builder dialog = new AlertDialog.Builder( getParent() );
+				dialog.setView(inputView);
+				dialog.setPositiveButton(getString(R.string.str_btn_close), new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO 自動生成されたメソッド・スタブ
+						
+					}
+				});
+				
+				dialog.show();
 			}
         	
 		});

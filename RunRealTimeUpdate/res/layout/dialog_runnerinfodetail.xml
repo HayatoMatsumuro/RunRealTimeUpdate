@@ -1,93 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_activity_runnerinfodetail_layout"
+    android:id="@+id/id_dialog_runnerinfodetail_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <RelativeLayout
-    	android:id="@+id/id_activity_runnerinfodetail_contents_layout"
+    	android:id="@+id/id_dialog_runnerinfodetail_contents_layout"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content" >
 
         <TextView
-        	android:id="@+id/id_activity_runnerinfodetail_contents_number_textview"
+        	android:id="@+id/id_dialog_runnerinfodetail_contents_number_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:layout_alignParentTop="true"
         	android:layout_alignParentLeft="true"
         	android:layout_marginTop="10dp"
         	android:layout_marginLeft="10dp"
+        	android:textColor="@color/white"
         	android:text="@string/str_txt_no"/>
 
-		<Button
-        	android:id="@+id/id_activity_runnerinfodetail_contents_back_button"
-        	android:layout_width="wrap_content"
-        	android:layout_height="40dp"
-        	android:layout_alignParentTop="true"
-        	android:layout_alignParentRight="true"
-        	android:text="@string/str_btn_back" />
-
     	<TextView
-        	android:id="@+id/id_activity_runnerinfodetail_contents_name_textview"
+        	android:id="@+id/id_dialog_runnerinfodetail_contents_name_textview"
         	android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
-        	android:layout_alignLeft="@+id/id_activity_runnerinfodetail_contents_number_textview"
-        	android:layout_below="@+id/id_activity_runnerinfodetail_contents_number_textview"
+        	android:layout_alignLeft="@+id/id_dialog_runnerinfodetail_contents_number_textview"
+        	android:layout_below="@+id/id_dialog_runnerinfodetail_contents_number_textview"
         	android:layout_marginTop="15dp"
+        	android:textColor="@color/white"
         	android:text="@string/str_txt_runnername"/>
 
     	<TextView
-    	    android:id="@+id/id_activity_runnerinfodetail_contents_section_textview"
+    	    android:id="@+id/id_dialog_runnerinfodetail_contents_section_textview"
     	    android:layout_width="wrap_content"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignLeft="@+id/id_activity_runnerinfodetail_contents_name_textview"
-    	    android:layout_below="@+id/id_activity_runnerinfodetail_contents_name_textview"
+    	    android:layout_alignLeft="@+id/id_dialog_runnerinfodetail_contents_name_textview"
+    	    android:layout_below="@+id/id_dialog_runnerinfodetail_contents_name_textview"
     	    android:layout_marginTop="15dp"
+        	android:textColor="@color/white"
         	android:text="@string/str_txt_section"/>
 
     	<TableLayout
-        	android:id="@+id/id_activity_runnerinfodetail_contents_timelist_layout"
+        	android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_layout"
         	android:layout_width="fill_parent"
         	android:layout_height="fill_parent"
         	android:layout_alignParentLeft="true"
-        	android:layout_below="@+id/id_activity_runnerinfodetail_contents_section_textview"
-        	android:layout_marginTop="15dp" >
+        	android:layout_below="@+id/id_dialog_runnerinfodetail_contents_section_textview"
+        	android:layout_marginTop="15dp"
+        	android:padding="1dp" >
 
         	<TableRow>
         		<TextView
-           	 		android:layout_width="70dp"
-            		android:text="@string/str_txt_point"/>
+           	 		android:layout_width="55dp"
+            		android:text="@string/str_txt_point"
+        			android:textColor="@color/white"/>
 	            <TextView
     	            android:layout_width="80dp"
         	        android:text="@string/str_txt_split"
-            		android:gravity="center"/>
+            		android:gravity="center"
+        			android:textColor="@color/white"/>
             	<TextView
                		android:layout_width="80dp"
                 	android:text="@string/str_txt_lap"
-            		android:gravity="center"/>
+            		android:gravity="center"
+        			android:textColor="@color/white"/>
             	<TextView
                 	android:layout_width="80dp"
                 	android:text="@string/str_txt_currenttime"
-            		android:gravity="center"/>
+            		android:gravity="center"
+        			android:textColor="@color/white"/>
         	</TableRow>
         	<TableRow >
         	    <RelativeLayout
-        	        android:id="@+id/id_activity_runnerinfodetail_contents_timelist_border_point_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_point_layout"
         	        android:layout_width="wrap_content"
         	        android:layout_height="2dp">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_activity_runnerinfodetail_contents_timelist_border_split_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_split_layout"
         	        android:layout_width="wrap_content"
         	        android:layout_height="2dp">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_activity_runnerinfodetail_contents_timelist_border_lap_layout"
+        	        android:id="@+id/id_dialogy_runnerinfodetail_contents_timelist_border_lap_layout"
         	        android:layout_width="wrap_content"
         	        android:layout_height="2dp">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_activity_runnerinfodetail_contents_timelist_border_currenttime_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_currenttime_layout"
         	        android:layout_width="wrap_content"
         	        android:layout_height="2dp">
         	    </RelativeLayout>
