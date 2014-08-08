@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class PassListSectionActivity extends Activity {
+public class PassListActivity extends Activity {
 
 	public static final String STR_ACTIVITY_ID = "passListSectionActivity";
 	
@@ -31,7 +31,7 @@ public class PassListSectionActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_passlistsection);
+		setContentView(R.layout.activity_passlist);
 		
 		Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
@@ -41,7 +41,7 @@ public class PassListSectionActivity extends Activity {
         
         // 大会情報が取得できないなら、エラー画面
         if( raceInfo == null ){
-        	Intent intentErr = new Intent(PassListSectionActivity.this, ErrorActivity.class);
+        	Intent intentErr = new Intent(PassListActivity.this, ErrorActivity.class);
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
@@ -109,7 +109,7 @@ public class PassListSectionActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent){
 			
 			if( convertView == null ){
-				convertView = this.inflater.inflate(R.layout.list_item_pass_point_runner, parent, false);
+				convertView = this.inflater.inflate(R.layout.list_item_passinfo, parent, false);
 			}
 			
 			RelativeLayout sectionLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_section_layout);

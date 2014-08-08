@@ -68,7 +68,7 @@
            android:label="@string/app_name" >
         </activity>
         <activity 
-           android:name="com.hm.runrealtimeupdate.PassListSectionActivity"
+           android:name="com.hm.runrealtimeupdate.PassListActivity"
            android:label="@string/app_name" >
         </activity>
         <service
