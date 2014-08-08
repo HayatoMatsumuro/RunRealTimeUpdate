@@ -692,18 +692,18 @@ public class Logic {
 		}
 		
 		for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
-			Collections.sort( passRunnerInfo.getPassPointInfo(), new PassPointInfoComparator2());
+			Collections.sort( passRunnerInfo.getPassPointInfo(), new PassPointInfoComparator());
 			
 			// タイム順に並び替え
 	        for( PassRunnerInfo.PassPointInfo info : passRunnerInfo.getPassPointInfo() ){
-	        	Collections.sort( info.getPassPointRunnerInfoList() , new PassPointInfoSplitComparator2() );
+	        	Collections.sort( info.getPassPointRunnerInfoList() , new PassPointInfoSplitComparator() );
 	        }
 		}
 		
 		return passRunnerInfoList;
 	}
     
-	private static class PassPointInfoComparator2 implements Comparator<PassRunnerInfo.PassPointInfo>{
+	private static class PassPointInfoComparator implements Comparator<PassRunnerInfo.PassPointInfo>{
 
 		@Override
 		public int compare( PassRunnerInfo.PassPointInfo o1, PassRunnerInfo.PassPointInfo o2) {
@@ -717,12 +717,12 @@ public class Logic {
 		
 	}
 
-	private static class PassPointInfoSplitComparator2 implements Comparator<PassRunnerInfo.PassPointInfo.PassPointRunnerInfo>{
+	private static class PassPointInfoSplitComparator implements Comparator<PassRunnerInfo.PassPointInfo.PassPointRunnerInfo>{
 
 		@Override
 		public int compare(PassRunnerInfo.PassPointInfo.PassPointRunnerInfo o1, PassRunnerInfo.PassPointInfo.PassPointRunnerInfo o2) {
 			
-			if( o1.getSplitLong() < o2.getSplitLong() ){
+			if( o1.getSplitLong() > o2.getSplitLong() ){
 				return 1;
 			}else{
 				return -1;
