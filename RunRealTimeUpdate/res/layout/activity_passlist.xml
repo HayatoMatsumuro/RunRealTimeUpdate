@@ -4,23 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/id_activity_passlist_title_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="17dp"
-        android:layout_marginTop="14dp"
-        android:text="@string/str_title_passlist"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <ListView
         android:id="@+id/id_activity_passlist_sectionlist_listview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_activity_passlist_title_textview"
-        android:layout_below="@+id/id_activity_passlist_title_textview"
         android:layout_marginTop="10dp" >
     </ListView>
 

@@ -212,6 +212,28 @@ public class DataBaseAccess {
 	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceId( ContentResolver contentResolver, String raceId){
 		List<DataBaseRunnerInfo> list = new ArrayList<DataBaseRunnerInfo>();
 		
+		// TODO: テスト用
+		String[][] tRunnerInfo = {
+				{ "2014utmf",	"100",		"テスト1",		"utmf",		"2014-05-31 00:00:00" },
+				{ "2014utmf",	"200",		"テスト2",		"utmf",		"2014-05-31 01:00:00" },
+				{ "2014utmf",	"300",		"テスト3",		"utmf",		"2014-05-31 02:00:00" },
+				{ "2014utmf",	"400",		"テスト4",		"sty",		"2014-05-31 03:00:00" },
+				{ "2014utmf",	"500",		"テスト5",		"sty",		"2014-05-31 04:00:00" },
+				{ "2014utmf",	"600",		"テスト6",		"utmf",		"2014-05-31 05:00:00" },
+		};
+		
+		for( int i=0; i<6; i++ ){
+			DataBaseRunnerInfo info = new DataBaseRunnerInfo();
+			info.setRaceId(tRunnerInfo[i][0]);
+			info.setNumber(tRunnerInfo[i][1]);
+			info.setName(tRunnerInfo[i][2]);
+			info.setSection(tRunnerInfo[i][3]);
+			info.setDate(tRunnerInfo[i][4]);
+			list.add(info);
+		}
+		
+		return list;
+		/*
 		String[] projection = {
 				RunnerProvider.STR_DB_COLUMN_RACEID,
 				RunnerProvider.STR_DB_COLUMN_NUMBER,
@@ -232,6 +254,7 @@ public class DataBaseAccess {
 		c.close();
 		
 		return list;
+		*/
 	}
 
 	/**
@@ -355,6 +378,117 @@ public class DataBaseAccess {
 	public static List<DataBaseTimeList> getTimeListByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number){
 		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
 		
+		// TODO: テストコード
+		if( number.equals("100")){
+			String ttInfo[][] = {
+					{ "A1 out",		"02:00:00",		"02:00:00",		"17:00:00" },
+					{ "A2 out",		"03:00:00",		"01:00:00",		"18:00:00" },
+					{ "A3 out",		"05:00:00",		"02:00:00",		"20:00:00" },
+			};
+			for( int i = 0; i<3; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}
+		else if( number.endsWith("200")){
+			String ttInfo[][] = {
+					{ "A1 out",		"02:00:00",		"02:00:00",		"17:00:00" },
+					{ "A2 out",		"06:00:00",		"04:00:00",		"21:00:00" },
+			};
+			for( int i = 0; i<2; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}
+		else if( number.endsWith("300")){
+			String ttInfo[][] = {
+					{ "A1 out",		"02:00:00",		"02:00:00",		"17:00:00" },
+					{ "A2 out",		"03:00:00",		"01:00:00",		"18:00:00" },
+					{ "A3 out",		"04:00:00",		"01:00:00",		"19:00:00" },
+			};
+			for( int i = 0; i<3; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}
+		else if( number.endsWith("400")){
+			String ttInfo[][] = {
+					{ "A10 out",		"01:30:00",		"01:30:00",		"18:30:00" },
+					{ "A11 out",		"02:00:00",		"00:30:00",		"19:00:00" },
+					{ "A12 out",		"04:00:00",		"02:00:00",		"21:00:00" },
+			};
+			for( int i = 0; i<3; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}
+		else if( number.endsWith("500")){
+			String ttInfo[][] = {
+					{ "A10 out",		"02:00:00",		"02:00:00",		"19:00:00" },
+					{ "A11 out",		"04:00:00",		"02:00:00",		"21:00:00" },
+			};
+			for( int i = 0; i<2; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}else if( number.endsWith("600")){
+			String ttInfo[][] = {
+					{ "A1 out",		"02:00:00",		"02:00:00",		"17:00:00" },
+					{ "A2 out",		"07:00:00",		"05:00:00",		"22:00:00" },
+			};
+			for( int i = 0; i<2; i++ ){
+				DataBaseTimeList timeList = new DataBaseTimeList();
+				timeList.setRaceId(raceId);
+				timeList.setNumber(number);
+				timeList.setPoint(ttInfo[i][0]);
+				timeList.setSplit(ttInfo[i][1]);
+				timeList.setLap(ttInfo[i][2]);
+				timeList.setCurrentTime(ttInfo[i][3]);
+				list.add(timeList);
+			}
+			
+			return list;
+		}
 		String[] projection = {
 			TimelistProvider.STR_DB_COLUMN_RACEID,
 			TimelistProvider.STR_DB_COLUMN_NUMBER,

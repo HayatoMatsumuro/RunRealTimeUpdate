@@ -13,7 +13,6 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 
-import com.hm.runrealtimeupdate.logic.PassPointInfo.PassPointRunnerInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
@@ -518,31 +517,6 @@ public class Logic {
 		return updateInfoList;
 	}
 	
-	
-	/**
-	 * 選択中の大会の部門リストを作成する
-	 * @param contentResolver
-	 * @param raceId　大会ID
-	 * @return
-	 */
-	public static List<String> getSectionList( ContentResolver contentResolver, String raceId ){
-		
-		List<String> sectionList = new ArrayList<String>();
-		
-		List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, raceId);
-		
-		for( DataBaseRunnerInfo dbRunnerInfo:dbRunnerInfoList){
-			
-			String section = dbRunnerInfo.getSection();
-			
-			if( sectionList.indexOf(section) == -1 ){
-				sectionList.add(section);
-			}
-		}
-		
-		return sectionList;
-	}
-	
 	/**
 	 * 部門ごとの選手情報を取得する
 	 * @param contentResolver
@@ -728,111 +702,7 @@ public class Logic {
 		
 		return passRunnerInfoList;
 	}
-	
-	/**
-	 * 地点通過情報のリスト取得
-	 * @param contentResolver
-	 * @param raceId 大会ID
-	 * @param section　部門
-	 * @param recentTime updateFlgをつけるまでの時間
-	 * @return
-	 */
-	public static List<PassPointInfo> getPassPointInfoList( ContentResolver contentResolver, String raceId, String section, long recentTime ){
-		
-		List<PassPointInfo> passPointInfoList = new ArrayList<PassPointInfo>();
-		
-		// 部門の選手リストを取得
-        List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceIdandSection( contentResolver, raceId, section);
-        
-        // 現在の時刻の秒取得
-     	Calendar cal = Calendar.getInstance();
-     	Date nowDate = cal.getTime();
-     	long nowTime = nowDate.getTime();
-     	
-        for( DataBaseRunnerInfo dbRunnerInfo : dbRunnerInfoList){
-        	
-        	List<DataBaseTimeList> dbTimeListList = DataBaseAccess.getTimeListByRaceIdAndNumber(contentResolver, raceId, dbRunnerInfo.getNumber());
-        	
-        	// 通過地点のインデックス取得
-        	int pointIdx = dbTimeListList.size()-1;
-        	if( pointIdx == -1){
-        		continue;
-        	}
-        	
-        	// 最新の通過地点取得
-        	DataBaseTimeList dbTimeList = dbTimeListList.get(pointIdx);
-        	
-        	PassPointInfo.PassPointRunnerInfo runnerInfo = new PassPointInfo().new PassPointRunnerInfo();
-			runnerInfo.setName(dbRunnerInfo.getName());
-			runnerInfo.setNumber(dbRunnerInfo.getNumber());
-			runnerInfo.setSplit(dbTimeList.getSplit());
-			runnerInfo.setLap(dbTimeList.getLap());
-			runnerInfo.setCurrentTime(dbTimeList.getCurrentTime());
-			
-			try {
-				Date date = DATEFORMAT.parse(dbRunnerInfo.getDate());
-				long updateTime = date.getTime();
-				
-				if( nowTime - updateTime < recentTime ){
-					runnerInfo.setRecentFlg(true);
-				}else{
-					runnerInfo.setRecentFlg(false);
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-				runnerInfo.setRecentFlg(false);
-			}
-			
-			int idx = getPassPointInfoListIdx(dbTimeList.getPoint(), passPointInfoList);
-        	if( idx == -1){
-        		// 新規追加
-        		PassPointInfo passPointInfo = new PassPointInfo();
-        		passPointInfo.setPoint(dbTimeList.getPoint());
-        		passPointInfo.setPassPointNo(pointIdx);
-        		passPointInfo.getPassPointRunnerInfoList().add(runnerInfo);
-        		passPointInfoList.add(passPointInfo);
-        	}else{
-        		passPointInfoList.get(idx).getPassPointRunnerInfoList().add(runnerInfo);
-        	}
-        }
-        
-        Collections.sort( passPointInfoList, new PassPointInfoComparator());
-        
-        // タイム順に並び替え
-        for( PassPointInfo info : passPointInfoList ){
-        	Collections.sort( info.getPassPointRunnerInfoList() , new PassPointInfoSplitComparator() );
-        }
-		return passPointInfoList;
-	}
     
-	private static int getPassPointInfoListIdx( String point, List<PassPointInfo> list){
-		
-		for( int i=0; i<list.size(); i++ ){
-			
-			PassPointInfo passPointInfo = list.get(i);
-			
-			if( passPointInfo.getPoint().equals(point)){
-				return i;
-			}
-		}
-		
-		return -1;
-	}
-	
-	private static class PassPointInfoComparator implements Comparator<PassPointInfo>{
-
-		@Override
-		public int compare(PassPointInfo o1, PassPointInfo o2) {
-			
-			if( o1.getPassPointNo() < o2.getPassPointNo() ){
-				return 1;
-			}else{
-				return -1;
-			}
-		}
-		
-	}
-	
 	private static class PassPointInfoComparator2 implements Comparator<PassRunnerInfo.PassPointInfo>{
 
 		@Override
@@ -845,19 +715,6 @@ public class Logic {
 		}
 		
 		
-	}
-	
-	private static class PassPointInfoSplitComparator implements Comparator<PassPointInfo.PassPointRunnerInfo>{
-
-		@Override
-		public int compare(PassPointRunnerInfo o1, PassPointRunnerInfo o2) {
-			
-			if( o1.getSplitLong() < o2.getSplitLong() ){
-				return 1;
-			}else{
-				return -1;
-			}
-		}
 	}
 
 	private static class PassPointInfoSplitComparator2 implements Comparator<PassRunnerInfo.PassPointInfo.PassPointRunnerInfo>{

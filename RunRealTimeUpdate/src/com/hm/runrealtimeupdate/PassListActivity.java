@@ -1,22 +1,16 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.List;
-
+//TODO:削除予定
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 
 public class PassListActivity extends Activity {
 	
@@ -43,14 +37,14 @@ public class PassListActivity extends Activity {
         }
         
         // 部門リストを取得する
-        List<String> sectionList = Logic.getSectionList(getContentResolver(), raceId);
+        //List<String> sectionList = Logic.getSectionList(getContentResolver(), raceId);
         
         // リストアダプタを作成
-        SectionListAdapter adapter = new SectionListAdapter( this, sectionList );
+        //SectionListAdapter adapter = new SectionListAdapter( this, sectionList );
         
         // リストビューに設定
         ListView listView = (ListView)findViewById(R.id.id_activity_passlist_sectionlist_listview);
-        listView.setAdapter(adapter);
+        //listView.setAdapter(adapter);
         listView.setTag(raceId);
         
         // リストビュー短押し
@@ -76,6 +70,7 @@ public class PassListActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
+	/*
 	private class SectionListAdapter extends ArrayAdapter<String>{
 
 		LayoutInflater inflater;
@@ -103,4 +98,5 @@ public class PassListActivity extends Activity {
 		
 		
 	}
+	*/
 }
