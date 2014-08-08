@@ -109,8 +109,8 @@ public class RaceTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		// 地点情報
-		tabIntent = new Intent( this, PassActivityGroup.class );
-		tabIntent.putExtra( PassActivityGroup.STR_INTENT_RACEID, raceId );
+		tabIntent = new Intent( this, PassListSectionActivity.class );
+		tabIntent.putExtra( PassListSectionActivity.STR_INTENT_RACEID, raceId );
 		spec = tabHost.newTabSpec( getString( R.string.str_tab_race_pass)).setIndicator(getString(R.string.str_tab_race_pass)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
