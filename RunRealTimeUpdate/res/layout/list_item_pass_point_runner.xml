@@ -6,10 +6,29 @@
     android:orientation="vertical" >
 
     <RelativeLayout
+        android:id="@+id/id_item_pass_point_runner_section_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       	android:background="#af59e2"
+       	android:padding="2dp" >
+       	
+        <TextView
+        	android:id="@+id/id_item_pass_point_runner_section_textview"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_alignParentLeft="true"
+        	android:layout_alignParentTop="true"
+        	android:layout_marginLeft="5dp"
+        	android:text="@string/str_txt_section"
+        	android:textAppearance="?android:attr/textAppearanceMedium" />
+    </RelativeLayout>
+    
+    <RelativeLayout
         android:id="@+id/id_item_pass_point_runner_point_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       	android:background="@color/maincolor" >
+       	android:background="@color/maincolor"
+       	android:padding="2dp" >
        	
         <TextView
         	android:id="@+id/id_item_pass_point_runner_point_textview"

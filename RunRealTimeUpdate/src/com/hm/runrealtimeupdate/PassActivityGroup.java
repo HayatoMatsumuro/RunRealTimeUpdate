@@ -20,7 +20,7 @@ public class PassActivityGroup extends ActivityGroup {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		
-		showPassListActivity( raceId );
+		showPassListSectionActivity( raceId, null );
 	}
 	
 	public void showPassListActivity( String raceId ){
@@ -41,7 +41,7 @@ public class PassActivityGroup extends ActivityGroup {
 		
 		Intent intent = new Intent( PassActivityGroup.this, PassListSectionActivity.class );
 		intent.putExtra( PassListSectionActivity.STR_INTENT_RACEID, raceId );
-		intent.putExtra( PassListSectionActivity.STR_INTENT_SECTION, section );
+		//intent.putExtra( PassListSectionActivity.STR_INTENT_SECTION, section );
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
 		Window passListdActivity = getLocalActivityManager().startActivity( PassListSectionActivity.STR_ACTIVITY_ID, intent );

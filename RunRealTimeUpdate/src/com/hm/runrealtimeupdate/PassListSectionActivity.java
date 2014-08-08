@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
-import com.hm.runrealtimeupdate.logic.PassPointInfo;
+import com.hm.runrealtimeupdate.logic.PassRunnerInfo;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
@@ -26,8 +26,6 @@ public class PassListSectionActivity extends Activity {
 	public static final String STR_ACTIVITY_ID = "passListSectionActivity";
 	
 	public static final String STR_INTENT_RACEID = "raceid";
-	
-	public static final String STR_INTENT_SECTION = "section";
 
 	private static final long LONG_RESENT_TIME = 300000;
 	
@@ -39,7 +37,6 @@ public class PassListSectionActivity extends Activity {
 		
 		Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        String section = intent.getStringExtra(STR_INTENT_SECTION);
         
         // 大会情報取得
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
@@ -52,28 +49,38 @@ public class PassListSectionActivity extends Activity {
         }
         
         // 地点通過情報取得
-        List<PassPointInfo> passPointInfoList = Logic.getPassPointInfoList(getContentResolver(), raceId, section, LONG_RESENT_TIME);
+        List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList(getContentResolver(), raceId, LONG_RESENT_TIME);
         
         List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
         
-        for( PassPointInfo passPointInfo:passPointInfoList){
-        	// タイトル
+        // TODO: タブを切り替えた場合、更新されないのでonResume に移動する必要がある
+        for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
+        	// 部門
         	PassPointListElement element = new PassPointListElement();
-        	element.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_TITLE);
-        	element.setPoint(passPointInfo.getPoint());
+        	element.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION);
+        	element.setSection(passRunnerInfo.getSection());
         	passPointList.add(element);
         	
-        	// 選手
-        	for( PassPointInfo.PassPointRunnerInfo runnerInfo : passPointInfo.getPassPointRunnerInfoList() ){
-        		PassPointListElement rElement = new PassPointListElement();
-        		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
-        		rElement.setName(runnerInfo.getName());
-        		rElement.setNumber(runnerInfo.getNumber());
-        		rElement.setSplit(runnerInfo.getSplit());
-        		rElement.setLap(runnerInfo.getLap());
-        		rElement.setCurrentTime(runnerInfo.getCurrentTime());
-        		rElement.setRecentFlg(runnerInfo.isRecentFlg());
-        		passPointList.add(rElement);
+        	for( PassRunnerInfo.PassPointInfo passPointInfo:passRunnerInfo.getPassPointInfo()){
+        		
+        		// 地点
+            	PassPointListElement pElement = new PassPointListElement();
+            	pElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT);
+            	pElement.setPoint(passPointInfo.getPoint());
+            	passPointList.add(pElement);
+            	
+            	// 選手
+            	for( PassRunnerInfo.PassPointInfo.PassPointRunnerInfo passPointRunnerInfo : passPointInfo.getPassPointRunnerInfoList() ){
+            		PassPointListElement rElement = new PassPointListElement();
+            		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
+            		rElement.setName(passPointRunnerInfo.getName());
+            		rElement.setNumber(passPointRunnerInfo.getNumber());
+            		rElement.setSplit(passPointRunnerInfo.getSplit());
+            		rElement.setLap(passPointRunnerInfo.getLap());
+            		rElement.setCurrentTime(passPointRunnerInfo.getCurrentTime());
+            		rElement.setRecentFlg(passPointRunnerInfo.isRecentFlg());
+            		passPointList.add(rElement);
+            	}
         	}
         }
         
@@ -120,9 +127,11 @@ public class PassListSectionActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_pass_point_runner, parent, false);
 			}
 			
+			RelativeLayout sectionLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_section_layout);
 			RelativeLayout pointLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_point_layout);
 			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_runner_layout);
 			
+			TextView sectionTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_section_textview );
 			TextView pointTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_point_textview );
 			TextView nameTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_name_textview );
 			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_split_textview );
@@ -130,9 +139,17 @@ public class PassListSectionActivity extends Activity {
 			
 			PassPointListElement element = getItem(position);
 			
-			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_TITLE )){
+			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION)){
+				// 部門表示
+				sectionTextView.setText(element.getSection());
+				sectionLayout.setVisibility(View.VISIBLE);
+				pointLayout.setVisibility(View.GONE);
+				runnerLayout.setVisibility(View.GONE);
+				
+			}else if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT )){
 				// 地点情報表示
 				pointTextView.setText(element.getPoint());
+				sectionLayout.setVisibility(View.GONE);
 				pointLayout.setVisibility(View.VISIBLE);
 				runnerLayout.setVisibility(View.GONE);
 				
@@ -140,6 +157,7 @@ public class PassListSectionActivity extends Activity {
 				// ランナー情報表示
 				nameTextView.setText(element.getName());
 				splitTextView.setText(getString(R.string.str_txt_split) + " " + element.getSplit());
+				sectionLayout.setVisibility(View.GONE);
 				pointLayout.setVisibility(View.GONE);
 				runnerLayout.setVisibility(View.VISIBLE);
 				
@@ -156,12 +174,16 @@ public class PassListSectionActivity extends Activity {
 	
 	private class PassPointListElement{
 		
-		public static final String STR_PASSPOINTLISTELEMENT_TITLE = "title";
+		public static final String STR_PASSPOINTLISTELEMENT_SECTION = "section";
+		
+		public static final String STR_PASSPOINTLISTELEMENT_POINT = "point";
 		
 		public static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
 		
 		private String sts;
 
+		private String section;
+		
 		private String point;
 		
 		private String number;
@@ -182,6 +204,14 @@ public class PassListSectionActivity extends Activity {
 
 		public void setSts(String sts) {
 			this.sts = sts;
+		}
+
+		public String getSection() {
+			return section;
+		}
+
+		public void setSection(String section) {
+			this.section = section;
 		}
 
 		public String getPoint() {

@@ -625,6 +625,110 @@ public class Logic {
 		return runnerInfo;
 	}
 	
+	
+	public static List<PassRunnerInfo> getPassRunnerInfoList( ContentResolver contentResolver, String raceId, long recentTime ){
+		
+		List<PassRunnerInfo> passRunnerInfoList = new ArrayList<PassRunnerInfo>();
+		
+		List<DataBaseRunnerInfo> dbRunnerInfoList = DataBaseAccess.getRunnerInfoByRaceId(contentResolver, raceId);
+		
+		// 現在の時刻の秒取得
+     	Calendar cal = Calendar.getInstance();
+     	Date nowDate = cal.getTime();
+     	long nowTime = nowDate.getTime();
+     	
+		for( DataBaseRunnerInfo dbInfo : dbRunnerInfoList ){
+			
+			RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo( contentResolver, dbInfo );
+			
+			// タイムリストが空なら何もしない
+			if( runnerInfo.getTimeList().size() == 0 ){
+				continue;
+			}
+			
+			//　部門検索
+			PassRunnerInfo passRunnerInfoCurrent = null;
+			String section = runnerInfo.getSection();
+			boolean searchFlg = false;
+			
+			for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
+				
+				if( passRunnerInfo.getSection().equals(section)){
+					searchFlg = true;
+					passRunnerInfoCurrent = passRunnerInfo;
+				}
+			}
+			
+			// 部門が見つからないならば、新しく追加
+			if( searchFlg == false ){
+				passRunnerInfoCurrent = new PassRunnerInfo();
+				passRunnerInfoCurrent.setSection(section);
+				passRunnerInfoList.add(passRunnerInfoCurrent);
+			}
+			
+			// 通過地点のインデックス取得
+        	int pointIdx = runnerInfo.getTimeList().size()-1;
+        	
+        	RunnerInfo.TimeList timeList = runnerInfo.getTimeList().get(pointIdx);
+        	
+        	// 選手情報設定
+        	PassRunnerInfo.PassPointInfo.PassPointRunnerInfo passPointRunnerInfo = new PassRunnerInfo().new PassPointInfo().new PassPointRunnerInfo();
+        	passPointRunnerInfo.setName(runnerInfo.getName());
+        	passPointRunnerInfo.setNumber(runnerInfo.getNumber());
+        	passPointRunnerInfo.setSplit(timeList.getSplit());
+        	passPointRunnerInfo.setLap(timeList.getLap());
+        	passPointRunnerInfo.setCurrentTime(timeList.getCurrentTime());
+        	
+        	try {
+				Date date = DATEFORMAT.parse(dbInfo.getDate());
+				long updateTime = date.getTime();
+				
+				if( nowTime - updateTime < recentTime ){
+					passPointRunnerInfo.setRecentFlg(true);
+				}else{
+					passPointRunnerInfo.setRecentFlg(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				passPointRunnerInfo.setRecentFlg(false);
+			}
+        	
+        	// 地点情報検索
+        	int idx = -1;
+        	List<PassRunnerInfo.PassPointInfo> list = passRunnerInfoCurrent.getPassPointInfo();
+        	for( int i=0; i<list.size(); i++ ){
+    			
+        		PassRunnerInfo.PassPointInfo passPointInfo = list.get(i);
+    			
+    			if( passPointInfo.getPoint().equals( timeList.getPoint() )){
+    				idx = i;
+    			}
+    		}
+        	
+        	if( idx == -1){
+        		// 新規追加
+        		PassRunnerInfo.PassPointInfo passPointInfo = new PassRunnerInfo().new PassPointInfo();
+        		passPointInfo.setPoint(timeList.getPoint());
+        		passPointInfo.setPassPointNo(pointIdx);
+        		passPointInfo.getPassPointRunnerInfoList().add(passPointRunnerInfo);
+        		list.add(passPointInfo);
+        	}else{
+        		list.get(idx).getPassPointRunnerInfoList().add(passPointRunnerInfo);
+        	}
+		}
+		
+		for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
+			Collections.sort( passRunnerInfo.getPassPointInfo(), new PassPointInfoComparator2());
+			
+			// タイム順に並び替え
+	        for( PassRunnerInfo.PassPointInfo info : passRunnerInfo.getPassPointInfo() ){
+	        	Collections.sort( info.getPassPointRunnerInfoList() , new PassPointInfoSplitComparator2() );
+	        }
+		}
+		
+		return passRunnerInfoList;
+	}
+	
 	/**
 	 * 地点通過情報のリスト取得
 	 * @param contentResolver
@@ -729,19 +833,46 @@ public class Logic {
 		
 	}
 	
+	private static class PassPointInfoComparator2 implements Comparator<PassRunnerInfo.PassPointInfo>{
+
+		@Override
+		public int compare( PassRunnerInfo.PassPointInfo o1, PassRunnerInfo.PassPointInfo o2) {
+			if( o1.getPassPointNo() < o2.getPassPointNo() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+		
+		
+	}
+	
 	private static class PassPointInfoSplitComparator implements Comparator<PassPointInfo.PassPointRunnerInfo>{
 
 		@Override
 		public int compare(PassPointRunnerInfo o1, PassPointRunnerInfo o2) {
 			
-			if( o1.getSplitLong() > o2.getSplitLong() ){
+			if( o1.getSplitLong() < o2.getSplitLong() ){
 				return 1;
 			}else{
 				return -1;
 			}
 		}
 	}
-	
+
+	private static class PassPointInfoSplitComparator2 implements Comparator<PassRunnerInfo.PassPointInfo.PassPointRunnerInfo>{
+
+		@Override
+		public int compare(PassRunnerInfo.PassPointInfo.PassPointRunnerInfo o1, PassRunnerInfo.PassPointInfo.PassPointRunnerInfo o2) {
+			
+			if( o1.getSplitLong() < o2.getSplitLong() ){
+				return 1;
+			}else{
+				return -1;
+			}
+		}
+	}
+
 	private static class UpdateInfoSplitComparator implements Comparator<UpdateInfo>{
 
 		@Override
