@@ -7,14 +7,22 @@
     <color name="titlecolor">#47cc59</color>
     <color name="accentColor">#cc9628</color>
     <color name="basetextcolor">#555555</color>
+    
+    <!-- ヘッダー -->
     <color name="color_com_header_layout_back">#47cc59</color>
+    <color name="color_com_header_title_textview_text">#ffffff</color>
     <color name="color_com_header_button_text">#ffffff</color>
     <color name="color_com_header_button_back">#8eccad</color>
-    <color name="color_com_header_title_textview_text">#ffffff</color>
+    
+    <!-- ボーダー -->
     <color name="color_com_border_layout_back">#c6cc28</color>
+    
+    <!-- ボディ -->
     <color name="color_com_body_layout_back">#e5edf2</color>
-    <color name="color_com_body_listview_back">#ffffff</color>
-    <color name="color_com_body_message_textview_back">#ffffff</color>
+    <color name="color_com_body_contents_layout_back">#ffffff</color>
+    <color name="color_com_body_message_layout_back">#ffffff</color>
+    
+    
     <color name="color_com_list_item_dot_textview_text">#c6cc28</color>
     
     <color name="color_activity_raceentry_body_urlform_layout_back">#ffffff</color>

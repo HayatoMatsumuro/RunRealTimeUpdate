@@ -13,8 +13,9 @@
         android:padding="@dimen/dim_com_header_layout_padding"
         android:background="@color/color_com_header_layout_back" >
 
+        <!-- タイトル -->
 		<TextView
-		    android:id="@+id/id_activity_main_header_racelist_textview"
+		    android:id="@+id/id_activity_main_header_title_textview"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
@@ -23,6 +24,7 @@
 		    android:textAppearance="?android:attr/textAppearanceMedium"
 		    android:textColor="@color/color_com_header_title_textview_text" />
 
+		<!-- 大会登録ボタン -->
 		<Button
             android:id="@+id/id_activity_main_header_entry_button"
             android:layout_width="wrap_content"
@@ -33,9 +35,10 @@
             android:background="@color/color_com_header_button_back"
             android:textColor="@color/color_com_header_button_text"
             android:text="@string/str_btn_entry" />
+		
     </RelativeLayout>
     
-    <!-- コンテンツ -->
+    <!-- ボディ -->
 	<LinearLayout
 	    android:id="@+id/id_activity_main_body_layout"
 	  	android:layout_width="fill_parent"
@@ -44,20 +47,39 @@
         android:padding="@dimen/dim_com_body_layout_padding"
     	android:background="@color/color_com_body_layout_back" >
 	    
-	    <ListView
-       		android:id="@+id/id_activity_main_body_racelist_listview"
-        	android:layout_width="match_parent"
+	    <!-- コンテンツ -->
+	    <RelativeLayout
+	        android:id="@+id/id_activity_main_body_contents_layout"
+	        android:layout_width="match_parent"
         	android:layout_height="wrap_content"
-	    	android:padding="@dimen/dim_com_body_listview_padding"
-	    	android:background="@color/color_com_body_listview_back"  >
-    	</ListView>
-        <TextView
-            android:id="@+id/id_activity_main_body_norace_textview"
-            android:layout_width="match_parent"
-           	android:layout_height="wrap_content"
-	    	android:padding="@dimen/dim_com_body_message_textview_padding"
-            android:text="@string/str_msg_mainnorace"
-	    	android:background="@color/color_com_body_message_textview_back"
-	    	android:visibility="gone" />
+        	android:padding="@dimen/dim_com_body_contents_layout_padding"
+        	android:background="@color/color_com_body_contents_layout_back" >
+	        
+	        <!-- 大会リスト -->
+	        <ListView
+       			android:id="@+id/id_activity_main_body_contents_racelist_listview"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content" />
+	    </RelativeLayout>
+	    
+	    <!-- メッセージ -->
+	    <RelativeLayout 
+	        android:id="@+id/id_activity_main_body_message_layout"
+	        android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_message_layout_padding"
+        	android:background="@color/color_com_body_message_layout_back"
+        	android:visibility="gone">
+	        
+	        <!-- 大会登録なし -->
+        	<TextView
+        	    android:id="@+id/id_activity_main_body_message_norace_textview"
+        	    android:layout_width="match_parent"
+        	   	android:layout_height="wrap_content"
+        	    android:text="@string/str_msg_mainnorace" />
+        	
+	    </RelativeLayout>
+	    
     </LinearLayout>
+    
 </LinearLayout>

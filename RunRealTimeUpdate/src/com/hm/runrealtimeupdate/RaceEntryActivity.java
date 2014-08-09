@@ -36,7 +36,7 @@ public class RaceEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideBtn = (Button)findViewById(R.id.id_activity_raceentry_body_urlform_decide_button);
+        Button decideBtn = (Button)findViewById(R.id.id_activity_raceentry_body_contents_urlform_decide_button);
         decideBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -47,7 +47,7 @@ public class RaceEntryActivity extends Activity {
 				params[0] = getString(R.string.str_txt_defaulturl);
 				
 				// URL入力エディットボックスから入力値取得
-				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_urlform_inputurl_edittext);
+				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_contents_urlform_inputurl_edittext);
 				
 				// 何も入力してないならば、以降の処理をしない
 				String inputRaceId = urlEdit.getText().toString();

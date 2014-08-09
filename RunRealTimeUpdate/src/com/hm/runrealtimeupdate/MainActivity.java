@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         
         // 大会情報リスト設定
         RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
-        ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
+        ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
         raceInfoListView.setAdapter(adapter);
         
         // リストのアイテム短押し
@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
      */
     private void setViewUI(){
     	
-    	ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
+    	ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
     	
     	// 登録している大会の個数取得
     	int raceInfoNum = raceInfoListView.getAdapter().getCount();
@@ -120,7 +120,7 @@ public class MainActivity extends Activity {
         }
     	
     	// 大会リストまたは大会未登録メッセージの設定
-    	TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_norace_textview);
+    	TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_message_norace_textview);
         if( raceInfoNum == 0 ){
         	raceInfoListView.setVisibility(View.GONE);
         	noRaceTextView.setVisibility(View.VISIBLE);
@@ -162,7 +162,7 @@ public class MainActivity extends Activity {
 				Logic.deleteRaceInfo( getContentResolver(), info.getRaceId());
 				
 				// リストから大会削除
-				ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_racelist_listview);
+				ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
 				RaceListAdapter adapter = ( RaceListAdapter )raceInfoListView.getAdapter();
 				adapter.remove( info );
 				adapter.notifyDataSetChanged();

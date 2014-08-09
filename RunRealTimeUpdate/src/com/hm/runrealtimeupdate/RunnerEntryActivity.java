@@ -32,6 +32,7 @@ public class RunnerEntryActivity extends Activity {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_runnerentry);
         
+        //TODO: 大会がないときのメッセージ
         // 大会情報取得
         Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);

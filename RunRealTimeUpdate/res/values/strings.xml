@@ -25,6 +25,7 @@
     <string name="str_dialog_msg_NG">やめる</string>
     <string name="str_dialog_msg_get">取得中</string>
     <string name="str_dialog_msg_cancel">キャンセル</string>
+    <string name="str_msg_default">メッセージ</string>
     <string name="str_msg_mainnorace">大会が登録されていません。大会を登録してください。</string>
     <string name="str_msg_runnnerno">選手が登録されていません。選手を登録してください。</string>
     <string name="str_msg_inputurl">以降のURLを入力</string>
