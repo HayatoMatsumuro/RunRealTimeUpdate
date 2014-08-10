@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.PassRunnerInfo;
-import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,61 +35,82 @@ public class PassListActivity extends Activity {
 		Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         
-        // 大会情報取得
-        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
-        
         // 大会情報が取得できないなら、エラー画面
-        if( raceInfo == null ){
+        if( ( raceId == null ) || ( raceId.equals("")) ){
         	Intent intentErr = new Intent(PassListActivity.this, ErrorActivity.class);
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
         
-        // 地点通過情報取得
-        List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList(getContentResolver(), raceId, LONG_RESENT_TIME);
-        
-        List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
-        
-        // TODO: タブを切り替えた場合、更新されないのでonResume に移動する必要がある
-        for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
-        	// 部門
-        	PassPointListElement element = new PassPointListElement();
-        	element.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION);
-        	element.setSection(passRunnerInfo.getSection());
-        	passPointList.add(element);
-        	
-        	for( PassRunnerInfo.PassPointInfo passPointInfo:passRunnerInfo.getPassPointInfo()){
-        		
-        		// 地点
-            	PassPointListElement pElement = new PassPointListElement();
-            	pElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT);
-            	pElement.setPoint(passPointInfo.getPoint());
-            	passPointList.add(pElement);
-            	
-            	// 選手
-            	for( PassRunnerInfo.PassPointInfo.PassPointRunnerInfo passPointRunnerInfo : passPointInfo.getPassPointRunnerInfoList() ){
-            		PassPointListElement rElement = new PassPointListElement();
-            		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
-            		rElement.setName(passPointRunnerInfo.getName());
-            		rElement.setNumber(passPointRunnerInfo.getNumber());
-            		rElement.setSplit(passPointRunnerInfo.getSplit());
-            		rElement.setLap(passPointRunnerInfo.getLap());
-            		rElement.setCurrentTime(passPointRunnerInfo.getCurrentTime());
-            		rElement.setRecentFlg(passPointRunnerInfo.isRecentFlg());
-            		passPointList.add(rElement);
-            	}
-        	}
-        }
-        
-        // リストビューの設定
-        ListView listView = (ListView)findViewById( R.id.id_activity_passlist_body_contents_passlist_listview);
-        PassPointAdapter adapter = new PassPointAdapter(this, passPointList);
-        listView.setAdapter(adapter);
-        
         return;
 	}
 	
 	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// 大会Id取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_message_layout );
+        
+        // 地点通過情報取得
+        List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList(getContentResolver(), raceId, LONG_RESENT_TIME);
+        
+        if( passRunnerInfoList.isEmpty() ){
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        } else {
+        	List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
+        	
+            for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
+            	// 部門
+            	PassPointListElement element = new PassPointListElement();
+            	element.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION);
+            	element.setSection(passRunnerInfo.getSection());
+            	passPointList.add(element);
+            	
+            	for( PassRunnerInfo.PassPointInfo passPointInfo:passRunnerInfo.getPassPointInfo()){
+            		
+            		// 地点
+                	PassPointListElement pElement = new PassPointListElement();
+                	pElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT);
+                	pElement.setPoint(passPointInfo.getPoint());
+                	passPointList.add(pElement);
+                	
+                	// 選手
+                	for( PassRunnerInfo.PassPointInfo.PassPointRunnerInfo passPointRunnerInfo : passPointInfo.getPassPointRunnerInfoList() ){
+                		PassPointListElement rElement = new PassPointListElement();
+                		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
+                		rElement.setName(passPointRunnerInfo.getName());
+                		rElement.setNumber(passPointRunnerInfo.getNumber());
+                		rElement.setSplit(passPointRunnerInfo.getSplit());
+                		rElement.setLap(passPointRunnerInfo.getLap());
+                		rElement.setCurrentTime(passPointRunnerInfo.getCurrentTime());
+                		rElement.setRecentFlg(passPointRunnerInfo.isRecentFlg());
+                		passPointList.add(rElement);
+                	}
+            	}
+            }
+            
+            // リストビューの設定
+            ListView listView = (ListView)findViewById( R.id.id_activity_passlist_body_contents_passlist_listview);
+            PassPointAdapter adapter = ( PassPointAdapter )listView.getAdapter();;
+            
+            if( adapter != null ){
+				adapter.clear();
+			}
+            
+            adapter = new PassPointAdapter(this, passPointList);
+            listView.setAdapter(adapter);
+        }
+        
+	}
+
+
 	private class PassPointAdapter extends ArrayAdapter<PassPointListElement>{
 		LayoutInflater inflater;
 		
