@@ -211,7 +211,7 @@ public class DataBaseAccess {
 	 */
 	public static List<DataBaseRunnerInfo> getRunnerInfoByRaceId( ContentResolver contentResolver, String raceId){
 		List<DataBaseRunnerInfo> list = new ArrayList<DataBaseRunnerInfo>();
-		
+		/*
 		// TODO: テスト用
 		String[][] tRunnerInfo = {
 				{ "2014utmf",	"100",		"テスト1",		"utmf",		"2014-05-31 00:00:00" },
@@ -233,7 +233,7 @@ public class DataBaseAccess {
 		}
 		
 		return list;
-		/*
+		*/
 		String[] projection = {
 				RunnerProvider.STR_DB_COLUMN_RACEID,
 				RunnerProvider.STR_DB_COLUMN_NUMBER,
@@ -254,7 +254,7 @@ public class DataBaseAccess {
 		c.close();
 		
 		return list;
-		*/
+		
 	}
 
 	/**

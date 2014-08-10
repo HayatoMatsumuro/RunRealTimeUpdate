@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -207,8 +208,9 @@ public class MainActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_raceinfo, parent, false);
 			}
 			
+			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
+			
 			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_detail_racename_textview);
-			TextView raceUpdateTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_update_textview);
 			
 			RaceInfo raceInfo = getItem(position);
 			
@@ -216,10 +218,9 @@ public class MainActivity extends Activity {
 			
 			// 速報中の大会ならば、速報中と表示
 			if(raceInfo.isRaceUpdate()){
-				raceUpdateTextView.setText(getString(R.string.str_txt_updateexe));
-				raceUpdateTextView.setVisibility(View.VISIBLE);
+				raceUpdateLayout.setVisibility(View.VISIBLE);
 			}else{
-				raceUpdateTextView.setVisibility(View.GONE);
+				raceUpdateLayout.setVisibility(View.GONE);
 			}
 			
 			return convertView;
