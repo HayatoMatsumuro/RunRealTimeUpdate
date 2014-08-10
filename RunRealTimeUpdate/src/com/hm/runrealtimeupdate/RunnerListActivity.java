@@ -188,18 +188,37 @@ public class RunnerListActivity extends Activity {
 		
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-		// リストビュー更新
-		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
-		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
 		
-		if( adapter != null ){
-			adapter.clear();
+		// レイアウト
+		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_contents_layout );
+		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_message_layout );
+		
+		// 部門別選手リストの取得
+		List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
+		
+		if( sectionRunnerInfoList.isEmpty() ){
+			// 選手情報なし
+			contentsLayout.setVisibility( View.GONE );
+			messageLayout.setVisibility( View.VISIBLE );
+		}else{
+			
+			// 選手情報なし
+			contentsLayout.setVisibility( View.VISIBLE );
+			messageLayout.setVisibility( View.GONE );
+						
+			List<SectionRunnerElement> sectionRunnerElementList = createSectionRunnerElementList( sectionRunnerInfoList );
+			
+			// リストビュー更新
+			ListView runnerInfoListView = ( ListView )findViewById( R.id.id_activity_runnerlist_body_contents_runnerlist_listview );
+			RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
+			
+			if( adapter != null ){
+				adapter.clear();
+			}
+			
+			adapter = new RunnerListAdapter( this, sectionRunnerElementList );
+	        runnerInfoListView.setAdapter( adapter );
 		}
-		
-		List<SectionRunnerElement> sectionRunnerElementList = createSectionRunnerElementList( raceId );
-        adapter = new RunnerListAdapter(this, sectionRunnerElementList);
-        runnerInfoListView.setAdapter(adapter);
-        
 	}
 	
 	/**
@@ -220,15 +239,11 @@ public class RunnerListActivity extends Activity {
 	
 	/**
 	 * リストビュー用の選手一覧のリストを作成する
-	 * @param raceId 大会ID
 	 * @return　リストビュー用の選手一覧
 	 */
-	private List<SectionRunnerElement> createSectionRunnerElementList( String raceId ){
+	private List<SectionRunnerElement> createSectionRunnerElementList( List<SectionRunnerInfo> sectionRunnerInfoList ){
 		
-		List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
-        
         // 表示用の部門別の選手情報設定
-        
         List<SectionRunnerElement> sectionRunnerElementList = new ArrayList<SectionRunnerElement>();
         for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList ){
         	
