@@ -10,7 +10,8 @@
     <RelativeLayout
         android:id="@+id/id_list_item_raceinfo_detail_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dim_list_item_raceinfo_detail_layout_height">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dim_list_item_raceinfo_detail_layout_padding">
 
         <!-- ドット -->
         <TextView
@@ -29,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dim_list_item_raceinfo_detail_racename_textview_marginleft"
             android:layout_toRightOf="@+id/id_list_item_raceinfo_detail_dot_textview"
             android:text="@string/str_txt_racename" />
 
