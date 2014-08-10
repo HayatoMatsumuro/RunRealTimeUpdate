@@ -52,15 +52,17 @@
 	        android:id="@+id/id_activity_raceentry_body_contents_layout"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_contents_layout_padding"
+    		android:background="@color/color_com_body_contents_layout_back"
 	    	android:orientation="vertical" >
 	        
-	        <!-- URL入力フォーム -->
+	        <!-- 入力フォーム -->
 	        <RelativeLayout
 	        	android:id="@+id/id_activity_raceentry_body_contents_urlform_layout"
 	        	android:layout_width="match_parent"
 	        	android:layout_height="wrap_content"
-	        	android:background="@color/color_activity_raceentry_body_urlform_layout_back"
-	        	android:padding="@dimen/dim_activity_raceentry_body_urlform_layout_padding" >
+	        	android:background="@color/color_activity_raceentry_body_contents_urlform_layout_back"
+	        	android:padding="@dimen/dim_activity_raceentry_body_contents_urlform_layout_padding" >
 
 	            <!-- デフォルトURL -->
 	        	<TextView
@@ -82,48 +84,26 @@
 	        	<!-- URL入力ボックス -->
 	        	<EditText
 	            	android:id="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
-	            	android:layout_width="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_width"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_height"
+	            	android:layout_width="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width"
+	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
 	            	android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
-	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_margintop"
-	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_marginleft"
+	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft"
 	            	android:ems="20"
 	            	android:inputType="textPersonName" />
 
 	        	<!-- 決定ボタン -->
 	        	<Button
-	           		android:id="@+id/id_activity_raceentry_body_contents_urlform_decide_button"
+	           		android:id="@+id/id_activity_raceentry_body_contenturl_inputform_decide_button"
 	            	android:layout_width="wrap_content"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_urlform_decide_button_height"
+	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
 	            	android:layout_toRightOf="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
 	            	android:layout_alignTop="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
-	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_urlform_decide_button_marginleft"
+	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
 	            	android:text="@string/str_btn_decide" />
 	        	
 			</RelativeLayout>
 			
-			<!-- リザーブ -->
-			<RelativeLayout
-	        	android:id="@+id/id_activity_raceentry_body_contents_reserve_layout"
-	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content" />
-			
-	    </RelativeLayout>
-	    
-	    <!-- メッセージ -->
-	    <RelativeLayout
-	        android:id="@+id/id_activity_raceentry_body_message_layout"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:visibility="gone" >
-	        
-	        <!-- デフォルトメッセージ -->
-	    	<TextView
-        	   	android:id="@+id/id_activity_main_body_message_default_textview"
-        	   	android:layout_width="match_parent"
-        		android:layout_height="wrap_content"
-        	   	android:text="@string/str_msg_default" />
-	    	
 	    </RelativeLayout>
 	    
 	</LinearLayout>

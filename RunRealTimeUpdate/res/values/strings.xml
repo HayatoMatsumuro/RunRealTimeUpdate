@@ -28,6 +28,8 @@
     <string name="str_msg_default">メッセージ</string>
     <string name="str_msg_mainnorace">大会が登録されていません。大会を登録してください。</string>
     <string name="str_msg_runnnerno">選手が登録されていません。選手を登録してください。</string>
+    <string name="str_msg_updateno">速報情報がありません。</string>
+    <string name="str_msg_passno">通過情報がありません。</string>
     <string name="str_msg_inputurl">以降のURLを入力</string>
     <string name="str_msg_inputNumber">ゼッケン番号入力してください。</string>
     <string name="str_msg_updaterunner">速報リストを更新しました。</string>

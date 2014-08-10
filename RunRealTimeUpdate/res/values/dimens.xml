@@ -23,22 +23,32 @@
     <dimen name="dim_com_body_contents_layout_padding">10dp</dimen>
     <dimen name="dim_com_body_message_layout_padding">10dp</dimen>
     
-    <dimen name="dim_activity_raceentry_body_urlform_layout_padding">15dp</dimen>
+    <!-- 大会登録 -->
+    <dimen name="dim_activity_raceentry_body_contents_urlform_layout_padding">0dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height">40dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width">200dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop">15dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft">10dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_marginleft">5dp</dimen>
+    <dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_height">40dp</dimen>
     
-    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_height">40dp</dimen>
-    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_width">200dp</dimen>
-    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_margintop">15dp</dimen>
-    <dimen name="dim_activity_raceentry_body_urlform_inputurl_edittext_marginleft">10dp</dimen>
+    <!-- 選手登録 -->
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_layout_padding">0dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_height">40dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_margintop">15dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_marginleft">10dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_marginleft">5dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_height">40dp</dimen>
     
-    <dimen name="dim_activity_raceentry_body_urlform_decide_button_marginleft">5dp</dimen>
-    <dimen name="dim_activity_raceentry_body_urlform_decide_button_height">40dp</dimen>
+    <!-- 大会詳細 -->
+    <dimen name="dim_activity_racedetail_body_contents_detailbox_layout_padding">10dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_detailbox_update_button_margintop">30dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_detailbox_update_button_height">40dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_detailbox_update_button_width">150dp</dimen>
     
     <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
     
-    <dimen name="dim_activity_racedetail_detailbox_layout_padding">10dp</dimen>
-    <dimen name="dim_activity_racedetail_detailbox_update_button_margintop">30dp</dimen>
-    <dimen name="dim_activity_racedetail_detailbox_update_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_detailbox_update_button_width">150dp</dimen>
+    
     
     <dimen name="dim_activity_runnerlist_contents_layout_padding">10dp</dimen>
     

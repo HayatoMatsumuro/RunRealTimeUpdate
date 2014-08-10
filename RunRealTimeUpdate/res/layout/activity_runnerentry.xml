@@ -13,8 +13,9 @@
         android:padding="@dimen/dim_com_header_layout_padding"
         android:background="@color/color_com_header_layout_back" >
         
+        <!-- タイトル -->
 	    <TextView
-		    android:id="@+id/id_activity_runnerentry_header_racelist_textview"
+		    android:id="@+id/id_activity_runnerentry_header_title_textview"
 		    android:layout_width="wrap_content"
 		    android:layout_height="wrap_content"
 		    android:layout_centerHorizontal="true"
@@ -23,6 +24,7 @@
 		    android:textAppearance="?android:attr/textAppearanceMedium"
 		    android:textColor="@color/color_com_header_title_textview_text" />
 	    
+	    <!-- 戻るボタン -->
 	    <Button
             android:id="@+id/id_activity_runnerentry_header_back_button"
             android:layout_width="wrap_content"
@@ -33,50 +35,69 @@
             android:background="@color/color_com_header_button_back"
             android:textColor="@color/color_com_header_button_text"
             android:text="@string/str_btn_back" />
+	    
     </RelativeLayout>
     
-    <!-- コンテンツ -->
-	<RelativeLayout
+	<!-- ボディ -->
+	<LinearLayout
 	    android:id="@+id/id_activity_runnerentry_body_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:background="@color/color_com_body_layout_back"
-	    android:orientation="vertical"
-	    android:padding="@dimen/dim_com_body_layout_padding" >
+	  	android:layout_width="match_parent"
+    	android:layout_height="match_parent"
+    	android:orientation="vertical"
+        android:padding="@dimen/dim_com_body_layout_padding"
+    	android:background="@color/color_com_body_layout_back" >
 	    
-	    <RelativeLayout
-	        android:id="@+id/id_activity_runnerentry_body_numberform_layout"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:background="@color/color_activity_raceentry_body_urlform_layout_back"
-	        android:padding="@dimen/dim_activity_raceentry_body_urlform_layout_padding" >
-	        
-    		<TextView
-        		android:id="@+id/id_activity_runnerentry_body_numberform_inputNumber_textview"
-        		android:layout_width="wrap_content"
-        		android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-	            android:layout_alignParentTop="true"
-        		android:text="@string/str_msg_inputNumber" />
+    	<!-- コンテンツ -->
+		<RelativeLayout
+	    	android:id="@+id/id_activity_runnerentry_body_contents_layout"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_contents_layout_padding"
+    		android:background="@color/color_com_body_contents_layout_back"
+	    	android:orientation="vertical">
+	    
+		    <!-- ゼッケン番号入力フォーム -->
+	    	<RelativeLayout
+	        	android:id="@+id/id_activity_runnerentry_body_contents_numberform_layout"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="wrap_content"
+        		android:padding="@dimen/dim_activity_runnerentry_body_contents_runnerform_layout_padding"
+    			android:background="@color/color_activity_runnerentry_body_contents_numberform_layout_back">
+    			
+	    	    <!--ゼッケン番号入力メッセージ -->
+    			<TextView
+        			android:id="@+id/id_activity_runnerentry_body_contents_numberform_inputNumber_textview"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+	            	android:layout_alignParentLeft="true"
+	            	android:layout_alignParentTop="true"
+        			android:text="@string/str_msg_inputNumber" />
 
-    		<EditText
-        		android:id="@+id/id_activity_runnerentry_body_numberform_number_edittext"
-        		android:layout_width="100dp"
-	            android:layout_height="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_height"
-	            android:layout_below="@+id/id_activity_runnerentry_body_numberform_inputNumber_textview"
-	            android:layout_marginTop="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_margintop"
-	            android:layout_marginLeft="@dimen/dim_activity_raceentry_body_urlform_inputurl_edittext_marginleft"
-	            android:ems="5"
-        		android:inputType="numberSigned" />
+    			<!-- ゼッケン番号入力ボックス -->
+    			<EditText
+        			android:id="@+id/id_activity_runnerentry_body_contents_numberform_number_edittext"
+        			android:layout_width="100dp"
+	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+	            	android:layout_below="@+id/id_activity_runnerentry_body_contents_numberform_inputNumber_textview"
+	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft"
+	            	android:ems="5"
+        			android:inputType="numberSigned" />
 
-    		<Button
-        		android:id="@+id/id_activity_runnerentry_body_numberform_decide_button"
-        		android:layout_width="wrap_content"
-        		android:layout_height="@dimen/dim_activity_raceentry_body_urlform_decide_button_height"
-	            android:layout_toRightOf="@+id/id_activity_runnerentry_body_numberform_number_edittext"
-	            android:layout_alignTop="@+id/id_activity_runnerentry_body_numberform_number_edittext"
-	            android:layout_marginLeft="@dimen/dim_activity_raceentry_body_urlform_decide_button_marginleft"
-	            android:text="@string/str_btn_decide" />
+    			<!-- 決定ボタン -->
+    			<Button
+        			android:id="@+id/id_activity_runnerentry_body_numberform_decide_button"
+        			android:layout_width="wrap_content"
+        			android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
+	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_numberform_number_edittext"
+	            	android:layout_alignTop="@+id/id_activity_runnerentry_body_contents_numberform_number_edittext"
+	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
+	            	android:text="@string/str_btn_decide" />
+    			
     		</RelativeLayout>
-	</RelativeLayout>
+    		
+		</RelativeLayout>
+		
+	</LinearLayout>
+	
 </LinearLayout>

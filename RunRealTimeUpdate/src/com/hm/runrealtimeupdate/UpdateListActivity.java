@@ -46,7 +46,7 @@ public class UpdateListActivity extends Activity {
         
         // リストビュー設定
         UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
-        ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_runner_listview);
+        ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_body_contents_update_listview);
         updateListView.setAdapter(adapter);
         
         return;

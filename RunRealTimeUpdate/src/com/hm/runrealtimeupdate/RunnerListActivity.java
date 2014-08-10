@@ -56,7 +56,7 @@ public class RunnerListActivity extends Activity {
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 選手リスト設定
-        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
+        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
         
         // 選手リストのアイテム長押し
         runnerInfoListView.setTag(raceInfo);
@@ -189,7 +189,7 @@ public class RunnerListActivity extends Activity {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		// リストビュー更新
-		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
+		ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
 		RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
 		
 		if( adapter != null ){
@@ -284,7 +284,7 @@ public class RunnerListActivity extends Activity {
     			Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
     				
     			// 表示リストを更新する
-    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_runnerlist_listview);
+    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
     			RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
     			adapter.remove( element );
     			adapter.notifyDataSetChanged();

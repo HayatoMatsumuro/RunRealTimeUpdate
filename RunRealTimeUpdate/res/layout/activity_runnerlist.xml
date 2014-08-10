@@ -18,7 +18,7 @@
         
         <!-- 選手リスト -->
     	<ListView
-    		android:id="@+id/id_activity_runnerlist_runnerlist_listview"
+    		android:id="@+id/id_activity_runnerlist_body_contents_runnerlist_listview"
     		android:layout_width="match_parent"
     		android:layout_height="wrap_content" />
     	
@@ -35,10 +35,11 @@
     	
         <!-- 登録選手なし -->
         <TextView
-        	android:id="@+id/id_activity_main_body_message_norace_textview"
+        	android:id="@+id/id_activity_runnerlist_body_message_norace_textview"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
         	android:text="@string/str_msg_runnnerno" />
         
     </RelativeLayout>
+    
 </LinearLayout>

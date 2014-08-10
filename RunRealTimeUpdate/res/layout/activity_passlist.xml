@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_activity_passlistsection_layout"
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_activity_passlist_body_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+   	android:orientation="vertical"
+    android:padding="@dimen/dim_com_body_layout_padding"
+    android:background="@color/color_com_body_layout_back" >
 
-    <TextView
-        android:id="@+id/id_activity_passlistsection_title_textview"
-        android:layout_width="wrap_content"
+	<!-- コンテンツ -->
+	<RelativeLayout 
+	    android:id="@+id/id_activity_passlist_body_contents_layout"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:padding="@dimen/dim_com_body_contents_layout_padding"
+        android:background="@color/color_com_body_contents_layout_back" >
+	    
+	    <!-- 通過情報リスト-->
+	    <ListView
+        	android:id="@+id/id_activity_passlist_body_contents_passlist_listview"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content" />
+    
+	</RelativeLayout>
+    
+    <!-- メッセージ -->
+    <RelativeLayout 
+	    android:id="@+id/id_activity_passlist_body_message_layout"
+	    android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/str_title_passlistsection"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <ListView
-        android:id="@+id/id_activity_passlistsection_sectionlist_listview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_activity_passlistsection_title_textview"
-        android:layout_below="@+id/id_activity_passlistsection_title_textview"
-        android:layout_marginTop="10dp" >
-    </ListView>
-
-    <Button
-        android:id="@+id/id_activity_passlistsection_back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/str_btn_back" />
+        android:padding="@dimen/dim_com_body_message_layout_padding"
+        android:background="@color/color_com_body_message_layout_back"
+        android:visibility="gone">
+    	
+        <!-- 通過情報なし -->
+        <TextView
+        	android:id="@+id/id_activity_passlist_body_message_passno_textview"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/str_msg_passno" />
+        
+    </RelativeLayout>
 
 </RelativeLayout>

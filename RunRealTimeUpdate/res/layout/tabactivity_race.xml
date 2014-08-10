@@ -18,6 +18,7 @@
         	android:padding="@dimen/dim_com_header_layout_padding"
         	android:background="@color/color_com_header_layout_back" >
 
+            <!-- 大会リスト -->
     		<Button
     	    	android:id="@+id/id_tabactivity_race_header_racelist_button"
             	android:layout_width="wrap_content"
@@ -29,6 +30,7 @@
             	android:textColor="@color/color_com_header_button_text"
     	    	android:text="@string/str_btn_backstart" />
     		
+    		<!-- 大会登録 -->
     		<Button 
     		    android:id="@+id/id_tabactivity_race_header_runnerentry_button"
     		    android:layout_width="wrap_content"
@@ -62,8 +64,7 @@
       			android:id="@android:id/tabcontent"
       			android:layout_width="fill_parent"
       			android:layout_height="fill_parent"/>
+        	
     </LinearLayout>
-
-
 
 </TabHost>

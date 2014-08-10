@@ -34,22 +34,22 @@ public class RaceDetailActivity extends Activity {
         }
 
         // 大会名表示
-        TextView raceNameTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racename);
-        raceNameTextView.setText(raceInfo.getRaceName());
+        TextView raceNameTextView = ( TextView )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_racename_textview );
+        raceNameTextView.setText( raceInfo.getRaceName() );
         
         // 大会日
-        TextView raceDateTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racedate_textview);
-        raceDateTextView.setText(raceInfo.getRaceDate());
+        TextView raceDateTextView = ( TextView )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_racedate_title_textview );
+        raceDateTextView.setText( raceInfo.getRaceDate() );
         
         // 開催地
-        TextView raceLocationTextView = (TextView)findViewById(R.id.id_activity_racedetail_detailbox_racelocation_textview);
-        raceLocationTextView.setText(raceInfo.getRaceLocation());
+        TextView raceLocationTextView = ( TextView )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_racelocation_title_textview );
+        raceLocationTextView.setText( raceInfo.getRaceLocation() );
         
         // 速報ボタン
-        Button updateButton = (Button)findViewById(R.id.id_activity_racedetail_detailbox_update_button);
+        Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_update_button );
         
         // 速報止ボタンの表示設定
-        RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver());
+        RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver() );
         
         if( updateRaceInfo == null ){
         	// 速報中の大会なし

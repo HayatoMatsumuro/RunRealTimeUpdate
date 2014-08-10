@@ -36,7 +36,7 @@ public class RaceEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideBtn = (Button)findViewById(R.id.id_activity_raceentry_body_contents_urlform_decide_button);
+        Button decideBtn = (Button)findViewById( R.id.id_activity_raceentry_body_contenturl_inputform_decide_button );
         decideBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override

@@ -83,7 +83,7 @@ public class PassListActivity extends Activity {
         }
         
         // リストビューの設定
-        ListView listView = (ListView)findViewById( R.id.id_activity_passlistsection_sectionlist_listview );
+        ListView listView = (ListView)findViewById( R.id.id_activity_passlist_body_contents_passlist_listview);
         PassPointAdapter adapter = new PassPointAdapter(this, passPointList);
         listView.setAdapter(adapter);
         
