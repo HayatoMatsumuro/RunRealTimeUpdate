@@ -3,7 +3,6 @@ package com.hm.runrealtimeupdate;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
-import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class UpdateListActivity extends Activity {
@@ -29,29 +29,59 @@ public class UpdateListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_updatelist);
 		
-		 // 大会情報取得
+		// 大会Id取得
         Intent intent = getIntent();
         String raceId = intent.getStringExtra( STR_INTENT_RACEID );
-        RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId);
         
         // 大会情報が取得できないなら、エラー画面
-        if( raceInfo == null ){
+        if( ( raceId == null ) || ( raceId.equals("")) ){
         	Intent intentErr = new Intent(UpdateListActivity.this, ErrorActivity.class);
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
         
-        // 速報データ取得
-        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
-        
-        // リストビュー設定
-        UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
-        ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_body_contents_update_listview);
-        updateListView.setAdapter(adapter);
-        
         return;
 	}
 	
+	
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+		
+		// 大会Id取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById(R.id.id_activity_updatelist_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_updatelist_body_message_layout );
+        
+        // 速報データ取得
+        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
+        
+        if( updateInfoList.isEmpty() ){
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        } else {
+
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        	
+        	ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_body_contents_update_listview);
+        	UpdateDataAdapter adapter = ( UpdateDataAdapter )updateListView.getAdapter();
+        	
+        	if( adapter != null ){
+				adapter.clear();
+			}
+        	
+        	// リストビュー設定
+            adapter = new UpdateDataAdapter(this, updateInfoList);
+            
+            updateListView.setAdapter(adapter);
+        }
+	}
+
+
 	/**
 	 * 速報データリストアダプタ
 	 * @author Hayato Matsumuro
