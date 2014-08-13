@@ -42,6 +42,9 @@
     <color name="color_item_list_raceinfo_update_textview_back">#e5b7e2</color>
     <color name="color_item_list_raceinfo_update_textview_text">#000000</color>
     
+    <!-- 速報情報 -->
+    <color name="color_item_list_updateinfo_update_textview_text">#cc2833</color>
+    
     <!-- 通過情報 -->
     <color name="color_item_list_passinfo_section_textview_back">#af59e2</color>
     <color name="color_item_list_passinfo_point_textview_back">#e6e6e6</color>

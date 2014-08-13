@@ -77,7 +77,6 @@
     	    android:linksClickable="true"
     	    android:padding="@dimen/dim_list_item_passinfo_runner_update_textview_padding"
     	    android:text="@string/str_txt_updatenew"
-    	    android:textAppearance="?android:attr/textAppearanceSmall"
     	    android:textColor="@color/color_item_list_passinfo_runner_update_textview_text" />
 
     </LinearLayout>

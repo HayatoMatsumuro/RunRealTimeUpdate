@@ -48,6 +48,7 @@
     <string name="str_txt_updatepass">通過</string>
     <string name="str_txt_updatesplit">スプリット</string>
     <string name="str_txt_updatecurrenttime">通過時間</string>
+    <string name="str_txt_updateinfo">速報情報</string>
     <string name="str_txt_passdatamain">通過情報メイン</string>
     <string name="str_txt_passdatasub">通過情報サブ</string>
     <string name="str_txt_runner">選手</string>

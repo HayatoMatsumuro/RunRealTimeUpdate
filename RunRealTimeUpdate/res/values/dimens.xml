@@ -67,6 +67,17 @@
     <dimen name="dim_list_item_runnerinfo_runner_number_textview_marginLeft">5dp</dimen>
     <dimen name="dim_list_item_runnerinfo_runner_name_textview_marginLeft">5dp</dimen>
     
+    <!-- 速報情報 -->
+    <dimen name="dim_list_item_updatedata_updateinfo_dot_textview_padding">5dp</dimen>
+    <dimen name="dim_list_item_updatedata_updateinfo_info_textview_marginLeft">5dp</dimen>
+    <dimen name="dim_list_item_updatedata_split_textview_paddingbottom">2dp</dimen>
+    <dimen name="dim_list_item_updatedata_split_textview_paddingtop">2dp</dimen>
+    <dimen name="dim_list_item_updatedata_split_textview_paddingleft">15dp</dimen>
+    <dimen name="dim_list_item_updatedata_currenttime_textview_paddingbottom">2dp</dimen>
+    <dimen name="dim_list_item_updatedata_currenttime_textview_paddingtop">2dp</dimen>
+    <dimen name="dim_list_item_updatedata_currenttime_textview_paddingleft">15dp</dimen>
+    <dimen name="dim_list_item_updatedata_update_textview_padding">2dp</dimen>
+    
     <!-- 通過情報 -->
     <dimen name="dim_list_item_passinfo_section_textview_padding">5dp</dimen>
     <dimen name="dim_list_item_passinfo_point_textview_padding">5dp</dimen>

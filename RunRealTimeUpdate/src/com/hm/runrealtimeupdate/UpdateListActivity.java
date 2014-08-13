@@ -103,20 +103,17 @@ public class UpdateListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_updatedata, parent, false);
 			}
 			
-			TextView runnerTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_runner_textview );
-			TextView passTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_pass_textview );
-			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_split_textview );
-			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_currenttime_textview );
-			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_item_updatedata_updatenuew_textview );			
+			TextView infoTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_updateinfo_info_textview);
+			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_split_textview );
+			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_currenttime_textview );
+			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_update_textview );			
         	UpdateInfo updateInfo = getItem(position);
 			
-        	String runnerStr = updateInfo.getName() + " " + getString(R.string.str_txt_updaterunner);
-        	String passStr = updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
+        	String infoStr = updateInfo.getName() + getString(R.string.str_txt_updaterunner) + updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
         	String splitStr = getString(R.string.str_txt_split) + " " + updateInfo.getSplit();
 			String currentTimeStr = getString(R.string.str_txt_currenttime) + " " + updateInfo.getCurrentTime();
         	
-        	runnerTextView.setText(runnerStr);
-        	passTextView.setText(passStr);
+        	infoTextView.setText(infoStr);
         	splitTextView.setText(splitStr);
         	currentTimeTextView.setText(currentTimeStr);
 			
