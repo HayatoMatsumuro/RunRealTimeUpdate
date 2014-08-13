@@ -1,91 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_item_pass_point_runner_layout"
+    android:id="@+id/id_item_pass_point_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <RelativeLayout
-        android:id="@+id/id_item_pass_point_runner_section_layout"
+    <!-- 部門 -->
+    <TextView
+        android:id="@+id/id_item_pass_point_section_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       	android:background="#af59e2"
-       	android:padding="2dp" >
-       	
-        <TextView
-        	android:id="@+id/id_item_pass_point_runner_section_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:layout_alignParentTop="true"
-        	android:layout_marginLeft="5dp"
-        	android:text="@string/str_txt_section"
-        	android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
+       	android:background="@color/color_item_list_passinfo_section_textview_back"
+       	android:padding="@dimen/dim_list_item_passinfo_section_textview_padding"
+        android:text="@string/str_txt_section" />
     
-    <RelativeLayout
-        android:id="@+id/id_item_pass_point_runner_point_layout"
+    <!-- 地点 -->
+    <TextView
+        android:id="@+id/id_item_pass_point_point_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       	android:background="@color/maincolor"
-       	android:padding="2dp" >
-       	
-        <TextView
-        	android:id="@+id/id_item_pass_point_runner_point_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:layout_alignParentTop="true"
-        	android:layout_marginLeft="5dp"
-        	android:text="@string/str_txt_point"
-        	android:textAppearance="?android:attr/textAppearanceMedium" />
-    </RelativeLayout>
+       	android:background="@color/color_item_list_passinfo_point_textview_back"
+       	android:padding="@dimen/dim_list_item_passinfo_point_textview_padding"
+        android:text="@string/str_txt_point" />
 
-    <RelativeLayout
-        android:id="@+id/id_item_pass_point_runner_runner_layout"
+    <!-- 選手情報 -->
+    <LinearLayout
+        android:id="@+id/id_item_pass_point_runner_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+		android:orientation="vertical" >
         
-        <TextView
-        	android:id="@+id/id_item_pass_point_runner_runner_dot_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:layout_alignParentTop="true"
-        	android:text="@string/str_txt_dot"
-        	android:layout_marginLeft="5dp"
-        	android:textColor="@color/accentColor" />
+        <!-- 選手名 -->
+        <RelativeLayout
+        	android:id="@+id/id_list_item_pass_point_runner_name_layout"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content">
+        	
+            <!-- ドット -->
+        	<TextView
+        		android:id="@+id/id_list_item_pass_point_runner_name_dot_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_alignParentLeft="true"
+            	android:layout_centerVertical="true"
+            	android:padding="@dimen/dim_com_list_item_dot_textview_padding"
+        		android:text="@string/str_txt_dot"
+        		android:textColor="@color/color_com_list_item_dot_textview_text" />
         
-        <TextView
-        	android:id="@+id/id_item_pass_point_runner_runner_name_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-    	    android:layout_toRightOf="@+id/id_item_pass_point_runner_runner_dot_textview"
-        	android:layout_marginLeft="5dp"
-        	android:text="@string/str_txt_runner"/>
+        	<!-- 選手名 -->
+        	<TextView
+        		android:id="@+id/id_item_pass_point_runner_name_name_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+            	android:layout_centerVertical="true"
+    	   		android:layout_toRightOf="@+id/id_list_item_pass_point_runner_name_dot_textview"
+        		android:layout_marginLeft="@dimen/dim_list_item_passinfo_runner_name_name_textview_marginLeft"
+        		android:text="@string/str_txt_runner"/>
+        </RelativeLayout>
 
+        <!-- スプリット -->
+        <TextView
+            android:id="@+id/id_item_pass_point_runner_runner_split_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dim_list_item_passinfo_runner_split_textview_paddingbottom"
+            android:paddingLeft="@dimen/dim_list_item_passinfo_runner_split_textview_paddingleft"
+            android:paddingTop="@dimen/dim_list_item_passinfo_runner_split_textview_paddingtop"
+            android:text="@string/str_txt_split" />
+
+        <!-- New -->
     	<TextView
-    	    android:id="@+id/id_item_pass_point_runner_runner_split_textview"
-    	    android:layout_width="wrap_content"
+    	    android:id="@+id/id_item_pass_point_runner_runner_updatenew_textview"
+    	    android:layout_width="match_parent"
     	    android:layout_height="wrap_content"
-    	    android:layout_alignLeft="@+id/id_item_pass_point_runner_runner_name_textview"
-    	    android:layout_below="@+id/id_item_pass_point_runner_runner_name_textview"
-        	android:layout_marginLeft="5dp"
-    	    android:text="@string/str_txt_split" />
+    	    android:gravity="right"
+    	    android:linksClickable="true"
+    	    android:padding="@dimen/dim_list_item_passinfo_runner_update_textview_padding"
+    	    android:text="@string/str_txt_updatenew"
+    	    android:textAppearance="?android:attr/textAppearanceSmall"
+    	    android:textColor="@color/color_item_list_passinfo_runner_update_textview_text" />
 
-    	<TextView
-       		android:id="@+id/id_item_pass_point_runner_runner_updatenew_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentRight="true"
-        	android:layout_alignParentTop="true"
-        	android:layout_marginRight="22dp"
-        	android:text="@string/str_txt_updatenew"
-        	android:textColor="@color/red"
-        	android:textStyle="italic"
-        	android:visibility="invisible"
-        	android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </RelativeLayout>
+    </LinearLayout>
     
 </LinearLayout>

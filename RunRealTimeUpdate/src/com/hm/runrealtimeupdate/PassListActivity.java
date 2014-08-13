@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -132,13 +133,12 @@ public class PassListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_passinfo, parent, false);
 			}
 			
-			RelativeLayout sectionLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_section_layout);
-			RelativeLayout pointLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_point_layout);
-			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById(R.id.id_item_pass_point_runner_runner_layout);
+			// TODO: 通過時間も追加
+			LinearLayout runnerLayout = ( LinearLayout )convertView.findViewById(R.id.id_item_pass_point_runner_layout);
 			
-			TextView sectionTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_section_textview );
-			TextView pointTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_point_textview );
-			TextView nameTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_name_textview );
+			TextView sectionTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_section_textview );
+			TextView pointTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_point_textview );
+			TextView nameTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_name_name_textview );
 			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_split_textview );
 			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_updatenew_textview );
 			
@@ -147,29 +147,29 @@ public class PassListActivity extends Activity {
 			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION)){
 				// 部門表示
 				sectionTextView.setText(element.getSection());
-				sectionLayout.setVisibility(View.VISIBLE);
-				pointLayout.setVisibility(View.GONE);
+				sectionTextView.setVisibility(View.VISIBLE);
+				pointTextView.setVisibility(View.GONE);
 				runnerLayout.setVisibility(View.GONE);
 				
 			}else if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT )){
 				// 地点情報表示
 				pointTextView.setText(element.getPoint());
-				sectionLayout.setVisibility(View.GONE);
-				pointLayout.setVisibility(View.VISIBLE);
+				sectionTextView.setVisibility(View.GONE);
+				pointTextView.setVisibility(View.VISIBLE);
 				runnerLayout.setVisibility(View.GONE);
 				
 			}else{
 				// ランナー情報表示
 				nameTextView.setText(element.getName());
 				splitTextView.setText(getString(R.string.str_txt_split) + " " + element.getSplit());
-				sectionLayout.setVisibility(View.GONE);
-				pointLayout.setVisibility(View.GONE);
+				sectionTextView.setVisibility(View.GONE);
+				pointTextView.setVisibility(View.GONE);
 				runnerLayout.setVisibility(View.VISIBLE);
 				
 				if(element.isRecentFlg()){
 					updateNewTextView.setVisibility(View.VISIBLE);
 				}else{
-					updateNewTextView.setVisibility(View.INVISIBLE);
+					updateNewTextView.setVisibility(View.GONE);
 				}
 			}
 			
