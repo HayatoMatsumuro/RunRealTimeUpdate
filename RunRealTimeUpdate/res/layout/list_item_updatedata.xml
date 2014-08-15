@@ -9,7 +9,8 @@
     <RelativeLayout
         android:id="@+id/id_list_item_updatedata_updateinfo_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dim_list_item_com_updateinfo_layout_padding" >
         
         <!-- ドット -->
         <TextView
@@ -18,9 +19,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:padding="@dimen/dim_com_list_item_dot_textview_padding"
             android:text="@string/str_txt_dot"
-            android:textColor="@color/color_com_list_item_dot_textview_text" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/color_list_item_com_dot_textview_text" />
         
         <!-- 通過情報 -->
         <TextView 
@@ -28,41 +29,81 @@
         	android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dim_list_item_updatedata_updateinfo_info_textview_marginLeft"
+            android:layout_marginLeft="@dimen/dim_list_item_com_updateinfo_info_textview_marginLeft"
             android:layout_toRightOf="@+id/id_list_item_updatedata_updateinfo_dot_textview"
             android:text="@string/str_txt_updateinfo" />
     </RelativeLayout>
     
-    <!-- スプリット -->
-    <TextView
-        android:id="@+id/id_list_item_updatedata_split_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dim_list_item_updatedata_split_textview_paddingbottom"
-        android:paddingLeft="@dimen/dim_list_item_updatedata_split_textview_paddingleft"
-        android:paddingTop="@dimen/dim_list_item_updatedata_split_textview_paddingtop"
-        android:text="@string/str_txt_split" />
-    
-    <!-- 通過時間 -->
-
-    <TextView
-        android:id="@+id/id_list_item_updatedata_currenttime_textview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dim_list_item_updatedata_currenttime_textview_paddingbottom"
-        android:paddingLeft="@dimen/dim_list_item_updatedata_currenttime_textview_paddingleft"
-        android:paddingTop="@dimen/dim_list_item_updatedata_currenttime_textview_paddingtop"
-        android:text="@string/str_txt_updatecurrenttime" />
-
-     <!-- New -->
-    <TextView
-    	android:id="@+id/id_list_item_updatedata_update_textview"
+    <!-- サブ情報 -->
+    <LinearLayout
+        android:id="@+id/id_list_item_updatedata_sub_layout"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	android:gravity="right"
-    	android:linksClickable="true"
-    	android:padding="@dimen/dim_list_item_updatedata_update_textview_padding"
-    	android:text="@string/str_txt_updatenew"
-    	android:textColor="@color/color_item_list_updateinfo_update_textview_text" />
-
+    	android:orientation="horizontal" >
+        
+        <!-- タイムリスト -->
+        <LinearLayout
+        	android:id="@+id/id_list_item_updatedata_sub_timelist_layout"
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+    		android:orientation="vertical" >
+        	
+            <!-- スプリット -->
+            <RelativeLayout 
+                android:id="@+id/id_list_item_updatedata_sub_timelist_split_layout"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="@dimen/dim_list_item_com_split_layout_paddingtop"
+        		android:paddingLeft="@dimen/dim_list_item_com_split_layout_paddingleft"
+        		android:paddingBottom="@dimen/dim_list_item_com_split_layout_paddingbottom">
+                
+                <TextView
+        			android:id="@+id/id_list_item_updatedata_sub_timelist_split_textview"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/str_txt_split" 
+        			android:textColor="@color/color_list_item_com_sub_textview_text"/>
+                
+            </RelativeLayout>
+            
+            <!-- 通過時間 -->
+            <RelativeLayout 
+                android:id="@+id/id_list_item_updatedata_sub_timelist_currenttime_layout"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:paddingTop="@dimen/dim_list_item_com_currenttime_layout_paddingtop"
+        		android:paddingLeft="@dimen/dim_list_item_com_currenttime_layout_paddingleft"
+        		android:paddingBottom="@dimen/dim_list_item_com_currenttime_layout_paddingbottom">
+                
+                <TextView
+        			android:id="@+id/id_list_item_updatedata_sub_timelist_currenttime_textview"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+        			android:text="@string/str_txt_updatecurrenttime"
+        			android:textColor="@color/color_list_item_com_sub_textview_text" />
+            
+            </RelativeLayout>
+            
+        </LinearLayout>
+        
+        <!-- New -->
+        <RelativeLayout
+        	android:id="@+id/id_list_item_updatedata_sub_new_layout"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+    		android:padding="@dimen/dim_list_item_com_new_layout_padding"
+            android:layout_gravity="bottom">
+            
+        	<TextView
+    			android:id="@+id/id_list_item_updatedata_sub_new_textview"
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:layout_alignParentRight="true"
+    			android:text="@string/str_txt_updatenew"
+    			android:textColor="@color/color_list_item_com_new_textview_text" />
+        
+        </RelativeLayout>
+        
+    </LinearLayout>
+    
 </LinearLayout>

@@ -127,49 +127,55 @@ public class PassListActivity extends Activity {
 		}
 		
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent){
+		public View getView( int position, View convertView, ViewGroup parent ){
 			
 			if( convertView == null ){
 				convertView = this.inflater.inflate(R.layout.list_item_passinfo, parent, false);
 			}
 			
-			// TODO: 通過時間も追加
-			LinearLayout runnerLayout = ( LinearLayout )convertView.findViewById(R.id.id_item_pass_point_runner_layout);
+			RelativeLayout sectionLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_passinfo_section_layout );
+			RelativeLayout pointLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_passinfo_point_layout );
+			LinearLayout runnerInfoLayout = ( LinearLayout )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_layout );
 			
-			TextView sectionTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_section_textview );
-			TextView pointTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_point_textview );
-			TextView nameTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_name_name_textview );
-			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_split_textview );
-			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_item_pass_point_runner_runner_updatenew_textview );
+			TextView sectionTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_section_textview );
+			TextView pointTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_point_textview );
+			TextView nameTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_runner_name_textview );
+			TextView splitTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_timelist_split_textview );
+			TextView currentTimeTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_timelist_currenttime_textview );
 			
-			PassPointListElement element = getItem(position);
+			RelativeLayout newLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_new_layout );
+			PassPointListElement element = getItem( position );
 			
-			if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION)){
+			if( element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION ) ){
 				// 部門表示
-				sectionTextView.setText(element.getSection());
-				sectionTextView.setVisibility(View.VISIBLE);
-				pointTextView.setVisibility(View.GONE);
-				runnerLayout.setVisibility(View.GONE);
+				sectionLayout.setVisibility( View.VISIBLE );
+				pointLayout.setVisibility( View.GONE );
+				runnerInfoLayout.setVisibility( View.GONE );
 				
-			}else if(element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT )){
+				sectionTextView.setText( element.getSection() );
+				
+			}else if( element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT ) ){
 				// 地点情報表示
-				pointTextView.setText(element.getPoint());
-				sectionTextView.setVisibility(View.GONE);
-				pointTextView.setVisibility(View.VISIBLE);
-				runnerLayout.setVisibility(View.GONE);
+				sectionLayout.setVisibility( View.GONE );
+				pointLayout.setVisibility( View.VISIBLE );
+				runnerInfoLayout.setVisibility( View.GONE );
+				
+				pointTextView.setText( element.getPoint() );
 				
 			}else{
 				// ランナー情報表示
-				nameTextView.setText(element.getName());
-				splitTextView.setText(getString(R.string.str_txt_split) + " " + element.getSplit());
-				sectionTextView.setVisibility(View.GONE);
-				pointTextView.setVisibility(View.GONE);
-				runnerLayout.setVisibility(View.VISIBLE);
+				sectionLayout.setVisibility( View.GONE );
+				pointLayout.setVisibility( View.GONE );
+				runnerInfoLayout.setVisibility( View.VISIBLE );
+				
+				nameTextView.setText( element.getName() );
+				splitTextView.setText( getString( R.string.str_txt_split ) + " " + element.getSplit() );
+				currentTimeTextView.setText( getString( R.string.str_txt_currenttime) + " " + element.getCurrentTime() );
 				
 				if(element.isRecentFlg()){
-					updateNewTextView.setVisibility(View.VISIBLE);
+					newLayout.setVisibility(View.VISIBLE);
 				}else{
-					updateNewTextView.setVisibility(View.GONE);
+					newLayout.setVisibility(View.GONE);
 				}
 			}
 			
@@ -252,7 +258,6 @@ public class PassListActivity extends Activity {
 			this.lap = lap;
 		}
 
-		@SuppressWarnings("unused")
 		public String getCurrentTime() {
 			return currentTime;
 		}

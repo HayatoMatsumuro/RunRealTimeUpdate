@@ -3,57 +3,54 @@
     android:id="@+id/id_list_item_raceinfo_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/dim_com_list_item_layout_padding" >
+    android:orientation="vertical">
 
-    <!-- 大会情報詳細 -->
+    <!-- 大会 -->
     <RelativeLayout
-        android:id="@+id/id_list_item_raceinfo_detail_layout"
+        android:id="@+id/id_list_item_raceinfo_race_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dim_list_item_raceinfo_detail_layout_padding">
+        android:padding="@dimen/dim_list_item_com_race_layout_padding" >
 
         <!-- ドット -->
         <TextView
-            android:id="@+id/id_list_item_raceinfo_detail_dot_textview"
+            android:id="@+id/id_list_item_raceinfo_race_dot_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:padding="@dimen/dim_com_list_item_dot_textview_padding"
             android:text="@string/str_txt_dot"
-            android:textColor="@color/color_com_list_item_dot_textview_text" />
-
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/color_list_item_com_dot_textview_text" />
+        
         <!-- 大会名 -->
         <TextView
-            android:id="@+id/id_list_item_raceinfo_detail_racename_textview"
+            android:id="@+id/id_list_item_raceinfo_race_name_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dim_list_item_raceinfo_detail_racename_textview_marginleft"
-            android:layout_toRightOf="@+id/id_list_item_raceinfo_detail_dot_textview"
+            android:layout_marginLeft="@dimen/dim_list_item_com_race_name_textview_marginleft"
+            android:layout_toRightOf="@+id/id_list_item_raceinfo_race_dot_textview"
             android:text="@string/str_txt_racename" />
-
     </RelativeLayout>
 	
 	<!-- 速報中 -->
-    <RelativeLayout
+   <RelativeLayout
         android:id="@+id/id_list_item_raceinfo_update_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dim_list_item_raceinfo_update_layout_height"
-        android:padding="@dimen/dim_list_item_raceinfo_detail_layout_padding" >
-
-        <!-- 速報中 -->
-		<TextView
+        android:layout_height="@dimen/dim_list_item_com_update_layout_height"
+        android:padding="@dimen/dim_list_item_com_update_layout_padding" >
+        
+        <TextView
 		    android:id="@+id/id_list_item_raceinfo_update_textview"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
-		    android:background="@color/color_item_list_raceinfo_update_textview_back"
+		    android:background="@color/color_list_item_com_update_textview_back"
 		    android:gravity="center"
-		    android:padding="@dimen/dim_list_item_raceinfo_update_textview_padding"
+		    android:padding="@dimen/dim_list_item_com_update_textview_padding"
 		    android:text="@string/str_txt_updateexe"
-		    android:textAppearance="?android:attr/textAppearanceMedium"
-		    android:textColor="@color/color_item_list_raceinfo_update_textview_text" />
+		    android:textAppearance="?android:attr/textAppearanceMedium" />
 
 	</RelativeLayout>
+	
 </LinearLayout>

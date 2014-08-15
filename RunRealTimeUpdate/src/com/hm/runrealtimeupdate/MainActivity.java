@@ -210,7 +210,7 @@ public class MainActivity extends Activity {
 			
 			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
 			
-			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_detail_racename_textview);
+			TextView raceNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_raceinfo_race_name_textview);
 			
 			RaceInfo raceInfo = getItem(position);
 			

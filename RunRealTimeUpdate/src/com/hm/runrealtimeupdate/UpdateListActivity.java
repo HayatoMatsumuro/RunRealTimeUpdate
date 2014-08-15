@@ -104,9 +104,9 @@ public class UpdateListActivity extends Activity {
 			}
 			
 			TextView infoTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_updateinfo_info_textview);
-			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_split_textview );
-			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_currenttime_textview );
-			TextView updateNewTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_update_textview );			
+			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_sub_timelist_split_textview );
+			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_sub_timelist_currenttime_textview );
+			RelativeLayout newLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_updatedata_sub_new_layout );			
         	UpdateInfo updateInfo = getItem(position);
 			
         	String infoStr = updateInfo.getName() + getString(R.string.str_txt_updaterunner) + updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
@@ -119,9 +119,9 @@ public class UpdateListActivity extends Activity {
 			
 			// New 表示
 			if( updateInfo.isRecentFlg()){
-				updateNewTextView.setVisibility(View.VISIBLE);
+				newLayout.setVisibility(View.VISIBLE);
 			}else{
-				updateNewTextView.setVisibility(View.INVISIBLE);
+				newLayout.setVisibility(View.GONE);
 			}
 			return convertView;
 		}

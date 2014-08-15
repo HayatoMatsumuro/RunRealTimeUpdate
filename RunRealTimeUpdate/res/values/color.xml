@@ -36,19 +36,11 @@
     <color name="color_activity_racedetail_body_contents_detailbox_update_button_back">#e5b7e2</color>
     
     <!-- リストアイテム -->
-    <color name="color_com_list_item_dot_textview_text">#c6cc28</color>
+    <color name="color_list_item_com_dot_textview_text">#c6cc28</color>
+    <color name="color_list_item_com_sub_textview_text">#555555</color>
+    <color name="color_list_item_com_new_textview_text">#cc2833</color>
+    <color name="color_list_item_com_section_layout_back">#af59e2</color>
+    <color name="color_list_item_com_point_layout_back">#e6e6e6</color>
+    <color name="color_list_item_com_update_textview_back">#e5b7e2</color>
     
-    <!-- 大会情報 -->
-    <color name="color_item_list_raceinfo_update_textview_back">#e5b7e2</color>
-    <color name="color_item_list_raceinfo_update_textview_text">#000000</color>
-    
-    <!-- 速報情報 -->
-    <color name="color_item_list_updateinfo_update_textview_text">#cc2833</color>
-    
-    <!-- 通過情報 -->
-    <color name="color_item_list_passinfo_section_textview_back">#af59e2</color>
-    <color name="color_item_list_passinfo_point_textview_back">#e6e6e6</color>
-    <color name="color_item_list_passinfo_runner_update_textview_text">#cc2833</color>
-    <color name="color_activity_runnerlist_contents_layout_back">#ffffff</color>
-    <color name="color_list_item_raceinfo_update_textview_text">#ff0000</color>
 </resources>
