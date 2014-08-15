@@ -37,16 +37,9 @@ public class RunnerListActivity extends Activity {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
-	/**
-	 * 登録できる選手の数
-	 */
-	//TODO:
-	//private static int INT_RUNNER_NUM_MAX = 30;
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
-		//TODO: レイアウトが変。白の部分が多い
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_runnerlist);
 		
@@ -169,8 +162,7 @@ public class RunnerListActivity extends Activity {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO 自動生成されたメソッド・スタブ
-						
+						// 何もしない
 					}
 				});
 				
@@ -261,25 +253,6 @@ public class RunnerListActivity extends Activity {
         
         return sectionRunnerElementList;
 	}
-	
-	/**
-	 * リストビュー用の選手一覧から選手数を取得する
-	 * @param sectionRunnerElementList　リストビュー用の選手一覧
-	 * @return　選手数
-	 */
-	//TODO: 選手登録できるかどうかの判定は、登録画面で行う
-	/*
-	private int getAllSectionRunner( List<SectionRunnerElement> sectionRunnerElementList ){
-		
-		int num = 0;
-		
-		for( SectionRunnerElement element : sectionRunnerElementList ){
-			if( element.getSection() == null){
-				num++;
-			}
-		}
-		return num;
-	}*/
 	
 	/**
 	 * 選手削除ダイアログのボタン押しコールバック

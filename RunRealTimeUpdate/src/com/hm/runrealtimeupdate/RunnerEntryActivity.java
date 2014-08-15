@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
@@ -26,13 +27,17 @@ public class RunnerEntryActivity extends Activity {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	public static final String STR_INTENT_CURRENTTAB = "currenttab";
+
+	/**
+	 * 登録できる選手の数
+	 */
+	private static int INT_RUNNER_NUM_MAX = 30;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_runnerentry);
         
-        //TODO: 大会がないときのメッセージ
         // 大会情報取得
         Intent intent = getIntent();
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
@@ -47,6 +52,20 @@ public class RunnerEntryActivity extends Activity {
         
         // カレントタブ取得
         int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_DETAIL );
+        
+        // 選手数
+        int runnerNum = Logic.getRunnerInfoList( getContentResolver(), raceId ).size();
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
+        if( runnerNum > INT_RUNNER_NUM_MAX ){
+        	// 最大を上回っていたら、メッセージを表示
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        }else{
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        }
         
         // 戻るボタン
         Button backButton =(Button)findViewById( R.id.id_activity_runnerentry_header_back_button );
