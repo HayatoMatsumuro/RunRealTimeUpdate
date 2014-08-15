@@ -58,7 +58,7 @@ public class RunnerEntryActivity extends Activity {
         
         RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
         RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
-        if( runnerNum > INT_RUNNER_NUM_MAX ){
+        if( runnerNum >= INT_RUNNER_NUM_MAX ){
         	// 最大を上回っていたら、メッセージを表示
         	contentsLayout.setVisibility( View.GONE );
         	messageLayout.setVisibility( View.VISIBLE );

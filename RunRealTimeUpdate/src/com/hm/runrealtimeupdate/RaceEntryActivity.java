@@ -14,9 +14,15 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
+	
+	/**
+	 * 登録できる大会の最大数
+	 */
+	private static final int INT_RACEINFO_NUM_MAX = 5;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +40,20 @@ public class RaceEntryActivity extends Activity {
 				startActivity(intent);
 			}
 		});
+        
+        // 大会数
+        int raceNum = Logic.getRaceInfoList( getContentResolver() ).size();
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_message_layout );
+        if( raceNum >= INT_RACEINFO_NUM_MAX ){
+        	// 最大を上回っていたら、メッセージを表示
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        }else{
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        }
         
         // 決定ボタン
         Button decideBtn = (Button)findViewById( R.id.id_activity_raceentry_body_contenturl_inputform_decide_button );

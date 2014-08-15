@@ -76,7 +76,7 @@
         	    android:id="@+id/id_activity_main_body_message_norace_textview"
         	    android:layout_width="match_parent"
         	   	android:layout_height="wrap_content"
-        	    android:text="@string/str_msg_mainnorace" />
+        	    android:text="@string/str_msg_raceno" />
         	
 	    </RelativeLayout>
 	    

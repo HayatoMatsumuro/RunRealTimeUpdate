@@ -26,11 +26,6 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	
-	/**
-	 * 登録できる大会の最大数
-	 */
-	private static final int INT_RACEINFO_NUM_MAX = 5;
-	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,14 +107,6 @@ public class MainActivity extends Activity {
     	
     	// 登録している大会の個数取得
     	int raceInfoNum = raceInfoListView.getAdapter().getCount();
-    	
-    	// ボタンの有効無効設定
-    	Button entryBtn = (Button)findViewById(R.id.id_activity_main_header_entry_button);
-    	if( raceInfoNum >= INT_RACEINFO_NUM_MAX ){
-        	entryBtn.setEnabled(false);
-        }else{
-        	entryBtn.setEnabled(true);
-        }
     	
     	// 大会リストまたは大会未登録メッセージの設定
     	TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_message_norace_textview);

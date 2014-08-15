@@ -107,14 +107,15 @@
         	android:background="@color/color_com_body_message_layout_back"
         	android:visibility="gone">
 	        
-	        <!-- 大会登録なし -->
+	        <!-- 選手登録最大 -->
         	<TextView
-        	    android:id="@+id/id_activity_runnerentry_body_message_norace_textview"
+        	    android:id="@+id/id_activity_runnerentry_body_message_norunner_textview"
         	    android:layout_width="match_parent"
         	   	android:layout_height="wrap_content"
         	    android:text="@string/str_msg_runnerfull" />
         	
 	    </RelativeLayout>
+	    
 	</LinearLayout>
 	
 </LinearLayout>

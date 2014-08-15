@@ -106,6 +106,24 @@
 			
 	    </RelativeLayout>
 	    
+	    <!-- メッセージ -->
+	    <RelativeLayout 
+	        android:id="@+id/id_activity_raceentry_body_message_layout"
+	        android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_message_layout_padding"
+        	android:background="@color/color_com_body_message_layout_back"
+        	android:visibility="gone">
+	        
+	        <!-- 大会登録最大 -->
+        	<TextView
+        	    android:id="@+id/id_activity_raceentry_body_message_norace_textview"
+        	    android:layout_width="match_parent"
+        	   	android:layout_height="wrap_content"
+        	    android:text="@string/str_msg_racefull" />
+        	
+	    </RelativeLayout>
+	    
 	</LinearLayout>
 	
 </LinearLayout>
