@@ -38,7 +38,7 @@
    <RelativeLayout
         android:id="@+id/id_list_item_raceinfo_update_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dim_list_item_com_update_layout_height"
+        android:layout_height="wrap_content"
         android:padding="@dimen/dim_list_item_com_update_layout_padding" >
         
         <TextView

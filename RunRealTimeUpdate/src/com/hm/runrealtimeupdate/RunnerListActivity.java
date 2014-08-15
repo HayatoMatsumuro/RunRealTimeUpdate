@@ -370,25 +370,27 @@ public class RunnerListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_runnerinfo, parent, false);
 			}
 			
-			TextView runnerNameTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_name_textview);
+			RelativeLayout sectionLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_runnerinfo_section_layout );
+			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_layout );
 			
-			RelativeLayout runnerRelative = (RelativeLayout)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_layout);
-			TextView runnerNoTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_runner_number_textview);
-			TextView runnerSectionTextView = (TextView)convertView.findViewById(R.id.id_list_item_runnerinfo_section_textview);
+			TextView runnerSectionTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_section_textview );
+			TextView runnerNameTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_name_textview );
+			TextView runnerNumberTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_number_textview );
 			
 			SectionRunnerElement item = getItem(position);
 			
 			// 部門
 			if( item.getSection() != null ){
-				runnerSectionTextView.setText(item.getSection());
-				runnerSectionTextView.setVisibility(View.VISIBLE);
-				runnerRelative.setVisibility(View.GONE);
+				sectionLayout.setVisibility( View.VISIBLE );
+				runnerLayout.setVisibility( View.GONE );
+				
+				runnerSectionTextView.setText( item.getSection() );
 				
 			}else{
-				runnerNameTextView.setText(item.runnerInfo.getName());
-				runnerNoTextView.setText(item.runnerInfo.getNumber());
-				runnerSectionTextView.setVisibility(View.GONE);
-				runnerRelative.setVisibility(View.VISIBLE);
+				sectionLayout.setVisibility( View.GONE );
+				runnerLayout.setVisibility( View.VISIBLE );
+				runnerNameTextView.setText( item.runnerInfo.getName() );
+				runnerNumberTextView.setText( item.runnerInfo.getNumber() );
 			}
 			
 			return convertView;

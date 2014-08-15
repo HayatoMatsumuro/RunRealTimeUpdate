@@ -140,6 +140,7 @@ public class PassListActivity extends Activity {
 			TextView sectionTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_section_textview );
 			TextView pointTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_point_textview );
 			TextView nameTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_runner_name_textview );
+			TextView numberTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_runner_number_textview );
 			TextView splitTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_timelist_split_textview );
 			TextView currentTimeTextView = ( TextView )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_timelist_currenttime_textview );
 			
@@ -169,6 +170,7 @@ public class PassListActivity extends Activity {
 				runnerInfoLayout.setVisibility( View.VISIBLE );
 				
 				nameTextView.setText( element.getName() );
+				numberTextView.setText( element.getNumber() );
 				splitTextView.setText( getString( R.string.str_txt_split ) + " " + element.getSplit() );
 				currentTimeTextView.setText( getString( R.string.str_txt_currenttime) + " " + element.getCurrentTime() );
 				
@@ -266,7 +268,6 @@ public class PassListActivity extends Activity {
 			this.currentTime = currentTime;
 		}
 
-		@SuppressWarnings("unused")
 		public String getNumber() {
 			return number;
 		}

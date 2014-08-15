@@ -55,7 +55,7 @@
     <dimen name="dim_list_item_com_race_name_textview_marginleft">5dp</dimen>
     
     <!-- リストアイテム 選手 -->
-    <dimen name="dim_list_item_com_runner_layout_padding">2dp</dimen>
+    <dimen name="dim_list_item_com_runner_layout_padding">5dp</dimen>
     <dimen name="dim_list_item_com_runner_number_textview_marginLeft">5dp</dimen>
     <dimen name="dim_list_item_com_runner_name_textview_marginLeft">5dp</dimen>
     
@@ -84,7 +84,6 @@
     
     <!-- リストアイテム 速報中 -->
     <dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
-    <dimen name="dim_list_item_com_update_layout_height">40dp</dimen>
     <dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
 
     <dimen name="dim_activity_runnerlist_contents_layout_padding">10dp</dimen>

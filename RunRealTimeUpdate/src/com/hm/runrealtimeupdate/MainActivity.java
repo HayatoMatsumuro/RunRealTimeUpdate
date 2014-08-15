@@ -45,6 +45,7 @@ public class MainActivity extends Activity {
         raceInfoListView.setAdapter(adapter);
         
         // リストのアイテム短押し
+        // TODO:短押しのとき、灰色が2重に表示する。
         raceInfoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
