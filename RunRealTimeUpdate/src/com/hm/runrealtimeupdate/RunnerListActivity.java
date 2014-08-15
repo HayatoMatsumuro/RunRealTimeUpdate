@@ -94,6 +94,7 @@ public class RunnerListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				
 				// 選手情報取得
+				//TODO: レイアウトを見直す
 				ListView listView = (ListView)parent;
 				SectionRunnerElement element = (SectionRunnerElement)listView.getItemAtPosition(position);
 				RunnerInfo runnerInfo = element.getRunnerInfo();

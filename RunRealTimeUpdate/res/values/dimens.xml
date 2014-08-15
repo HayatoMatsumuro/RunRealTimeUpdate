@@ -4,12 +4,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     
-    <dimen name="com_border_height">5dp</dimen>
-    
-    <dimen name="com_title_padding">10dp</dimen>
-    <dimen name="com_message_padding">20dp</dimen>
-    <dimen name="com_contents_padding">5dp</dimen>
-
     <!-- ヘッダー -->
     <dimen name="dim_com_header_layout_height">40dp</dimen>
     <dimen name="dim_com_header_layout_padding">5dp</dimen>
@@ -86,10 +80,4 @@
     <dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
     <dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
 
-    <dimen name="dim_activity_runnerlist_contents_layout_padding">10dp</dimen>
-    
-    <dimen name="dim_activity_runnerlist_contents_header_runnerentry_button_height">40dp</dimen>
-    <dimen name="dim_activity_runnerlist_contents_body_layout_topmargin">20dp</dimen>
-    
-    
 </resources>

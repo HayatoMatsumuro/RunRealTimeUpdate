@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="red">#FF0000</color>
     <color name="white">#FFFFFF</color>
-    <color name="maincolor">#e6e6e6</color>
-    <color name="basecolor">#e5edf2</color>
-    <color name="titlecolor">#47cc59</color>
-    <color name="accentColor">#cc9628</color>
-    <color name="basetextcolor">#555555</color>
     
     <!-- ヘッダー -->
     <color name="color_com_header_layout_back">#47cc59</color>
