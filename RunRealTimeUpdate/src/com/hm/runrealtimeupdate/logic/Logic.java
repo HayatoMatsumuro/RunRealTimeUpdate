@@ -537,9 +537,7 @@ public class Logic {
 			
 			searchFlg = false;
 			
-			RunnerInfo runnerInfo = new RunnerInfo();
-			runnerInfo.setNumber(dbRunnerInfo.getNumber());
-			runnerInfo.setName(dbRunnerInfo.getName());
+			RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo( contentResolver, dbRunnerInfo );
 			
 			for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList){
 				

@@ -1,97 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_dialog_runnerinfodetail_layout"
+    android:id="@+id/id_dialog_runnerinfodetail_scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-    	android:id="@+id/id_dialog_runnerinfodetail_contents_layout"
+    <!-- 選手情報詳細 -->
+    <LinearLayout
+    	android:id="@+id/id_dialog_runnerinfodetail_layout"
     	android:layout_width="match_parent"
-    	android:layout_height="wrap_content" >
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical"
+    	android:padding="@dimen/dim_dialog_com_layout_padding"
+    	android:background="@color/color_dialog_runnerinfodetail_layout_back" >
 
-        <TextView
-        	android:id="@+id/id_dialog_runnerinfodetail_contents_number_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentTop="true"
-        	android:layout_alignParentLeft="true"
-        	android:layout_marginTop="10dp"
-        	android:layout_marginLeft="10dp"
-        	android:textColor="@color/white"
-        	android:text="@string/str_txt_no"/>
+        <!-- ゼッケン番号 -->
+        <RelativeLayout 
+            android:id="@+id/id_dialog_runnerinfodetail_number_layout"
+    		android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:paddingTop="@dimen/dim_dialog_runnerinfodetail_number_layout_paddingtop"
+    		android:paddingBottom="@dimen/dim_dialog_runnerinfodetail_number_layout_paddingbottom">
+            
+            <!-- タイトル -->
+        	<TextView
+        		android:id="@+id/id_dialog_runnerinfodetail_number_title_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:text="@string/str_txt_no"/>
+        	
+        	<!-- テキスト -->
+        	<TextView
+        	    android:id="@+id/id_dialog_runnerinfodetail_number_text_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@+id/id_dialog_runnerinfodetail_number_title_textview"
+        		android:layout_marginLeft="@dimen/dim_dialog_runnerinfodetail_number_text_marginLeft" />
+        	    
+        </RelativeLayout>
 
-    	<TextView
-        	android:id="@+id/id_dialog_runnerinfodetail_contents_name_textview"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignLeft="@+id/id_dialog_runnerinfodetail_contents_number_textview"
-        	android:layout_below="@+id/id_dialog_runnerinfodetail_contents_number_textview"
-        	android:layout_marginTop="15dp"
-        	android:textColor="@color/white"
-        	android:text="@string/str_txt_runnername"/>
+        <!-- 選手名 -->
+        <RelativeLayout 
+            android:id="@+id/id_dialog_runnerinfodetail_name_layout"
+    		android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:paddingTop="@dimen/dim_dialog_runnerinfodetail_name_layout_paddingtop"
+    		android:paddingBottom="@dimen/dim_dialog_runnerinfodetail_name_layout_paddingbottom">
+        	
+            <!-- タイトル -->
+            <TextView
+        		android:id="@+id/id_dialog_runnerinfodetail_name_title_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:text="@string/str_txt_runnername"/>
+            
+            <!-- テキスト -->
+        	<TextView
+        	    android:id="@+id/id_dialog_runnerinfodetail_name_text_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@+id/id_dialog_runnerinfodetail_name_title_textview"
+        		android:layout_marginLeft="@dimen/dim_dialog_runnerinfodetail_name_text_marginLeft"/>
+        </RelativeLayout>
+        
+        <!-- 部門 -->
+        <RelativeLayout 
+            android:id="@+id/id_dialog_runnerinfodetail_section_layout"
+    		android:layout_width="match_parent"
+    		android:layout_height="wrap_content"
+    		android:paddingTop="@dimen/dim_dialog_runnerinfodetail_section_layout_paddingtop"
+    		android:paddingBottom="@dimen/dim_dialog_runnerinfodetail_section_layout_paddingbottom">
+        	
+            <!-- タイトル -->
+            <TextView
+    	    	android:id="@+id/id_dialog_runnerinfodetail_section_title_textview"
+    	    	android:layout_width="wrap_content"
+    	    	android:layout_height="wrap_content"
+        		android:text="@string/str_txt_section"/>
+            
+            <!-- テキスト -->
+        	<TextView
+        	    android:id="@+id/id_dialog_runnerinfodetail_section_text_textview"
+        		android:layout_width="wrap_content"
+        		android:layout_height="wrap_content"
+        		android:layout_toRightOf="@+id/id_dialog_runnerinfodetail_section_title_textview"
+        		android:layout_marginLeft="@dimen/dim_dialog_runnerinfodetail_section_text_marginLeft"/>
+        </RelativeLayout>
 
-    	<TextView
-    	    android:id="@+id/id_dialog_runnerinfodetail_contents_section_textview"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignLeft="@+id/id_dialog_runnerinfodetail_contents_name_textview"
-    	    android:layout_below="@+id/id_dialog_runnerinfodetail_contents_name_textview"
-    	    android:layout_marginTop="15dp"
-        	android:textColor="@color/white"
-        	android:text="@string/str_txt_section"/>
 
     	<TableLayout
-        	android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_layout"
-        	android:layout_width="fill_parent"
-        	android:layout_height="fill_parent"
-        	android:layout_alignParentLeft="true"
-        	android:layout_below="@+id/id_dialog_runnerinfodetail_contents_section_textview"
-        	android:layout_marginTop="15dp"
-        	android:padding="1dp" >
+        	android:id="@+id/id_dialog_runnerinfodetail_timelist_layout"
+        	android:layout_width="match_parent"
+        	android:layout_height="match_parent" >
 
-        	<TableRow>
-        		<TextView
-           	 		android:layout_width="55dp"
-            		android:text="@string/str_txt_point"
-        			android:textColor="@color/white"/>
-	            <TextView
-    	            android:layout_width="80dp"
-        	        android:text="@string/str_txt_split"
-            		android:gravity="center"
-        			android:textColor="@color/white"/>
-            	<TextView
-               		android:layout_width="80dp"
-                	android:text="@string/str_txt_lap"
-            		android:gravity="center"
-        			android:textColor="@color/white"/>
-            	<TextView
-                	android:layout_width="80dp"
-                	android:text="@string/str_txt_currenttime"
-            		android:gravity="center"
-        			android:textColor="@color/white"/>
+        	<TableRow android:layout_width="match_parent" >
+
+        	    <!-- 地点 -->
+        	    <RelativeLayout 
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_point_layout"
+        	        android:layout_width="@dimen/dim_dialog_runnerinfodetail_timelist_point_layout_width"
+        	        android:layout_height="wrap_content"
+            		android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_layout_padding">
+        	        
+        	        <TextView
+            			android:id="@+id/id_dialog_runnerinfodetail_timelist_point_textview"
+        	        	android:layout_width="match_parent"
+        	        	android:layout_height="match_parent"
+            			android:background="@color/color_dialog_runnerinfodetail_timelist_com_textview_back"
+            			android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_textview_padding"
+            			android:gravity="center"
+            			android:text="@string/str_txt_point"/>
+        	    </RelativeLayout>
+        		
+        		<!-- スプリット -->
+        		<RelativeLayout 
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_split_layout"
+        	        android:layout_width="@dimen/dim_dialog_runnerinfodetail_timelist_split_layout_width"
+        	        android:layout_height="wrap_content"
+            		android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_layout_padding">
+	            
+	            	<TextView
+        	        	android:id="@+id/id_dialog_runnerinfodetail_timelist_split_textview"
+    	            	android:layout_width="match_parent"
+        	        	android:layout_height="match_parent"
+        	        	android:background="@color/color_dialog_runnerinfodetail_timelist_com_textview_back"
+            			android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_textview_padding"
+        	        	android:text="@string/str_txt_split"
+            			android:gravity="center"/>
+        	    </RelativeLayout>
+        	    
+        		<!-- ラップ -->
+            	<RelativeLayout 
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_lap_layout"
+        	        android:layout_width="@dimen/dim_dialog_runnerinfodetail_timelist_lap_layout_width"
+        	        android:layout_height="wrap_content"
+            		android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_layout_padding">
+        	        
+            		<TextView
+        	        	android:id="@+id/id_dialog_runnerinfodetail_timelist_lap_textview"
+    	            	android:layout_width="match_parent"
+        	        	android:layout_height="match_parent"
+        	        	android:background="@color/color_dialog_runnerinfodetail_timelist_com_textview_back"
+            			android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_textview_padding"
+        	        	android:text="@string/str_txt_lap"
+            			android:gravity="center"/>
+            	</RelativeLayout>
+            	
+            	<!-- 通過時間 -->
+            	<RelativeLayout 
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_currenttime_layout"
+        	        android:layout_width="@dimen/dim_dialog_runnerinfodetail_timelist_currenttime_layout_width"
+        	        android:layout_height="wrap_content"
+            		android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_layout_padding">
+        	        
+            		<TextView
+        	        	android:id="@+id/id_dialog_runnerinfodetail_timelist_currenttime_textview"
+    	            	android:layout_width="match_parent"
+        	        	android:layout_height="match_parent"
+        	        	android:background="@color/color_dialog_runnerinfodetail_timelist_com_textview_back"
+            			android:padding="@dimen/dim_dialog_runnerinfodetail_timelist_com_textview_padding"
+        	        	android:text="@string/str_txt_currenttime"
+            			android:gravity="center"/>
+            	</RelativeLayout>
+
         	</TableRow>
         	<TableRow >
         	    <RelativeLayout
-        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_point_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_border_point_layout"
         	        android:layout_width="wrap_content"
-        	        android:layout_height="2dp">
+        	        android:layout_height="wrap_content">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_split_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_border_split_layout"
         	        android:layout_width="wrap_content"
-        	        android:layout_height="2dp">
+        	        android:layout_height="wrap_content">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_dialogy_runnerinfodetail_contents_timelist_border_lap_layout"
+        	        android:id="@+id/id_dialogy_runnerinfodetail_timelist_border_lap_layout"
         	        android:layout_width="wrap_content"
-        	        android:layout_height="2dp">
+        	        android:layout_height="wrap_content">
         	    </RelativeLayout>
         	    <RelativeLayout
-        	        android:id="@+id/id_dialog_runnerinfodetail_contents_timelist_border_currenttime_layout"
+        	        android:id="@+id/id_dialog_runnerinfodetail_timelist_border_currenttime_layout"
         	        android:layout_width="wrap_content"
-        	        android:layout_height="2dp">
+        	        android:layout_height="wrap_content">
         	    </RelativeLayout>
         	</TableRow>
     	</TableLayout>
-    </RelativeLayout>
+    </LinearLayout>
 </ScrollView>

@@ -40,6 +40,26 @@
     <!-- 大会タブ -->
     <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
     
+    <!-- ダイアログ -->
+    <dimen name="dim_dialog_com_layout_padding">1dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingtop">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_number_text_marginLeft">15dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingtop">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_name_text_marginLeft">15dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingtop">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_section_text_marginLeft">15dp</dimen>
+    
+    <dimen name="dim_dialog_runnerinfodetail_timelist_com_layout_padding">1dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_timelist_com_textview_padding">1dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_timelist_point_layout_width">60dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_timelist_split_layout_width">80dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_timelist_lap_layout_width">65dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_timelist_currenttime_layout_width">70dp</dimen>
+    
+    
     <!-- リストアイテム -->
     <!-- リストアイテム  大会-->
     <dimen name="dim_list_item_com_race_layout_padding">2dp</dimen>

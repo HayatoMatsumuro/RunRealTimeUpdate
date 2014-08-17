@@ -22,6 +22,10 @@
     <!-- 大会詳細 -->
     <color name="color_activity_racedetail_body_contents_update_button_back">#e5b7e2</color>
     
+    <!-- 選手詳細 -->
+    <color name="color_dialog_runnerinfodetail_layout_back">#ffffff</color>
+    <color name="color_dialog_runnerinfodetail_timelist_com_textview_back">#DDDDDD</color>
+    
     <!-- リストアイテム -->
     <color name="color_list_item_com_dot_textview_text">#c6cc28</color>
     <color name="color_list_item_com_sub_textview_text">#555555</color>

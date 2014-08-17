@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -109,51 +108,51 @@ public class RunnerListActivity extends Activity {
 				final View inputView = factory.inflate(R.layout.dialog_runnerinfodetail, null);
 				
 				// ゼッケン番号
-		     	TextView numberTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_number_textview);
-		     	numberTextView.setText("No. " + runnerInfo.getNumber());
+		     	TextView numberTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_number_text_textview );
+		     	numberTextView.setText( runnerInfo.getNumber() );
 		     	
 		     	// 選手名
-		     	TextView nameTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_name_textview);
-		     	nameTextView.setText(runnerInfo.getName());
+		     	TextView nameTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_name_text_textview );
+		     	nameTextView.setText( runnerInfo.getName() );
 		     		
 		     	// 部門
-		     	TextView sectionTextView = (TextView)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_section_textview);
-		     	sectionTextView.setText(runnerInfo.getSection());
+		     	TextView sectionTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_section_text_textview );
+		     	sectionTextView.setText( runnerInfo.getSection() );
 		     	
 				
 				// タイムリスト
-				TableLayout tableLayout = (TableLayout)inputView.findViewById(R.id.id_dialog_runnerinfodetail_contents_timelist_layout);
+				TableLayout tableLayout = ( TableLayout )inputView.findViewById( R.id.id_dialog_runnerinfodetail_timelist_layout );
 				
 				for( RunnerInfo.TimeList timelist : runnerInfo.getTimeList() ){
 					TableRow tableRow = new TableRow( getParent() );
 					
 					// 地点
 					TextView pointTextView = new TextView( getParent() );
-					pointTextView.setText(timelist.getPoint());
-					pointTextView.setTextColor(Color.WHITE);
+					pointTextView.setText( timelist.getPoint() );
+					pointTextView.setPadding( 1, 1, 1, 1 );
 					
 					// スプリット
 					TextView splitTextView = new TextView( getParent() );
-					splitTextView.setText(timelist.getSplit());
-					splitTextView.setGravity(Gravity.CENTER);
-					splitTextView.setTextColor(Color.WHITE);
+					splitTextView.setText( timelist.getSplit() );
+					splitTextView.setGravity( Gravity.CENTER );
+					splitTextView.setPadding( 1, 1, 1, 1 );
 					
 					// ラップ
 					TextView lapTextView = new TextView( getParent() );
-		    		lapTextView.setText(timelist.getLap());
-		    		lapTextView.setGravity(Gravity.CENTER);
-		    		lapTextView.setTextColor(Color.WHITE);
+		    		lapTextView.setText( timelist.getLap() );
+		    		lapTextView.setGravity( Gravity.CENTER );
+		    		lapTextView.setPadding( 1, 1, 1, 1 );
 		    		
 		    		// カレントタイム
 		    		TextView currentTimeView = new TextView( getParent() );
-		    		currentTimeView.setText(timelist.getCurrentTime());
-		    		currentTimeView.setGravity(Gravity.CENTER);
-		    		currentTimeView.setTextColor(Color.WHITE);
+		    		currentTimeView.setText( timelist.getCurrentTime() );
+		    		currentTimeView.setGravity( Gravity.CENTER );
+		    		lapTextView.setPadding( 1, 1, 1, 1 );
 					
-		    		tableRow.addView(pointTextView);
-		    		tableRow.addView(splitTextView);
-		    		tableRow.addView(lapTextView);
-		    		tableRow.addView(currentTimeView);
+		    		tableRow.addView( pointTextView );
+		    		tableRow.addView( splitTextView );
+		    		tableRow.addView( lapTextView );
+		    		tableRow.addView( currentTimeView );
 		    		
 		    		tableLayout.addView(tableRow, new TableLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT));
 				}
