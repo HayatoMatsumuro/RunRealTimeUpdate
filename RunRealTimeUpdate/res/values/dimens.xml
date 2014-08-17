@@ -42,14 +42,14 @@
     
     <!-- ダイアログ -->
     <dimen name="dim_dialog_com_layout_padding">1dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingtop">4dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingtop">5dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingbottom">5dp</dimen>
     <dimen name="dim_dialog_runnerinfodetail_number_text_marginLeft">15dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingtop">4dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingtop">5dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingbottom">5dp</dimen>
     <dimen name="dim_dialog_runnerinfodetail_name_text_marginLeft">15dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingtop">4dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingbottom">4dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingtop">5dp</dimen>
+    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingbottom">5dp</dimen>
     <dimen name="dim_dialog_runnerinfodetail_section_text_marginLeft">15dp</dimen>
     
     <dimen name="dim_dialog_runnerinfodetail_timelist_com_layout_padding">1dp</dimen>
