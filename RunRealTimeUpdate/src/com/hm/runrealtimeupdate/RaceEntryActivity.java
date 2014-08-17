@@ -5,9 +5,7 @@ import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,21 +19,18 @@ import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
 	
+	/**
+	 * 登録できる大会の最大数
+	 */
+	private static final int INT_RACEINFO_NUM_MAX = 5;
+	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raceentry);
 
-        // ヘッダー
-        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_header);
-        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
-        
-        // ボーダー
-        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_raceentry_relative_border);
-        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
-        
         // 戻るボタン
-        Button backBtn = (Button)findViewById(R.id.id_raceentry_btn_back);
+        Button backBtn = (Button)findViewById(R.id.id_activity_raceentry_header_back_button);
         backBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -46,8 +41,22 @@ public class RaceEntryActivity extends Activity {
 			}
 		});
         
+        // 大会数
+        int raceNum = Logic.getRaceInfoList( getContentResolver() ).size();
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_message_layout );
+        if( raceNum >= INT_RACEINFO_NUM_MAX ){
+        	// 最大を上回っていたら、メッセージを表示
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        }else{
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        }
+        
         // 決定ボタン
-        Button decideBtn = (Button)findViewById(R.id.id_raceentry_btn_decide);
+        Button decideBtn = (Button)findViewById( R.id.id_activity_raceentry_body_contenturl_inputform_decide_button );
         decideBtn.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -58,7 +67,7 @@ public class RaceEntryActivity extends Activity {
 				params[0] = getString(R.string.str_txt_defaulturl);
 				
 				// URL入力エディットボックスから入力値取得
-				EditText urlEdit = (EditText)findViewById(R.id.id_raceentry_edit_inputurl);
+				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_contents_urlform_inputurl_edittext);
 				
 				// 何も入力してないならば、以降の処理をしない
 				String inputRaceId = urlEdit.getText().toString();
@@ -101,6 +110,29 @@ public class RaceEntryActivity extends Activity {
 	 */
 	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
 
+		ProgressDialog m_ProgressDialog = null;
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			// 進捗ダイアログ作成
+			m_ProgressDialog = new ProgressDialog(RaceEntryActivity.this);
+			m_ProgressDialog.setTitle(getResources().getString(R.string.str_dialog_title_progress_raceinfo));
+			m_ProgressDialog.setMessage(getResources().getString(R.string.str_dialog_msg_get));
+			m_ProgressDialog.setCancelable(true);
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.str_dialog_msg_cancel), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+					
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
+		}
 		/**
 		 * 
 		 * @param String params[0] アップデートサイトURL、param[1] 大会ID
@@ -121,111 +153,88 @@ public class RaceEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute( RaceInfo raceInfo)
 		{
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
 			if( raceInfo == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
+				
 			}else{
-				RaceEntryDialog raceEntryDialog = new RaceEntryDialog( RaceEntryActivity.this, getContentResolver(), raceInfo);
-				raceEntryDialog.onDialog();
+				InfoDialog<RaceInfo> raceEntryInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceEntryButtonCallbackImpl() );
+				raceEntryInfoDialog.onDialog(
+						RaceEntryActivity.this,
+						getString(R.string.str_dialog_title_race),
+						createDialogMessage( raceInfo ),
+						getString(R.string.str_dialog_msg_OK),
+						getString(R.string.str_dialog_msg_NG));
+			}
+		}
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
 			}
 			
+			Toast.makeText(RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
 	/**
-	 * 大会登録ダイアログ
+	 * 登録ダイアログのメッセージを作成する
+	 * @param raceInfo 大会情報
+	 * @return メッセージ
+	 */
+	private String createDialogMessage( RaceInfo raceInfo ){
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append(getString(R.string.str_dialog_msg_name));
+		builder.append("\n");
+		builder.append(raceInfo.getRaceName());
+		builder.append("\n");
+		builder.append(getString(R.string.str_dialog_msg_date));
+		builder.append("\n");
+		builder.append(raceInfo.getRaceDate());
+		builder.append("\n");
+		builder.append(getString(R.string.str_dialog_msg_location));
+		builder.append("\n");
+		builder.append(raceInfo.getRaceLocation());
+		
+		return builder.toString();
+	}
+	
+	/**
+	 * 大会登録ダイアログのボタン押しのコールバック
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	private class RaceEntryDialog{
-		
-		/**
-    	 * コンテキスト
-    	 */
-    	private Context m_Context;
-    	
-    	/**
-    	 * コンテントリゾルバ
-    	 */
-    	private ContentResolver m_ContentResolver;
-    	
-    	/**
-    	 * 大会情報
-    	 */
-    	private RaceInfo m_RaceInfo;
-    	
-    	/**
-    	 * コンストラクタ
-    	 * @param context
-    	 * @param contentResolver
-    	 * @param raceInfo
-    	 */
-    	public RaceEntryDialog( Context context, ContentResolver contentResolver, RaceInfo raceInfo ){
-    		// 初期化
-    		m_Context = context;
-    		m_ContentResolver = contentResolver;
-    		m_RaceInfo = raceInfo;
-    	}
-    	
-    	public void onDialog(){
-    		AlertDialog.Builder dialog = new AlertDialog.Builder(RaceEntryActivity.this);
-			dialog.setTitle(getString(R.string.str_dialog_title_race));
-			dialog.setMessage(createDialogMessage(m_RaceInfo));
-			
-			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
+	private class RaceEntryButtonCallbackImpl implements InfoDialog.ButtonCallback<RaceInfo>{
 
-				@Override
-				public void onClick(DialogInterface dialog, int width)
-				{
-					
-					if( Logic.checkEntryRaceId( m_ContentResolver, m_RaceInfo.getRaceId() ) ){
-						// すでに大会が登録済み
-						Toast.makeText( m_Context, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT).show();
-					}else{
-						// データベース登録
-						Logic.entryRaceInfo( m_ContentResolver, m_RaceInfo );
-						
-						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT ).show();
-						
-						Intent intent = new Intent( m_Context, MainActivity.class );
-						startActivity(intent);
-					}
-				}
-			});
+		@Override
+		public void onClickPositiveButton(DialogInterface dialog, int which, RaceInfo info) {
 			
-			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
-
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// なにもしない					
-				}
+			if( Logic.checkEntryRaceId( getContentResolver(), info.getRaceId() ) ){
+				// すでに大会が登録済み
+				Toast.makeText( RaceEntryActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT).show();
+			}else{
+				// データベース登録
+				Logic.entryRaceInfo( getContentResolver(), info );
 				
-			});
-			
-			dialog.show();
-    	}
-    	
-    	/**
-		 * 登録ダイアログのメッセージを作成する
-		 * @param raceInfo 大会情報
-		 * @return メッセージ
-		 */
-		private String createDialogMessage( RaceInfo raceInfo ){
-			
-			StringBuilder builder = new StringBuilder();
-			builder.append(getString(R.string.str_dialog_msg_name));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceName());
-			builder.append("\n");
-			builder.append(getString(R.string.str_dialog_msg_date));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceDate());
-			builder.append("\n");
-			builder.append(getString(R.string.str_dialog_msg_location));
-			builder.append("\n");
-			builder.append(raceInfo.getRaceLocation());
-			
-			return builder.toString();
+				Toast.makeText( RaceEntryActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
+				
+				Intent intent = new Intent( RaceEntryActivity.this, MainActivity.class );
+				startActivity(intent);
+			}
 		}
+
+		@Override
+		public void onClickNegativeButton(DialogInterface dialog, int which, RaceInfo info) {
+			
+		}	
 	}
 }

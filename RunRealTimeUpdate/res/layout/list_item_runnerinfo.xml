@@ -1,54 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_list_item_runnerinfo_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"  >
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
+    <!-- 部門 -->
     <RelativeLayout
-        android:id="@+id/id_runnerinfo_relative_section"
+        android:id="@+id/id_list_item_runnerinfo_section_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-       	android:background="@color/maincolor" >
+        android:padding="@dimen/dim_list_item_com_section_layout_padding"
+       	android:background="@color/color_list_item_com_section_layout_back" >
+
+        <!-- 部門 -->
     	<TextView
-        	android:id="@+id/id_runnerinfo_txt_section"
-      		android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-       		android:padding="5dp"
-        	android:text="@string/str_txt_section" />
+    	    android:id="@+id/id_list_item_runnerinfo_section_textview"
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:layout_alignParentLeft="true"
+    	    android:layout_centerVertical="true"
+    	    android:text="@string/str_txt_section" />
+
     </RelativeLayout>
 
-   <RelativeLayout
-        android:id="@+id/id_runnerinfo_relative_runner"
+    <!-- 選手 -->
+	<RelativeLayout
+        android:id="@+id/id_list_item_runnerinfo_runner_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content"
+    	android:padding="@dimen/dim_list_item_com_runner_layout_padding" >
 
+        <!-- ドット -->
         <TextView
-        	android:id="@+id/id_runnerinfo_txt_dot"
-        	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_alignParentLeft="true"
-        	android:layout_alignParentTop="true"
-       		android:padding="10dp"
-        	android:text="@string/str_txt_dot"
-        	android:textColor="@color/accentColor" />
+            android:id="@+id/id_list_item_runnerinfo_runner_dot_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+    	    android:layout_centerVertical="true"
+            android:text="@string/str_txt_dot"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/color_list_item_com_dot_textview_text" />
 
-    	<TextView
-    	    android:id="@+id/id_runnerinfo_txt_no"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_dot"
-    	    android:layout_marginLeft="5dp"
-    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_dot"
-    	    android:text="@string/str_txt_no" />
+        <!-- ゼッケン番号 -->
+        <TextView
+            android:id="@+id/id_list_item_runnerinfo_runner_number_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    	    android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dim_list_item_com_runner_number_textview_marginLeft"
+            android:layout_toRightOf="@+id/id_list_item_runnerinfo_runner_dot_textview"
+            android:text="@string/str_txt_no" />
 
-    	<TextView
-    	    android:id="@+id/id_runnerinfo_txt_name"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignBaseline="@+id/id_runnerinfo_txt_no"
-    	    android:layout_marginLeft="5dp"
-    	    android:layout_toRightOf="@+id/id_runnerinfo_txt_no"
-    	    android:text="@string/str_txt_runnername" />
-
+        <!-- 選手名 -->
+        <TextView
+            android:id="@+id/id_list_item_runnerinfo_runner_name_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+    	    android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dim_list_item_com_runner_name_textview_marginLeft"
+            android:layout_toRightOf="@+id/id_list_item_runnerinfo_runner_number_textview"
+            android:text="@string/str_txt_runnername" />
     </RelativeLayout>
+
 </LinearLayout>

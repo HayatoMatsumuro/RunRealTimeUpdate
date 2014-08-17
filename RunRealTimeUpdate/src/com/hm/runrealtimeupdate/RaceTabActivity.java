@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -42,11 +41,7 @@ public class RaceTabActivity extends TabActivity {
         }
         
         // カレントタブ取得
-        int currentTab = intent.getIntExtra(STR_INTENT_CURRENTTAB, 0);
-        
-		// ヘッダー
-        RelativeLayout headerLayout = (RelativeLayout)findViewById(R.id.id_race_relative_header);
-        headerLayout.setBackgroundColor(getResources().getColor(R.color.maincolor));
+        int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, INT_INTENT_VAL_CURRENTTAB_DETAIL );
         
         // 速報中テキスト
         int visibility = View.INVISIBLE;
@@ -57,12 +52,8 @@ public class RaceTabActivity extends TabActivity {
         }
         setVisibilityUpdateExe( visibility );
         
-        // ボーダー
-        RelativeLayout borderLayout = (RelativeLayout)findViewById(R.id.id_race_relative_border);
-        borderLayout.setBackgroundColor(getResources().getColor(R.color.subcolor));
-        
         // 大会一覧ボタン
-        Button raceListButton = (Button)findViewById(R.id.id_race_btn_racelist);
+        Button raceListButton = (Button)findViewById(R.id.id_tabactivity_race_header_racelist_button);
         raceListButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -72,6 +63,28 @@ public class RaceTabActivity extends TabActivity {
 				startActivity(intent);
 			}
 		});
+        
+        // 選手登録ボタン
+        Button runnerEntryButton = ( Button )findViewById( R.id.id_tabactivity_race_header_runnerentry_button );
+        runnerEntryButton.setTag( raceId );
+        runnerEntryButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				String raceId = ( String )v.getTag();
+				
+				TabHost tabHost = getTabHost();
+				int currentTab = tabHost.getCurrentTab();
+				
+				// 選手登録画面遷移
+				Intent intent = new Intent( RaceTabActivity.this, RunnerEntryActivity.class );
+				intent.putExtra( RunnerEntryActivity.STR_INTENT_RACEID, raceId );
+				intent.putExtra( RunnerEntryActivity.STR_INTENT_CURRENTTAB, currentTab );
+				startActivity(intent);		
+			}
+		});
+        
 		// タブ設定
 		TabHost tabHost = getTabHost();
 		TabHost.TabSpec spec;
@@ -84,8 +97,8 @@ public class RaceTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		// 選手リスト
-		tabIntent = new Intent(this, RunnerActivityGroup.class);
-		tabIntent.putExtra(RunnerActivityGroup.STR_INTENT_RACEID, raceId);
+		tabIntent = new Intent(this, RunnerListActivity.class);
+		tabIntent.putExtra(RunnerListActivity.STR_INTENT_RACEID, raceId);
 		spec = tabHost.newTabSpec(getString(R.string.str_tab_race_runner)).setIndicator(getString(R.string.str_tab_race_runner)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
@@ -96,20 +109,20 @@ public class RaceTabActivity extends TabActivity {
 		tabHost.addTab(spec);
 		
 		// 地点情報
-		tabIntent = new Intent( this, PassActivityGroup.class );
-		tabIntent.putExtra( PassActivityGroup.STR_INTENT_RACEID, raceId );
+		tabIntent = new Intent( this, PassListActivity.class );
+		tabIntent.putExtra( PassListActivity.STR_INTENT_RACEID, raceId );
 		spec = tabHost.newTabSpec( getString( R.string.str_tab_race_pass)).setIndicator(getString(R.string.str_tab_race_pass)).setContent(tabIntent);
 		tabHost.addTab(spec);
 		
 		tabHost.setCurrentTab( currentTab );
 	}
-	
+
 	/**
 	 * 速報中テキストの表示状態設定
 	 * @param visibility
 	 */
 	public void setVisibilityUpdateExe( int visibility ){
-		TextView updateExeTextView = ( TextView )findViewById(R.id.id_race_txt_updateexe);
+		TextView updateExeTextView = ( TextView )findViewById(R.id.id_tabactivity_race_updateexe_textview);
 		updateExeTextView.setVisibility( visibility );
 		return;
 	}

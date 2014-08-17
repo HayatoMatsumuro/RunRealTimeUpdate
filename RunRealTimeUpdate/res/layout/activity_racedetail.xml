@@ -1,63 +1,110 @@
-<?xml version="1.0" encoding="utf-8"?><RelativeLayout
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/id_activity_racedetail_body_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="@dimen/dim_com_body_layout_padding"
+    android:background="@color/color_com_body_layout_back" >
 
-    <TextView
-        android:id="@+id/id_racedetail_txt_racename"
-        android:layout_width="wrap_content"
+    <!-- コンテンツ -->
+    <LinearLayout
+	    android:id="@+id/id_activity_racedetail_body_contents_layout"
+	    android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/str_txt_racename"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
- 
-    <ImageView
-        android:id="@+id/id_racedetail_img_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_txt_racename"
-        android:layout_below="@+id/id_racedetail_txt_racename"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/str_txt_racedate"
-        android:src="@android:drawable/ic_menu_my_calendar" />
-    
-    <TextView
-        android:id="@+id/id_racedetail_txt_racedate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/id_racedetail_img_racedate"
-        android:layout_alignTop="@+id/id_racedetail_img_racedate"
-        android:layout_marginTop="14dp"
-        android:text="@string/str_txt_racedate" />
+    	android:orientation="vertical"
+        android:padding="@dimen/dim_com_body_contents_layout_padding"
+        android:background="@color/color_com_body_contents_layout_back" >
         
-    <ImageView
-        android:id="@+id/id_racedetail_img_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_img_racedate"
-        android:layout_below="@+id/id_racedetail_img_racedate"
-        android:contentDescription="@string/str_txt_racelocation"
-        android:src="@android:drawable/ic_menu_mylocation" />
+        <!-- 大会詳細 -->
+    	<LinearLayout
+        	android:id="@+id/id_activity_racedetail_body_contents_detailbox_layout"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+    		android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/id_racedetail_txt_racelocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/id_racedetail_img_racelocation"
-        android:layout_toRightOf="@+id/id_racedetail_img_racelocation"
-        android:layout_marginTop="14dp"
-        android:text="@string/str_txt_racelocation" />
+    	    <!-- 大会名 -->
+	        <TextView
+      	    	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racename_textview"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="@string/str_txt_racename"
+            	android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/id_racedetail_btn_updatestartstop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_racedetail_img_racelocation"
-        android:layout_below="@+id/id_racedetail_img_racelocation"
-        android:layout_marginTop="30dp"
-        android:text="@string/str_btn_updatestart" />
+	        <!-- 開催日 -->
+        	<RelativeLayout 
+            	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racedate_layout"
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content" >
+           		
+        	    <!-- 画像 -->
+        		<ImageView
+        		    android:id="@+id/id_activity_racedetail_body_contents_detailbox_racedate_image_imageview"
+        		    android:layout_width="wrap_content"
+        		    android:layout_height="wrap_content"
+        		    android:layout_alignParentLeft="true"
+        		    android:layout_alignParentTop="true"
+        		    android:contentDescription="@string/str_txt_racedate"
+        		    android:src="@android:drawable/ic_menu_my_calendar" />
 
-</RelativeLayout>
+	        	<!-- タイトル -->
+        		<TextView
+        	    	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racedate_title_textview"
+        	    	android:layout_width="wrap_content"
+        	    	android:layout_height="wrap_content"
+        	    	android:layout_centerVertical="true"
+        	    	android:layout_toRightOf="@+id/id_activity_racedetail_body_contents_detailbox_racedate_image_imageview"
+        	    	android:text="@string/str_txt_racedate" />
+
+			</RelativeLayout>
+			
+        	<!-- 開催地 -->
+			<RelativeLayout 
+            	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_layout"
+            	android:layout_width="match_parent"
+            	android:layout_height="wrap_content" >
+        	
+			    <!-- 画像 -->
+		    	<ImageView
+            		android:id="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_image_imageview"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:layout_alignParentLeft="true"
+            		android:layout_alignParentTop="true"
+            		android:contentDescription="@string/str_txt_racelocation"
+            		android:src="@android:drawable/ic_menu_mylocation" />
+
+		    	<!-- タイトル -->
+		    	<TextView
+		        	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_title_textview"
+		        	android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"
+		        	android:layout_centerVertical="true"
+		        	android:layout_toRightOf="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_image_imageview"
+		        	android:text="@string/str_txt_racelocation" />
+
+        	</RelativeLayout>
+        	
+    	</LinearLayout>
+    	
+    	<!-- 速報 -->
+    	<RelativeLayout 
+        	android:id="@+id/id_activity_racedetail_body_contents_update_layout"
+        	android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+        	
+			<!-- 速報ボタン -->
+        	<Button
+            	android:id="@+id/id_activity_racedetail_body_contents_update_button"
+            	android:layout_width="@dimen/dim_activity_racedetail_body_contents_update_button_width"
+            	android:layout_height="@dimen/dim_activity_racedetail_body_contents_update_button_height"
+            	android:layout_centerHorizontal="true"
+            	android:layout_marginTop="@dimen/dim_activity_racedetail_body_contents_update_button_margintop"
+           		android:background="@color/color_activity_racedetail_body_contents_update_button_back"
+            	android:text="@string/str_btn_updatestart" />
+    	    
+    	</RelativeLayout>
+    	
+    </LinearLayout>
+    
+</LinearLayout>

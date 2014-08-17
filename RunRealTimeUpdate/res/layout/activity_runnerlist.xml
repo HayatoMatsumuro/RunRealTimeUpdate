@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_activity_runnerlist_body_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+   	android:orientation="vertical"
+    android:padding="@dimen/dim_com_body_layout_padding"
+    android:background="@color/color_com_body_layout_back" >
 
-    <TextView
-        android:id="@+id/id_runnerlist_txt_runnerlist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/str_title_runnerlist"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/id_runnerlist_btn_runnerentry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/str_btn_runnerentry" />
+    <!-- コンテンツ -->
+    <RelativeLayout 
+    	android:id="@+id/id_activity_runnerlist_body_contents_layout"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+        android:padding="@dimen/dim_com_body_contents_layout_padding"
+        android:background="@color/color_com_body_contents_layout_back" >
+        
+        <!-- 選手リスト -->
+    	<ListView
+    		android:id="@+id/id_activity_runnerlist_body_contents_runnerlist_listview"
+    		android:layout_width="match_parent"
+    		android:layout_height="wrap_content" />
+    	
+    </RelativeLayout>
     
-    <ListView
-        android:id="@+id/id_runnerlist_listview_runner"
-        android:layout_width="wrap_content"
+    <!-- メッセージ -->
+    <RelativeLayout 
+	    android:id="@+id/id_activity_runnerlist_body_message_layout"
+	    android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_runnerlist_txt_runnerlist"
-        android:layout_below="@+id/id_runnerlist_txt_runnerlist"
-        android:layout_marginTop="30dp" >
-    </ListView>
-
-</RelativeLayout>
+        android:padding="@dimen/dim_com_body_message_layout_padding"
+        android:background="@color/color_com_body_message_layout_back"
+        android:visibility="gone">
+    	
+        <!-- 登録選手なし -->
+        <TextView
+        	android:id="@+id/id_activity_runnerlist_body_message_norace_textview"
+        	android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:text="@string/str_msg_runnnerno" />
+        
+    </RelativeLayout>
+    
+</LinearLayout>

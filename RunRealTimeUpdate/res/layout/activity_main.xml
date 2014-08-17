@@ -1,41 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_activity_main_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-  
+
+    <!-- ヘッダー -->
     <RelativeLayout
-        android:id="@+id/id_main_relative_header"
+        android:id="@+id/id_activity_main_header_layout"
         android:layout_width="match_parent"
-        android:layout_height="50dp" >
+        android:layout_height="@dimen/dim_com_header_layout_height"
+        android:padding="@dimen/dim_com_header_layout_padding"
+        android:background="@color/color_com_header_layout_back" >
 
+        <!-- タイトル -->
+		<TextView
+		    android:id="@+id/id_activity_main_header_title_textview"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+		    android:layout_centerVertical="true"
+		    android:text="@string/str_title_raceList"
+		    android:textAppearance="?android:attr/textAppearanceMedium"
+		    android:textColor="@color/color_com_header_title_textview_text" />
 
-    	<TextView
-    	    android:id="@+id/id_main_txt_title"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_centerVertical="true"
-    	    android:layout_marginLeft="20dp"
-    	    android:text="@string/str_title_raceList"
-    	    android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    	<Button
-    	    android:id="@+id/id_main_btn_entry"
-    	    android:layout_width="wrap_content"
-    	    android:layout_height="wrap_content"
-    	    android:layout_alignParentBottom="true"
-    	    android:layout_alignParentRight="true"
-    	    android:text="@string/str_btn_entry" />
-
-	</RelativeLayout>
-	<RelativeLayout
-        android:id="@+id/id_main_relative_border"
-        android:layout_width="match_parent"
-        android:layout_height="5dp" >
+		<!-- 大会登録ボタン -->
+		<Button
+            android:id="@+id/id_activity_main_header_entry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dim_com_header_button_padding"
+            android:background="@color/color_com_header_button_back"
+            android:textColor="@color/color_com_header_button_text"
+            android:text="@string/str_btn_entry" />
+		
     </RelativeLayout>
-    <ListView
-       		android:id="@+id/id_main_listview_race"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content">
-    </ListView>
+    
+    <!-- ボディ -->
+	<LinearLayout
+	    android:id="@+id/id_activity_main_body_layout"
+	  	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:orientation="vertical"
+        android:padding="@dimen/dim_com_body_layout_padding"
+    	android:background="@color/color_com_body_layout_back" >
+	    
+	    <!-- コンテンツ -->
+	    <RelativeLayout
+	        android:id="@+id/id_activity_main_body_contents_layout"
+	        android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_contents_layout_padding"
+        	android:background="@color/color_com_body_contents_layout_back" >
+	        
+	        <!-- 大会リスト -->
+	        <ListView
+       			android:id="@+id/id_activity_main_body_contents_racelist_listview"
+        		android:layout_width="match_parent"
+        		android:layout_height="wrap_content" />
+	    </RelativeLayout>
+	    
+	    <!-- メッセージ -->
+	    <RelativeLayout 
+	        android:id="@+id/id_activity_main_body_message_layout"
+	        android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:padding="@dimen/dim_com_body_message_layout_padding"
+        	android:background="@color/color_com_body_message_layout_back"
+        	android:visibility="gone">
+	        
+	        <!-- 大会登録なし -->
+        	<TextView
+        	    android:id="@+id/id_activity_main_body_message_norace_textview"
+        	    android:layout_width="match_parent"
+        	   	android:layout_height="wrap_content"
+        	    android:text="@string/str_msg_raceno" />
+        	
+	    </RelativeLayout>
+	    
+    </LinearLayout>
+    
 </LinearLayout>

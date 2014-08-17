@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
@@ -25,6 +26,12 @@ public class RunnerEntryActivity extends Activity {
 	public static final String STR_ACTIVITY_ID = "runnerEntryActivity";
 	
 	public static final String STR_INTENT_RACEID = "raceid";
+	public static final String STR_INTENT_CURRENTTAB = "currenttab";
+
+	/**
+	 * 登録できる選手の数
+	 */
+	private static int INT_RUNNER_NUM_MAX = 30;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,23 +50,48 @@ public class RunnerEntryActivity extends Activity {
         	return;
         }
         
+        // カレントタブ取得
+        int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_DETAIL );
+        
+        // 選手数
+        int runnerNum = Logic.getRunnerInfoList( getContentResolver(), raceId ).size();
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
+        if( runnerNum >= INT_RUNNER_NUM_MAX ){
+        	// 最大を上回っていたら、メッセージを表示
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        }else{
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        }
+        
         // 戻るボタン
-        Button backButton =(Button)findViewById(R.id.id_runnerentry_btn_back);
-        backButton.setTag(raceId);
+        Button backButton =(Button)findViewById( R.id.id_activity_runnerentry_header_back_button );
+        
+        BackButtonTag backButtonTag = new BackButtonTag();
+        backButtonTag.setRaceId(raceId);
+        backButtonTag.setCurrentTab(currentTab);
+        backButton.setTag( backButtonTag );
+        
         backButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				
-				String raceId = (String)v.getTag();
+				BackButtonTag backButtonTag = ( BackButtonTag )v.getTag();
 				
-				// 大会詳細画面遷移
-				(( RunnerActivityGroup )getParent()).showRunnerListActivity(raceId);
+				// 大会画面遷移
+				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class);
+				intent.putExtra(RaceTabActivity.STR_INTENT_RACEID, backButtonTag.getRaceId());
+				intent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, backButtonTag.getCurrentTab());
+				startActivity(intent);
 			}
 		});
         
         // 決定ボタン
-        Button decideButton = (Button)findViewById(R.id.id_runnerentry_btn_decide);
+        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_body_numberform_decide_button );
         decideButton.setTag(raceInfo);
         decideButton.setOnClickListener(new OnClickListener() {
 			
@@ -78,7 +110,7 @@ public class RunnerEntryActivity extends Activity {
 				// URL入力エディットボックスから入力値取得
 				// TODO: 取得後は、ゼッケン番号を消す。
 				// TODO: 取得後は、キー入力のバーを消す。
-				EditText noEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+				EditText noEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
 				params[2] = noEdit.getText().toString();
 				
 				if( params[2] == null || params[2].equals("")){
@@ -90,6 +122,29 @@ public class RunnerEntryActivity extends Activity {
 				task.execute(params);
 			}
 		});
+	}
+	
+	private class BackButtonTag {
+		
+		private String raceId;
+
+		private int currentTab;
+		
+		public String getRaceId() {
+			return raceId;
+		}
+
+		public void setRaceId(String raceId) {
+			this.raceId = raceId;
+		}
+
+		public int getCurrentTab() {
+			return currentTab;
+		}
+
+		public void setCurrentTab(int currentTab) {
+			this.currentTab = currentTab;
+		}
 	}
 	
 	/**
@@ -207,11 +262,14 @@ public class RunnerEntryActivity extends Activity {
 						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
 						
 						// キーボードを隠す
-						EditText numberEdit = (EditText)findViewById(R.id.id_runnerentry_edit_number);
+						EditText numberEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
 				        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 				        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 						
-						(( RunnerActivityGroup )getParent()).showRunnerListActivity(m_RaceInfo.getRaceId());
+						Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class);
+						intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
+						intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
+						startActivity(intent);
 
 						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT).show();
 					}else{

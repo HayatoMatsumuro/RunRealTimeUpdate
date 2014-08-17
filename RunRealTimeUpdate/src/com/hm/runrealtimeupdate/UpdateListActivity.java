@@ -3,7 +3,6 @@ package com.hm.runrealtimeupdate;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
-import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
@@ -15,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class UpdateListActivity extends Activity {
@@ -29,29 +29,59 @@ public class UpdateListActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_updatelist);
 		
-		 // 大会情報取得
+		// 大会Id取得
         Intent intent = getIntent();
         String raceId = intent.getStringExtra( STR_INTENT_RACEID );
-        RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId);
         
         // 大会情報が取得できないなら、エラー画面
-        if( raceInfo == null ){
+        if( ( raceId == null ) || ( raceId.equals("")) ){
         	Intent intentErr = new Intent(UpdateListActivity.this, ErrorActivity.class);
         	intentErr.putExtra(ErrorActivity.STR_INTENT_MESSAGE, "大会情報取得に失敗しました。");
         	return;
         }
         
-        // 速報データ取得
-        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
-        
-        // リストビュー設定
-        UpdateDataAdapter adapter = new UpdateDataAdapter(this, updateInfoList);
-        ListView updateListView = (ListView)findViewById(R.id.id_updatelist_listview_runner);
-        updateListView.setAdapter(adapter);
-        
         return;
 	}
 	
+	
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+		
+		// 大会Id取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+        
+        RelativeLayout contentsLayout = ( RelativeLayout )findViewById(R.id.id_activity_updatelist_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_updatelist_body_message_layout );
+        
+        // 速報データ取得
+        List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
+        
+        if( updateInfoList.isEmpty() ){
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        } else {
+
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        	
+        	ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_body_contents_update_listview);
+        	UpdateDataAdapter adapter = ( UpdateDataAdapter )updateListView.getAdapter();
+        	
+        	if( adapter != null ){
+				adapter.clear();
+			}
+        	
+        	// リストビュー設定
+            adapter = new UpdateDataAdapter(this, updateInfoList);
+            
+            updateListView.setAdapter(adapter);
+        }
+	}
+
+
 	/**
 	 * 速報データリストアダプタ
 	 * @author Hayato Matsumuro
@@ -73,29 +103,25 @@ public class UpdateListActivity extends Activity {
 				convertView = this.inflater.inflate(R.layout.list_item_updatedata, parent, false);
 			}
 			
-			TextView runnerTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_runner);
-			TextView passTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_pass);
-			TextView splitTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_split);
-			TextView currentTimeTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_currenttime);
-			TextView updateNewTextView = (TextView)convertView.findViewById(R.id.id_updatedata_txt_updatenuew);
-			
+			TextView infoTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_updateinfo_info_textview);
+			TextView splitTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_sub_timelist_split_textview );
+			TextView currentTimeTextView = (TextView)convertView.findViewById( R.id.id_list_item_updatedata_sub_timelist_currenttime_textview );
+			RelativeLayout newLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_updatedata_sub_new_layout );			
         	UpdateInfo updateInfo = getItem(position);
 			
-        	String runnerStr = updateInfo.getName() + " " + getString(R.string.str_txt_updaterunner);
-        	String passStr = updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
+        	String infoStr = updateInfo.getName() + getString(R.string.str_txt_updaterunner) + updateInfo.getPoint() + " " + getString(R.string.str_txt_updatepass);
         	String splitStr = getString(R.string.str_txt_split) + " " + updateInfo.getSplit();
 			String currentTimeStr = getString(R.string.str_txt_currenttime) + " " + updateInfo.getCurrentTime();
         	
-        	runnerTextView.setText(runnerStr);
-        	passTextView.setText(passStr);
+        	infoTextView.setText(infoStr);
         	splitTextView.setText(splitStr);
         	currentTimeTextView.setText(currentTimeStr);
 			
 			// New 表示
 			if( updateInfo.isRecentFlg()){
-				updateNewTextView.setVisibility(View.VISIBLE);
+				newLayout.setVisibility(View.VISIBLE);
 			}else{
-				updateNewTextView.setVisibility(View.INVISIBLE);
+				newLayout.setVisibility(View.GONE);
 			}
 			return convertView;
 		}
