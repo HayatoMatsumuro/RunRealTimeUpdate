@@ -8,28 +8,26 @@
     android:background="@color/color_com_body_layout_back" >
 
     <!-- コンテンツ -->
-    <RelativeLayout
+    <LinearLayout
 	    android:id="@+id/id_activity_racedetail_body_contents_layout"
 	    android:layout_width="match_parent"
         android:layout_height="wrap_content"
+    	android:orientation="vertical"
         android:padding="@dimen/dim_com_body_contents_layout_padding"
         android:background="@color/color_com_body_contents_layout_back" >
         
         <!-- 大会詳細 -->
-    	<RelativeLayout
+    	<LinearLayout
         	android:id="@+id/id_activity_racedetail_body_contents_detailbox_layout"
         	android:layout_width="match_parent"
         	android:layout_height="wrap_content"
-        	android:background="@color/color_activity_racedetail_body_contents_detailbox_layout_back"
-        	android:padding="@dimen/dim_activity_racedetail_body_contents_detailbox_layout_padding" >
+    		android:orientation="vertical" >
 
     	    <!-- 大会名 -->
 	        <TextView
       	    	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racename_textview"
             	android:layout_width="wrap_content"
             	android:layout_height="wrap_content"
-            	android:layout_alignParentLeft="true"
-            	android:layout_alignParentTop="true"
             	android:text="@string/str_txt_racename"
             	android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -37,8 +35,7 @@
         	<RelativeLayout 
             	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racedate_layout"
             	android:layout_width="match_parent"
-            	android:layout_height="wrap_content"
-           		android:layout_below="@+id/id_activity_racedetail_body_contents_detailbox_racename_textview" >
+            	android:layout_height="wrap_content" >
            		
         	    <!-- 画像 -->
         		<ImageView
@@ -65,8 +62,7 @@
 			<RelativeLayout 
             	android:id="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_layout"
             	android:layout_width="match_parent"
-            	android:layout_height="wrap_content"
-            	android:layout_below="@+id/id_activity_racedetail_body_contents_detailbox_racedate_layout" >
+            	android:layout_height="wrap_content" >
         	
 			    <!-- 画像 -->
 		    	<ImageView
@@ -89,19 +85,26 @@
 
         	</RelativeLayout>
         	
+    	</LinearLayout>
+    	
+    	<!-- 速報 -->
+    	<RelativeLayout 
+        	android:id="@+id/id_activity_racedetail_body_contents_update_layout"
+        	android:layout_width="match_parent"
+		    android:layout_height="wrap_content" >
+        	
 			<!-- 速報ボタン -->
         	<Button
-            	android:id="@+id/id_activity_racedetail_body_contents_detailbox_update_button"
-            	android:layout_width="@dimen/dim_activity_racedetail_body_contents_detailbox_update_button_width"
-            	android:layout_height="@dimen/dim_activity_racedetail_body_contents_detailbox_update_button_height"
-            	android:layout_below="@+id/id_activity_racedetail_body_contents_detailbox_racelocation_layout"
+            	android:id="@+id/id_activity_racedetail_body_contents_update_button"
+            	android:layout_width="@dimen/dim_activity_racedetail_body_contents_update_button_width"
+            	android:layout_height="@dimen/dim_activity_racedetail_body_contents_update_button_height"
             	android:layout_centerHorizontal="true"
-            	android:layout_marginTop="@dimen/dim_activity_racedetail_body_contents_detailbox_update_button_margintop"
-           		android:background="@color/color_activity_racedetail_body_contents_detailbox_update_button_back"
+            	android:layout_marginTop="@dimen/dim_activity_racedetail_body_contents_update_button_margintop"
+           		android:background="@color/color_activity_racedetail_body_contents_update_button_back"
             	android:text="@string/str_btn_updatestart" />
-        	
+    	    
     	</RelativeLayout>
     	
-    </RelativeLayout>
+    </LinearLayout>
     
 </LinearLayout>

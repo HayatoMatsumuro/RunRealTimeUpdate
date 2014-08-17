@@ -60,9 +60,7 @@
 	    	<RelativeLayout
 	        	android:id="@+id/id_activity_runnerentry_body_contents_numberform_layout"
 	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content"
-        		android:padding="@dimen/dim_activity_runnerentry_body_contents_runnerform_layout_padding"
-    			android:background="@color/color_activity_runnerentry_body_contents_numberform_layout_back">
+	        	android:layout_height="wrap_content">
     			
 	    	    <!--ゼッケン番号入力メッセージ -->
     			<TextView
@@ -96,6 +94,12 @@
     			
     		</RelativeLayout>
     		
+	    	<!-- ダミー( 警告防止 ) -->
+	        <RelativeLayout
+	        	android:id="@+id/id_activity_raceentry_body_contents_dummy_layout"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="wrap_content" >
+	        </RelativeLayout>
 		</RelativeLayout>
 		
 		<!-- メッセージ -->

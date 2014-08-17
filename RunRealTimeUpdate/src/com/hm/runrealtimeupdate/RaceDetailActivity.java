@@ -46,7 +46,7 @@ public class RaceDetailActivity extends Activity {
         raceLocationTextView.setText( raceInfo.getRaceLocation() );
         
         // 速報ボタン
-        Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_update_button );
+        Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
         
         // 速報止ボタンの表示設定
         RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver() );
