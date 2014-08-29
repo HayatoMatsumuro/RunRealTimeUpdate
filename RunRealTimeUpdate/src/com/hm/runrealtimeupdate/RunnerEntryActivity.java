@@ -6,8 +6,6 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,8 +106,6 @@ public class RunnerEntryActivity extends Activity {
 				
 				// ゼッケンNo.取得
 				// URL入力エディットボックスから入力値取得
-				// TODO: 取得後は、ゼッケン番号を消す。
-				// TODO: 取得後は、キー入力のバーを消す。
 				EditText noEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
 				params[2] = noEdit.getText().toString();
 				
@@ -187,130 +183,103 @@ public class RunnerEntryActivity extends Activity {
 				return;
 			}
 			
-			// 大会情報ダイアログ表示
-			RunnerEntryDialog dialog
-				= new RunnerEntryDialog(
-						RunnerEntryActivity.this,
-						getParent(),
-						getContentResolver(),
-						m_RaceInfo,
-						runnerInfo);
-			dialog.onDialog();
+			RunnerEntryDialogInfo info = new RunnerEntryDialogInfo();
+			info.setRaceInfo( m_RaceInfo );
+			info.setRunnerInfo( runnerInfo );
+			
+			// 選手情報ダイアログ表示
+			InfoDialog<RunnerEntryDialogInfo> runnerEntryDialogInfo = new InfoDialog<RunnerEntryDialogInfo>( info, new RunnerEntryButtonCallbackImpl() );
+			runnerEntryDialogInfo.onDialog(
+					RunnerEntryActivity.this,
+					getString( R.string.str_dialog_title_runnerentry ),
+					createDialogMessage( runnerInfo ),
+					getString( R.string.str_dialog_msg_OK ),
+					getString( R.string.str_dialog_msg_NG )
+			);
 		}
 	}
 	
 	/**
-	 * 選手情報登録ダイアログ
+	 * ダイアログのメッセージ作成
+	 * @param runnerInfo 選手情報
+	 * @return
+	 */
+	private String createDialogMessage( RunnerInfo runnerInfo ){
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append(getString(R.string.str_txt_racename));
+		builder.append(":");
+		builder.append(runnerInfo.getName());
+		builder.append("\n");
+		builder.append(getString(R.string.str_txt_no));
+		builder.append(":");
+		builder.append(runnerInfo.getNumber());
+		builder.append("\n");
+		builder.append(getString(R.string.str_txt_section));
+		builder.append(":");
+		builder.append(runnerInfo.getSection());
+		builder.append("\n");
+		return builder.toString();
+	}
+	
+	private class RunnerEntryButtonCallbackImpl implements InfoDialog.ButtonCallback<RunnerEntryDialogInfo>{
+
+		@Override
+		public void onClickPositiveButton(DialogInterface dialog, int which, RunnerEntryDialogInfo info) {
+			
+			if( !Logic.checkEntryRunnerId( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() )){
+				// データベース登録
+				Logic.entryRunnerInfo( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() );
+				
+				// キーボードを隠す
+				EditText numberEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
+		        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+				
+				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class);
+				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().getRaceId() );
+				intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
+				startActivity(intent);
+
+				Toast.makeText( RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT).show();
+			}else{
+				// 登録済みのゼッケン番号
+				Toast.makeText( RunnerEntryActivity.this, "すでに登録済みです", Toast.LENGTH_SHORT).show();
+			}	
+		}
+
+		@Override
+		public void onClickNegativeButton(DialogInterface dialog, int which, RunnerEntryDialogInfo info) {
+			
+		}
+		
+	}
+	
+	/**
+	 * 選手登録ダイアログ用の情報
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	private class RunnerEntryDialog{
+	private class RunnerEntryDialogInfo{
 		
-		/**
-    	 * コンテキスト
-    	 */
-    	private Context m_Context;
-    	
-    	/**
-    	 * ダイアログコンテキスト
-    	 */
-    	private Context m_DialogContext;
-    	
-    	/**
-    	 * コンテントリゾルバ
-    	 */
-    	private ContentResolver m_ContentResolver;
-    	
-    	/**
-    	 * 大会情報
-    	 */
-    	private RaceInfo m_RaceInfo;
-    	
-    	/**
-    	 * 選手情報
-    	 */
-    	private RunnerInfo m_RunnerInfo;
-    	
-    	/**
-    	 * コンストラクタ
-    	 * @param context
-    	 * @param parentContext
-    	 * @param contentResolver
-    	 * @param raceInfo
-    	 * @param runnerInfo
-    	 */
-    	RunnerEntryDialog( Context context, Context dialogContext, ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo){
-    		m_Context = context;
-    		m_DialogContext = dialogContext;
-    		m_ContentResolver = contentResolver;
-    		m_RaceInfo = raceInfo;
-    		m_RunnerInfo = runnerInfo;
-    	}
-    	
-    	public void onDialog(){
-    		AlertDialog.Builder dialog = new AlertDialog.Builder(m_DialogContext);
-			dialog.setTitle(getString(R.string.str_dialog_title_runnerentry));
-			dialog.setMessage(createDialogMessage(m_RunnerInfo));
-			
-			dialog.setPositiveButton(getString(R.string.str_dialog_msg_OK), new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-					if( !Logic.checkEntryRunnerId( m_ContentResolver, m_RaceInfo, m_RunnerInfo )){
-						// データベース登録
-						Logic.entryRunnerInfo( m_ContentResolver, m_RaceInfo, m_RunnerInfo);
-						
-						// キーボードを隠す
-						EditText numberEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
-				        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				        imm.hideSoftInputFromWindow(numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-						
-						Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class);
-						intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
-						intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
-						startActivity(intent);
+		private RaceInfo raceInfo;
+		
+		private RunnerInfo runnerInfo;
 
-						Toast.makeText( m_Context, "登録しました", Toast.LENGTH_SHORT).show();
-					}else{
-						// 登録済みのゼッケン番号
-						Toast.makeText( m_Context, "すでに登録済みです", Toast.LENGTH_SHORT).show();
-					}	
-				}
-			});
-			
-			dialog.setNegativeButton(getString(R.string.str_dialog_msg_NG), new DialogInterface.OnClickListener(){
+		public RaceInfo getRaceInfo() {
+			return raceInfo;
+		}
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					
-				}
-				
-			});
-			dialog.show();
-    	}
-    	
-    	/**
-    	 * ダイアログのメッセージ作成
-    	 * @param runnerInfo 選手情報
-    	 * @return
-    	 */
-    	private String createDialogMessage( RunnerInfo runnerInfo ){
-			StringBuilder builder = new StringBuilder();
-			
-			builder.append(getString(R.string.str_txt_racename));
-			builder.append(":");
-			builder.append(runnerInfo.getName());
-			builder.append("\n");
-			builder.append(getString(R.string.str_txt_no));
-			builder.append(":");
-			builder.append(runnerInfo.getNumber());
-			builder.append("\n");
-			builder.append(getString(R.string.str_txt_section));
-			builder.append(":");
-			builder.append(runnerInfo.getSection());
-			builder.append("\n");
-			return builder.toString();
+		public void setRaceInfo(RaceInfo raceInfo) {
+			this.raceInfo = raceInfo;
+		}
+
+		public RunnerInfo getRunnerInfo() {
+			return runnerInfo;
+		}
+
+		public void setRunnerInfo(RunnerInfo runnerInfo) {
+			this.runnerInfo = runnerInfo;
 		}
 	}
 }
