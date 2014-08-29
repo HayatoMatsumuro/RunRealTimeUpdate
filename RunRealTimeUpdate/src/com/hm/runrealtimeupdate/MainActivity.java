@@ -95,27 +95,24 @@ public class MainActivity extends Activity {
 		});
         
         // 表示状態設定
-        setViewUI();
+        setViewBody( raceInfoListView.getCount() );
     }
     
     /**
-     * ユーザーインターフェースの表示設定
+     * ボディの表示設定
      */
-    private void setViewUI(){
-    	
-    	ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
-    	
-    	// 登録している大会の個数取得
-    	int raceInfoNum = raceInfoListView.getAdapter().getCount();
+    private void setViewBody( int raceInfoNum ){
     	
     	// 大会リストまたは大会未登録メッセージの設定
-    	TextView noRaceTextView = (TextView)findViewById(R.id.id_activity_main_body_message_norace_textview);
-        if( raceInfoNum == 0 ){
-        	raceInfoListView.setVisibility(View.GONE);
-        	noRaceTextView.setVisibility(View.VISIBLE);
+    	RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_main_body_contents_layout );
+    	RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_main_body_message_layout );
+    	
+    	if( raceInfoNum == 0 ){
+    		contentsLayout.setVisibility(View.GONE);
+    		messageLayout.setVisibility(View.VISIBLE);
         }else{
-        	raceInfoListView.setVisibility(View.VISIBLE);
-        	noRaceTextView.setVisibility(View.GONE);
+        	contentsLayout.setVisibility(View.VISIBLE);
+        	messageLayout.setVisibility(View.GONE);
         }
     }
     
@@ -157,7 +154,7 @@ public class MainActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				
 				// 表示状態設定
-		        setViewUI();
+		        setViewBody( raceInfoListView.getCount() );
 				
 				Toast.makeText( MainActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 			
