@@ -181,38 +181,46 @@ public class RunnerListActivity extends Activity {
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
 		
-		// レイアウト
-		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_contents_layout );
-		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_message_layout );
+		setViewBody( raceId );
+	}
+	
+	private void setViewBody( String raceId ){
 		
 		// 部門別選手リストの取得
 		List<SectionRunnerInfo> sectionRunnerInfoList = Logic.getSectionRunnerInfo(getContentResolver(), raceId, getString(R.string.str_txt_section_no));
 		
-		if( sectionRunnerInfoList.isEmpty() ){
-			// 選手情報なし
-			contentsLayout.setVisibility( View.GONE );
-			messageLayout.setVisibility( View.VISIBLE );
-		}else{
+		// 選手リストまたは選手未登録メッセージの設定
+		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_contents_layout );
+        RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerlist_body_message_layout );
+        
+		if( !sectionRunnerInfoList.isEmpty() ){
 			
-			// 選手情報なし
-			contentsLayout.setVisibility( View.VISIBLE );
-			messageLayout.setVisibility( View.GONE );
-						
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+					
+			// 選手情報あり			
 			List<SectionRunnerElement> sectionRunnerElementList = createSectionRunnerElementList( sectionRunnerInfoList );
-			
+				
 			// リストビュー更新
 			ListView runnerInfoListView = ( ListView )findViewById( R.id.id_activity_runnerlist_body_contents_runnerlist_listview );
 			RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
-			
+					
 			if( adapter != null ){
 				adapter.clear();
 			}
-			
+					
 			adapter = new RunnerListAdapter( this, sectionRunnerElementList );
-	        runnerInfoListView.setAdapter( adapter );
+		    runnerInfoListView.setAdapter( adapter );
+		    
+	        adapter.notifyDataSetChanged();
+		}else{
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
 		}
+		
+        return;
 	}
-	
+
 	/**
 	 * ダイアログのメッセージを作成する
 	 * @param runnerInfoItem
@@ -270,13 +278,9 @@ public class RunnerListActivity extends Activity {
 			if( !raceInfo.isRaceUpdate()){
 				// 選手削除
     			Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
-    				
-    			// 表示リストを更新する
-    			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
-    			RunnerListAdapter adapter = (RunnerListAdapter)runnerInfoListView.getAdapter();
-    			adapter.remove( element );
-    			adapter.notifyDataSetChanged();
     			
+				setViewBody( raceInfo.getRaceId() );
+				
     			Toast.makeText(RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT).show();
 			}else{
 				Toast.makeText(RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT).show();
