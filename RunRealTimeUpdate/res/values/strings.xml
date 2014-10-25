@@ -30,6 +30,8 @@
     <string name="str_msg_racefull">これ以上大会の登録ができません。登録したいならば、大会削除を行ってください。</string>
     <string name="str_msg_runnnerno">選手が登録されていません。選手を登録してください。</string>
     <string name="str_msg_runnerfull">これ以上選手の登録ができません。登録したいならば、選手削除を行ってください。</string>
+    <string name="str_msg_inputName">名前で検索する場合は、名前を入力してください。</string>
+    <string name="str_msg_nosearchname">選手がみつかりませんでした。</string>
     <string name="str_msg_updateno">速報情報がありません。</string>
     <string name="str_msg_passno">通過情報がありません。</string>
     <string name="str_msg_inputurl">以降のURLを入力</string>
@@ -61,12 +63,15 @@
     <string name="str_txt_updatenew">New</string>
     <string name="str_txt_dot">■</string>
     <string name="str_txt_arrow">矢印</string>
+    <string name="str_txt_sei">姓</string>
+    <string name="str_txt_mei">名</string>
     <string name="str_btn_entry">大会登録</string>
     <string name="str_btn_updatestart">速報を開始する</string>
     <string name="str_btn_updatestop">速報を停止する</string>
     <string name="str_btn_updatelist">速報リスト</string>
     <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>
+    <string name="str_btn_search">検索</string>
     <string name="str_btn_back">戻る</string>
     <string name="str_btn_close">閉じる</string>
     <string name="str_btn_passlist">通過情報</string>

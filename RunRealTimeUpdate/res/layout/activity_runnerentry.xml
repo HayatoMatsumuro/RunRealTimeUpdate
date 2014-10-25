@@ -93,6 +93,96 @@
 	            	android:text="@string/str_btn_decide" />
     			
     		</RelativeLayout>
+    		<!-- 名前検索フォーム -->
+	    	<RelativeLayout
+	        	android:id="@+id/id_activity_runnerentry_body_contents_nameform_layout"
+	        	android:layout_below="@+id/id_activity_runnerentry_body_contents_numberform_layout"
+	        	android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_nameform_layout_margintop"
+	        	android:layout_width="match_parent"
+	        	android:layout_height="wrap_content">
+	        		
+	    		<!--名前検索メッセージ -->
+	    		<TextView
+        			android:id="@+id/id_activity_runnerentry_body_contents_nameform_inputname_textview"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+	            	android:layout_alignParentLeft="true"
+	            	android:layout_alignParentTop="true"
+        			android:text="@string/str_msg_inputName" />
+	    		
+	    		<!-- 姓 -->
+	    		<TextView
+    			    android:id="@+id/id_activity_runnerentry_body_contents_nameform_sei_textview"
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="wrap_content"
+    			    android:layout_marginLeft="@dimen/dim_activity_runnerentry_body_contents_nameform_sei_textview_marginleft"
+    			    android:layout_alignBaseline="@+id/id_activity_runnerentry_body_contents_nameform_sei_edittext"
+    			    android:layout_alignBottom="@+id/id_activity_runnerentry_body_contents_nameform_sei_edittext"
+    			    android:layout_alignParentLeft="true"
+    			    android:text="@string/str_txt_sei" />
+	    		
+	    		<!-- 姓入力ボックス -->
+    			<EditText
+        			android:id="@+id/id_activity_runnerentry_body_contents_nameform_sei_edittext"
+        			android:layout_width="50dp"
+	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+	            	android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_inputname_textview"
+	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_sei_textview"
+	            	android:ems="5"
+        			android:inputType="text" />
+    			
+    			<!-- 名 -->
+    			<TextView
+    			    android:id="@+id/id_activity_runnerentry_body_contents_nameform_mei_textview"
+    			    android:layout_width="wrap_content"
+    			    android:layout_height="wrap_content"
+    			    android:layout_alignBaseline="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
+    			    android:layout_alignBottom="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
+    			    android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_sei_edittext"
+	            	android:layout_marginLeft="@dimen/dim_activity_runnerentry_body_contents_nameform_mei_textview_marginleft"
+    			    android:text="@string/str_txt_mei" />
+
+    			<!-- 名入力ボックス -->
+    			<EditText
+        			android:id="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
+        			android:layout_width="50dp"
+	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+	            	android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_inputname_textview"
+	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_mei_textview"
+	            	android:ems="5"
+        			android:inputType="text" />
+    			
+    			<!-- 検索ボタン -->
+    			<Button
+        			android:id="@+id/id_activity_runnerentry_body_contens_nameform_search_button"
+        			android:layout_width="wrap_content"
+        			android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
+	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
+	            	android:layout_alignTop="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
+	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
+	            	android:text="@string/str_btn_search" />
+	        </RelativeLayout>
+    			
+    		<!-- 選手リスト -->
+    		<ListView
+    			android:id="@+id/id_activity_runnerentry_body_contents_runnerlist_listview"
+    			android:layout_width="match_parent"
+    			android:layout_height="wrap_content"
+    			android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_layout"
+    			android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_namelist_listview_margintop"
+    			android:visibility="gone"
+    			/>
+    		<!-- 選手なし -->
+    		<TextView
+    		    android:id="@+id/id_activity_runnerentry_body_contents_nosearchname_textview"
+    			android:layout_width="match_parent"
+    			android:layout_height="wrap_content"
+    			android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_layout"
+    			android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_nosearchname_listview_margintop"
+    			android:text="@string/str_msg_nosearchname"
+    			android:gravity="center_horizontal"/>
     		
 	    	<!-- ダミー( 警告防止 ) -->
 	        <RelativeLayout
