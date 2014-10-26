@@ -1,6 +1,7 @@
 package com.hm.runrealtimeupdate.logic.parser;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -170,6 +171,17 @@ public class ParserRunnersUpdate {
 			throw new ParserException("Exception.");
 		}
 		
+	}
+	
+	/**
+	 * 名前から選手情報を検索し取得する
+	 * @param url アップデートサイトURL
+	 * @param sei 姓
+	 * @param mei 名
+	 * @return 選手情報リスト
+	 */
+	public static List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ){
+		return null;
 	}
 	
 	/**

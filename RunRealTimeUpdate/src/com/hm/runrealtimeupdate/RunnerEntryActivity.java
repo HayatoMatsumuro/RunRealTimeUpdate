@@ -1,5 +1,7 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
@@ -89,7 +91,7 @@ public class RunnerEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_body_numberform_decide_button );
+        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_decide_button );
         decideButton.setTag(raceInfo);
         decideButton.setOnClickListener(new OnClickListener() {
 			
@@ -115,6 +117,36 @@ public class RunnerEntryActivity extends Activity {
 				}
 				// 選手情報取得タスク起動
 				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
+				task.execute(params);
+			}
+		});
+        
+        // 検索ボタン
+        Button searchButton = (Button)findViewById(R.id.id_activity_runnerentry_body_contens_nameform_search_button );
+        searchButton.setTag(raceInfo);
+        searchButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				String[] params = { null, null, null, null };
+				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
+				// 大会情報取得
+				RaceInfo raceInfo = (RaceInfo)v.getTag();
+				params[1] = raceInfo.getRaceId();
+				
+				// 姓取得
+				EditText seiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
+				params[2] = seiEdit.getText().toString();
+				
+				// 名取得
+				EditText meiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
+				params[3] = meiEdit.getText().toString();
+				
+				// 名前検索タスク起動
+				RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
 				task.execute(params);
 			}
 		});
@@ -199,6 +231,27 @@ public class RunnerEntryActivity extends Activity {
 		}
 	}
 	
+	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
+
+		@Override
+		/**
+		 * params[0]:アップデートサイトURL
+		 * params[1]:大会ID
+		 * params[2]:姓
+		 * params[3]:名
+		 */
+		protected List<RunnerInfo> doInBackground( String... params ) {
+			
+			//TODO: 消す
+			@SuppressWarnings("unused")
+			List<RunnerInfo> runnerInfoList = null;
+			
+			// 名前から選手情報を検索する
+			runnerInfoList = Logic.searchRunnerInfoByName( params[0], params[1], params[2], params[3] );
+			return null;
+		}
+		
+	}
 	/**
 	 * ダイアログのメッセージ作成
 	 * @param runnerInfo 選手情報

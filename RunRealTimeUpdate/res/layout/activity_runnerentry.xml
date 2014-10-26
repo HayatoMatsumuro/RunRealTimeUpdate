@@ -84,7 +84,7 @@
 
     			<!-- 決定ボタン -->
     			<Button
-        			android:id="@+id/id_activity_runnerentry_body_numberform_decide_button"
+        			android:id="@+id/id_activity_runnerentry_body_contents_numberform_decide_button"
         			android:layout_width="wrap_content"
         			android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
 	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_numberform_number_edittext"
@@ -174,6 +174,7 @@
     			android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_namelist_listview_margintop"
     			android:visibility="gone"
     			/>
+    		
     		<!-- 選手なし -->
     		<TextView
     		    android:id="@+id/id_activity_runnerentry_body_contents_nosearchname_textview"
@@ -182,7 +183,8 @@
     			android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_layout"
     			android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_nosearchname_listview_margintop"
     			android:text="@string/str_msg_nosearchname"
-    			android:gravity="center_horizontal"/>
+    			android:gravity="center_horizontal"
+    			android:visibility="gone"/>
     		
 	    	<!-- ダミー( 警告防止 ) -->
 	        <RelativeLayout
