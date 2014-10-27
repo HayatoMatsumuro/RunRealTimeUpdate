@@ -13,12 +13,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class RunnerEntryActivity extends Activity {
@@ -242,15 +247,30 @@ public class RunnerEntryActivity extends Activity {
 		 */
 		protected List<RunnerInfo> doInBackground( String... params ) {
 			
-			//TODO: 消す
-			@SuppressWarnings("unused")
 			List<RunnerInfo> runnerInfoList = null;
 			
 			// 名前から選手情報を検索する
 			runnerInfoList = Logic.searchRunnerInfoByName( params[0], params[1], params[2], params[3] );
-			return null;
+			return runnerInfoList;
 		}
 		
+		@Override
+		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
+			
+			RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
+			
+			if( adapter != null ){
+				adapter.clear();
+			}
+			
+			adapter = new RunnerListAdapter( RunnerEntryActivity.this, runnerInfoList );
+		    runnerInfoListView.setAdapter( adapter );
+		    
+	        adapter.notifyDataSetChanged();
+	        
+	        runnerInfoListView.setVisibility(View.VISIBLE);
+		}
 	}
 	/**
 	 * ダイアログのメッセージ作成
@@ -308,6 +328,45 @@ public class RunnerEntryActivity extends Activity {
 		
 	}
 	
+	/**
+	 * ランナーリストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RunnerListAdapter extends ArrayAdapter<RunnerInfo>{
+
+		LayoutInflater inflater;
+    	
+		public RunnerListAdapter(Context context, List<RunnerInfo> objects) {
+			super(context, 0, objects);
+			
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent){
+			
+			if( convertView == null ){
+				convertView = this.inflater.inflate(R.layout.list_item_runnerinfo, parent, false);
+			}
+			
+			RelativeLayout sectionLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_runnerinfo_section_layout );
+			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_layout );
+			
+			TextView runnerNameTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_name_textview );
+			TextView runnerNumberTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_number_textview );
+			
+			RunnerInfo item = getItem(position);
+			
+			sectionLayout.setVisibility( View.GONE );
+			runnerLayout.setVisibility( View.VISIBLE );
+			runnerNameTextView.setText( item.getName() );
+			runnerNumberTextView.setText( item.getNumber() );
+			
+			return convertView;
+		}
+	}
 	/**
 	 * 選手登録ダイアログ用の情報
 	 * @author Hayato Matsumuro
