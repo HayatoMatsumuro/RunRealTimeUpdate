@@ -1,6 +1,7 @@
 package com.hm.runrealtimeupdate.logic.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Connection;
@@ -179,9 +180,111 @@ public class ParserRunnersUpdate {
 	 * @param sei 姓
 	 * @param mei 名
 	 * @return 選手情報リスト
+	 * @throws ParserException 
 	 */
-	public static List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ){
-		return null;
+	public static List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ) throws ParserException{
+		
+		List<ParserRunnerInfo> parserRunnerInfoList = null;
+		
+		String runnerinfoUrl = createRunnerInfoByNameURL( url, raceId );
+		
+		try {
+			Connection connection = Jsoup.connect( runnerinfoUrl );
+			if( connection == null ){
+				throw new ParserException( "接続に失敗しました。" );
+			}
+
+			Document doc = connection.data("name1", sei, "name2", mei ).post();
+			if( doc == null )
+			{
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+			
+			// メインブロック取得
+			Elements mainBlock = doc.select("div#mainBlock");
+			if( ( mainBlock == null ) || ( mainBlock.isEmpty() ) ){
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+			
+			Element mainBlockElement = mainBlock.get(0);						
+			if( mainBlockElement == null){
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+			
+			// 選手情報を取得
+			Elements trElements = mainBlockElement.getElementsByTag("tr");						
+			if( trElements == null){
+				throw new ParserException("選手情報取得に失敗しました。");
+			}
+			if( trElements.isEmpty() ){
+				throw new ParserException("選手情報がありません。");
+			}
+			
+			trElements.remove(0);
+			
+			int size = trElements.size();
+			
+			parserRunnerInfoList = new ArrayList<ParserRunnerInfo>();
+			
+			for( int i = 0; i < size; i++ ){
+				Element trElement = trElements.get(i);
+				if( trElement == null){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				Elements tdElements = trElement.getElementsByTag("td");
+				if( tdElements == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				// 名前要素取得
+				Element tdNameElement = tdElements.get(0);
+				if( tdNameElement == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				Elements aNameElements = tdNameElement.getElementsByTag("a");
+				if( aNameElements == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				Element aNameElement = aNameElements.get(0);
+				if( aNameElement == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				String name = aNameElement.text();
+				
+				// ゼッケン番号要素取得
+				Element tdNumberElement = tdElements.get(1);
+				if( tdNumberElement == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				Elements aNumberElements = tdNumberElement.getElementsByTag("a");
+				if( aNumberElements == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				
+				Element aNumberElement = aNumberElements.get(0);
+				if( aNumberElement == null ){
+					throw new ParserException("選手情報が不正です。");
+				}
+				String number = aNumberElement.text();
+				
+				ParserRunnerInfo pRunnerInfo = new ParserRunnerInfo();
+				pRunnerInfo.setName(name);
+				pRunnerInfo.setNumber(number);
+				parserRunnerInfoList.add( pRunnerInfo );
+			}
+		} catch (ParserException e) {
+			e.printStackTrace();
+			throw new ParserException("Exception.");
+		} catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+			throw new ParserException("IOException.");
+		}
+		return parserRunnerInfoList;
 	}
 	
 	/**
@@ -213,6 +316,16 @@ public class ParserRunnersUpdate {
 		builder.append("/numberfile/");
 		builder.append(no);
 		builder.append(".html");
+		
+		return builder.toString();
+	}
+	
+	private static String createRunnerInfoByNameURL( String url, String raceId ){
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append( url );
+		builder.append( raceId );
+		builder.append( "/php/name.php" );
 		
 		return builder.toString();
 	}

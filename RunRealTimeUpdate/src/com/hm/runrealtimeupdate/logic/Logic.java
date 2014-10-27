@@ -589,9 +589,9 @@ public class Logic {
 		
 		List<RunnerInfo> runnerInfoList = null;
 		
-		List<ParserRunnerInfo> parserRunnerInfoList = ParserRunnersUpdate.searchRunnerInfoByName(url, raceId, sei, mei);
-		
-		if( parserRunnerInfoList != null ){
+		List<ParserRunnerInfo> parserRunnerInfoList = null;
+		try {
+			parserRunnerInfoList = ParserRunnersUpdate.searchRunnerInfoByName(url, raceId, sei, mei);
 			
 			runnerInfoList = new ArrayList<RunnerInfo>();
 			
@@ -601,7 +601,11 @@ public class Logic {
 				runnerInfo.setName( parserRunnerInfo.getName() );
 				runnerInfoList.add( runnerInfo );
 			}
+			
+		} catch (ParserException e) {
+			e.printStackTrace();
 		}
+		
 		return runnerInfoList;
 	}
 	
