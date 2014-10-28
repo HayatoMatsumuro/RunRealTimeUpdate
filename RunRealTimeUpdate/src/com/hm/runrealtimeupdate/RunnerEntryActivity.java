@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class RunnerEntryActivity extends Activity {
 	
@@ -155,6 +157,34 @@ public class RunnerEntryActivity extends Activity {
 				task.execute(params);
 			}
 		});
+        
+        // 選手リストビュー短押し
+        ListView runnerInfoListView = ( ListView )findViewById( R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
+        runnerInfoListView.setTag( raceInfo );
+        runnerInfoListView.setOnItemClickListener( new OnItemClickListener(){
+
+			@Override
+			public void onItemClick( AdapterView<?> parent, View v, int position, long id ){
+				
+				// 選択した大会情報を取得する
+				ListView listView = (ListView)parent;
+				RunnerInfo runnerInfo = (RunnerInfo)listView.getItemAtPosition(position);
+				
+				String[] params = { null, null, null };
+				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
+				RaceInfo raceInfo = (RaceInfo)v.getTag();
+				params[1] = raceInfo.getRaceId();
+				
+				params[2] = runnerInfo.getNumber();
+				
+				// 選手情報取得タスク起動
+				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
+				task.execute(params);
+			}
+        	
+        });
 	}
 	
 	private class BackButtonTag {
