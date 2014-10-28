@@ -186,12 +186,6 @@
     			android:gravity="center_horizontal"
     			android:visibility="gone"/>
     		
-	    	<!-- ダミー( 警告防止 ) -->
-	        <RelativeLayout
-	        	android:id="@+id/id_activity_raceentry_body_contents_dummy_layout"
-	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content" >
-	        </RelativeLayout>
 		</RelativeLayout>
 		
 		<!-- メッセージ -->

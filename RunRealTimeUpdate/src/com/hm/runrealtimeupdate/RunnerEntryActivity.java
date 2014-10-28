@@ -286,20 +286,31 @@ public class RunnerEntryActivity extends Activity {
 		
 		@Override
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+			
 			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
+			TextView noSearchNameTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_contents_nosearchname_textview );
 			
-			RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
-			
-			if( adapter != null ){
-				adapter.clear();
+			if( runnerInfoList != null ){
+				// リストビュー表示
+				RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
+				
+				if( adapter != null ){
+					adapter.clear();
+				}
+				
+				adapter = new RunnerListAdapter( RunnerEntryActivity.this, runnerInfoList );
+			    runnerInfoListView.setAdapter( adapter );
+			    
+		        adapter.notifyDataSetChanged();
+		        
+		        runnerInfoListView.setVisibility( View.VISIBLE );
+				noSearchNameTextView.setVisibility( View.GONE );
+			}else{
+				// 選手なしのメッセージ表示
+				runnerInfoListView.setVisibility( View.GONE );
+				noSearchNameTextView.setVisibility( View.VISIBLE );
 			}
 			
-			adapter = new RunnerListAdapter( RunnerEntryActivity.this, runnerInfoList );
-		    runnerInfoListView.setAdapter( adapter );
-		    
-	        adapter.notifyDataSetChanged();
-	        
-	        runnerInfoListView.setVisibility(View.VISIBLE);
 	        
 	        // キーボードを隠す
 	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
