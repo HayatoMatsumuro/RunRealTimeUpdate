@@ -300,6 +300,16 @@ public class RunnerEntryActivity extends Activity {
 	        adapter.notifyDataSetChanged();
 	        
 	        runnerInfoListView.setVisibility(View.VISIBLE);
+	        
+	        // キーボードを隠す
+	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
+	        
+			EditText seiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
+	        imm.hideSoftInputFromWindow( seiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
+	        
+	        EditText meiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
+	        imm.hideSoftInputFromWindow( meiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
+	        
 		}
 	}
 	/**
