@@ -174,7 +174,7 @@ public class RunnerEntryActivity extends Activity {
 				
 				params[0] = getString(R.string.str_txt_defaulturl);
 				
-				RaceInfo raceInfo = (RaceInfo)v.getTag();
+				RaceInfo raceInfo = ( RaceInfo )listView.getTag();
 				params[1] = raceInfo.getRaceId();
 				
 				params[2] = runnerInfo.getNumber();
