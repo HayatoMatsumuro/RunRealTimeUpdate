@@ -32,6 +32,15 @@
     <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_marginleft">5dp</dimen>
     <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_height">40dp</dimen>
     
+    <dimen name="dim_activity_runnerentry_body_contents_nameform_layout_margintop">15dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_nameform_sei_textview_marginleft">10dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_nameform_mei_textview_marginleft">10dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_marginleft">5dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_height">40dp</dimen>
+    
+    <dimen name="dim_activity_runnerentry_body_contents_namelist_listview_margintop">20dp</dimen>
+    <dimen name="dim_activity_runnerentry_body_contents_nosearchname_listview_margintop">40dp</dimen>
+    
     <!-- 大会詳細 -->
     <dimen name="dim_activity_racedetail_body_contents_update_button_margintop">30dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_update_button_height">40dp</dimen>

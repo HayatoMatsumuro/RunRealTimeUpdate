@@ -577,6 +577,38 @@ public class Logic {
 		return sectionRunnerInfoList;
 	}
 	
+	/**
+	 * 名前から選手情報を検索する
+	 * @param url
+	 * @param raceId
+	 * @param sei
+	 * @param mei
+	 * @return
+	 */
+	public static List<RunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ){
+		
+		List<RunnerInfo> runnerInfoList = null;
+		
+		List<ParserRunnerInfo> parserRunnerInfoList = null;
+		try {
+			parserRunnerInfoList = ParserRunnersUpdate.searchRunnerInfoByName(url, raceId, sei, mei);
+			
+			runnerInfoList = new ArrayList<RunnerInfo>();
+			
+			for( ParserRunnerInfo parserRunnerInfo : parserRunnerInfoList ){
+				RunnerInfo runnerInfo = new RunnerInfo();
+				runnerInfo.setNumber( parserRunnerInfo.getNumber() );
+				runnerInfo.setName( parserRunnerInfo.getName() );
+				runnerInfoList.add( runnerInfo );
+			}
+			
+		} catch (ParserException e) {
+			e.printStackTrace();
+		}
+		
+		return runnerInfoList;
+	}
+	
 	private static RunnerInfo getRunnerInfoByDBRunnerInfo( ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo ){
 		RunnerInfo runnerInfo = new RunnerInfo();
 		runnerInfo.setName(dbRunnerInfo.getName());

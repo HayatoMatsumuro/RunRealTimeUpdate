@@ -1,5 +1,7 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
@@ -11,13 +13,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class RunnerEntryActivity extends Activity {
 	
@@ -89,7 +98,7 @@ public class RunnerEntryActivity extends Activity {
 		});
         
         // 決定ボタン
-        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_body_numberform_decide_button );
+        Button decideButton = (Button)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_decide_button );
         decideButton.setTag(raceInfo);
         decideButton.setOnClickListener(new OnClickListener() {
 			
@@ -118,6 +127,64 @@ public class RunnerEntryActivity extends Activity {
 				task.execute(params);
 			}
 		});
+        
+        // 検索ボタン
+        Button searchButton = (Button)findViewById(R.id.id_activity_runnerentry_body_contens_nameform_search_button );
+        searchButton.setTag(raceInfo);
+        searchButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				String[] params = { null, null, null, null };
+				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
+				// 大会情報取得
+				RaceInfo raceInfo = (RaceInfo)v.getTag();
+				params[1] = raceInfo.getRaceId();
+				
+				// 姓取得
+				EditText seiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
+				params[2] = seiEdit.getText().toString();
+				
+				// 名取得
+				EditText meiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
+				params[3] = meiEdit.getText().toString();
+				
+				// 名前検索タスク起動
+				RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
+				task.execute(params);
+			}
+		});
+        
+        // 選手リストビュー短押し
+        ListView runnerInfoListView = ( ListView )findViewById( R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
+        runnerInfoListView.setTag( raceInfo );
+        runnerInfoListView.setOnItemClickListener( new OnItemClickListener(){
+
+			@Override
+			public void onItemClick( AdapterView<?> parent, View v, int position, long id ){
+				
+				// 選択した大会情報を取得する
+				ListView listView = (ListView)parent;
+				RunnerInfo runnerInfo = (RunnerInfo)listView.getItemAtPosition(position);
+				
+				String[] params = { null, null, null };
+				
+				params[0] = getString(R.string.str_txt_defaulturl);
+				
+				RaceInfo raceInfo = ( RaceInfo )listView.getTag();
+				params[1] = raceInfo.getRaceId();
+				
+				params[2] = runnerInfo.getNumber();
+				
+				// 選手情報取得タスク起動
+				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
+				task.execute(params);
+			}
+        	
+        });
 	}
 	
 	private class BackButtonTag {
@@ -199,6 +266,63 @@ public class RunnerEntryActivity extends Activity {
 		}
 	}
 	
+	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
+
+		@Override
+		/**
+		 * params[0]:アップデートサイトURL
+		 * params[1]:大会ID
+		 * params[2]:姓
+		 * params[3]:名
+		 */
+		protected List<RunnerInfo> doInBackground( String... params ) {
+			
+			List<RunnerInfo> runnerInfoList = null;
+			
+			// 名前から選手情報を検索する
+			runnerInfoList = Logic.searchRunnerInfoByName( params[0], params[1], params[2], params[3] );
+			return runnerInfoList;
+		}
+		
+		@Override
+		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+			
+			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
+			TextView noSearchNameTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_contents_nosearchname_textview );
+			
+			if( runnerInfoList != null ){
+				// リストビュー表示
+				RunnerListAdapter adapter = ( RunnerListAdapter )runnerInfoListView.getAdapter();
+				
+				if( adapter != null ){
+					adapter.clear();
+				}
+				
+				adapter = new RunnerListAdapter( RunnerEntryActivity.this, runnerInfoList );
+			    runnerInfoListView.setAdapter( adapter );
+			    
+		        adapter.notifyDataSetChanged();
+		        
+		        runnerInfoListView.setVisibility( View.VISIBLE );
+				noSearchNameTextView.setVisibility( View.GONE );
+			}else{
+				// 選手なしのメッセージ表示
+				runnerInfoListView.setVisibility( View.GONE );
+				noSearchNameTextView.setVisibility( View.VISIBLE );
+			}
+			
+	        
+	        // キーボードを隠す
+	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
+	        
+			EditText seiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
+	        imm.hideSoftInputFromWindow( seiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
+	        
+	        EditText meiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
+	        imm.hideSoftInputFromWindow( meiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
+	        
+		}
+	}
 	/**
 	 * ダイアログのメッセージ作成
 	 * @param runnerInfo 選手情報
@@ -255,6 +379,45 @@ public class RunnerEntryActivity extends Activity {
 		
 	}
 	
+	/**
+	 * ランナーリストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RunnerListAdapter extends ArrayAdapter<RunnerInfo>{
+
+		LayoutInflater inflater;
+    	
+		public RunnerListAdapter(Context context, List<RunnerInfo> objects) {
+			super(context, 0, objects);
+			
+			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent){
+			
+			if( convertView == null ){
+				convertView = this.inflater.inflate(R.layout.list_item_runnerinfo, parent, false);
+			}
+			
+			RelativeLayout sectionLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_runnerinfo_section_layout );
+			RelativeLayout runnerLayout = (RelativeLayout)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_layout );
+			
+			TextView runnerNameTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_name_textview );
+			TextView runnerNumberTextView = (TextView)convertView.findViewById( R.id.id_list_item_runnerinfo_runner_number_textview );
+			
+			RunnerInfo item = getItem(position);
+			
+			sectionLayout.setVisibility( View.GONE );
+			runnerLayout.setVisibility( View.VISIBLE );
+			runnerNameTextView.setText( item.getName() );
+			runnerNumberTextView.setText( item.getNumber() );
+			
+			return convertView;
+		}
+	}
 	/**
 	 * 選手登録ダイアログ用の情報
 	 * @author Hayato Matsumuro
