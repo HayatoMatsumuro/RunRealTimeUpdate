@@ -221,6 +221,7 @@ public class RunnerEntryActivity extends Activity {
 		ProgressDialog m_ProgressDialog = null;
 		
 		private RaceInfo m_RaceInfo;
+		private boolean m_CancellFlg = false;
 		
 		public RunnerInfoLoaderTask(RaceInfo raceInfo){
 			super();
@@ -274,7 +275,11 @@ public class RunnerEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
-						
+			
+			if( m_CancellFlg ){
+				return;
+			}
+			
 			if(runnerInfo == null){
 				Toast.makeText(RunnerEntryActivity.this, "選手情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
@@ -293,6 +298,8 @@ public class RunnerEntryActivity extends Activity {
 					getString( R.string.str_dialog_msg_OK ),
 					getString( R.string.str_dialog_msg_NG )
 			);
+			
+			return;
 		}
 		
 		@Override
@@ -303,6 +310,9 @@ public class RunnerEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
 
 			Toast.makeText(RunnerEntryActivity.this, "選手情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
 		}	
