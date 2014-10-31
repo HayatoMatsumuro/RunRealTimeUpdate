@@ -8,6 +8,7 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -217,11 +218,35 @@ public class RunnerEntryActivity extends Activity {
 	 */
 	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
 		
+		ProgressDialog m_ProgressDialog = null;
+		
 		private RaceInfo m_RaceInfo;
 		
 		public RunnerInfoLoaderTask(RaceInfo raceInfo){
 			super();
 			m_RaceInfo = raceInfo;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			// 進捗ダイアログ作成
+			m_ProgressDialog = new ProgressDialog( RunnerEntryActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_runnerinfo ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+					
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
 		}
 		
 		@Override
@@ -245,6 +270,11 @@ public class RunnerEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute(RunnerInfo runnerInfo){
 			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+						
 			if(runnerInfo == null){
 				Toast.makeText(RunnerEntryActivity.this, "選手情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
@@ -264,6 +294,18 @@ public class RunnerEntryActivity extends Activity {
 					getString( R.string.str_dialog_msg_NG )
 			);
 		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+
+			Toast.makeText(RunnerEntryActivity.this, "選手情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
+		}	
 	}
 	
 	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
