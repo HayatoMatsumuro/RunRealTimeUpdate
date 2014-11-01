@@ -112,6 +112,8 @@ public class RaceEntryActivity extends Activity {
 
 		ProgressDialog m_ProgressDialog = null;
 		
+		private boolean m_CancellFlg = false;
+		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -158,6 +160,10 @@ public class RaceEntryActivity extends Activity {
 				m_ProgressDialog.dismiss();
 			}
 			
+			if( m_CancellFlg ){
+				return;
+			}
+			
 			if( raceInfo == null ){
 				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
@@ -180,6 +186,9 @@ public class RaceEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
 			
 			Toast.makeText(RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
 		}
