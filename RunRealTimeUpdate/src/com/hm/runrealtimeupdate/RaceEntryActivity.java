@@ -83,6 +83,20 @@ public class RaceEntryActivity extends Activity {
 				task.execute(params);
 			}
 		});
+        
+        // QRコードボタン
+        Button qrBtn = ( Button )findViewById( R.id.id_activity_raceentry_body_contents_qr_button );
+        qrBtn.setOnClickListener( new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// QR検索画面
+				Intent intent = new Intent(RaceEntryActivity.this, RaceEntryQRActivity.class);
+				startActivity(intent);
+				
+			}
+        	
+        });
 	}
 	
 	/**

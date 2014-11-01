@@ -102,11 +102,19 @@
 	        	
 			</RelativeLayout>
 			
-	        <!-- ダミー( 警告防止 ) -->
+	        <!-- QRコード検索ボタン -->
 	        <RelativeLayout
-	        	android:id="@+id/id_activity_raceentry_body_contents_dummy_layout"
+	        	android:id="@+id/id_activity_raceentry_body_contents_qr_layout"
 	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content" >
+	        	android:layout_height="wrap_content"
+	        	android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_layout" >
+	        	
+	            <Button 
+	                android:id="@+id/id_activity_raceentry_body_contents_qr_button"
+	                android:layout_width="wrap_content"
+	                android:layout_height="@dimen/dim_activity_raceentry_body_contents_qr_button_height"
+	                android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_qr_button_marginTop"
+	                android:text="@string/str_btn_qr"/>
 	        </RelativeLayout>
 	        
 	    </RelativeLayout>

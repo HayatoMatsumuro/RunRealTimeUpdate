@@ -79,6 +79,7 @@
     <string name="str_btn_passlist">通過情報</string>
     <string name="str_btn_detail">大会詳細</string>
     <string name="str_btn_backstart">大会一覧</string>
+    <string name="str_btn_qr">QRコードで検索</string>
     <string name="str_tab_race_detail">詳細</string>
     <string name="str_tab_race_runner">選手</string>
     <string name="str_tab_race_update">速報</string>
