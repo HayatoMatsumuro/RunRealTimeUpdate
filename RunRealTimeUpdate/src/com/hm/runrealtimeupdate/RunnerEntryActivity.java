@@ -320,6 +320,30 @@ public class RunnerEntryActivity extends Activity {
 	
 	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
 
+		ProgressDialog m_ProgressDialog = null;
+		
+		private boolean m_CancellFlg = false;
+		
+		// 進捗ダイアログ作成
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			m_ProgressDialog = new ProgressDialog( RunnerEntryActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_namesearch ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
+		}
+		
 		@Override
 		/**
 		 * params[0]:アップデートサイトURL
@@ -339,6 +363,15 @@ public class RunnerEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
 			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+	        if( m_CancellFlg ){
+				return;
+			}
+	        
 			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
 			TextView noSearchNameTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_contents_nosearchname_textview );
 			
@@ -363,8 +396,7 @@ public class RunnerEntryActivity extends Activity {
 				noSearchNameTextView.setVisibility( View.VISIBLE );
 			}
 			
-	        
-	        // キーボードを隠す
+			// キーボードを隠す
 	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
 	        
 			EditText seiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
@@ -373,7 +405,23 @@ public class RunnerEntryActivity extends Activity {
 	        EditText meiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
 	        imm.hideSoftInputFromWindow( meiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 	        
+	        return;
 		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
+
+			Toast.makeText(RunnerEntryActivity.this, "名前検索をキャンセルしました。", Toast.LENGTH_SHORT).show();
+		}	
 	}
 	/**
 	 * ダイアログのメッセージ作成
