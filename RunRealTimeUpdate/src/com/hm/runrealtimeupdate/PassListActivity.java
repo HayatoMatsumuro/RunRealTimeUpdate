@@ -65,6 +65,9 @@ public class PassListActivity extends Activity {
         	contentsLayout.setVisibility( View.GONE );
         	messageLayout.setVisibility( View.VISIBLE );
         } else {
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        	
         	List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
         	
             for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
