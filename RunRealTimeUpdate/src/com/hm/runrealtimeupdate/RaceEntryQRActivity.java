@@ -40,6 +40,8 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 	private Point m_PreviewSize = null;
 	private float m_PreviewWidthRatio = 0;
 	private float m_PreviewHeightRatio = 0;
+	
+	private Toast m_Toast = null;
 
 	private static final int MIN_PREVIEW_PIXELS = 470 * 320;
 	private static final int MAX_PREVIEW_PIXELS = 1280 * 720;
@@ -201,7 +203,13 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 			MultiFormatReader multiFormatReader = new MultiFormatReader();
 			
 			try {
+				
 				rawResult = multiFormatReader.decode(bitmap);
+				
+				// Toast 非表示
+				if( m_Toast != null ){
+					m_Toast.cancel();
+				}
 				
 				// URL表示ダイアログ表示
 				InfoDialog<String> URLDispDialog = new InfoDialog<String>( rawResult.getText(), new URLDispCallbackImpl());
@@ -231,6 +239,10 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 	public boolean onTouchEvent(MotionEvent event) {
 		if (m_Camera != null) {
 			if (event.getAction() == MotionEvent.ACTION_DOWN) {
+				
+				m_Toast = Toast.makeText(getApplicationContext(), "読み取り開始", Toast.LENGTH_SHORT);
+				m_Toast.show();
+				
 				m_Camera.autoFocus(this);
 			}
 		}
@@ -265,10 +277,12 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 				intent.putExtra( RaceEntryActivity.STR_INTENT_RACEID, raceId );
 				startActivity( intent );
 				
-				Toast.makeText(getApplicationContext(), "QRコード解析に成功しました。", Toast.LENGTH_SHORT).show();
+				m_Toast = Toast.makeText(getApplicationContext(), "QRコード解析に成功しました。", Toast.LENGTH_SHORT);
+				m_Toast.show();
 			}else{
 				// アップデートサイトでない
-				Toast.makeText(getApplicationContext(), "URL解析に失敗しました。", Toast.LENGTH_SHORT).show();
+				m_Toast = Toast.makeText(getApplicationContext(), "URL解析に失敗しました。", Toast.LENGTH_SHORT);
+				m_Toast.show();
 			}
 			
 		}
