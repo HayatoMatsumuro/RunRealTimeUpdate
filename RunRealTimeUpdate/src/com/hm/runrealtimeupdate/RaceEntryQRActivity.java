@@ -181,7 +181,7 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 	@Override
 	public void onPreviewFrame( byte[] data, Camera camera ) {
 		Result rawResult = null;
-		View target = ( View ) findViewById( R.id.id_activity_raceentryqr_center_view );
+		View target = ( View ) findViewById( R.id.id_activity_raceentryqr_preview_frame_view );
 		int left = ( int ) ( target.getLeft() * m_PreviewWidthRatio );
 		int top = ( int ) ( target.getTop() * m_PreviewHeightRatio );
 		int width = ( int ) ( target.getWidth() * m_PreviewWidthRatio );

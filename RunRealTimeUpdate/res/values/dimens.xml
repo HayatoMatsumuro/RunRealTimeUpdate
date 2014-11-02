@@ -27,6 +27,12 @@
     <dimen name="dim_activity_raceentry_body_contents_qr_button_marginTop">40dp</dimen>
     <dimen name="dim_activity_raceentry_body_contents_qr_button_height">40dp</dimen>
     
+    <!-- 大会登録QR -->
+    <dimen name="dim_activity_raceentryqr_preview_frame_view_width">300dp</dimen>
+    <dimen name="dim_activity_raceentryqr_preview_frame_view_height">180dp</dimen>
+    <dimen name="dim_activity_raceentryqr_preview_frame_view_background_stroke_width">5dp</dimen>
+    <dimen name="dim_activity_raceentryqr_preview_frame_view_background_corners_radius">2dp</dimen>
+    
     <!-- 選手登録 -->
     <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_height">40dp</dimen>
     <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_margintop">15dp</dimen>

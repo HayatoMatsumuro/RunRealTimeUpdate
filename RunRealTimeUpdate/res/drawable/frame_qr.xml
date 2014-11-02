@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
-    <solid android:color="#00000000"/>
-    <stroke android:width="5dp" android:color="#77dcdcdc"/>
-    <corners android:radius="2dp" />
+    <solid android:color="@color/color_activity_raceentryqr_preview_frame_view_background_solid_color"/>
+    <stroke 
+        android:width="@dimen/dim_activity_raceentryqr_preview_frame_view_background_stroke_width"
+        android:color="@color/color_activity_raceentryqr_preview_frame_view_background_stroke_color"/>
+    <corners android:radius="@dimen/dim_activity_raceentryqr_preview_frame_view_background_stroke_width" />
 </shape>

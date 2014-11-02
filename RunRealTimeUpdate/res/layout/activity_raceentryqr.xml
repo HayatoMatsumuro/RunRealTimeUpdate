@@ -5,28 +5,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     
+    <!-- カメラ -->
     <FrameLayout
+        android:id="@+id/id_activity_raceentryqr_preview_layout"
     	android:layout_width="match_parent"
     	android:layout_height="0dp"
     	android:layout_weight="1" >
     
+        <!-- Surface -->
     	<SurfaceView 
         	android:id="@+id/id_activity_raceentryqr_preview_surfaceview"
        		android:layout_width="match_parent"
         	android:layout_height="match_parent"/>
     
+    	<!-- QRコード読み取り枠 -->
     	<RelativeLayout
-        	android:id="@+id/id_activity_raceentryqr_center_layout"
+        	android:id="@+id/id_activity_raceentryqr_preview_frame_layout"
         	android:layout_width="match_parent"
         	android:layout_height="match_parent" >
         
+    	    <!-- 枠 -->
         	<View 
-            	android:id="@+id/id_activity_raceentryqr_center_view"
-            	android:layout_width="300dp"
-            	android:layout_height="180dp"
+            	android:id="@+id/id_activity_raceentryqr_preview_frame_view"
+            	android:layout_width="@dimen/dim_activity_raceentryqr_preview_frame_view_width"
+            	android:layout_height="@dimen/dim_activity_raceentryqr_preview_frame_view_height"
             	android:layout_centerHorizontal="true"
             	android:layout_centerVertical="true"
-            	android:background="@drawable/frame_qr"/>
+            	android:background="@drawable/frame_qr">
+        	    
+            </View>
     	</RelativeLayout>
 	</FrameLayout>
 	
