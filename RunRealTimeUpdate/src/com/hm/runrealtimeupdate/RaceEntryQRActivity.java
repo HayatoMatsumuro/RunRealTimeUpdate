@@ -214,8 +214,7 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 				);
 		
 			} catch ( ReaderException re) {
-				Toast.makeText(getApplicationContext(), "読み取りに失敗しました。",
-				Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "読み取りに失敗しました。", Toast.LENGTH_SHORT).show();
 			}
 		}
 		
@@ -255,13 +254,27 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 
 		@Override
 		public void onClickPositiveButton(DialogInterface dialog, int which, String url ){
-			// TODO 自動生成されたメソッド・スタブ
+			
+			// 取得したURLにアップデートサイトが含まれるか調べる
+			if( url.startsWith( getString( R.string.str_txt_defaulturl ) ) ){
+				// アップデートサイト取得
+				String raceId = url.replaceAll( getString( R.string.str_txt_defaulturl ), "" );
+				
+				// 大会登録画面遷移
+				Intent intent = new Intent( RaceEntryQRActivity.this, RaceEntryActivity.class );
+				intent.putExtra( RaceEntryActivity.STR_INTENT_RACEID, raceId );
+				startActivity( intent );
+				
+				Toast.makeText(getApplicationContext(), "QRコード解析に成功しました。", Toast.LENGTH_SHORT).show();
+			}else{
+				// アップデートサイトでない
+				Toast.makeText(getApplicationContext(), "URL解析に失敗しました。", Toast.LENGTH_SHORT).show();
+			}
 			
 		}
 
 		@Override
 		public void onClickNegativeButton(DialogInterface dialog, int which, String url ){
-			// TODO 自動生成されたメソッド・スタブ
 			
 		}
 		

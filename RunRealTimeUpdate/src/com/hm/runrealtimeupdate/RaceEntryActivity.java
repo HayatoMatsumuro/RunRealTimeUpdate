@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
 	
+	public static final String STR_INTENT_RACEID = "raceid";
+	
 	/**
 	 * 登録できる大会の最大数
 	 */
