@@ -15,6 +15,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.hardware.Camera;
@@ -201,10 +202,19 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 			
 			try {
 				rawResult = multiFormatReader.decode(bitmap);
-				Toast.makeText(getApplicationContext(), rawResult.getText(), Toast.LENGTH_LONG).show();
+				
+				// URL表示ダイアログ表示
+				InfoDialog<String> URLDispDialog = new InfoDialog<String>( rawResult.getText(), new URLDispCallbackImpl());
+				URLDispDialog.onDialog(
+						RaceEntryQRActivity.this,
+						getString( R.string.str_dialog_title_urldisp ),
+						createDialogMessage( rawResult.getText() ),
+						getString( R.string.str_dialog_msg_OK ),
+						getString( R.string.str_dialog_msg_NG )
+				);
 		
 			} catch ( ReaderException re) {
-				Toast.makeText(getApplicationContext(), "read error: " + re.getMessage(),
+				Toast.makeText(getApplicationContext(), "読み取りに失敗しました。",
 				Toast.LENGTH_LONG).show();
 			}
 		}
@@ -227,5 +237,33 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 		}
 		
 		return super.onTouchEvent(event);
+	}
+	
+	private String createDialogMessage( String url ){
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append("取得したURL : ");
+		builder.append( url );
+		
+		return builder.toString();
+	}
+	
+	/**
+	 * URL表示ダイアログボタン押しのコールバック
+	 */
+	private class URLDispCallbackImpl implements InfoDialog.ButtonCallback<String>{
+
+		@Override
+		public void onClickPositiveButton(DialogInterface dialog, int which, String url ){
+			// TODO 自動生成されたメソッド・スタブ
+			
+		}
+
+		@Override
+		public void onClickNegativeButton(DialogInterface dialog, int which, String url ){
+			// TODO 自動生成されたメソッド・スタブ
+			
+		}
+		
 	}
 }

@@ -16,6 +16,7 @@
     <string name="str_dialog_title_deleterace">大会削除確認</string>
     <string name="str_dialog_title_runnerentry">選手登録確認</string>
     <string name="str_dialog_title_deleterunner">選手削除確認</string>
+    <string name="str_dialog_title_urldisp">URL確認</string>
     <string name="str_dialog_title_progress_raceinfo">大会情報</string>
     <string name="str_dialog_title_progress_runnerinfo">選手情報</string>
     <string name="str_dialog_title_progress_namesearch">名前検索</string>
