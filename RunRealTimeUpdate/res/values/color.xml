@@ -36,4 +36,5 @@
     
     <!-- QRコード -->
     <color name="color_activity_raceentryqr_frame_color">#FFFFFF</color>
+    <color name="color_activity_raceentryqr_menu_layout_background">#000000</color>
 </resources>

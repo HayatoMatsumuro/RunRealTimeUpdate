@@ -75,6 +75,7 @@
     <string name="str_btn_decide">決定</string>
     <string name="str_btn_search">検索</string>
     <string name="str_btn_back">戻る</string>
+    <string name="str_btn_backqr">大会登録に戻る</string>
     <string name="str_btn_close">閉じる</string>
     <string name="str_btn_passlist">通過情報</string>
     <string name="str_btn_detail">大会詳細</string>

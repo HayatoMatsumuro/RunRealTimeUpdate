@@ -15,6 +15,7 @@ import com.google.zxing.common.HybridBinarizer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -26,7 +27,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, PreviewCallback {
@@ -79,6 +82,17 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 					m_Camera.startPreview();
 				}
 				
+			}
+		});
+		
+		// 大会登録戻るボタン
+		Button menuButton = ( Button )findViewById( R.id.id_activity_raceentryqr_menu_button );
+		menuButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent( RaceEntryQRActivity.this, RaceEntryActivity.class );
+				startActivity( intent );
 			}
 		});
 	}
