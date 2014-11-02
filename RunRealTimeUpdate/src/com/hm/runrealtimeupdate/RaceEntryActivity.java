@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 public class RaceEntryActivity extends Activity {
 	
+	public static final String STR_INTENT_RACEID = "raceid";
+	
 	/**
 	 * 登録できる大会の最大数
 	 */
@@ -29,6 +31,11 @@ public class RaceEntryActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_raceentry);
 
+        // 大会ID取得
+        Intent intent = getIntent();
+        String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+        
+        
         // 戻るボタン
         Button backBtn = (Button)findViewById(R.id.id_activity_raceentry_header_back_button);
         backBtn.setOnClickListener(new OnClickListener() {
@@ -54,6 +61,10 @@ public class RaceEntryActivity extends Activity {
         	contentsLayout.setVisibility( View.VISIBLE );
         	messageLayout.setVisibility( View.GONE );
         }
+        
+        // 大会ID入力
+        EditText urlEdit = ( EditText )findViewById( R.id.id_activity_raceentry_body_contents_urlform_inputurl_edittext );
+        urlEdit.setText( raceId );
         
         // 決定ボタン
         Button decideBtn = (Button)findViewById( R.id.id_activity_raceentry_body_contenturl_inputform_decide_button );
@@ -83,6 +94,20 @@ public class RaceEntryActivity extends Activity {
 				task.execute(params);
 			}
 		});
+        
+        // QRコードボタン
+        Button qrBtn = ( Button )findViewById( R.id.id_activity_raceentry_body_contents_qr_button );
+        qrBtn.setOnClickListener( new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// QR検索画面
+				Intent intent = new Intent(RaceEntryActivity.this, RaceEntryQRActivity.class);
+				startActivity(intent);
+				
+			}
+        	
+        });
 	}
 	
 	/**

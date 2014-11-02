@@ -16,6 +16,7 @@
     <string name="str_dialog_title_deleterace">大会削除確認</string>
     <string name="str_dialog_title_runnerentry">選手登録確認</string>
     <string name="str_dialog_title_deleterunner">選手削除確認</string>
+    <string name="str_dialog_title_urldisp">URL確認</string>
     <string name="str_dialog_title_progress_raceinfo">大会情報</string>
     <string name="str_dialog_title_progress_runnerinfo">選手情報</string>
     <string name="str_dialog_title_progress_namesearch">名前検索</string>
@@ -39,6 +40,7 @@
     <string name="str_msg_inputurl">以降のURLを入力</string>
     <string name="str_msg_inputNumber">ゼッケン番号入力してください。</string>
     <string name="str_msg_updaterunner">速報リストを更新しました。</string>
+    <string name="str_msg_readqr">枠内にQRコードを表示して、画面をタッチしてください。</string>
     <string name="str_txt_defaulturl">http://update.runnet.jp/</string>
     <string name="str_txt_logo">ロゴ</string>
     <string name="str_txt_racename">大会名</string>
@@ -75,10 +77,12 @@
     <string name="str_btn_decide">決定</string>
     <string name="str_btn_search">検索</string>
     <string name="str_btn_back">戻る</string>
+    <string name="str_btn_backqr">大会登録に戻る</string>
     <string name="str_btn_close">閉じる</string>
     <string name="str_btn_passlist">通過情報</string>
     <string name="str_btn_detail">大会詳細</string>
     <string name="str_btn_backstart">大会一覧</string>
+    <string name="str_btn_qr">QRコードで検索</string>
     <string name="str_tab_race_detail">詳細</string>
     <string name="str_tab_race_runner">選手</string>
     <string name="str_tab_race_update">速報</string>
