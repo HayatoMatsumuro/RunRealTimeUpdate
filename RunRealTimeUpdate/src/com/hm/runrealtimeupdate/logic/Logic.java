@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
@@ -25,7 +24,6 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
 	
-	@SuppressLint("SimpleDateFormat")
 	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
 	/**
