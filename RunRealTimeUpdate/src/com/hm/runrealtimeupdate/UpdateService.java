@@ -175,7 +175,7 @@ public class UpdateService extends Service {
 					// 更新がある場合は通知
 					if(updateFlg){
 						
-						Notification notification = new Notification( R.drawable.ic_runner, getString(R.string.str_msg_updaterunner), System.currentTimeMillis());
+						Notification notification = new Notification( R.drawable.ic_launcher, getString(R.string.str_msg_updaterunner), System.currentTimeMillis());
 						notification.flags = Notification.FLAG_AUTO_CANCEL;
 						
 						Intent notifiIntent = new Intent(UpdateService.this, RaceTabActivity.class);
