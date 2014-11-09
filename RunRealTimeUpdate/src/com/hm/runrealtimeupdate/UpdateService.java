@@ -21,12 +21,14 @@ import android.util.Log;
 public class UpdateService extends Service {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
+	public static final String STR_INTENT_CNTMAX = "cntmax";
 	
 	//TODO: 暫定値
 	/**
 	 * タイマー間隔
 	 */
-	private static int INT_TIMER_INTERVAL = 120000;
+	public static final int INT_TIMER_INTERVAL = 120000;
+	
 	
 	//TODO: 暫定値
 	/**
@@ -42,11 +44,9 @@ public class UpdateService extends Service {
 	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
 	
 	/**
-	 * 速報を行う回数
-	 * 1日で自動的に速報が停止する
+	 * 最大回数
 	 */
-	//TODO: 暫定
-	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
+	private static int m_IntervalCntMax = 0;
 	
 	/**
 	 * タイマー
@@ -90,6 +90,9 @@ public class UpdateService extends Service {
         	stopSelf();
         	return;
         }
+        
+        // 速報を行う回数を取得
+        m_IntervalCntMax = intent.getIntExtra( STR_INTENT_CNTMAX, 1 );
         
         // 選手情報取得
         List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
@@ -196,7 +199,7 @@ public class UpdateService extends Service {
 					
 					// 速報回数が最大を超えたら速報を自動停止する
 					m_IntervalCnt++;
-					if( m_IntervalCnt >= INT_TIMER_INTERAVAL_CNT_MAX ){
+					if( m_IntervalCnt >= m_IntervalCntMax ){
 						// TODO:
 						Log.d("service", "stopSelf");
 						
