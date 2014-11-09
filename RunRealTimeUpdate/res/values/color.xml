@@ -20,7 +20,7 @@
     <color name="color_tabactivity_race_updateexe_textview_back">#e5b7e2</color>
     
     <!-- 大会詳細 -->
-    <color name="color_activity_racedetail_body_contents_update_button_back">#e5b7e2</color>
+    <color name="color_activity_racedetail_body_contents_com_button_back">#e5b7e2</color>
     
     <!-- 選手詳細 -->
     <color name="color_dialog_runnerinfodetail_layout_back">#ffffff</color>
