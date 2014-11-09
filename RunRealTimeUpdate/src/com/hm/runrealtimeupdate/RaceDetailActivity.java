@@ -100,6 +100,10 @@ public class RaceDetailActivity extends Activity {
 					// ボタン表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestop));
 					
+					// 手動更新を無効化
+					Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+					manualButton.setEnabled( false );
+					
 					// Toast表示
 					Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
 				} else {
@@ -124,6 +128,10 @@ public class RaceDetailActivity extends Activity {
 
 					// Toast表示
 					Toast.makeText( RaceDetailActivity.this, "速報を停止しました！", Toast.LENGTH_SHORT ).show();
+					
+					// 手動更新を有効化
+					Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+					manualButton.setEnabled( true );
 				}
 			}
 		});
