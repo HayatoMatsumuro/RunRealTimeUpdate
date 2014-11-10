@@ -135,5 +135,24 @@ public class RaceDetailActivity extends Activity {
 				}
 			}
 		});
+        
+        // 手動更新ボタンの設定
+        Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+        manualButton.setTag( raceInfo );
+        manualButton.setOnClickListener( new OnClickListener() {
+			
+			@Override
+			public void onClick( View v ) {
+				RaceInfo raceInfo = ( RaceInfo )v.getTag();
+				
+				// 手動更新開始
+				Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
+				intent.putExtra( UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId() );
+				intent.putExtra( UpdateService.STR_INTENT_CNTMAX, 1 );
+				startService( intent );
+				
+				// TODO: 更新中も速報ボタンが押せる。
+			}
+		});
 	}
 }
