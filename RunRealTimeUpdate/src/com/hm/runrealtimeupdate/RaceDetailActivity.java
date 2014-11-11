@@ -1,10 +1,16 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
+import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -146,13 +152,117 @@ public class RaceDetailActivity extends Activity {
 				RaceInfo raceInfo = ( RaceInfo )v.getTag();
 				
 				// 手動更新開始
-				Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
-				intent.putExtra( UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId() );
-				intent.putExtra( UpdateService.STR_INTENT_CNTMAX, 1 );
-				startService( intent );
+				String[] params = { null };
 				
-				// TODO: 更新中も速報ボタンが押せる。
+				params[0] = getString( R.string.str_txt_defaulturl );
+				
+				// 手動更新タスク起動
+				ManualUpdateTask task = new ManualUpdateTask( raceInfo.getRaceId() );
+				task.execute( params );
 			}
 		});
+	}
+	
+	/**
+	 * 手動更新タスク
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	class ManualUpdateTask extends AsyncTask< String, Void, List<RunnerInfo> >{
+
+		private String m_RaceId = null;
+		
+		private ProgressDialog m_ProgressDialog = null;
+		
+		private boolean m_CancellFlg = false;
+		
+		public ManualUpdateTask( String raceId ){
+			super();
+			m_RaceId = raceId;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			m_ProgressDialog = new ProgressDialog( RaceDetailActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_namesearch ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
+		}
+		
+		@Override
+		/**
+		 * params[0]:アップデートサイトURL
+		 */
+		protected List<RunnerInfo> doInBackground(String... params) {
+			
+			// 選手の更新情報を取得する
+			String url = params[0];
+			
+			// 選手情報を取得する
+			List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), m_RaceId );
+			
+			// 最新の選手情報を取得する
+			return Logic.getNetRunnerInfoList( url, m_RaceId, runnerInfoList );
+		}
+		
+		@Override
+		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+			
+			String message = null;
+			
+			if( m_CancellFlg ){
+				return;
+			}
+			
+			if( runnerInfoList != null ){
+				
+				// データアップデート
+				boolean updateFlg = Logic.updateRunnerInfo( getContentResolver(), m_RaceId, runnerInfoList );
+				
+				if( updateFlg ){
+					message = "★★★更新情報があります★★★";
+				}else{
+					message = "更新情報はありません。";
+				}
+			}else{
+				message = "手動更新に失敗しました。";
+			}
+			
+
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			Toast.makeText( RaceDetailActivity.this, message, Toast.LENGTH_SHORT).show();
+			
+			return;
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
+
+			Toast.makeText( RaceDetailActivity.this, "自動更新をキャンセルしました。", Toast.LENGTH_SHORT ).show();
+		}
 	}
 }
