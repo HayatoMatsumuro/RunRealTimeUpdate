@@ -93,11 +93,6 @@ public class RaceDetailActivity extends Activity {
 					// 速報開始
 					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
 					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					//TODO: 1日で自動更新が停止するように設定
-					intent.putExtra(
-						UpdateService.STR_INTENT_CNTMAX,
-						86400000 / UpdateService.INT_TIMER_INTERVAL
-					);
 					startService(intent);
 					
 					// 速報中テキスト表示
