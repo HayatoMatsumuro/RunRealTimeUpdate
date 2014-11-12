@@ -17,6 +17,7 @@
     <string name="str_dialog_title_runnerentry">選手登録確認</string>
     <string name="str_dialog_title_deleterunner">選手削除確認</string>
     <string name="str_dialog_title_urldisp">URL確認</string>
+    <string name="str_dialog_title_updatedetail">選手速報詳細</string>
     <string name="str_dialog_title_progress_raceinfo">大会情報</string>
     <string name="str_dialog_title_progress_runnerinfo">選手情報</string>
     <string name="str_dialog_title_progress_namesearch">名前検索</string>
@@ -24,11 +25,15 @@
     <string name="str_dialog_msg_name">大会名:</string>
     <string name="str_dialog_msg_date">開催日:</string>
     <string name="str_dialog_msg_location">開催地:</string>
+    <string name="str_dialog_msg_split">スプリット　</string>
+    <string name="str_dialog_msg_lap">ラップ　</string>
+    <string name="str_dialog_msg_currenttime">経過時間　</string>
     <string name="str_dialog_msg_OK">登録する</string>
     <string name="str_dialog_msg_DEL">削除する</string>
     <string name="str_dialog_msg_NG">やめる</string>
     <string name="str_dialog_msg_get">取得中</string>
     <string name="str_dialog_msg_cancel">キャンセル</string>
+    <string name="str_dialog_msg_close">閉じる</string>
     <string name="str_msg_default">メッセージ</string>
     <string name="str_msg_raceno">大会が登録されていません。大会を登録してください。</string>
     <string name="str_msg_racefull">これ以上大会の登録ができません。登録したいならば、大会削除を行ってください。</string>
