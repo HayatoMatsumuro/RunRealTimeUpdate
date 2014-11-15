@@ -66,13 +66,19 @@ public class RunnerEntryActivity extends Activity {
         
         RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
         RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
+        TextView messageTextView = ( TextView )findViewById(R.id.id_activity_runnerentry_body_message_norunner_textview);
         if( runnerNum >= INT_RUNNER_NUM_MAX ){
         	// 最大を上回っていたら、メッセージを表示
         	contentsLayout.setVisibility( View.GONE );
         	messageLayout.setVisibility( View.VISIBLE );
-        }else{
-        	contentsLayout.setVisibility( View.VISIBLE );
-        	messageLayout.setVisibility( View.GONE );
+        	messageTextView.setText( getString( R.string.str_msg_runnerfull ) );
+        }
+        
+        // 速報中なら、メッセージを表示する
+        if( raceInfo.isRaceUpdate() ){
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        	messageTextView.setText( getString( R.string.str_msg_runnerupdateexe ) );
         }
         
         // 戻るボタン
