@@ -197,7 +197,7 @@
         	android:background="@color/color_com_body_message_layout_back"
         	android:visibility="gone">
 	        
-	        <!-- 選手登録最大 -->
+	        <!-- メッセージ -->
         	<TextView
         	    android:id="@+id/id_activity_runnerentry_body_message_norunner_textview"
         	    android:layout_width="match_parent"

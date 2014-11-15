@@ -39,6 +39,7 @@
     <string name="str_msg_racefull">これ以上大会の登録ができません。登録したいならば、大会削除を行ってください。</string>
     <string name="str_msg_runnnerno">選手が登録されていません。選手を登録してください。</string>
     <string name="str_msg_runnerfull">これ以上選手の登録ができません。登録したいならば、選手削除を行ってください。</string>
+    <string name="str_msg_runnerupdateexe">速報中なので、選手登録はできません。速報を停止してから選手登録してください。</string>
     <string name="str_msg_inputName">名前で検索する場合は、名前を入力してください。</string>
     <string name="str_msg_nosearchname">選手がみつかりませんでした。</string>
     <string name="str_msg_updateno">速報情報がありません。</string>
