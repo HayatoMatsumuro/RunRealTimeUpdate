@@ -51,27 +51,8 @@ public class RaceDetailActivity extends Activity {
         TextView raceLocationTextView = ( TextView )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_racelocation_title_textview );
         raceLocationTextView.setText( raceInfo.getRaceLocation() );
         
-        // 速報ボタン
-        Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
-        
-        // 速報止ボタンの表示設定
-        RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver() );
-        
-        if( updateRaceInfo == null ){
-        	// 速報中の大会なし
-        	updateButton.setText(getString(R.string.str_btn_updatestart));
-        	updateButton.setEnabled(true);
-        }else if( updateRaceInfo.getRaceId().equals(raceInfo.getRaceId())){
-        	// 選択中の大会IDと速報中の大会が一致
-        	updateButton.setText(getString(R.string.str_btn_updatestop));
-        	updateButton.setEnabled(true);
-        }else{
-        	// 他の大会が速報中
-        	updateButton.setText(getString(R.string.str_btn_updatestart));
-        	updateButton.setEnabled(false);
-        }
-        
         // 速報ボタンの処理設定
+        Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
         updateButton.setTag(raceInfo);
         updateButton.setOnClickListener(new OnClickListener() {
 			
@@ -158,6 +139,43 @@ public class RaceDetailActivity extends Activity {
 		});
 	}
 	
+	@Override
+	protected void onResume() {
+		
+		super.onResume();
+		
+		// 大会情報取得
+		Intent intent = getIntent();
+		String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+		
+		// 自動更新、手動更新ボタンの表示状態設定
+		// 速報状態の大会情報を取得
+		RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver() );
+		
+		Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
+		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+		
+		// 速報中の大会なし
+		if( updateRaceInfo == null ){
+        	updateButton.setText( getString( R.string.str_btn_updatestart ) );
+        	updateButton.setEnabled( true );
+        	manualButton.setEnabled( true );
+        }
+		// 選択中の大会IDと速報中の大会が一致
+		else if( updateRaceInfo.getRaceId().equals( raceId ) )
+		{
+        	updateButton.setText( getString( R.string.str_btn_updatestop ) );
+        	updateButton.setEnabled( true );
+        	manualButton.setEnabled( false );
+        }
+		// 他の大会が速報中
+		else{
+        	updateButton.setText( getString( R.string.str_btn_updatestart ) );
+        	updateButton.setEnabled( false );
+        	manualButton.setEnabled( false );
+        }
+	}
+
 	/**
 	 * 手動更新タスク
 	 * @author Hayato Matsumuro

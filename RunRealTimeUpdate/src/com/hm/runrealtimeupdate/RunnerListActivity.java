@@ -2,12 +2,11 @@ package com.hm.runrealtimeupdate;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -41,17 +40,11 @@ public class RunnerListActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_runnerlist);
-		
-		// 大会情報取得
-        Intent intent = getIntent();
-        String raceId = intent.getStringExtra(STR_INTENT_RACEID);
-        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
         // 選手リスト設定
         ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
         
         // 選手リストのアイテム長押し
-        runnerInfoListView.setTag(raceInfo);
         runnerInfoListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -89,11 +82,11 @@ public class RunnerListActivity extends Activity {
         // 選手リストの短押し
         runnerInfoListView.setOnItemClickListener(new OnItemClickListener() {
 
+			@SuppressLint("InflateParams")
 			@Override
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				
 				// 選手情報取得
-				//TODO: レイアウトを見直す
 				ListView listView = (ListView)parent;
 				SectionRunnerElement element = (SectionRunnerElement)listView.getItemAtPosition(position);
 				RunnerInfo runnerInfo = element.getRunnerInfo();
@@ -104,8 +97,9 @@ public class RunnerListActivity extends Activity {
 				}
 				
 				// ダイアログの中身生成
+				// TODO: inflate の引数がnullだと警告が発生。暫定対策
 				LayoutInflater factory = LayoutInflater.from( getParent() );
-				final View inputView = factory.inflate(R.layout.dialog_runnerinfodetail, null);
+				final View inputView = factory.inflate(R.layout.dialog_runnerinfodetail, null );
 				
 				// ゼッケン番号
 		     	TextView numberTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_number_text_textview );
@@ -178,9 +172,15 @@ public class RunnerListActivity extends Activity {
 	protected void onResume(){
 		super.onResume();
 		
+		// 大会ID取得
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra(STR_INTENT_RACEID);
+        RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
 		
+		 // 選手リスト設定
+        ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerlist_body_contents_runnerlist_listview);
+        runnerInfoListView.setTag(raceInfo);
+        
 		setViewBody( raceId );
 	}
 	
