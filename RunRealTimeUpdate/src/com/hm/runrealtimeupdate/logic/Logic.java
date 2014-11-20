@@ -9,9 +9,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
-
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
@@ -24,6 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
 
 public class Logic {
 	
+	@SuppressLint("SimpleDateFormat")
 	private static final DateFormat DATEFORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	
 	/**
@@ -452,7 +452,7 @@ public class Logic {
 	public static void deleteRunnerInfo( ContentResolver contentResolver, String raceId, String number ){
 		
 		// 速報リスト削除
-		DataBaseAccess.deleteRunnerInfoByRaceIdAndNumber(contentResolver, raceId, number);
+		DataBaseAccess.deleteUpdateDataByRaceIdAndNumber(contentResolver, raceId, number);
 		
 		// タイムリスト削除
 		DataBaseAccess.deleteTimeListByRaceIdAndNumber(contentResolver, raceId, number);
