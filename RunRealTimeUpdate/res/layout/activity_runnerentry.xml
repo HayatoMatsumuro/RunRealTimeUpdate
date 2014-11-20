@@ -124,12 +124,12 @@
 	    		<!-- 姓入力ボックス -->
     			<EditText
         			android:id="@+id/id_activity_runnerentry_body_contents_nameform_sei_edittext"
-        			android:layout_width="50dp"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+        			android:layout_width="@dimen/dim_activity_runnerentry_body_contents_nameform_sei_edittext_width"
+	            	android:layout_height="@dimen/dim_activity_runnerentry_body_contents_nameform_sei_edittext_height"
 	            	android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_inputname_textview"
-	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_nameform_sei_edittext_margintop"
 	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_sei_textview"
-	            	android:ems="5"
+	            	android:ems="10"
         			android:inputType="text" />
     			
     			<!-- 名 -->
@@ -146,22 +146,22 @@
     			<!-- 名入力ボックス -->
     			<EditText
         			android:id="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
-        			android:layout_width="50dp"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+        			android:layout_width="@dimen/dim_activity_runnerentry_body_contents_nameform_mei_edittext_width"
+	            	android:layout_height="@dimen/dim_activity_runnerentry_body_contents_nameform_mei_edittext_height"
 	            	android:layout_below="@+id/id_activity_runnerentry_body_contents_nameform_inputname_textview"
-	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+	            	android:layout_marginTop="@dimen/dim_activity_runnerentry_body_contents_nameform_mei_edittext_margintop"
 	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_mei_textview"
-	            	android:ems="5"
+	            	android:ems="10"
         			android:inputType="text" />
     			
     			<!-- 検索ボタン -->
     			<Button
         			android:id="@+id/id_activity_runnerentry_body_contens_nameform_search_button"
         			android:layout_width="wrap_content"
-        			android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
+        			android:layout_height="@dimen/dim_activity_runnerentry_body_contents_nameform_search_button_height"
 	            	android:layout_toRightOf="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
 	            	android:layout_alignTop="@+id/id_activity_runnerentry_body_contents_nameform_mei_edittext"
-	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
+	            	android:layout_marginLeft="@dimen/dim_activity_runnerentry_body_contents_nameform_search_button_marginleft"
 	            	android:text="@string/str_btn_search" />
 	        </RelativeLayout>
     			
