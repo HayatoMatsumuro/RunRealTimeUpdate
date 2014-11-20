@@ -8,6 +8,7 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -65,13 +66,19 @@ public class RunnerEntryActivity extends Activity {
         
         RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
         RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
+        TextView messageTextView = ( TextView )findViewById(R.id.id_activity_runnerentry_body_message_norunner_textview);
         if( runnerNum >= INT_RUNNER_NUM_MAX ){
         	// 最大を上回っていたら、メッセージを表示
         	contentsLayout.setVisibility( View.GONE );
         	messageLayout.setVisibility( View.VISIBLE );
-        }else{
-        	contentsLayout.setVisibility( View.VISIBLE );
-        	messageLayout.setVisibility( View.GONE );
+        	messageTextView.setText( getString( R.string.str_msg_runnerfull ) );
+        }
+        
+        // 速報中なら、メッセージを表示する
+        if( raceInfo.isRaceUpdate() ){
+        	contentsLayout.setVisibility( View.GONE );
+        	messageLayout.setVisibility( View.VISIBLE );
+        	messageTextView.setText( getString( R.string.str_msg_runnerupdateexe ) );
         }
         
         // 戻るボタン
@@ -217,11 +224,36 @@ public class RunnerEntryActivity extends Activity {
 	 */
 	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
 		
+		ProgressDialog m_ProgressDialog = null;
+		
 		private RaceInfo m_RaceInfo;
+		private boolean m_CancellFlg = false;
 		
 		public RunnerInfoLoaderTask(RaceInfo raceInfo){
 			super();
 			m_RaceInfo = raceInfo;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			
+			// 進捗ダイアログ作成
+			m_ProgressDialog = new ProgressDialog( RunnerEntryActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_runnerinfo ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+					
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
 		}
 		
 		@Override
@@ -245,6 +277,15 @@ public class RunnerEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute(RunnerInfo runnerInfo){
 			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			if( m_CancellFlg ){
+				return;
+			}
+			
 			if(runnerInfo == null){
 				Toast.makeText(RunnerEntryActivity.this, "選手情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
 				return;
@@ -263,11 +304,52 @@ public class RunnerEntryActivity extends Activity {
 					getString( R.string.str_dialog_msg_OK ),
 					getString( R.string.str_dialog_msg_NG )
 			);
+			
+			return;
 		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
+
+			Toast.makeText(RunnerEntryActivity.this, "選手情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
+		}	
 	}
 	
 	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
 
+		ProgressDialog m_ProgressDialog = null;
+		
+		private boolean m_CancellFlg = false;
+		
+		// 進捗ダイアログ作成
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+			m_ProgressDialog = new ProgressDialog( RunnerEntryActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_namesearch ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					onCancelled();
+				}
+				
+			});
+			
+			m_ProgressDialog.show();
+		}
+		
 		@Override
 		/**
 		 * params[0]:アップデートサイトURL
@@ -287,6 +369,15 @@ public class RunnerEntryActivity extends Activity {
 		@Override
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
 			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+	        if( m_CancellFlg ){
+				return;
+			}
+	        
 			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
 			TextView noSearchNameTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_contents_nosearchname_textview );
 			
@@ -311,8 +402,7 @@ public class RunnerEntryActivity extends Activity {
 				noSearchNameTextView.setVisibility( View.VISIBLE );
 			}
 			
-	        
-	        // キーボードを隠す
+			// キーボードを隠す
 	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
 	        
 			EditText seiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
@@ -321,7 +411,23 @@ public class RunnerEntryActivity extends Activity {
 	        EditText meiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
 	        imm.hideSoftInputFromWindow( meiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 	        
+	        return;
 		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// ダイアログ削除
+			if( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
+			
+			// キャンセルフラグ設定
+			m_CancellFlg = true;
+
+			Toast.makeText(RunnerEntryActivity.this, "名前検索をキャンセルしました。", Toast.LENGTH_SHORT).show();
+		}	
 	}
 	/**
 	 * ダイアログのメッセージ作成

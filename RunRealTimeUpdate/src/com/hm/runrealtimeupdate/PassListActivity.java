@@ -7,12 +7,16 @@ import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.PassRunnerInfo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -43,9 +47,58 @@ public class PassListActivity extends Activity {
         	return;
         }
         
+        // リストの選手情報タッチ
+        ListView listView = (ListView)findViewById( R.id.id_activity_passlist_body_contents_passlist_listview );
+        listView.setOnItemClickListener( new OnItemClickListener() {
+
+			@Override
+			public void onItemClick( AdapterView<?> parent, View v, int position, long id ) {
+				ListView listView = ( ListView )parent;
+				PassPointListElement element = ( PassPointListElement )listView.getItemAtPosition( position );
+				
+				if( PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER.equals( element.getSts() ) ){
+
+					AlertDialog.Builder dialog = new AlertDialog.Builder( PassListActivity.this );
+					dialog.setTitle( getString( R.string.str_dialog_title_updatedetail ) );
+					dialog.setMessage( createDialogMessage( element ) );
+					dialog.setNegativeButton( getString( R.string.str_dialog_msg_close), new DialogInterface.OnClickListener(){
+
+						@Override
+						public void onClick(DialogInterface arg0, int arg1) {
+							
+						}
+						
+					});
+
+					dialog.show();
+				}
+			}
+		});
+        
         return;
 	}
 	
+	private String createDialogMessage( PassPointListElement element ){
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append( element.getNumber() );
+		builder.append( "\n" );
+		builder.append( element.getName() );
+		builder.append( "\n\n" );
+		builder.append( element.getPoint() );
+		builder.append( "\n\n" );
+		builder.append( getString( R.string.str_dialog_msg_split ) );
+		builder.append( element.getSplit() );
+		builder.append( "\n" );
+		builder.append( getString( R.string.str_dialog_msg_lap ) );
+		builder.append( element.getLap() );
+		builder.append( "\n" );
+		builder.append( getString( R.string.str_dialog_msg_currenttime ) );
+		builder.append( element.getCurrentTime() );
+		
+		return builder.toString();
+		
+	}
 	
 	@Override
 	protected void onResume() {
@@ -65,6 +118,9 @@ public class PassListActivity extends Activity {
         	contentsLayout.setVisibility( View.GONE );
         	messageLayout.setVisibility( View.VISIBLE );
         } else {
+        	contentsLayout.setVisibility( View.VISIBLE );
+        	messageLayout.setVisibility( View.GONE );
+        	
         	List<PassPointListElement> passPointList = new ArrayList<PassPointListElement>();
         	
             for( PassRunnerInfo passRunnerInfo : passRunnerInfoList ){
@@ -88,6 +144,7 @@ public class PassListActivity extends Activity {
                 		rElement.setSts(PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER);
                 		rElement.setName(passPointRunnerInfo.getName());
                 		rElement.setNumber(passPointRunnerInfo.getNumber());
+                		rElement.setPoint(passPointInfo.getPoint());
                 		rElement.setSplit(passPointRunnerInfo.getSplit());
                 		rElement.setLap(passPointRunnerInfo.getLap());
                 		rElement.setCurrentTime(passPointRunnerInfo.getCurrentTime());
@@ -119,11 +176,6 @@ public class PassListActivity extends Activity {
 			super(context, 0, objects);
 			
 			this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-		
-		@Override
-		public boolean isEnabled(int position){
-			return false;
 		}
 		
 		@Override
@@ -251,7 +303,6 @@ public class PassListActivity extends Activity {
 			this.split = split;
 		}
 
-		@SuppressWarnings("unused")
 		public String getLap() {
 			return lap;
 		}
