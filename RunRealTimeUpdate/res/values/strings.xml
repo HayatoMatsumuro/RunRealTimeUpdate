@@ -27,7 +27,7 @@
     <string name="str_dialog_msg_location">開催地:</string>
     <string name="str_dialog_msg_split">スプリット　</string>
     <string name="str_dialog_msg_lap">ラップ　</string>
-    <string name="str_dialog_msg_currenttime">経過時間　</string>
+    <string name="str_dialog_msg_currenttime">通過時間　</string>
     <string name="str_dialog_msg_OK">登録する</string>
     <string name="str_dialog_msg_DEL">削除する</string>
     <string name="str_dialog_msg_NG">やめる</string>
