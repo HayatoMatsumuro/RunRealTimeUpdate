@@ -6,12 +6,16 @@ import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -40,9 +44,54 @@ public class UpdateListActivity extends Activity {
         	return;
         }
         
+        // リストの選手情報タッチ
+        ListView updateListView = (ListView)findViewById(R.id.id_activity_updatelist_body_contents_update_listview);
+        updateListView.setOnItemClickListener( new OnItemClickListener() {
+
+			@Override
+			public void onItemClick( AdapterView<?> parent, View v, int position, long id ) {
+				ListView listView = ( ListView )parent;
+				UpdateInfo updateInfo = ( UpdateInfo )listView.getItemAtPosition( position );
+				
+				AlertDialog.Builder dialog = new AlertDialog.Builder( UpdateListActivity.this );
+				dialog.setTitle( getString( R.string.str_dialog_title_updatedetail ) );
+				dialog.setMessage( createDialogMessage( updateInfo ) );
+				dialog.setNegativeButton( getString( R.string.str_dialog_msg_close), new DialogInterface.OnClickListener(){
+
+					@Override
+					public void onClick(DialogInterface arg0, int arg1) {
+						
+					}
+					
+				});
+				
+				dialog.show();
+			}
+        	
+		});
         return;
 	}
 	
+	private String createDialogMessage( UpdateInfo updateInfo ){
+		
+		StringBuilder builder = new StringBuilder();
+		builder.append( updateInfo.getNumber() );
+		builder.append( "\n" );
+		builder.append( updateInfo.getName() );
+		builder.append( "\n\n" );
+		builder.append( updateInfo.getPoint() );
+		builder.append( "\n\n" );
+		builder.append( getString( R.string.str_dialog_msg_split ) );
+		builder.append( updateInfo.getSplit() );
+		builder.append( "\n" );
+		builder.append( getString( R.string.str_dialog_msg_lap ) );
+		builder.append( updateInfo.getLap() );
+		builder.append( "\n" );
+		builder.append( getString( R.string.str_dialog_msg_currenttime ) );
+		builder.append( updateInfo.getCurrentTime() );
+		
+		return builder.toString();
+	}
 	
 	@Override
 	protected void onResume() {
