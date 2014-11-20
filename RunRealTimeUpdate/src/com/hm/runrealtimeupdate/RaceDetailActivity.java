@@ -199,7 +199,7 @@ public class RaceDetailActivity extends Activity {
 			super.onPreExecute();
 			
 			m_ProgressDialog = new ProgressDialog( RaceDetailActivity.this );
-			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_namesearch ) );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_manual ) );
 			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
 			m_ProgressDialog.setCancelable( true );
 			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
