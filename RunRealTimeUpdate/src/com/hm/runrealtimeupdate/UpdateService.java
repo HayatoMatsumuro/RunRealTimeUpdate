@@ -54,6 +54,11 @@ public class UpdateService extends Service {
 	private Timer m_IntervalTimer;
 	
 	/**
+	 * タイマータスク
+	 */
+	private UpdateTimerTask m_UpdateTimerTask;
+	
+	/**
 	 * 速報の回数
 	 */
 	private int m_IntervalCnt;
@@ -70,6 +75,7 @@ public class UpdateService extends Service {
 		Log.d("service", "destroy");
 		
 		// タイマー停止
+		m_UpdateTimerTask.cancel();
 		m_IntervalTimer.cancel();
 	}
 
@@ -98,8 +104,8 @@ public class UpdateService extends Service {
 		Log.d("service", "start");
 		
 		// タイマー開始
-		UpdateTimerTask timerTask = new UpdateTimerTask( getContentResolver(), raceInfo, runnerInfoList);
-		m_IntervalTimer.schedule(timerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL);
+		m_UpdateTimerTask = new UpdateTimerTask( getContentResolver(), raceInfo, runnerInfoList );
+		m_IntervalTimer.schedule( m_UpdateTimerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL );
 	}
 	
 	/**
@@ -135,6 +141,11 @@ public class UpdateService extends Service {
 		private List<RunnerInfo> m_NetRunnerInfoList;
 		
 		/**
+		 * キャンセルフラグ
+		 */
+		private boolean m_CancelFlg;
+		
+		/**
 		 * コンストラクタ
 		 * @param raceInfo 大会情報
 		 * @param numberList ゼッケン番号リスト
@@ -145,11 +156,11 @@ public class UpdateService extends Service {
 			m_RaceInfo = raceInfo;
 			m_RunnerInfoList = runnerInfoList;
 			m_NetRunnerInfoList = null;
+			m_CancelFlg = false;
 		}
 		
 		@Override
 		public void run() {
-			
 			
 			if( m_NetRunnerInfoList != null ){
 				// ネットワーク選手リストが有効ならば更新をしない
@@ -169,6 +180,12 @@ public class UpdateService extends Service {
 				public void run() {
 					// TODO:
 					Log.d("service", "update Start");
+					
+					// キャンセルされたならば、この先の処理はしない
+					if( m_CancelFlg ){
+						return;
+					}
+					
 					// データアップデート
 					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
 					
@@ -214,5 +231,13 @@ public class UpdateService extends Service {
 				}
 			});
 		}
+
+		@Override
+		public boolean cancel() {
+			m_CancelFlg = true;
+			return super.cancel();
+		}
+		
+		
 	}
 }
