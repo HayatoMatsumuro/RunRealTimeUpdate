@@ -437,7 +437,7 @@ public class RunnerEntryActivity extends Activity {
 	private String createDialogMessage( RunnerInfo runnerInfo ){
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(getString(R.string.str_txt_racename));
+		builder.append(getString(R.string.str_txt_runnername));
 		builder.append(":");
 		builder.append(runnerInfo.getName());
 		builder.append("\n");
