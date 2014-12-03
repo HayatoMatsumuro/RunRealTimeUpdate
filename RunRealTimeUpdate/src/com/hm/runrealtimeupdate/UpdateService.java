@@ -14,6 +14,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
@@ -136,14 +137,14 @@ public class UpdateService extends Service {
 		private List<RunnerInfo> m_RunnerInfoList;
 		
 		/**
-		 * ネットワークから取得した選手情報
-		 */
-		private List<RunnerInfo> m_NetRunnerInfoList;
-		
-		/**
 		 * キャンセルフラグ
 		 */
 		private boolean m_CancelFlg;
+		
+		/**
+		 * アップデートタスク
+		 */
+		RunnerInfoUpdateTask m_UpdateTask;
 		
 		/**
 		 * コンストラクタ
@@ -155,79 +156,47 @@ public class UpdateService extends Service {
 			m_ContentResolver = contentResolver;
 			m_RaceInfo = raceInfo;
 			m_RunnerInfoList = runnerInfoList;
-			m_NetRunnerInfoList = null;
 			m_CancelFlg = false;
+			m_UpdateTask = new RunnerInfoUpdateTask( m_RaceInfo, m_ContentResolver );
 		}
 		
 		@Override
 		public void run() {
 			
-			if( m_NetRunnerInfoList != null ){
-				// ネットワーク選手リストが有効ならば更新をしない
-				return;
-			}
-			
-			// ネットワークから選手情報を取得する
-			String url = getString(R.string.str_txt_defaulturl);
-			// TODO:
-			Log.d("service", "net get Start");
-			m_NetRunnerInfoList = Logic.getNetRunnerInfoList(url, m_RaceInfo.getRaceId(), m_RunnerInfoList);
-			// TODO:
-			Log.d("service", "net get End");
 			m_Handler.post(new Runnable() {
 				
 				@Override
 				public void run() {
-					// TODO:
-					Log.d("service", "update Start");
 					
 					// キャンセルされたならば、この先の処理はしない
 					if( m_CancelFlg ){
 						return;
 					}
 					
-					// データアップデート
-					boolean updateFlg = Logic.updateRunnerInfo(m_ContentResolver, m_RaceInfo.getRaceId(), m_NetRunnerInfoList);
-					
-					// 更新がある場合は通知
-					if(updateFlg){
-						
-						Notification notification = new Notification( R.drawable.ic_launcher, getString(R.string.str_msg_updaterunner), System.currentTimeMillis());
-						notification.flags = Notification.FLAG_AUTO_CANCEL;
-						
-						Intent notifiIntent = new Intent(UpdateService.this, RaceTabActivity.class);
-						notifiIntent.putExtra(RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
-						notifiIntent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_UPDATE);
-						
-						PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-						
-						// ステータスバー
-						notification.setLatestEventInfo(getApplicationContext(), getString(R.string.app_name), getString(R.string.str_msg_updaterunner), pendIntent);
-						
-						// バイブ
-						notification.vibrate = LONG_BIVRATION;
-						
-						NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-						manager.notify(R.string.app_name, notification);
-					}
-					
 					// 速報回数が最大を超えたら速報を自動停止する
 					m_IntervalCnt++;
-					if( m_IntervalCnt >= INT_TIMER_INTERAVAL_CNT_MAX ){
+					if( m_IntervalCnt > INT_TIMER_INTERAVAL_CNT_MAX ){
 						// TODO:
 						Log.d("service", "stopSelf");
 						
 						// 速報停止状態にする
-						Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId());
+						Logic.setUpdateOffRaceId( m_ContentResolver, m_RaceInfo.getRaceId() );
 						stopSelf();
+						return;
 					}
 					
-
-					// TODO:
-					Log.d("service", "update End");
+					if( m_UpdateTask.getStatus() != AsyncTask.Status.RUNNING ){
+						
+						RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
 					
-					m_NetRunnerInfoList.clear();
-					m_NetRunnerInfoList = null;
+						param.setUrl( getString( R.string.str_txt_defaulturl ) );
+						param.setRaceId( m_RaceInfo.getRaceId() );
+						param.setRunnerInfoList( m_RunnerInfoList );
+					
+						// 手動更新タスク起動
+						m_UpdateTask = new RunnerInfoUpdateTask( m_RaceInfo, m_ContentResolver );
+						m_UpdateTask.execute( param );
+					}
 				}
 			});
 		}
@@ -235,9 +204,150 @@ public class UpdateService extends Service {
 		@Override
 		public boolean cancel() {
 			m_CancelFlg = true;
+			
+			if( m_UpdateTask != null ){
+				m_UpdateTask.onCancelled();
+			}
 			return super.cancel();
 		}
+	}
+	
+	private class RunnerInfoUpdateTask extends AsyncTask< RunnerInfoUpdateTask.TaskParam, Void, List<RunnerInfo > >{
 		
+		private boolean m_CancelFlg;
 		
+		/**
+		 * 大会情報
+		 */
+		private RaceInfo m_RaceInfo;
+		
+		/**
+		 * コンテントリゾルバ
+		 */
+		private ContentResolver m_ContentResolver;
+		
+		/**
+		 * コンストラクタ
+		 * @param raceInfo 大会情報
+		 * @param contentResolver コンテントリゾルバ
+		 */
+		RunnerInfoUpdateTask( RaceInfo raceInfo, ContentResolver contentResolver ){
+			m_CancelFlg = false;
+			m_RaceInfo = raceInfo;
+			m_ContentResolver = contentResolver;
+		}
+		
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+		}
+		
+		@Override
+		protected List<RunnerInfo> doInBackground(TaskParam... params) {
+			
+			// ネットワークから選手情報取得
+			String url = params[0].getUrl();
+			String raceId = params[0].getRaceId();
+			List<RunnerInfo> runnerInfoList = params[0].getRunnerInfoList();
+
+			// TODO:
+			Log.d("service", "net get Start");
+			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
+		}
+		
+		@Override
+		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+			
+			if( m_CancelFlg ){
+				return;
+			}
+			
+			// データアップデート
+			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
+			
+			// 更新がある場合は通知
+			if(updateFlg){
+				
+				Notification notification = new Notification(
+													R.drawable.ic_launcher,
+													getString( R.string.str_msg_updaterunner ),
+													System.currentTimeMillis() );
+				notification.flags = Notification.FLAG_AUTO_CANCEL;
+				
+				Intent notifiIntent = new Intent(UpdateService.this, RaceTabActivity.class);
+				notifiIntent.putExtra(RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId());
+				notifiIntent.putExtra(RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_UPDATE);
+				
+				PendingIntent pendIntent = PendingIntent.getActivity(UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				
+				// ステータスバー
+				notification.setLatestEventInfo(
+								getApplicationContext(),
+								getString( R.string.app_name ),
+								getString( R.string.str_msg_updaterunner ),
+								pendIntent );
+				
+				// バイブ
+				notification.vibrate = LONG_BIVRATION;
+				
+				NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+				manager.notify(R.string.app_name, notification);
+			}
+			
+			return;
+		}
+		
+		@Override
+		protected void onCancelled() {
+			super.onCancelled();
+			
+			// キャンセルフラグ設定
+			m_CancelFlg = true;
+		}
+		
+
+		public class TaskParam{
+			
+			/**
+			 * 大会URL
+			 */
+			private String url;
+
+			/**
+			 * 大会ID
+			 */
+			private String raceId;
+			
+			/**
+			 * 選手リスト
+			 */
+			private List<RunnerInfo> runnerInfoList;
+
+
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+			
+			public String getRaceId() {
+				return raceId;
+			}
+
+			public void setRaceId(String raceId) {
+				this.raceId = raceId;
+			}
+
+			public List<RunnerInfo> getRunnerInfoList() {
+				return runnerInfoList;
+			}
+
+			public void setRunnerInfoList(List<RunnerInfo> runnerInfo) {
+				this.runnerInfoList = runnerInfo;
+			}
+			
+		}
 	}
 }
