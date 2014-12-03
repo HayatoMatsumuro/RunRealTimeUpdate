@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -73,10 +74,6 @@ public class RaceEntryActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				String[] params = { null, null };
-				
-				params[0] = getString(R.string.str_txt_defaulturl);
-				
 				// URL入力エディットボックスから入力値取得
 				EditText urlEdit = (EditText)findViewById(R.id.id_activity_raceentry_body_contents_urlform_inputurl_edittext);
 				
@@ -87,11 +84,14 @@ public class RaceEntryActivity extends Activity {
 					return;
 				}
 				
-				params[1] = formatRaceId( inputRaceId );
+				String raceId = formatRaceId( inputRaceId );
 				
+				RaceInfoLoaderTask.TaskParam param = new RaceInfoLoaderTask().new TaskParam();
+				param.setUrl( getString( R.string.str_txt_defaulturl ) );
+				param.setRaceId( raceId );
 				
 				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
-				task.execute(params);
+				task.execute(param);
 			}
 		});
         
@@ -133,44 +133,50 @@ public class RaceEntryActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class RaceInfoLoaderTask extends AsyncTask<String, Void, RaceInfo>{
+	class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo> {
 
 		ProgressDialog m_ProgressDialog = null;
-		
-		private boolean m_CancellFlg = false;
 		
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
 			
 			// 進捗ダイアログ作成
-			m_ProgressDialog = new ProgressDialog(RaceEntryActivity.this);
-			m_ProgressDialog.setTitle(getResources().getString(R.string.str_dialog_title_progress_raceinfo));
-			m_ProgressDialog.setMessage(getResources().getString(R.string.str_dialog_msg_get));
-			m_ProgressDialog.setCancelable(true);
-			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.str_dialog_msg_cancel), new DialogInterface.OnClickListener(){
+			m_ProgressDialog = new ProgressDialog( RaceEntryActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_raceinfo ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					onCancelled();
+					Log.d("RaceInfoLoaderTask", "onClick" );
+					cancel( true );
 					
+					// ダイアログ削除
+					if( m_ProgressDialog != null ){
+						m_ProgressDialog.dismiss();
+					}
+					
+					Toast.makeText( RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT ).show();
 				}
-				
 			});
 			
 			m_ProgressDialog.show();
 		}
 		/**
 		 * 
-		 * @param String params[0] アップデートサイトURL、param[1] 大会ID
+		 * @param TaskParam params
 		 * @return
 		 */
 		@Override
-		protected RaceInfo doInBackground(String... params) {
+		protected RaceInfo doInBackground( TaskParam... params ) {
 			
 			RaceInfo raceInfo = null;
 			try {
-				raceInfo = Logic.getNetRaceInfo( params[0], params[1] );
+				String url = params[0].getUrl();
+				String raceId = params[0].getRaceId();
+				raceInfo = Logic.getNetRaceInfo( url, raceId );
 				
 			} catch (LogicException e) {
 				e.printStackTrace();
@@ -178,29 +184,25 @@ public class RaceEntryActivity extends Activity {
 			return raceInfo;
 		}
 		@Override
-		protected void onPostExecute( RaceInfo raceInfo)
+		protected void onPostExecute( RaceInfo raceInfo )
 		{
 			// ダイアログ削除
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
 			
-			if( m_CancellFlg ){
-				return;
-			}
-			
 			if( raceInfo == null ){
-				Toast.makeText(RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT).show();
+				Toast.makeText( RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT ).show();
 				return;
 				
 			}else{
 				InfoDialog<RaceInfo> raceEntryInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceEntryButtonCallbackImpl() );
 				raceEntryInfoDialog.onDialog(
 						RaceEntryActivity.this,
-						getString(R.string.str_dialog_title_race),
+						getString( R.string.str_dialog_title_race ),
 						createDialogMessage( raceInfo ),
-						getString(R.string.str_dialog_msg_OK),
-						getString(R.string.str_dialog_msg_NG));
+						getString( R.string.str_dialog_msg_OK ),
+						getString( R.string.str_dialog_msg_NG ) );
 			}
 		}
 		@Override
@@ -211,11 +213,29 @@ public class RaceEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
+		}
+		
+		public class TaskParam{
 			
-			// キャンセルフラグ設定
-			m_CancellFlg = true;
+			private String url;
 			
-			Toast.makeText(RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
+			private String raceId;
+
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+
+			public String getRaceId() {
+				return raceId;
+			}
+
+			public void setRaceId(String raceId) {
+				this.raceId = raceId;
+			}
 		}
 	}
 	
