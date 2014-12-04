@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -86,12 +85,13 @@ public class RaceEntryActivity extends Activity {
 				
 				String raceId = formatRaceId( inputRaceId );
 				
-				RaceInfoLoaderTask.TaskParam param = new RaceInfoLoaderTask().new TaskParam();
+				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
+				
+				RaceInfoLoaderTask.TaskParam param = task.new TaskParam();
 				param.setUrl( getString( R.string.str_txt_defaulturl ) );
 				param.setRaceId( raceId );
 				
-				RaceInfoLoaderTask task = new RaceInfoLoaderTask();
-				task.execute(param);
+				task.execute( param );
 			}
 		});
         
@@ -135,7 +135,10 @@ public class RaceEntryActivity extends Activity {
 	 */
 	class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo> {
 
-		ProgressDialog m_ProgressDialog = null;
+		/**
+		 * 進捗ダイアログ
+		 */
+		private ProgressDialog m_ProgressDialog = null;
 		
 		@Override
 		protected void onPreExecute() {
@@ -150,15 +153,7 @@ public class RaceEntryActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					Log.d("RaceInfoLoaderTask", "onClick" );
 					cancel( true );
-					
-					// ダイアログ削除
-					if( m_ProgressDialog != null ){
-						m_ProgressDialog.dismiss();
-					}
-					
-					Toast.makeText( RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT ).show();
 				}
 			});
 			
@@ -208,11 +203,13 @@ public class RaceEntryActivity extends Activity {
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
-			
+
 			// ダイアログ削除
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
+			
+			Toast.makeText( RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT ).show();
 		}
 		
 		public class TaskParam{
