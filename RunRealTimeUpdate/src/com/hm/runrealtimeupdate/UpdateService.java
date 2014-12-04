@@ -137,11 +137,6 @@ public class UpdateService extends Service {
 		private List<RunnerInfo> m_RunnerInfoList;
 		
 		/**
-		 * キャンセルフラグ
-		 */
-		private boolean m_CancelFlg;
-		
-		/**
 		 * アップデートタスク
 		 */
 		RunnerInfoUpdateTask m_UpdateTask;
@@ -156,7 +151,6 @@ public class UpdateService extends Service {
 			m_ContentResolver = contentResolver;
 			m_RaceInfo = raceInfo;
 			m_RunnerInfoList = runnerInfoList;
-			m_CancelFlg = false;
 			m_UpdateTask = new RunnerInfoUpdateTask( m_RaceInfo, m_ContentResolver );
 		}
 		
@@ -167,11 +161,6 @@ public class UpdateService extends Service {
 				
 				@Override
 				public void run() {
-					
-					// キャンセルされたならば、この先の処理はしない
-					if( m_CancelFlg ){
-						return;
-					}
 					
 					// 速報回数が最大を超えたら速報を自動停止する
 					m_IntervalCnt++;
@@ -203,18 +192,16 @@ public class UpdateService extends Service {
 
 		@Override
 		public boolean cancel() {
-			m_CancelFlg = true;
 			
-			if( m_UpdateTask != null ){
-				m_UpdateTask.onCancelled();
+			if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
+				m_UpdateTask.cancel( true );
 			}
 			return super.cancel();
 		}
+		
 	}
 	
 	private class RunnerInfoUpdateTask extends AsyncTask< RunnerInfoUpdateTask.TaskParam, Void, List<RunnerInfo > >{
-		
-		private boolean m_CancelFlg;
 		
 		/**
 		 * 大会情報
@@ -232,7 +219,6 @@ public class UpdateService extends Service {
 		 * @param contentResolver コンテントリゾルバ
 		 */
 		RunnerInfoUpdateTask( RaceInfo raceInfo, ContentResolver contentResolver ){
-			m_CancelFlg = false;
 			m_RaceInfo = raceInfo;
 			m_ContentResolver = contentResolver;
 		}
@@ -257,10 +243,6 @@ public class UpdateService extends Service {
 		
 		@Override
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
-			
-			if( m_CancelFlg ){
-				return;
-			}
 			
 			// データアップデート
 			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
@@ -300,12 +282,8 @@ public class UpdateService extends Service {
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
-			
-			// キャンセルフラグ設定
-			m_CancelFlg = true;
 		}
 		
-
 		public class TaskParam{
 			
 			/**
