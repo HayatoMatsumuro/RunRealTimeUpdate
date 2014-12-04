@@ -8,6 +8,7 @@ import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -126,15 +127,20 @@ public class RaceDetailActivity extends Activity {
 			@Override
 			public void onClick( View v ) {
 				RaceInfo raceInfo = ( RaceInfo )v.getTag();
+				String raceId = raceInfo.getRaceId();
 				
-				// 手動更新開始
-				String[] params = { null };
-				
-				params[0] = getString( R.string.str_txt_defaulturl );
+				// 選手情報を取得する
+				List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), raceId );
 				
 				// 手動更新タスク起動
-				ManualUpdateTask task = new ManualUpdateTask( raceInfo.getRaceId() );
-				task.execute( params );
+				ManualUpdateTask task = new ManualUpdateTask( getContentResolver(), raceInfo.getRaceId() );
+				
+				ManualUpdateTask.TaskParam param = task.new TaskParam();
+				param.setRaceId( raceInfo.getRaceId() );
+				param.setUrl( getString( R.string.str_txt_defaulturl ) );
+				param.setRunnerInfoList( runnerInfoList );
+				
+				task.execute( param );
 			}
 		});
 	}
@@ -181,16 +187,26 @@ public class RaceDetailActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class ManualUpdateTask extends AsyncTask< String, Void, List<RunnerInfo> >{
+	class ManualUpdateTask extends AsyncTask< ManualUpdateTask.TaskParam, Void, List<RunnerInfo> >{
 
+		/**
+		 * コンテントリゾルバ
+		 */
+		private ContentResolver m_ContentResolver;
+		
+		/**
+		 * 大会ID
+		 */
 		private String m_RaceId = null;
 		
+		/**
+		 * 進捗ダイアログ
+		 */
 		private ProgressDialog m_ProgressDialog = null;
 		
-		private boolean m_CancellFlg = false;
-		
-		public ManualUpdateTask( String raceId ){
+		public ManualUpdateTask( ContentResolver contentResolver, String raceId ){
 			super();
+			m_ContentResolver = contentResolver;
 			m_RaceId = raceId;
 		}
 		
@@ -205,7 +221,7 @@ public class RaceDetailActivity extends Activity {
 			m_ProgressDialog.setButton( DialogInterface.BUTTON_NEGATIVE, getResources().getString( R.string.str_dialog_msg_cancel ), new DialogInterface.OnClickListener(){
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					onCancelled();
+					cancel( true );
 				}
 				
 			});
@@ -217,16 +233,15 @@ public class RaceDetailActivity extends Activity {
 		/**
 		 * params[0]:アップデートサイトURL
 		 */
-		protected List<RunnerInfo> doInBackground(String... params) {
+		protected List<RunnerInfo> doInBackground( TaskParam... params ) {
 			
-			// 選手の更新情報を取得する
-			String url = params[0];
-			
-			// 選手情報を取得する
-			List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), m_RaceId );
+			// ネットワークから選手情報取得
+			String url = params[0].getUrl();
+			String raceId = params[0].getRaceId();
+			List<RunnerInfo> runnerInfoList = params[0].getRunnerInfoList();
 			
 			// 最新の選手情報を取得する
-			return Logic.getNetRunnerInfoList( url, m_RaceId, runnerInfoList );
+			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
 		}
 		
 		@Override
@@ -234,14 +249,10 @@ public class RaceDetailActivity extends Activity {
 			
 			String message = null;
 			
-			if( m_CancellFlg ){
-				return;
-			}
-			
 			if( runnerInfoList != null ){
 				
 				// データアップデート
-				boolean updateFlg = Logic.updateRunnerInfo( getContentResolver(), m_RaceId, runnerInfoList );
+				boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceId, runnerInfoList );
 				
 				if( updateFlg ){
 					message = "★★★更新情報があります★★★";
@@ -271,11 +282,50 @@ public class RaceDetailActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
-			
-			// キャンセルフラグ設定
-			m_CancellFlg = true;
 
-			Toast.makeText( RaceDetailActivity.this, "自動更新をキャンセルしました。", Toast.LENGTH_SHORT ).show();
+			Toast.makeText( RaceDetailActivity.this, "手動更新をキャンセルしました。", Toast.LENGTH_SHORT ).show();
+		}
+		
+		public class TaskParam{
+			
+			/**
+			 * 大会URL
+			 */
+			private String url;
+
+			/**
+			 * 大会ID
+			 */
+			private String raceId;
+			
+			/**
+			 * 選手リスト
+			 */
+			private List<RunnerInfo> runnerInfoList;
+			
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+
+			public String getRaceId() {
+				return raceId;
+			}
+
+			public void setRaceId(String raceId) {
+				this.raceId = raceId;
+			}
+
+			public List<RunnerInfo> getRunnerInfoList() {
+				return runnerInfoList;
+			}
+
+			public void setRunnerInfoList(List<RunnerInfo> runnerInfoList) {
+				this.runnerInfoList = runnerInfoList;
+			}
 		}
 	}
 }
