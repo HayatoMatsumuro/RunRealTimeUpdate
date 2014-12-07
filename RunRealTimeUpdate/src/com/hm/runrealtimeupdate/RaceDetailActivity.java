@@ -7,8 +7,11 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -73,9 +76,24 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(true);
 					
 					// 速報開始
-					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					startService(intent);
+					//Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
+					//intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
+					//startService(intent);
+					
+					AlarmManager alarmManager = (AlarmManager)RaceDetailActivity.this.getSystemService( Context.ALARM_SERVICE );
+					Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
+					long time = System.currentTimeMillis();
+					
+					PendingIntent p = PendingIntent.getService(
+							RaceDetailActivity.this,
+							-1,
+							intent,
+							PendingIntent.FLAG_UPDATE_CURRENT );
+					
+					// TODO:仮
+					long delay = 20000;
+					
+					alarmManager.setRepeating(AlarmManager.RTC, time, delay, p);
 					
 					// 速報中テキスト表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.VISIBLE );

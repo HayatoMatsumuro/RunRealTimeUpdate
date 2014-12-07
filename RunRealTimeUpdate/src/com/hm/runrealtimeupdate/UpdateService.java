@@ -76,8 +76,8 @@ public class UpdateService extends Service {
 		Log.d("service", "destroy");
 		
 		// タイマー停止
-		m_UpdateTimerTask.cancel();
-		m_IntervalTimer.cancel();
+		//m_UpdateTimerTask.cancel();
+		//m_IntervalTimer.cancel();
 	}
 
 	@Override
@@ -94,6 +94,7 @@ public class UpdateService extends Service {
         
         // 大会情報が取得できないなら、停止する
         if( raceInfo == null ){
+        	Log.d("service", "stopSelf");
         	stopSelf();
         	return;
         }
