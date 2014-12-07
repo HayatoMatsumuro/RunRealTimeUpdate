@@ -1,21 +1,21 @@
 package com.hm.runrealtimeupdate;
 
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -34,18 +34,6 @@ public class UpdateService extends Service {
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		// TODO:
-		Log.d("service", "destroy");
-		
-		// タイマー停止
-		if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
-			m_UpdateTask.cancel( true );
-		}
 	}
 
 	@Override
@@ -76,97 +64,16 @@ public class UpdateService extends Service {
 		m_UpdateTask.execute( param );
 	}
 	
-	/**
-	 * データ更新タスク
-	 * @author Hayato Matsumuro
-	 *
-	 */
-	private class UpdateTimerTask extends TimerTask {
-
-		/**
-		 * ハンドラ
-		 */
-		private Handler m_Handler;
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// TODO:
+		Log.d("service", "destroy");
 		
-		/**
-		 * コンテントリゾルバ
-		 */
-		private ContentResolver m_ContentResolver;
-		
-		/**
-		 * 大会情報
-		 */
-		private RaceInfo m_RaceInfo;
-		
-		/**
-		 * ゼッケン番号リスト
-		 */
-		private List<RunnerInfo> m_RunnerInfoList;
-		
-		/**
-		 * アップデートタスク
-		 */
-		RunnerInfoUpdateTask m_UpdateTask;
-		
-		/**
-		 * コンストラクタ
-		 * @param raceInfo 大会情報
-		 * @param numberList ゼッケン番号リスト
-		 */
-		UpdateTimerTask( ContentResolver contentResolver, RaceInfo raceInfo, List<RunnerInfo> runnerInfoList ){
-			m_Handler = new Handler();
-			m_ContentResolver = contentResolver;
-			m_RaceInfo = raceInfo;
-			m_RunnerInfoList = runnerInfoList;
-			m_UpdateTask = new RunnerInfoUpdateTask( m_RaceInfo, m_ContentResolver );
+		// タイマー停止
+		if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
+			m_UpdateTask.cancel( true );
 		}
-		
-		@Override
-		public void run() {
-			
-			m_Handler.post(new Runnable() {
-				
-				@Override
-				public void run() {
-					
-					// 速報回数が最大を超えたら速報を自動停止する
-					//m_IntervalCnt++;
-					/*
-					if( m_IntervalCnt > INT_TIMER_INTERAVAL_CNT_MAX ){
-						// TODO:
-						Log.d("service", "stopSelf");
-						
-						// 速報停止状態にする
-						Logic.setUpdateOffRaceId( m_ContentResolver, m_RaceInfo.getRaceId() );
-						stopSelf();
-						return;
-					}
-					*/
-					if( m_UpdateTask.getStatus() != AsyncTask.Status.RUNNING ){
-						
-						RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
-					
-						param.setUrl( getString( R.string.str_txt_defaulturl ) );
-						param.setRaceId( m_RaceInfo.getRaceId() );
-						param.setRunnerInfoList( m_RunnerInfoList );
-					
-						// 手動更新タスク起動
-						m_UpdateTask = new RunnerInfoUpdateTask( m_RaceInfo, m_ContentResolver );
-						m_UpdateTask.execute( param );
-					}
-				}
-			});
-		}
-
-		@Override
-		public boolean cancel() {
-			
-			if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
-				m_UpdateTask.cancel( true );
-			}
-			return super.cancel();
-		}
-		
 	}
 	
 	private class RunnerInfoUpdateTask extends AsyncTask< RunnerInfoUpdateTask.TaskParam, Void, List<RunnerInfo > >{
@@ -243,6 +150,35 @@ public class UpdateService extends Service {
 				NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 				manager.notify(R.string.app_name, notification);
 			}
+			
+			// 更新の停止処理
+			try {
+				boolean stopflg = Logic.updateUpdateCount( UpdateService.this );
+				
+				// 更新を停止する
+				if( stopflg ){
+					AlarmManager alarmManager = ( AlarmManager )UpdateService.this.getSystemService( Context.ALARM_SERVICE );
+					
+					Intent intent = new Intent( UpdateService.this, UpdateService.class );
+					intent.putExtra( UpdateService.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
+					
+				    PendingIntent pendingIntent = PendingIntent.getService(
+				    		UpdateService.this,
+				            -1,
+				            intent,
+				            PendingIntent.FLAG_CANCEL_CURRENT);
+				    
+				    alarmManager.cancel( pendingIntent );
+				    pendingIntent.cancel();
+				}
+			} catch (LogicException e) {
+				// 特に何も処理しない( ありえないので )
+				e.printStackTrace();
+			}
+			
+			// 速報停止状態にする
+			Logic.setUpdateOffRaceId( m_ContentResolver, m_RaceInfo.getRaceId() );
+			stopSelf();
 			
 			return;
 		}

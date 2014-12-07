@@ -101,6 +101,9 @@ public class RaceDetailActivity extends Activity {
 					
 					alarmManager.setRepeating( AlarmManager.RTC, time, INT_TIMER_INTERVAL, pendingIntent );
 					
+					// 更新カウントを設定
+					Logic.setUpdateCountMax( RaceDetailActivity.this, INT_TIMER_INTERAVAL_CNT_MAX );
+					
 					// 速報中テキスト表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.VISIBLE );
 					

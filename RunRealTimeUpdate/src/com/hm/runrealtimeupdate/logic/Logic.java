@@ -9,8 +9,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Context;
+
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseAccess;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRaceInfo;
 import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseRunnerInfo;
@@ -20,6 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
+import com.hm.runrealtimeupdate.logic.preferences.PreferenceUpdateCount;
 
 public class Logic {
 	
@@ -731,6 +735,39 @@ public class Logic {
 		return passRunnerInfoList;
 	}
     
+	/**
+	 * 更新カウントの最大値を設定する
+	 * @param context
+	 * @param updateCount
+	 */
+	public static void setUpdateCountMax( Context context, int updateCountMax ){
+		PreferenceUpdateCount.deleteUpdateCount( context );
+		PreferenceUpdateCount.saveUpdateCount(context, updateCountMax );
+	}
+	
+	/**
+	 * 更新カウントを更新する
+	 * @param context
+	 * @return　true:更新カウントが0未満 / false:更新カウントが0以上
+	 * @throws LogicException アップデートカウントが存在しない
+	 */
+	public static boolean updateUpdateCount( Context context ) throws LogicException{
+		
+		int updateCount = PreferenceUpdateCount.loadUpdateCount( context );
+		
+		if( updateCount == Integer.MAX_VALUE ){
+			throw new LogicException( "no UpdateCount" );
+		}
+		updateCount--;
+		
+		if( updateCount >= 0 ){
+			PreferenceUpdateCount.saveUpdateCount( context, updateCount );
+			return false;
+		}else{
+			return true;
+		}
+	}
+	
 	private static class PassPointInfoComparator implements Comparator<PassRunnerInfo.PassPointInfo>{
 
 		@Override
