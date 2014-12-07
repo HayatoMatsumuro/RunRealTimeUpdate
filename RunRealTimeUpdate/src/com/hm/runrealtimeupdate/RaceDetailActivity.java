@@ -68,7 +68,6 @@ public class RaceDetailActivity extends Activity {
         
         // 速報ボタンの処理設定
         Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
-        updateButton.setTag(raceInfo);
         updateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -95,7 +94,7 @@ public class RaceDetailActivity extends Activity {
 					
 					PendingIntent pendingIntent = PendingIntent.getService(
 							RaceDetailActivity.this,
-							-1,
+							UpdateService.INT_REQUESTCODE_START,
 							intent,
 							PendingIntent.FLAG_UPDATE_CURRENT );
 					
@@ -130,13 +129,14 @@ public class RaceDetailActivity extends Activity {
 					
 				    PendingIntent pendingIntent = PendingIntent.getService(
 				    		RaceDetailActivity.this,
-				            -1,
+				    		UpdateService.INT_REQUESTCODE_START,
 				            intent,
 				            PendingIntent.FLAG_CANCEL_CURRENT);
 				    
 				    alarmManager.cancel( pendingIntent );
 				    pendingIntent.cancel();
-				    
+					stopService( intent );
+
 					// 速報中テキスト非表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
 					
@@ -188,6 +188,7 @@ public class RaceDetailActivity extends Activity {
 		// 大会情報取得
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+		RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId );
 		
 		// 自動更新、手動更新ボタンの表示状態設定
 		// 速報状態の大会情報を取得
@@ -201,20 +202,44 @@ public class RaceDetailActivity extends Activity {
         	updateButton.setText( getString( R.string.str_btn_updatestart ) );
         	updateButton.setEnabled( true );
         	manualButton.setEnabled( true );
+        	
+        	// 速報中テキスト非表示
+			(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
         }
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
 		{
-        	updateButton.setText( getString( R.string.str_btn_updatestop ) );
-        	updateButton.setEnabled( true );
-        	manualButton.setEnabled( false );
+			if( !isSetUpdateAlarm() ){
+				
+				updateButton.setText( getString( R.string.str_btn_updatestart ) );
+				
+				Logic.setUpdateOffRaceId(getContentResolver(), updateRaceInfo.getRaceId());
+				
+				raceInfo.setRaceUpdate( false );
+				
+				updateButton.setText( getString( R.string.str_btn_updatestop ) );
+				manualButton.setEnabled( true );
+				
+				// 速報中テキスト非表示
+	        	(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+			}else{
+				updateButton.setText( getString( R.string.str_btn_updatestop ) );
+				
+				manualButton.setEnabled( false );
+			}
+			updateButton.setEnabled( true );
         }
 		// 他の大会が速報中
 		else{
         	updateButton.setText( getString( R.string.str_btn_updatestart ) );
         	updateButton.setEnabled( false );
         	manualButton.setEnabled( false );
+        	
+        	// 速報中テキスト非表示
+        	(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
         }
+		
+        updateButton.setTag( raceInfo );
 	}
 
 	/**
@@ -363,4 +388,25 @@ public class RaceDetailActivity extends Activity {
 			}
 		}
 	}
+	
+	/**
+     * 更新アラームが設定されているか確認する
+     * @return true:起動中/false:起動中でない
+     */
+    private boolean isSetUpdateAlarm(){
+    	
+    	Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
+    	
+    	PendingIntent pendingIntent = PendingIntent.getService(
+    						RaceDetailActivity.this,
+    						UpdateService.INT_REQUESTCODE_START,
+    						intent,
+    						PendingIntent.FLAG_NO_CREATE );
+    	
+    	if( pendingIntent == null ) {
+    		return false;
+    	}else {
+    	    return true;
+    	}
+    }
 }

@@ -23,6 +23,7 @@ public class UpdateService extends Service {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
+	public static final int INT_REQUESTCODE_START = 1;
 	/**
 	 * バイブ 
 	 *  [ON時間, OFF時間, ・・・]
@@ -40,6 +41,9 @@ public class UpdateService extends Service {
 	public void onStart(Intent intent, int startId ) {
 		super.onStart(intent, startId);
 		
+		// TODO:
+		Log.d("service", "start");
+		
 		// 大会情報取得
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
@@ -50,6 +54,11 @@ public class UpdateService extends Service {
         	return;
         }
         
+        if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
+        	// TODO:
+    		Log.d("service", "net Exe");
+        	return;
+        }
         // 選手情報取得
         List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
 		
@@ -114,10 +123,14 @@ public class UpdateService extends Service {
 			// TODO:
 			Log.d("service", "net get Start");
 			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
+			
 		}
 		
 		@Override
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList ){
+
+			// TODO:
+			Log.d("service", "net get End");
 			
 			// データアップデート
 			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
@@ -164,20 +177,24 @@ public class UpdateService extends Service {
 					
 				    PendingIntent pendingIntent = PendingIntent.getService(
 				    		UpdateService.this,
-				            -1,
+				    		INT_REQUESTCODE_START,
 				            intent,
 				            PendingIntent.FLAG_CANCEL_CURRENT);
 				    
 				    alarmManager.cancel( pendingIntent );
 				    pendingIntent.cancel();
+				    
+				    // データベース変更
+					Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId() );
+					
+				    // TODO:
+					Log.d("service", "alarm End");
 				}
 			} catch (LogicException e) {
 				// 特に何も処理しない( ありえないので )
 				e.printStackTrace();
 			}
 			
-			// 速報停止状態にする
-			Logic.setUpdateOffRaceId( m_ContentResolver, m_RaceInfo.getRaceId() );
 			stopSelf();
 			
 			return;
@@ -186,6 +203,9 @@ public class UpdateService extends Service {
 		@Override
 		protected void onCancelled() {
 			super.onCancelled();
+
+			// TODO:
+			Log.d("service", "net cancel");
 		}
 		
 		public class TaskParam{
@@ -232,4 +252,5 @@ public class UpdateService extends Service {
 			
 		}
 	}
+	
 }
