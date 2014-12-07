@@ -29,20 +29,7 @@ public class UpdateService extends Service {
 	 */
 	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
 	
-	/**
-	 * タイマー
-	 */
-	private Timer m_IntervalTimer;
-	
-	/**
-	 * タイマータスク
-	 */
-	private UpdateTimerTask m_UpdateTimerTask;
-	
-	/**
-	 * 速報の回数
-	 */
-	private int m_IntervalCnt;
+	private RunnerInfoUpdateTask m_UpdateTask = null;
 	
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -56,40 +43,37 @@ public class UpdateService extends Service {
 		Log.d("service", "destroy");
 		
 		// タイマー停止
-		//m_UpdateTimerTask.cancel();
-		//m_IntervalTimer.cancel();
+		if( ( m_UpdateTask != null ) && ( m_UpdateTask.getStatus() == AsyncTask.Status.RUNNING ) ){
+			m_UpdateTask.cancel( true );
+		}
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId ) {
 		super.onStart(intent, startId);
 		
-		// 初期化
-		m_IntervalTimer = new Timer();
-		m_IntervalCnt = 0;
-		
 		// 大会情報取得
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
-        stopSelf();
-        
         // 大会情報が取得できないなら、停止する
         if( raceInfo == null ){
-        	Log.d("service", "stopSelf");
         	stopSelf();
         	return;
         }
         
         // 選手情報取得
         List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList(getContentResolver(), raceId);
-        
-		// TODO:
-		Log.d("service", "start");
 		
-		// タイマー開始
-		m_UpdateTimerTask = new UpdateTimerTask( getContentResolver(), raceInfo, runnerInfoList );
-		//m_IntervalTimer.schedule( m_UpdateTimerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL );
+        // 更新タスク開始
+        m_UpdateTask = new RunnerInfoUpdateTask( raceInfo, getContentResolver() );
+        RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
+		
+		param.setUrl( getString( R.string.str_txt_defaulturl ) );
+		param.setRaceId( raceInfo.getRaceId() );
+		param.setRunnerInfoList( runnerInfoList );
+		
+		m_UpdateTask.execute( param );
 	}
 	
 	/**
@@ -146,7 +130,7 @@ public class UpdateService extends Service {
 				public void run() {
 					
 					// 速報回数が最大を超えたら速報を自動停止する
-					m_IntervalCnt++;
+					//m_IntervalCnt++;
 					/*
 					if( m_IntervalCnt > INT_TIMER_INTERAVAL_CNT_MAX ){
 						// TODO:
