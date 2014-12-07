@@ -26,6 +26,17 @@ public class RaceDetailActivity extends Activity {
 
 	public static final String STR_INTENT_RACEID = "raceid";
 	
+	/**
+	 * タイマー間隔
+	 */
+	private static int INT_TIMER_INTERVAL = 120000;
+	
+	/**
+	 * 速報を行う回数
+	 * 1日で自動的に速報が停止する
+	 */
+	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +78,8 @@ public class RaceDetailActivity extends Activity {
 				// 動作的に問題ないため、そのままとする
 				RaceInfo raceInfo = ( RaceInfo )v.getTag();
 				
+				AlarmManager alarmManager = ( AlarmManager )RaceDetailActivity.this.getSystemService( Context.ALARM_SERVICE );
+				
 				if( !raceInfo.isRaceUpdate() ){
 					// 速報を開始する
 					
@@ -76,24 +89,17 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(true);
 					
 					// 速報開始
-					//Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					//intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					//startService(intent);
-					
-					AlarmManager alarmManager = (AlarmManager)RaceDetailActivity.this.getSystemService( Context.ALARM_SERVICE );
 					Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
+					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
 					long time = System.currentTimeMillis();
 					
-					PendingIntent p = PendingIntent.getService(
+					PendingIntent pendingIntent = PendingIntent.getService(
 							RaceDetailActivity.this,
 							-1,
 							intent,
 							PendingIntent.FLAG_UPDATE_CURRENT );
 					
-					// TODO:仮
-					long delay = 20000;
-					
-					alarmManager.setRepeating(AlarmManager.RTC, time, delay, p);
+					alarmManager.setRepeating( AlarmManager.RTC, time, INT_TIMER_INTERVAL, pendingIntent );
 					
 					// 速報中テキスト表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.VISIBLE );
@@ -116,10 +122,18 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(false);
 					
 					// 速報停止
-					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					stopService(intent);
+					Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
+					intent.putExtra( UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId() );
 					
+				    PendingIntent pendingIntent = PendingIntent.getService(
+				    		RaceDetailActivity.this,
+				            -1,
+				            intent,
+				            PendingIntent.FLAG_CANCEL_CURRENT);
+				    
+				    alarmManager.cancel( pendingIntent );
+				    pendingIntent.cancel();
+				    
 					// 速報中テキスト非表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
 					

@@ -23,31 +23,11 @@ public class UpdateService extends Service {
 	
 	public static final String STR_INTENT_RACEID = "raceid";
 	
-	//TODO: 暫定値
-	/**
-	 * タイマー間隔
-	 */
-	private static int INT_TIMER_INTERVAL = 120000;
-	
-	//TODO: 暫定値
-	/**
-	 * タイマー開始遅延時間
-	 */
-	private static int INT_TIMER_DELAY = 0;
-	
-	//TODO: 暫定値
 	/**
 	 * バイブ 
 	 *  [ON時間, OFF時間, ・・・]
 	 */
 	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
-	
-	/**
-	 * 速報を行う回数
-	 * 1日で自動的に速報が停止する
-	 */
-	//TODO: 暫定
-	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
 	
 	/**
 	 * タイマー
@@ -92,6 +72,8 @@ public class UpdateService extends Service {
         String raceId = intent.getStringExtra(STR_INTENT_RACEID);
         RaceInfo raceInfo = Logic.getRaceInfo(getContentResolver(), raceId);
         
+        stopSelf();
+        
         // 大会情報が取得できないなら、停止する
         if( raceInfo == null ){
         	Log.d("service", "stopSelf");
@@ -107,7 +89,7 @@ public class UpdateService extends Service {
 		
 		// タイマー開始
 		m_UpdateTimerTask = new UpdateTimerTask( getContentResolver(), raceInfo, runnerInfoList );
-		m_IntervalTimer.schedule( m_UpdateTimerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL );
+		//m_IntervalTimer.schedule( m_UpdateTimerTask, INT_TIMER_DELAY, INT_TIMER_INTERVAL );
 	}
 	
 	/**
@@ -165,6 +147,7 @@ public class UpdateService extends Service {
 					
 					// 速報回数が最大を超えたら速報を自動停止する
 					m_IntervalCnt++;
+					/*
 					if( m_IntervalCnt > INT_TIMER_INTERAVAL_CNT_MAX ){
 						// TODO:
 						Log.d("service", "stopSelf");
@@ -174,7 +157,7 @@ public class UpdateService extends Service {
 						stopSelf();
 						return;
 					}
-					
+					*/
 					if( m_UpdateTask.getStatus() != AsyncTask.Status.RUNNING ){
 						
 						RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
