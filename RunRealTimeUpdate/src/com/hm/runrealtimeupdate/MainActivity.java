@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
         
         if( chkRaceInfo != null ){
         	
-        	if( CommonLib.isSetUpdateAlarm( MainActivity.this ) ){
+        	if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) ){
         		Log.d("main", "Alarm Stop, database updateexe");
         		Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
         		chkRaceInfo.setRaceUpdate( false );
