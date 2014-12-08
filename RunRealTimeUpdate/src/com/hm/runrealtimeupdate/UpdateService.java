@@ -7,13 +7,11 @@ import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
-import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.IBinder;
@@ -170,25 +168,16 @@ public class UpdateService extends Service {
 				
 				// 更新を停止する
 				if( stopflg ){
-					AlarmManager alarmManager = ( AlarmManager )UpdateService.this.getSystemService( Context.ALARM_SERVICE );
 					
-					Intent intent = new Intent( UpdateService.this, UpdateService.class );
-					intent.putExtra( UpdateService.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
-					
-				    PendingIntent pendingIntent = PendingIntent.getService(
-				    		UpdateService.this,
-				    		INT_REQUESTCODE_START,
-				            intent,
-				            PendingIntent.FLAG_CANCEL_CURRENT);
-				    
-				    alarmManager.cancel( pendingIntent );
-				    pendingIntent.cancel();
+					CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.getRaceId() );
 				    
 				    // データベース変更
 					Logic.setUpdateOffRaceId(getContentResolver(), m_RaceInfo.getRaceId() );
 					
 				    // TODO:
 					Log.d("service", "alarm End");
+					
+					return;
 				}
 			} catch (LogicException e) {
 				// 特に何も処理しない( ありえないので )
@@ -249,8 +238,6 @@ public class UpdateService extends Service {
 			public void setRunnerInfoList(List<RunnerInfo> runnerInfo) {
 				this.runnerInfoList = runnerInfo;
 			}
-			
 		}
 	}
-	
 }

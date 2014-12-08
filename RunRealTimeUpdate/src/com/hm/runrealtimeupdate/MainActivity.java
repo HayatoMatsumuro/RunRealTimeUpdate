@@ -7,7 +7,6 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -109,7 +108,7 @@ public class MainActivity extends Activity {
         
         if( chkRaceInfo != null ){
         	
-        	if( !isSetUpdateAlarm() ){
+        	if( CommonLib.isSetUpdateAlarm( MainActivity.this ) ){
         		Log.d("main", "Alarm Stop, database updateexe");
         		Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
         		chkRaceInfo.setRaceUpdate( false );
@@ -240,24 +239,4 @@ public class MainActivity extends Activity {
     	
     }
     
-    /**
-     * 更新アラームが設定されているか確認する
-     * @return true:起動中/false:起動中でない
-     */
-    private boolean isSetUpdateAlarm(){
-    	
-    	Intent intent = new Intent( MainActivity.this, UpdateService.class );
-    	
-    	PendingIntent pendingIntent = PendingIntent.getService(
-    						MainActivity.this,
-    						UpdateService.INT_REQUESTCODE_START,
-    						intent,
-    						PendingIntent.FLAG_NO_CREATE );
-    	
-    	if( pendingIntent == null ) {
-    		return false;
-    	}else {
-    	    return true;
-    	}
-    }
 }

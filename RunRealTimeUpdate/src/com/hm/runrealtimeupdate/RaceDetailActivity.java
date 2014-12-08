@@ -7,11 +7,8 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -77,8 +74,6 @@ public class RaceDetailActivity extends Activity {
 				// 動作的に問題ないため、そのままとする
 				RaceInfo raceInfo = ( RaceInfo )v.getTag();
 				
-				AlarmManager alarmManager = ( AlarmManager )RaceDetailActivity.this.getSystemService( Context.ALARM_SERVICE );
-				
 				if( !raceInfo.isRaceUpdate() ){
 					// 速報を開始する
 					
@@ -88,17 +83,7 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(true);
 					
 					// 速報開始
-					Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					long time = System.currentTimeMillis();
-					
-					PendingIntent pendingIntent = PendingIntent.getService(
-							RaceDetailActivity.this,
-							UpdateService.INT_REQUESTCODE_START,
-							intent,
-							PendingIntent.FLAG_UPDATE_CURRENT );
-					
-					alarmManager.setRepeating( AlarmManager.RTC, time, INT_TIMER_INTERVAL, pendingIntent );
+					CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), INT_TIMER_INTERVAL );
 					
 					// 更新カウントを設定
 					Logic.setUpdateCountMax( RaceDetailActivity.this, INT_TIMER_INTERAVAL_CNT_MAX );
@@ -124,18 +109,7 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(false);
 					
 					// 速報停止
-					Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
-					intent.putExtra( UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId() );
-					
-				    PendingIntent pendingIntent = PendingIntent.getService(
-				    		RaceDetailActivity.this,
-				    		UpdateService.INT_REQUESTCODE_START,
-				            intent,
-				            PendingIntent.FLAG_CANCEL_CURRENT);
-				    
-				    alarmManager.cancel( pendingIntent );
-				    pendingIntent.cancel();
-					stopService( intent );
+					CommonLib.cancelUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
 
 					// 速報中テキスト非表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
@@ -143,7 +117,6 @@ public class RaceDetailActivity extends Activity {
 					// ボタン表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestart));
 					
-
 					// Toast表示
 					Toast.makeText( RaceDetailActivity.this, "速報を停止しました！", Toast.LENGTH_SHORT ).show();
 					
@@ -209,7 +182,7 @@ public class RaceDetailActivity extends Activity {
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
 		{
-			if( !isSetUpdateAlarm() ){
+			if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) ){
 				
 				updateButton.setText( getString( R.string.str_btn_updatestart ) );
 				
@@ -389,24 +362,4 @@ public class RaceDetailActivity extends Activity {
 		}
 	}
 	
-	/**
-     * 更新アラームが設定されているか確認する
-     * @return true:起動中/false:起動中でない
-     */
-    private boolean isSetUpdateAlarm(){
-    	
-    	Intent intent = new Intent( RaceDetailActivity.this, UpdateService.class );
-    	
-    	PendingIntent pendingIntent = PendingIntent.getService(
-    						RaceDetailActivity.this,
-    						UpdateService.INT_REQUESTCODE_START,
-    						intent,
-    						PendingIntent.FLAG_NO_CREATE );
-    	
-    	if( pendingIntent == null ) {
-    		return false;
-    	}else {
-    	    return true;
-    	}
-    }
 }
