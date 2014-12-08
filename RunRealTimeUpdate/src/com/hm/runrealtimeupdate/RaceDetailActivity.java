@@ -23,6 +23,17 @@ public class RaceDetailActivity extends Activity {
 
 	public static final String STR_INTENT_RACEID = "raceid";
 	
+	/**
+	 * タイマー間隔
+	 */
+	private static int INT_TIMER_INTERVAL = 120000;
+	
+	/**
+	 * 速報を行う回数
+	 * 1日で自動的に速報が停止する
+	 */
+	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +65,6 @@ public class RaceDetailActivity extends Activity {
         
         // 速報ボタンの処理設定
         Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
-        updateButton.setTag(raceInfo);
         updateButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -73,9 +83,10 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(true);
 					
 					// 速報開始
-					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					startService(intent);
+					CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), INT_TIMER_INTERVAL );
+					
+					// 更新カウントを設定
+					Logic.setUpdateCountMax( RaceDetailActivity.this, INT_TIMER_INTERAVAL_CNT_MAX );
 					
 					// 速報中テキスト表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.VISIBLE );
@@ -98,17 +109,14 @@ public class RaceDetailActivity extends Activity {
 					raceInfo.setRaceUpdate(false);
 					
 					// 速報停止
-					Intent intent = new Intent(RaceDetailActivity.this, UpdateService.class);
-					intent.putExtra(UpdateService.STR_INTENT_RACEID, raceInfo.getRaceId());
-					stopService(intent);
-					
+					CommonLib.cancelUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
+
 					// 速報中テキスト非表示
 					(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
 					
 					// ボタン表示変更
 					((Button)v).setText(getString(R.string.str_btn_updatestart));
 					
-
 					// Toast表示
 					Toast.makeText( RaceDetailActivity.this, "速報を停止しました！", Toast.LENGTH_SHORT ).show();
 					
@@ -153,6 +161,7 @@ public class RaceDetailActivity extends Activity {
 		// 大会情報取得
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+		RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId );
 		
 		// 自動更新、手動更新ボタンの表示状態設定
 		// 速報状態の大会情報を取得
@@ -166,20 +175,44 @@ public class RaceDetailActivity extends Activity {
         	updateButton.setText( getString( R.string.str_btn_updatestart ) );
         	updateButton.setEnabled( true );
         	manualButton.setEnabled( true );
+        	
+        	// 速報中テキスト非表示
+			(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
         }
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
 		{
-        	updateButton.setText( getString( R.string.str_btn_updatestop ) );
-        	updateButton.setEnabled( true );
-        	manualButton.setEnabled( false );
+			if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) ){
+				
+				updateButton.setText( getString( R.string.str_btn_updatestart ) );
+				
+				Logic.setUpdateOffRaceId(getContentResolver(), updateRaceInfo.getRaceId());
+				
+				raceInfo.setRaceUpdate( false );
+				
+				updateButton.setText( getString( R.string.str_btn_updatestop ) );
+				manualButton.setEnabled( true );
+				
+				// 速報中テキスト非表示
+	        	(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+			}else{
+				updateButton.setText( getString( R.string.str_btn_updatestop ) );
+				
+				manualButton.setEnabled( false );
+			}
+			updateButton.setEnabled( true );
         }
 		// 他の大会が速報中
 		else{
         	updateButton.setText( getString( R.string.str_btn_updatestart ) );
         	updateButton.setEnabled( false );
         	manualButton.setEnabled( false );
+        	
+        	// 速報中テキスト非表示
+        	(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
         }
+		
+        updateButton.setTag( raceInfo );
 	}
 
 	/**
@@ -328,4 +361,5 @@ public class RaceDetailActivity extends Activity {
 			}
 		}
 	}
+	
 }
