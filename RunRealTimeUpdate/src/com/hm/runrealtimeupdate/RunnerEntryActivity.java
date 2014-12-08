@@ -111,27 +111,27 @@ public class RunnerEntryActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-
-				String[] params = { null, null, null };
-				
-				params[0] = getString(R.string.str_txt_defaulturl);
 				
 				// 大会情報取得
 				RaceInfo raceInfo = (RaceInfo)v.getTag();
-				params[1] = raceInfo.getRaceId();
 				
 				// ゼッケンNo.取得
 				// URL入力エディットボックスから入力値取得
 				EditText noEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
-				params[2] = noEdit.getText().toString();
+				String number = noEdit.getText().toString();
 				
-				if( params[2] == null || params[2].equals("")){
+				if( number == null || number.equals("")){
 					Toast.makeText(RunnerEntryActivity.this, "ゼッケン番号を入力してください。", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				// 選手情報取得タスク起動
 				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
-				task.execute(params);
+				
+				RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
+				param.setUrl( getString( R.string.str_txt_defaulturl ) );
+				param.setRaceId( raceInfo.getRaceId() );
+				param.setNumber( number );
+				task.execute( param );
 			}
 		});
         
@@ -142,26 +142,24 @@ public class RunnerEntryActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-
-				String[] params = { null, null, null, null };
-				
-				params[0] = getString(R.string.str_txt_defaulturl);
 				
 				// 大会情報取得
 				RaceInfo raceInfo = (RaceInfo)v.getTag();
-				params[1] = raceInfo.getRaceId();
 				
 				// 姓取得
 				EditText seiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
-				params[2] = seiEdit.getText().toString();
 				
 				// 名取得
 				EditText meiEdit = (EditText)findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
-				params[3] = meiEdit.getText().toString();
 				
 				// 名前検索タスク起動
 				RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
-				task.execute(params);
+				RunnerInfoByNameLoaderTask.TaskParam param = task.new TaskParam();
+				param.setUrl( getString( R.string.str_txt_defaulturl ) );
+				param.setRaceId( raceInfo.getRaceId() );
+				param.setSei( seiEdit.getText().toString() );
+				param.setMei( meiEdit.getText().toString() );
+				task.execute( param );
 			}
 		});
         
@@ -175,20 +173,18 @@ public class RunnerEntryActivity extends Activity {
 				
 				// 選択した大会情報を取得する
 				ListView listView = (ListView)parent;
-				RunnerInfo runnerInfo = (RunnerInfo)listView.getItemAtPosition(position);
-				
-				String[] params = { null, null, null };
-				
-				params[0] = getString(R.string.str_txt_defaulturl);
-				
 				RaceInfo raceInfo = ( RaceInfo )listView.getTag();
-				params[1] = raceInfo.getRaceId();
 				
-				params[2] = runnerInfo.getNumber();
+				RunnerInfo runnerInfo = (RunnerInfo)listView.getItemAtPosition(position);
 				
 				// 選手情報取得タスク起動
 				RunnerInfoLoaderTask task = new RunnerInfoLoaderTask(raceInfo);
-				task.execute(params);
+				RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
+				
+				param.setUrl( getString( R.string.str_txt_defaulturl ) );
+				param.setRaceId( raceInfo.getRaceId() );
+				param.setNumber( runnerInfo.getNumber() );
+				task.execute( param );
 			}
         	
         });
@@ -222,14 +218,19 @@ public class RunnerEntryActivity extends Activity {
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class RunnerInfoLoaderTask extends AsyncTask<String, Void, RunnerInfo>{
+	class RunnerInfoLoaderTask extends AsyncTask<RunnerInfoLoaderTask.TaskParam, Void, RunnerInfo>{
 		
-		ProgressDialog m_ProgressDialog = null;
+		/**
+		 * 進捗ダイアログ
+		 */
+		private ProgressDialog m_ProgressDialog = null;
 		
+		/**
+		 * 大会情報
+		 */
 		private RaceInfo m_RaceInfo;
-		private boolean m_CancellFlg = false;
 		
-		public RunnerInfoLoaderTask(RaceInfo raceInfo){
+		public RunnerInfoLoaderTask( RaceInfo raceInfo ){
 			super();
 			m_RaceInfo = raceInfo;
 		}
@@ -247,8 +248,7 @@ public class RunnerEntryActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					onCancelled();
-					
+					cancel( true );
 				}
 				
 			});
@@ -257,17 +257,15 @@ public class RunnerEntryActivity extends Activity {
 		}
 		
 		@Override
-		/**
-		 * params[0]:アップデートサイトURL
-		 * params[1]:大会ID
-		 * params[2]:ゼッケン番号
-		 */
-		protected RunnerInfo doInBackground(String... params) {
+		protected RunnerInfo doInBackground(TaskParam... params) {
 			
 			RunnerInfo runnerInfo = null;
 			
 			try{
-				runnerInfo = Logic.getNetRunnerInfo( params[0], params[1], params[2] );
+				String url = params[0].getUrl();
+				String raceId = params[0].getRaceId();
+				String number = params[0].getNumber();
+				runnerInfo = Logic.getNetRunnerInfo( url, raceId, number );
 			}catch (LogicException e) {
 				e.printStackTrace();
 			}
@@ -280,10 +278,6 @@ public class RunnerEntryActivity extends Activity {
 			// ダイアログ削除
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
-			}
-			
-			if( m_CancellFlg ){
-				return;
 			}
 			
 			if(runnerInfo == null){
@@ -316,19 +310,50 @@ public class RunnerEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
-			
-			// キャンセルフラグ設定
-			m_CancellFlg = true;
 
 			Toast.makeText(RunnerEntryActivity.this, "選手情報取得をキャンセルしました。", Toast.LENGTH_SHORT).show();
-		}	
+		}
+		
+		public class TaskParam{
+			
+			private String url;
+			
+			private String raceId;
+			
+			private String number;
+
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+
+			public String getRaceId() {
+				return raceId;
+			}
+
+			public void setRaceId(String raceId) {
+				this.raceId = raceId;
+			}
+
+			public String getNumber() {
+				return number;
+			}
+
+			public void setNumber(String number) {
+				this.number = number;
+			}
+		}
 	}
 	
-	class RunnerInfoByNameLoaderTask extends AsyncTask<String, Void, List<RunnerInfo>>{
+	class RunnerInfoByNameLoaderTask extends AsyncTask<RunnerInfoByNameLoaderTask.TaskParam, Void, List<RunnerInfo>>{
 
+		/**
+		 * 進捗ダイアログ
+		 */
 		ProgressDialog m_ProgressDialog = null;
-		
-		private boolean m_CancellFlg = false;
 		
 		// 進捗ダイアログ作成
 		@Override
@@ -342,7 +367,7 @@ public class RunnerEntryActivity extends Activity {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					onCancelled();
+					cancel( true );
 				}
 				
 			});
@@ -351,18 +376,16 @@ public class RunnerEntryActivity extends Activity {
 		}
 		
 		@Override
-		/**
-		 * params[0]:アップデートサイトURL
-		 * params[1]:大会ID
-		 * params[2]:姓
-		 * params[3]:名
-		 */
-		protected List<RunnerInfo> doInBackground( String... params ) {
+		protected List<RunnerInfo> doInBackground( TaskParam... params ) {
 			
 			List<RunnerInfo> runnerInfoList = null;
 			
 			// 名前から選手情報を検索する
-			runnerInfoList = Logic.searchRunnerInfoByName( params[0], params[1], params[2], params[3] );
+			String url = params[0].getUrl();
+			String raceId = params[0].getRaceId();
+			String mei = params[0].getMei();
+			String sei = params[0].getSei();
+			runnerInfoList = Logic.searchRunnerInfoByName( url, raceId, sei, mei );
 			return runnerInfoList;
 		}
 		
@@ -372,10 +395,6 @@ public class RunnerEntryActivity extends Activity {
 			// ダイアログ削除
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
-			}
-			
-	        if( m_CancellFlg ){
-				return;
 			}
 	        
 			ListView runnerInfoListView = (ListView)findViewById(R.id.id_activity_runnerentry_body_contents_runnerlist_listview );
@@ -422,12 +441,52 @@ public class RunnerEntryActivity extends Activity {
 			if( m_ProgressDialog != null ){
 				m_ProgressDialog.dismiss();
 			}
-			
-			// キャンセルフラグ設定
-			m_CancellFlg = true;
 
 			Toast.makeText(RunnerEntryActivity.this, "名前検索をキャンセルしました。", Toast.LENGTH_SHORT).show();
-		}	
+		}
+		
+		private class TaskParam{
+			
+			private String url;
+			
+			private String raceId;
+			
+			private String sei;
+			
+			private String mei;
+
+			public String getUrl() {
+				return url;
+			}
+
+			public void setUrl(String url) {
+				this.url = url;
+			}
+
+			public String getRaceId() {
+				return raceId;
+			}
+
+			public void setRaceId(String raceId) {
+				this.raceId = raceId;
+			}
+
+			public String getSei() {
+				return sei;
+			}
+
+			public void setSei(String sei) {
+				this.sei = sei;
+			}
+
+			public String getMei() {
+				return mei;
+			}
+
+			public void setMei(String mei) {
+				this.mei = mei;
+			}
+		}
 	}
 	/**
 	 * ダイアログのメッセージ作成

@@ -7,11 +7,10 @@ import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,34 +32,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        // 大会情報
-        List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
-        
-        // 速報サービス停止状態ならば、データベースの速報状態を停止する
-        RaceInfo chkRaceInfo = null;
-        for( RaceInfo raceInfo : raceInfoList ){
-        	if( raceInfo.isRaceUpdate() ){
-        		chkRaceInfo = raceInfo;
-        		break;
-        	}
-        }
-        
-        if( chkRaceInfo != null ){
-        	
-        	if( !isRunServiceRunning() ){
-        		Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
-        		chkRaceInfo.setRaceUpdate( false );
-        	}
-        }
-       
-        
-        // 大会情報リスト設定
-        RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
         ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
-        raceInfoListView.setAdapter(adapter);
         
         // リストのアイテム短押し
-        // TODO:短押しのとき、灰色が2重に表示する。
         raceInfoListView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -114,11 +88,42 @@ public class MainActivity extends Activity {
 			}
 		});
         
-        // 表示状態設定
-        setViewBody( raceInfoListView.getCount() );
     }
     
-    /**
+    @Override
+	protected void onResume() {
+		super.onResume();
+		
+		 // 大会情報
+        List<RaceInfo> raceInfoList = Logic.getRaceInfoList(getContentResolver());
+        
+        // 速報サービス停止状態ならば、データベースの速報状態を停止する
+        RaceInfo chkRaceInfo = null;
+        for( RaceInfo raceInfo : raceInfoList ){
+        	if( raceInfo.isRaceUpdate() ){
+        		chkRaceInfo = raceInfo;
+        		break;
+        	}
+        }
+        
+        if( chkRaceInfo != null ){
+        	
+        	if( CommonLib.isSetUpdateAlarm( MainActivity.this ) ){
+        		Log.d("main", "Alarm Stop, database updateexe");
+        		Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
+        		chkRaceInfo.setRaceUpdate( false );
+        	}
+        }
+        // 大会情報リスト設定
+        RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
+        ListView raceInfoListView = (ListView)findViewById(R.id.id_activity_main_body_contents_racelist_listview);
+        raceInfoListView.setAdapter(adapter);
+        
+        // 表示状態設定
+        setViewBody( raceInfoListView.getCount() );
+	}
+
+	/**
      * ボディの表示設定
      */
     private void setViewBody( int raceInfoNum ){
@@ -232,29 +237,6 @@ public class MainActivity extends Activity {
 			
 		}
     	
-    }
-    
-    /**
-	 * 更新サービスが起動中か確認する
-	 * @return true:起動中/false:起動中でない
-	 */
-    private boolean isRunServiceRunning(){
-    	
-    	String name = UpdateService.class.getCanonicalName();
-    	
-    	ActivityManager manager = ( ActivityManager )getSystemService( ACTIVITY_SERVICE );
-    	List< RunningServiceInfo > serviceInfoList = manager.getRunningServices( Integer.MAX_VALUE );
-    	
-    	if( serviceInfoList != null ){
-    		
-    		for( RunningServiceInfo info : serviceInfoList ){
-    			
-    			if( name.equals( info.service.getClassName() ) ){
-					return true;
-				}
-    		}
-    	}
-    	return false;
     }
     
 }
