@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * 大会詳細画面のActivity
+ * @author Hayato Matsumuro
+ *
+ */
 public class RaceDetailActivity extends Activity
 {
 	/**
