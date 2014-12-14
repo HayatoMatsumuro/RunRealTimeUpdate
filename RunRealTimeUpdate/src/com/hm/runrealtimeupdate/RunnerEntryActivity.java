@@ -29,6 +29,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
+/**
+ * 選手登録画面のActivity
+ * @author Hayato Matsumuro
+ *
+ */
 public class RunnerEntryActivity extends Activity
 {
 	/**
