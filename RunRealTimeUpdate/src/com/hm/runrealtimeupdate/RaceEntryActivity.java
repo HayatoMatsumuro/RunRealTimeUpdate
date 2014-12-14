@@ -246,6 +246,8 @@ public class RaceEntryActivity extends Activity
 					getString( R.string.str_dialog_msg_NG )
 				);
 			}
+
+			return;
 		}
 
 		@Override
@@ -297,6 +299,8 @@ public class RaceEntryActivity extends Activity
 			public void setUrl( String url )
 			{
 				this.url = url;
+
+				return;
 			}
 
 			/**
@@ -315,6 +319,8 @@ public class RaceEntryActivity extends Activity
 			public void setRaceId( String raceId )
 			{
 				this.raceId = raceId;
+
+				return;
 			}
 		}
 	}
