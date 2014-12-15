@@ -73,7 +73,8 @@ public class MainActivity extends Activity
 
 					// 削除ダイアログ表示
 					InfoDialog<RaceInfo> raceDeleteInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceDeleteButtonCallbackImpl() );
-					raceDeleteInfoDialog.onDialog(
+					raceDeleteInfoDialog.onDialog
+					(
 						MainActivity.this,
 						getString( R.string.str_dialog_title_deleterace ),
 						createDialogMessage( raceInfo ),

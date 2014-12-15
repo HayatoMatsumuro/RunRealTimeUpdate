@@ -46,7 +46,8 @@ public class RaceEntryActivity extends Activity
 
 		// 戻るボタン
 		Button backBtn = ( Button )findViewById( R.id.id_activity_raceentry_header_back_button );
-		backBtn.setOnClickListener(
+		backBtn.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
@@ -84,7 +85,8 @@ public class RaceEntryActivity extends Activity
 
 		// 決定ボタン
 		Button decideBtn = ( Button )findViewById( R.id.id_activity_raceentry_body_contenturl_inputform_decide_button );
-		decideBtn.setOnClickListener(
+		decideBtn.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
@@ -119,7 +121,8 @@ public class RaceEntryActivity extends Activity
 
 		// QRコードボタン
 		Button qrBtn = ( Button )findViewById( R.id.id_activity_raceentry_body_contents_qr_button );
-		qrBtn.setOnClickListener(
+		qrBtn.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
@@ -179,13 +182,14 @@ public class RaceEntryActivity extends Activity
 			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_raceinfo ) );
 			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
 			m_ProgressDialog.setCancelable( true );
-			m_ProgressDialog.setButton(
+			m_ProgressDialog.setButton
+			(
 				DialogInterface.BUTTON_NEGATIVE,
 				getResources().getString( R.string.str_dialog_msg_cancel ),
 				new DialogInterface.OnClickListener()
 				{
 					@Override
-					public void onClick(DialogInterface dialog, int which)
+					public void onClick( DialogInterface dialog, int which )
 					{
 						cancel( true );
 
@@ -212,7 +216,7 @@ public class RaceEntryActivity extends Activity
 				raceInfo = Logic.getNetRaceInfo( url, raceId );
 
 			}
-			catch (LogicException e)
+			catch ( LogicException e )
 			{
 				e.printStackTrace();
 			}

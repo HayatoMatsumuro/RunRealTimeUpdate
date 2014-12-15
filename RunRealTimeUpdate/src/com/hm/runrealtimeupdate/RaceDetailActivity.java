@@ -75,7 +75,8 @@ public class RaceDetailActivity extends Activity
 
 		// 速報ボタンの処理設定
 		Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
-		updateButton.setOnClickListener(
+		updateButton.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
@@ -147,7 +148,8 @@ public class RaceDetailActivity extends Activity
 		// 手動更新ボタンの設定
 		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 		manualButton.setTag( raceInfo );
-		manualButton.setOnClickListener(
+		manualButton.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
@@ -208,7 +210,7 @@ public class RaceDetailActivity extends Activity
 			{
 				updateButton.setText( getString( R.string.str_btn_updatestart ) );
 
-				Logic.setUpdateOffRaceId(getContentResolver(), updateRaceInfo.getRaceId());
+				Logic.setUpdateOffRaceId( getContentResolver(), updateRaceInfo.getRaceId() );
 
 				raceInfo.setRaceUpdate( false );
 
@@ -216,7 +218,7 @@ public class RaceDetailActivity extends Activity
 				manualButton.setEnabled( true );
 
 				// 速報中テキスト非表示
-				(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+				( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
 			}
 			else
 			{
@@ -234,7 +236,7 @@ public class RaceDetailActivity extends Activity
 			manualButton.setEnabled( false );
 
 			// 速報中テキスト非表示
-			(( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+			( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
 		}
 
 		updateButton.setTag( raceInfo );
@@ -288,7 +290,8 @@ public class RaceDetailActivity extends Activity
 			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_manual ) );
 			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
 			m_ProgressDialog.setCancelable( true );
-			m_ProgressDialog.setButton(
+			m_ProgressDialog.setButton
+			(
 				DialogInterface.BUTTON_NEGATIVE,
 				getResources().getString( R.string.str_dialog_msg_cancel ),
 				new DialogInterface.OnClickListener()

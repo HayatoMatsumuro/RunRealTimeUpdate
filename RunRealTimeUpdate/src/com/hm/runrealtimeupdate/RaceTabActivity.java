@@ -101,7 +101,8 @@ public class RaceTabActivity extends TabActivity
 		// 選手登録ボタン
 		Button runnerEntryButton = ( Button )findViewById( R.id.id_tabactivity_race_header_runnerentry_button );
 		runnerEntryButton.setTag( raceId );
-		runnerEntryButton.setOnClickListener(
+		runnerEntryButton.setOnClickListener
+		(
 			new OnClickListener()
 			{
 				@Override
