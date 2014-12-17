@@ -754,8 +754,8 @@ public class Logic {
 	 */
 	public static void setRegularStopCount( Context context, int regularStopCount )
 	{
-		PreferenceStopCount.deleteStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT );
-		PreferenceStopCount.saveStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT, regularStopCount );
+		PreferenceStopCount.deleteStopCount( context, PreferenceStopCount.KEY_REGULARSTOPCOUNT );
+		PreferenceStopCount.saveStopCount( context, PreferenceStopCount.KEY_REGULARSTOPCOUNT, regularStopCount );
 		return;
 	}
 
