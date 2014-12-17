@@ -180,12 +180,26 @@ public class UpdateService extends Service
 
 				NotificationManager manager = ( NotificationManager )getSystemService( NOTIFICATION_SERVICE );
 				manager.notify( R.string.app_name, notification );
-			}
 
-			// 更新の停止処理
-			try
+				// カウントを再設定する
+				Logic.setAutoStopCount( UpdateService.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+			}
+			// 更新なし
+			else
 			{
-				boolean stopflg = Logic.updateUpdateCount( UpdateService.this );
+				boolean stopflg = false;
+
+				// 更新の停止処理
+				try
+				{
+					stopflg = Logic.updateAutoStopCount( UpdateService.this );
+				}
+				catch( LogicException e )
+				{
+					// 更新を停止する
+					stopflg = true;
+					e.printStackTrace();
+				}
 
 				// 更新を停止する
 				if( stopflg )
@@ -197,11 +211,6 @@ public class UpdateService extends Service
 
 					return;
 				}
-			}
-			catch( LogicException e )
-			{
-				// 特に何も処理しない( ありえないので )
-				e.printStackTrace();
 			}
 
 			stopSelf();

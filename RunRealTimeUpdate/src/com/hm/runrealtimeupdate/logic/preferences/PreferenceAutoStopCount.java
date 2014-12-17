@@ -38,7 +38,7 @@ public class PreferenceAutoStopCount
 	 * @param context コンテキスト
 	 * @return 自動停止カウント
 	 */
-	public static int loadUAutoStopCount( Context context )
+	public static int loadAutoStopCount( Context context )
 	{
 		return PreferenceAccess.loadIntData( context, KEY_AUTOSTOPCOUNT );
 	}

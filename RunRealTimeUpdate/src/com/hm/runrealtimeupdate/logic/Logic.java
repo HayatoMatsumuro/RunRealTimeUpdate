@@ -23,7 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
-import com.hm.runrealtimeupdate.logic.preferences.PreferenceUpdateCount;
+import com.hm.runrealtimeupdate.logic.preferences.PreferenceAutoStopCount;
 
 public class Logic {
 	
@@ -736,24 +736,25 @@ public class Logic {
 	}
     
 	/**
-	 * 更新カウントの最大値を設定する
-	 * @param context
-	 * @param updateCount
+	 * 自動停止カウントの設定をする
+	 * @param context コンテキスト
+	 * @param updateCount 自動停止カウント値
 	 */
-	public static void setUpdateCountMax( Context context, int updateCountMax ){
-		PreferenceUpdateCount.deleteUpdateCount( context );
-		PreferenceUpdateCount.saveUpdateCount(context, updateCountMax );
+	public static void setAutoStopCount( Context context, int autoStopCount ){
+		PreferenceAutoStopCount.deleteAutoStopCount( context );
+		PreferenceAutoStopCount.saveAutoStopCount(context, autoStopCount );
 	}
 	
 	/**
-	 * 更新カウントを更新する
-	 * @param context
-	 * @return　true:更新カウントが0未満 / false:更新カウントが0以上
+	 * 自動停止カウントを更新する
+	 *  自動停止カウントをデクリメントする。
+	 * @param context　コンテキスト
+	 * @return　true:自動停止カウントが0未満 / false:自動停止カウントが0以上
 	 * @throws LogicException アップデートカウントが存在しない
 	 */
-	public static boolean updateUpdateCount( Context context ) throws LogicException{
-		
-		int updateCount = PreferenceUpdateCount.loadUpdateCount( context );
+	public static boolean updateAutoStopCount( Context context ) throws LogicException
+	{	
+		int updateCount = PreferenceAutoStopCount.loadAutoStopCount( context );
 		
 		if( updateCount == Integer.MAX_VALUE ){
 			throw new LogicException( "no UpdateCount" );
@@ -761,7 +762,7 @@ public class Logic {
 		updateCount--;
 		
 		if( updateCount >= 0 ){
-			PreferenceUpdateCount.saveUpdateCount( context, updateCount );
+			PreferenceAutoStopCount.saveAutoStopCount( context, updateCount );
 			return false;
 		}else{
 			return true;
