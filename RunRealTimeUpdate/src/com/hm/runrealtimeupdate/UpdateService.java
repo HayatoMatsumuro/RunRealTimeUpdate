@@ -127,7 +127,6 @@ public class UpdateService extends Service
 		{
 			m_RaceInfo = raceInfo;
 			m_ContentResolver = contentResolver;
-
 			return;
 		}
 
@@ -155,6 +154,9 @@ public class UpdateService extends Service
 			// データアップデート
 			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
 
+			// 停止フラグ
+			boolean stopFlg = false;
+
 			// 更新がある場合は通知
 			if( updateFlg )
 			{
@@ -180,30 +182,52 @@ public class UpdateService extends Service
 
 				NotificationManager manager = ( NotificationManager )getSystemService( NOTIFICATION_SERVICE );
 				manager.notify( R.string.app_name, notification );
+
+				// カウントを再設定する
+				Logic.setAutoStopCount( UpdateService.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
 			}
-
-			// 更新の停止処理
-			try
+			// 更新なし
+			else
 			{
-				boolean stopflg = Logic.updateUpdateCount( UpdateService.this );
-
-				// 更新を停止する
-				if( stopflg )
+				// 更新の停止処理
+				try
 				{
-					CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.getRaceId() );
-
-					// データベース変更
-					Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.getRaceId() );
-
-					return;
+					stopFlg = Logic.updateAutoStopCount( UpdateService.this );
+				}
+				catch( LogicException e )
+				{
+					// 更新を停止する
+					stopFlg = true;
+					e.printStackTrace();
 				}
 			}
-			catch( LogicException e )
+
+			// 自動停止がOFFならば、定期更新
+			if( !stopFlg )
 			{
-				// 特に何も処理しない( ありえないので )
-				e.printStackTrace();
+				// 更新の停止処理
+				try
+				{
+					stopFlg = Logic.updateRegularStopCount( UpdateService.this );
+				}
+				catch( LogicException e )
+				{
+					// 更新を停止する
+					stopFlg = true;
+					e.printStackTrace();
+				}
 			}
 
+			// 更新を停止する
+			if( stopFlg )
+			{
+				CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.getRaceId() );
+
+				// データベース変更
+				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.getRaceId() );
+
+				return;
+			}
 			stopSelf();
 
 			return;

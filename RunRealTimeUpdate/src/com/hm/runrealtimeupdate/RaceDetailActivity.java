@@ -31,17 +31,6 @@ public class RaceDetailActivity extends Activity
 	 */
 	public static final String STR_INTENT_RACEID = "raceid";
 
-	/**
-	 * タイマー間隔
-	 */
-	private static int INT_TIMER_INTERVAL = 120000;
-
-	/**
-	 * 速報を行う回数
-	 * 1日で自動的に速報が停止する
-	 */
-	private static int INT_TIMER_INTERAVAL_CNT_MAX = 86400000 / INT_TIMER_INTERVAL;
-
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
 	{
@@ -96,10 +85,11 @@ public class RaceDetailActivity extends Activity
 						raceInfo.setRaceUpdate( true );
 
 						// 速報開始
-						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), INT_TIMER_INTERVAL );
+						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), Common.INT_SERVICE_INTERVAL );
 
-						// 更新カウントを設定
-						Logic.setUpdateCountMax( RaceDetailActivity.this, INT_TIMER_INTERAVAL_CNT_MAX );
+						// 停止カウントを設定
+						Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
 						// 速報中テキスト表示
 						( ( RaceTabActivity )getParent() ).setVisibilityUpdateExe( View.VISIBLE );
