@@ -23,7 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
-import com.hm.runrealtimeupdate.logic.preferences.PreferenceAutoStopCount;
+import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
 public class Logic {
 	
@@ -738,37 +738,81 @@ public class Logic {
 	/**
 	 * 自動停止カウントの設定をする
 	 * @param context コンテキスト
-	 * @param updateCount 自動停止カウント値
+	 * @param autoStopCount 自動停止カウント値
 	 */
-	public static void setAutoStopCount( Context context, int autoStopCount ){
-		PreferenceAutoStopCount.deleteAutoStopCount( context );
-		PreferenceAutoStopCount.saveAutoStopCount(context, autoStopCount );
+	public static void setAutoStopCount( Context context, int autoStopCount )
+	{
+		PreferenceStopCount.deleteStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT );
+		PreferenceStopCount.saveStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT, autoStopCount );
+		return;
 	}
-	
+
 	/**
-	 * 自動停止カウントを更新する
-	 *  自動停止カウントをデクリメントする。
-	 * @param context　コンテキスト
-	 * @return　true:自動停止カウントが0未満 / false:自動停止カウントが0以上
-	 * @throws LogicException アップデートカウントが存在しない
+	 * 定期停止カウントの設定をする
+	 * @param context コンテキスト
+	 * @param regularStopCount 定期停止カウント値
+	 */
+	public static void setRegularStopCount( Context context, int regularStopCount )
+	{
+		PreferenceStopCount.deleteStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT );
+		PreferenceStopCount.saveStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT, regularStopCount );
+		return;
+	}
+
+	/**
+	 * 自動停止カウントの更新
+	 * @param context コンテキスト
+	 * @return true:自動停止カウントが0以下/ false:自動停止カウントが0より大きい
+	 * @throws LogicException
 	 */
 	public static boolean updateAutoStopCount( Context context ) throws LogicException
-	{	
-		int updateCount = PreferenceAutoStopCount.loadAutoStopCount( context );
-		
-		if( updateCount == Integer.MAX_VALUE ){
-			throw new LogicException( "no UpdateCount" );
+	{
+		return updateStopCount( context, PreferenceStopCount.KEY_AUTOSTOPCOUNT );
+	}
+
+	/**
+	 * 定期停止カウントの更新
+	 * @param context コンテキスト
+	 * @return true:定期停止カウントが0以下/ false:定期停止カウントが0より大きい
+	 * @throws LogicException
+	 */
+	public static boolean updateRegularStopCount( Context context ) throws LogicException
+	{
+		return updateStopCount( context, PreferenceStopCount.KEY_REGULARSTOPCOUNT );
+	}
+
+	/**
+	 * 停止カウントを更新する
+	 *  停止カウントをデクリメントする。
+	 * @param context　コンテキスト
+	 * @param key キー
+	 * @return　true:停止カウントが0以下/ false:自動停止カウントが0以上
+	 * @throws LogicException 停止カウントが存在しないものがある
+	 */
+	private static boolean updateStopCount( Context context, String key ) throws LogicException
+	{
+		// 停止カウント
+		int stopCount = PreferenceStopCount.loadAutoStopCount( context, key );
+
+		if( stopCount == Integer.MAX_VALUE )
+		{
+			throw new LogicException( "no RegularStopCount" );
 		}
-		updateCount--;
-		
-		if( updateCount >= 0 ){
-			PreferenceAutoStopCount.saveAutoStopCount( context, updateCount );
-			return false;
-		}else{
+
+		// 停止カウントデクリメント
+		stopCount--;
+
+		// 停止カウント保存
+		PreferenceStopCount.saveStopCount( context, key, stopCount );
+
+		if( stopCount <= 0 )
+		{
 			return true;
 		}
+
+		return false;
 	}
-	
+
 	private static class PassPointInfoComparator implements Comparator<PassRunnerInfo.PassPointInfo>{
 
 		@Override

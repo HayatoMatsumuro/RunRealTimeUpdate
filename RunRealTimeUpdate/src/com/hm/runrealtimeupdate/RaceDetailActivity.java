@@ -87,8 +87,9 @@ public class RaceDetailActivity extends Activity
 						// 速報開始
 						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), Common.INT_SERVICE_INTERVAL );
 
-						// 自動停止カウントを設定
-						Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_SERVICE_INTERVAL );
+						// 停止カウントを設定
+						Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
 						// 速報中テキスト表示
 						( ( RaceTabActivity )getParent() ).setVisibilityUpdateExe( View.VISIBLE );

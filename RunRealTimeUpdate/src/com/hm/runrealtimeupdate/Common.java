@@ -13,7 +13,12 @@ public class Common
 	public static final int INT_SERVICE_INTERVAL = 120000;
 
 	/**
-	 * 最後の更新から自動停止までの更新確認回数
+	 * 最後の更新から自動停止までの更新確認回数( 7時間 )
 	 */
 	public static final int INT_COUNT_AUTOSTOP_LASTUPDATE = 25200000 / INT_SERVICE_INTERVAL;
+
+	/**
+	 * 自動開始から停止までの更新確認回数( 24時間 )
+	 */
+	public static final int INT_COUNT_REGULARSTOP = 86400000 / INT_SERVICE_INTERVAL;
 }
