@@ -25,6 +25,11 @@ public class DataBaseAccess {
 	public static final String STR_DBA_RACE_UPDATEFLG_OFF = RaceProvider.STR_UPDATEFLG_OFF;
 	
 	/**
+	 * 大会速報予約中
+	 */
+	public static final String STR_DBA_RACE_UPDATEFLG_RESERVE = RaceProvider.STR_UPDATEFLG_RESERVE;
+	
+	/**
 	 * 大会情報をデータベースに登録
 	 * @param contentResolver
 	 * @param deRaceInfo 大会情報
@@ -51,6 +56,7 @@ public class DataBaseAccess {
 	 * 指定の大会の速報状態設定
 	 * @param contentResolver
 	 * @param raceId 大会ID
+	 * @param update 速報状態
 	 */
 	public static void setRaceUpdate( ContentResolver contentResolver, String raceId, String update ){
 		

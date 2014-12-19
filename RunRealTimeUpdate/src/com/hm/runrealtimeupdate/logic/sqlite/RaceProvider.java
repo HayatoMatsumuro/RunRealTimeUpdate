@@ -30,6 +30,7 @@ public class RaceProvider extends ContentProvider {
 	
 	public static final String STR_UPDATEFLG_OFF = "0";
 	public static final String STR_UPDATEFLG_ON = "1";
+	public static final String STR_UPDATEFLG_RESERVE = "2";
 	
 	private static final int VERSION = 2;
 	
