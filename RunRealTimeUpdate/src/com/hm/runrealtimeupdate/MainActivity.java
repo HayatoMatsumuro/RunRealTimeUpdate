@@ -114,28 +114,38 @@ public class MainActivity extends Activity
 		List<RaceInfo> raceInfoList = Logic.getRaceInfoList( getContentResolver() );
 
 		// 速報サービス停止状態ならば、データベースの速報状態を停止する
-		// TODO:この処理をLogic で行う
 		RaceInfo chkRaceInfo = null;
 		for( RaceInfo raceInfo : raceInfoList )
 		{
-			if( raceInfo.isRaceUpdate() )
+			if( raceInfo.getRaceUpdate() != RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				chkRaceInfo = raceInfo;
 				break;
 			}
 		}
 
+		// 予約中または速報中の大会あり
 		if( chkRaceInfo != null )
 		{
-			// アラーム停止中
-			if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) )
+			// 速報中
+			if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
 			{
-				// 速報状態停止
-				Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
-				chkRaceInfo.setRaceUpdate( false );
+				// アラーム停止中
+				if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) )
+				{
+					// 速報状態停止
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
+					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+				}
+			}
+			// 予約中
+			else if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE )
+			{
+				// TODO:処理を記載する
 			}
 		}
 
+		// TODO:予約中の場合は何もしない
 		// 大会情報リスト設定
 		RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
 		ListView raceInfoListView = ( ListView )findViewById( R.id.id_activity_main_body_contents_racelist_listview );
@@ -198,7 +208,7 @@ public class MainActivity extends Activity
 		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
 		{
 			// 速報中でない
-			if( !info.isRaceUpdate() )
+			if( info.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				// 大会削除
 				Logic.deleteRaceInfo( getContentResolver(), info.getRaceId() );
@@ -216,7 +226,7 @@ public class MainActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText( MainActivity.this, "速報中のため、削除できません。", Toast.LENGTH_SHORT ).show();
+				Toast.makeText( MainActivity.this, "速報中または予約中のため、削除できません。", Toast.LENGTH_SHORT ).show();
 			}
 
 			return;
@@ -273,12 +283,13 @@ public class MainActivity extends Activity
 			// 速報中の表示
 			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
 
-			if(raceInfo.isRaceUpdate())
+			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				raceUpdateLayout.setVisibility( View.VISIBLE );
 			}
 			else
 			{
+				// TODO:予約中の場合は表示を変更する
 				raceUpdateLayout.setVisibility( View.GONE );
 			}
 

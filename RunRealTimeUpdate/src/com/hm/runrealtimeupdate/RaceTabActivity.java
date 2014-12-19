@@ -73,12 +73,13 @@ public class RaceTabActivity extends TabActivity
 
 		// 速報中テキスト
 		int visibility = View.INVISIBLE;
-		if( raceInfo.isRaceUpdate() )
+		if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 		{
 			visibility = View.VISIBLE;
 		}
 		else
 		{
+			// TODO:予約中のときの表示
 			visibility = View.GONE;
 		}
 		setVisibilityUpdateExe( visibility );

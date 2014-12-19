@@ -88,8 +88,9 @@ public class RunnerEntryActivity extends Activity
 		}
 
 		// 速報中なら、メッセージを表示する
-		if( raceInfo.isRaceUpdate() )
+		if( raceInfo.getRaceUpdate() != RaceInfo.INT_RACEUPDATE_OFF )
 		{
+			// TODO:予約中のメッセージを考慮
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
 			messageTextView.setText( getString( R.string.str_msg_runnerupdateexe ) );

@@ -75,14 +75,13 @@ public class RaceDetailActivity extends Activity
 					// 動作的に問題ないため、そのままとする
 					RaceInfo raceInfo = ( RaceInfo )v.getTag();
 
-					if( !raceInfo.isRaceUpdate() )
+					// 速報停止中
+					if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 					{
-						// 速報を開始する
-
 						// 大会を速報状態にする
 						Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.getRaceId() );
 
-						raceInfo.setRaceUpdate( true );
+						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_ON );
 
 						// 速報開始
 						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId(), Common.INT_SERVICE_INTERVAL );
@@ -104,14 +103,13 @@ public class RaceDetailActivity extends Activity
 						// Toast表示
 						Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
 					}
+					// 速報中( 予約中の場合は、ボタンは無効になる )
 					else
 					{
-						// 速報停止ボタン押し
-
 						// データベース変更
 						Logic.setUpdateOffRaceId( getContentResolver(), raceInfo.getRaceId() );
 
-						raceInfo.setRaceUpdate( false );
+						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
 						// 速報停止
 						CommonLib.cancelUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
@@ -195,28 +193,37 @@ public class RaceDetailActivity extends Activity
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
 		{
-			// アラーム停止中
-			if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
+			// 速報中
+			if( updateRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
 			{
-				updateButton.setText( getString( R.string.str_btn_updatestart ) );
+				// アラーム停止中
+				if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
+				{
+					updateButton.setText( getString( R.string.str_btn_updatestart ) );
 
-				Logic.setUpdateOffRaceId( getContentResolver(), updateRaceInfo.getRaceId() );
+					Logic.setUpdateOffRaceId( getContentResolver(), updateRaceInfo.getRaceId() );
 
-				raceInfo.setRaceUpdate( false );
+					raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
-				updateButton.setText( getString( R.string.str_btn_updatestop ) );
-				manualButton.setEnabled( true );
+					updateButton.setText( getString( R.string.str_btn_updatestop ) );
+					manualButton.setEnabled( true );
 
-				// 速報中テキスト非表示
-				( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+					// 速報中テキスト非表示
+					( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+				}
+				else
+				{
+					updateButton.setText( getString( R.string.str_btn_updatestop ) );
+					
+					manualButton.setEnabled( false );
+				}
+				updateButton.setEnabled( true );
 			}
-			else
-			{
-				updateButton.setText( getString( R.string.str_btn_updatestop ) );
-				
-				manualButton.setEnabled( false );
+			// 予約中
+			else if( updateRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE ){
+				// TODO:処理を記載する
 			}
-			updateButton.setEnabled( true );
+			
 		}
 		// 他の大会が速報中
 		else

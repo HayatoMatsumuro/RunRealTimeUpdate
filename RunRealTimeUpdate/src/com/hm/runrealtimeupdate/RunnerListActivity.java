@@ -304,7 +304,7 @@ public class RunnerListActivity extends Activity
 			// 速報中でないなら削除
 			RaceInfo raceInfo = info.getRaceInfo();
 			SectionRunnerElement element = info.getSectionRunnerElement();
-			if( !raceInfo.isRaceUpdate() )
+			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				// 選手削除
 				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
@@ -315,6 +315,7 @@ public class RunnerListActivity extends Activity
 			}
 			else
 			{
+				// TODO:予約中
 				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
 			}
 

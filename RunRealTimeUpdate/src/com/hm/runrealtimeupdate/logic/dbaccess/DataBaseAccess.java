@@ -71,7 +71,7 @@ public class DataBaseAccess {
 	}
 	
 	/**
-	 * 速報中の大会をすべて取得する。
+	 * 速報中( または予約中 ) の大会をすべて取得する。
 	 * 速報中の大会がないならば、空リストを取得する
 	 * @param contentResolver
 	 * @return　速報中の大会。ない場合は空リスト。
@@ -89,7 +89,7 @@ public class DataBaseAccess {
 				RaceProvider.STR_DB_COLUMN_DATE
 		};
 		
-		String selection = RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_ON +"'";
+		String selection = RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_ON +"'" + " OR " + RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_RESERVE +"'";
 		
 		Cursor c = contentResolver.query(RaceProvider.URI_DB, projection, selection, null, null);
 		

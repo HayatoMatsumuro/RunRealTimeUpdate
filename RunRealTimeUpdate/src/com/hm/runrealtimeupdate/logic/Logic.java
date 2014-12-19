@@ -115,15 +115,9 @@ public class Logic
 		raceInfo.setRaceName( dbRaceInfo.getRaceName() );
 		raceInfo.setRaceDate( dbRaceInfo.getRaceDate() );
 		raceInfo.setRaceLocation( dbRaceInfo.getRaceLocation() );
-		
-		if( dbRaceInfo.getUpdateFlg().equals( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON ) )
-		{
-			raceInfo.setRaceUpdate( true );
-		}
-		else
-		{
-			raceInfo.setRaceUpdate( false );
-		}
+
+		int raceUpdate = Integer.parseInt( dbRaceInfo.getUpdateFlg() );
+		raceInfo.setRaceUpdate( raceUpdate );
 
 		return raceInfo;
 	}
@@ -232,7 +226,7 @@ public class Logic
 			raceInfo.setRaceName( parserRaceInfo.getName() );
 			raceInfo.setRaceDate( parserRaceInfo.getDate() );
 			raceInfo.setRaceLocation( parserRaceInfo.getLocation() );
-			raceInfo.setRaceUpdate( false );
+			raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
 			return raceInfo;
 		}
