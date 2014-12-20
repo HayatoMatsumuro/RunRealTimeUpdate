@@ -133,6 +133,44 @@ public class RaceDetailActivity extends Activity
 			}
 		);
 
+		// 自動更新予約ボタンの設定
+		Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
+		reserveButton.setTag( raceInfo );
+		reserveButton.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				@Override
+				public void onClick( View v )
+				{
+					RaceInfo raceInfo = ( RaceInfo )v.getTag();
+
+					// 停止中
+					if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
+					{
+						// 大会を速報予約状態にする
+						Logic.setUpdateReserveRaceId( getContentResolver(), raceInfo.getRaceId() );
+						
+						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
+
+						// ボタン表示変更
+						( ( Button )v ).setText( getString( R.string.str_btn_reservecancel ) );
+					}
+					else
+					{
+						// 大会を速報停止状態にする
+						Logic.setUpdateOffRaceId( getContentResolver(), raceInfo.getRaceId() );
+
+						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+
+						// ボタン表示変更
+						( ( Button )v ).setText( getString( R.string.str_btn_reservestart ) );
+					}
+					return;
+				}
+			}
+		);
+
 		// 手動更新ボタンの設定
 		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 		manualButton.setTag( raceInfo );

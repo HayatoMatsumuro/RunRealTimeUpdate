@@ -59,10 +59,10 @@
     <dimen name="dim_activity_racedetail_body_contents_update_button_margintop">30dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_update_button_height">40dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_update_button_width">150dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_reserve_button_margintop">40dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_reserve_button_margintop">20dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_reserve_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_reserve_button_width">100dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">40dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_reserve_button_width">170dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">20dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_manual_button_height">40dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_manual_button_width">100dp</dimen>
     

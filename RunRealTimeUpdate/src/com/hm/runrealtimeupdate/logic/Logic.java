@@ -189,6 +189,18 @@ public class Logic
 	}
 
 	/**
+	 * 師弟の大会の速報状態を予約にする
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 */
+	public static void setUpdateReserveRaceId( ContentResolver contentResolver, String raceId )
+	{
+		// 指定の大会を予約状態にする
+		DataBaseAccess.setRaceUpdate( contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_RESERVE );
+		return;
+	}
+
+	/**
 	 * 指定の大会IDが登録済みかどうかを検索する
 	 * @param raceId 大会ID
 	 * @return false:未登録/true:登録済み
