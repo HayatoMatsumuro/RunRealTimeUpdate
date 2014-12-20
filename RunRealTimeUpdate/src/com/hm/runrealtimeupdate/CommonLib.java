@@ -27,7 +27,7 @@ public class CommonLib
 
 		long time = System.currentTimeMillis();
 
-		PendingIntent pendingIntent = PendingIntent.getService( context, UpdateService.INT_REQUESTCODE_START, intent, PendingIntent.FLAG_UPDATE_CURRENT );
+		PendingIntent pendingIntent = PendingIntent.getService( context, Common.INT_REQUESTCODE_UPDATEPERIODIC, intent, PendingIntent.FLAG_UPDATE_CURRENT );
 
 		alarmManager.setRepeating( AlarmManager.RTC, time, interval, pendingIntent );
 
@@ -46,7 +46,7 @@ public class CommonLib
 		Intent intent = new Intent( context, UpdateService.class );
 		intent.putExtra( UpdateService.STR_INTENT_RACEID, raceId );
 
-		PendingIntent pendingIntent = PendingIntent.getService( context, UpdateService.INT_REQUESTCODE_START, intent, PendingIntent.FLAG_CANCEL_CURRENT );
+		PendingIntent pendingIntent = PendingIntent.getService( context, Common.INT_REQUESTCODE_UPDATEPERIODIC, intent, PendingIntent.FLAG_CANCEL_CURRENT );
 
 		alarmManager.cancel( pendingIntent );
 	    pendingIntent.cancel();
@@ -67,7 +67,7 @@ public class CommonLib
 		PendingIntent pendingIntent = PendingIntent.getService
 		(
 			context,
-			UpdateService.INT_REQUESTCODE_START,
+			Common.INT_REQUESTCODE_UPDATEPERIODIC,
 			intent,
 			PendingIntent.FLAG_NO_CREATE
 		);
@@ -80,5 +80,32 @@ public class CommonLib
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * 更新予約アラームを設定する
+	 * @param context コンテキスト
+	 * @param raceId 大会ID
+	 * @param time　時間
+	 */
+	public static void setUpdateReserveAlarm( Context context, String raceId, long time )
+	{
+		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
+
+		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
+		intent.putExtra( UpdateBroadcastReceiver.STR_INTENT_RACEID, raceId ); 
+		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast
+				(
+					context,
+					Common.INT_REQUESTCODE_UPDATERESERVE,
+					intent,
+					PendingIntent.FLAG_UPDATE_CURRENT
+				);
+
+		alarmManager.set( AlarmManager.RTC, time, pendingIntent );
+
+		return;
 	}
 }
