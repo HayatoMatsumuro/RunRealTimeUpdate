@@ -1,5 +1,8 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -85,15 +88,13 @@ public class CommonLib
 	/**
 	 * 更新予約アラームを設定する
 	 * @param context コンテキスト
-	 * @param raceId 大会ID
 	 * @param time　時間
 	 */
-	public static void setUpdateReserveAlarm( Context context, String raceId, long time )
+	public static void setUpdateReserveAlarm( Context context, long time )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
 		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
-		intent.putExtra( UpdateBroadcastReceiver.STR_INTENT_RACEID, raceId ); 
 		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
 
 		PendingIntent pendingIntent = PendingIntent.getBroadcast
@@ -107,5 +108,56 @@ public class CommonLib
 		alarmManager.set( AlarmManager.RTC, time, pendingIntent );
 
 		return;
+	}
+
+	/**
+	 * 現在の時を取得する
+	 * @return 現在の時( 0 ～ 23 )
+	 */
+	public static int getHourOfDay()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		return date.getHours();
+	}
+
+	/**
+	 * 現在の分を取得する
+	 * @return 現在の分( 0～59 )
+	 */
+	public static int getMinute()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		return date.getMinutes();
+	}
+
+	/**
+	 * アラームの設定時間を取得する
+	 *  引数設定の次の時分で設定する
+	 * @param hourofday 時
+	 * @param minute 分
+	 * @return アラーム設定時間
+	 */
+	public static long getAlarmTime( int hourOfDay, int minute )
+	{
+		Calendar cal = Calendar.getInstance();
+		Date nowDate = cal.getTime();
+		
+		Date alarmDate = cal.getTime();
+		alarmDate.setHours( hourOfDay );
+		alarmDate.setMinutes( minute );
+		alarmDate.setSeconds( 0 );
+
+		long msec = alarmDate.getTime();
+
+		// アラーム時間が現在よりも前だったら補正する
+		if( alarmDate.before( nowDate ) )
+		{
+			// 1日加算
+			msec = msec + 86400000;
+		}
+
+		return msec;
 	}
 }

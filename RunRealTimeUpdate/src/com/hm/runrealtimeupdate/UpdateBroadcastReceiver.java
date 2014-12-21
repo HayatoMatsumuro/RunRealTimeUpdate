@@ -12,11 +12,6 @@ import android.content.Intent;
 public class UpdateBroadcastReceiver extends BroadcastReceiver
 {
 	/**
-	 * インテント 大会ID
-	 */
-	public static final String STR_INTENT_RACEID = "raceid";
-
-	/**
 	 * インテント アクション 更新開始
 	 */
 	public static final String STR_INTENT_ACTION_UPDATESTART = "updatestart";

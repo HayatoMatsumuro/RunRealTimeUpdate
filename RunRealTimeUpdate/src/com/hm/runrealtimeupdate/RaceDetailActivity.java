@@ -8,6 +8,7 @@ import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 /**
@@ -148,13 +150,33 @@ public class RaceDetailActivity extends Activity
 					// 停止中
 					if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 					{
+						TimePickerDialog dialog = new TimePickerDialog
+							(
+								RaceDetailActivity.this,
+								new TimePickerDialog.OnTimeSetListener() {
+									
+									@Override
+									public void onTimeSet(TimePicker view, int hourOfDay, int minute)
+									{
+										long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
+
+										// アラームを設定する
+										CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, alarmTime );
+										return;
+									}
+								},
+								CommonLib.getHourOfDay(),
+								CommonLib.getMinute(),
+								true
+							);
+						dialog.show();
 						// 大会を速報予約状態にする
-						Logic.setUpdateReserveRaceId( getContentResolver(), raceInfo.getRaceId() );
+						//Logic.setUpdateReserveRaceId( getContentResolver(), raceInfo.getRaceId() );
 						
-						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
+						//raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
 
 						// ボタン表示変更
-						( ( Button )v ).setText( getString( R.string.str_btn_reservecancel ) );
+						//( ( Button )v ).setText( getString( R.string.str_btn_reservecancel ) );
 					}
 					else
 					{
