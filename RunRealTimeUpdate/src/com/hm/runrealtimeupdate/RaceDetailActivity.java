@@ -9,6 +9,7 @@ import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -153,33 +154,18 @@ public class RaceDetailActivity extends Activity
 						TimePickerDialog dialog = new TimePickerDialog
 							(
 								RaceDetailActivity.this,
-								new TimePickerDialog.OnTimeSetListener() {
-									
-									@Override
-									public void onTimeSet(TimePicker view, int hourOfDay, int minute)
-									{
-										long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
-
-										// アラームを設定する
-										CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, alarmTime );
-										return;
-									}
-								},
+								new OnReserveTimeSetListener( raceInfo, v ),
 								CommonLib.getHourOfDay(),
 								CommonLib.getMinute(),
 								true
 							);
 						dialog.show();
-						// 大会を速報予約状態にする
-						//Logic.setUpdateReserveRaceId( getContentResolver(), raceInfo.getRaceId() );
-						
-						//raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
-
-						// ボタン表示変更
-						//( ( Button )v ).setText( getString( R.string.str_btn_reservecancel ) );
 					}
 					else
 					{
+						// 予約をキャンセルする
+						CommonLib.cancelUpdateReserveAlarm( RaceDetailActivity.this );
+
 						// 大会を速報停止状態にする
 						Logic.setUpdateOffRaceId( getContentResolver(), raceInfo.getRaceId() );
 
@@ -513,5 +499,54 @@ public class RaceDetailActivity extends Activity
 				return;
 			}
 		}
+	}
+
+	/**
+	 * 予約タイマーセットリスナー
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class OnReserveTimeSetListener implements OnTimeSetListener
+	{
+		/**
+		 * 大会情報
+		 */
+		private RaceInfo m_RaceInfo;
+
+		/**
+		 * ビュー
+		 */
+		private View m_View;
+
+		/**
+		 * コンストラクタ
+		 * @param raceInfo 大会情報
+		 * @param v ビュー
+		 */
+		public OnReserveTimeSetListener( RaceInfo raceInfo, View v )
+		{
+			m_RaceInfo = raceInfo;
+			m_View = v;
+			return;
+		}
+
+		@Override
+		public void onTimeSet( TimePicker view, int hourOfDay, int minute )
+		{
+			long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
+
+			// アラームを設定する
+			CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, alarmTime );
+
+			// 大会を速報予約状態にする
+			Logic.setUpdateReserveRaceId( getContentResolver(), m_RaceInfo.getRaceId() );
+
+			m_RaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
+
+			// ボタン表示変更
+			( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
+
+			return;
+		}	
 	}
 }

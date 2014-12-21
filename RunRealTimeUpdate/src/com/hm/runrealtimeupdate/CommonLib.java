@@ -111,6 +111,30 @@ public class CommonLib
 	}
 
 	/**
+	 * 更新予約アラームを取り消す
+	 * @param context コンテキスト
+	 */
+	public static void cancelUpdateReserveAlarm( Context context )
+	{
+		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
+
+		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast
+				(
+					context,
+					Common.INT_REQUESTCODE_UPDATERESERVE,
+					intent,
+					PendingIntent.FLAG_CANCEL_CURRENT
+				);
+
+		alarmManager.cancel( pendingIntent );
+	    pendingIntent.cancel();
+
+	    return;
+	}
+
+	/**
 	 * 現在の時を取得する
 	 * @return 現在の時( 0 ～ 23 )
 	 */
