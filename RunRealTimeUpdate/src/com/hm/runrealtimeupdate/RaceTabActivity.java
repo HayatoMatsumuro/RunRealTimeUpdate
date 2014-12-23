@@ -1,6 +1,7 @@
 package com.hm.runrealtimeupdate;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.TabActivity;
@@ -72,17 +73,7 @@ public class RaceTabActivity extends TabActivity
 		int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, INT_INTENT_VAL_CURRENTTAB_DETAIL );
 
 		// 速報中テキスト
-		int visibility = View.INVISIBLE;
-		if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
-		{
-			visibility = View.VISIBLE;
-		}
-		else
-		{
-			// TODO:予約中のときの表示
-			visibility = View.GONE;
-		}
-		setVisibilityUpdateExe( visibility );
+		setDispUpdateBar( raceInfo.getRaceUpdate() );
 
 		// 大会一覧ボタン
 		Button raceListButton = ( Button )findViewById( R.id.id_tabactivity_race_header_racelist_button );
@@ -158,13 +149,46 @@ public class RaceTabActivity extends TabActivity
 	}
 
 	/**
-	 * 速報中テキストの表示状態設定
-	 * @param visibility　表示状態
+	 * 速報中バーの表示切替
+	 * @param raceUpdate　表示指定( INT_RACEUPDATE_ON, INT_RACEUPDATE_RESERVE, INT_RACEUPDATE_OFF )
 	 */
-	public void setVisibilityUpdateExe( int visibility )
+	public void setDispUpdateBar( int raceUpdate )
 	{
 		TextView updateExeTextView = ( TextView )findViewById( R.id.id_tabactivity_race_updateexe_textview );
-		updateExeTextView.setVisibility( visibility );
+		TextView updateReserveTextView = ( TextView )findViewById( R.id.id_tabactivity_race_updatereserve_textview );
+
+		// 表示指示
+		switch( raceUpdate )
+		{
+		// 速報中
+		case RaceInfo.INT_RACEUPDATE_ON:
+			updateExeTextView.setVisibility( View.VISIBLE );
+			updateReserveTextView.setVisibility( View.GONE );
+			break;
+		// 予約中
+		case RaceInfo.INT_RACEUPDATE_RESERVE:
+			try
+			{
+				String time = Logic.getStringReserveTime( RaceTabActivity.this );
+				String reserveText = time + " " + getString( R.string.str_txt_updatereserve );
+				updateReserveTextView.setText( reserveText );
+				updateReserveTextView.setVisibility( View.VISIBLE );
+			}
+			catch (LogicException e)
+			{
+				updateReserveTextView.setVisibility( View.GONE );
+			}
+
+			updateExeTextView.setVisibility( View.GONE );
+
+			break;
+		// 指定なし
+		case RaceInfo.INT_RACEUPDATE_OFF:
+		default:
+			updateExeTextView.setVisibility( View.GONE );
+			updateReserveTextView.setVisibility( View.GONE );
+			break;
+		}
 		return;
 	}
 }

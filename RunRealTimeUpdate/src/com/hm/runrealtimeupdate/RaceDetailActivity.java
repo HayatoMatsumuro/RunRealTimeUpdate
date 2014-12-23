@@ -94,7 +94,7 @@ public class RaceDetailActivity extends Activity
 						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
 						// 速報中テキスト表示
-						( ( RaceTabActivity )getParent() ).setVisibilityUpdateExe( View.VISIBLE );
+						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 
 						// ボタン表示変更
 						( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
@@ -118,7 +118,7 @@ public class RaceDetailActivity extends Activity
 						CommonLib.cancelUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
 
 						// 速報中テキスト非表示
-						( ( RaceTabActivity )getParent() ).setVisibilityUpdateExe( View.GONE );
+						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_ON );
 
 						// ボタン表示変更
 						((Button)v).setText( getString( R.string.str_btn_updatestart ) );
@@ -234,7 +234,7 @@ public class RaceDetailActivity extends Activity
 			manualButton.setEnabled( true );
 
 			// 速報中テキスト非表示
-			( ( RaceTabActivity )getParent() ).setVisibilityUpdateExe( View.GONE );
+			( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 		}
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
@@ -255,7 +255,7 @@ public class RaceDetailActivity extends Activity
 					manualButton.setEnabled( true );
 
 					// 速報中テキスト非表示
-					( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+					( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 				}
 				else
 				{
@@ -279,7 +279,7 @@ public class RaceDetailActivity extends Activity
 			manualButton.setEnabled( false );
 
 			// 速報中テキスト非表示
-			( ( RaceTabActivity )getParent()).setVisibilityUpdateExe( View.GONE );
+			( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 		}
 
 		updateButton.setTag( raceInfo );
