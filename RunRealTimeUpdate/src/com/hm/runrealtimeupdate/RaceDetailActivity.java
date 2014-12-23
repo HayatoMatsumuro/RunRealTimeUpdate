@@ -136,7 +136,7 @@ public class RaceDetailActivity extends Activity
 			}
 		);
 
-		// 自動更新予約ボタンの設定
+		// 予約ボタンの設定
 		Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
 		reserveButton.setTag( raceInfo );
 		reserveButton.setOnClickListener
@@ -545,6 +545,12 @@ public class RaceDetailActivity extends Activity
 
 			// ボタン表示変更
 			( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
+
+			// アラーム時間の設定
+			Logic.setReserveTime( RaceDetailActivity.this, hourOfDay, minute );
+
+			// 速報バーの表示更新
+			( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_RESERVE );
 
 			return;
 		}	

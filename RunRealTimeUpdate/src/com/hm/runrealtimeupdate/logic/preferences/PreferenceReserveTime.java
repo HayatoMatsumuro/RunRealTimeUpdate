@@ -25,15 +25,14 @@ public class PreferenceReserveTime
 	/**
 	 * 予約時間をプリファレンスに保存する
 	 * @param context コンテキスト
-	 * @param hour 予約時
-	 * @param minute 予約分
+	 * @param time 予約時間
 	 */
-	public static void saveReserveTime( Context context, int hour, int minute )
+	public static void saveReserveTime( Context context, ReserveTime time )
 	{
 		Map< String, Integer > map = new HashMap< String, Integer>();
 
-		map.put( KEY_RESERVEHOUR, hour );
-		map.put( KEY_RESERVEMINUTE, minute );
+		map.put( KEY_RESERVEHOUR, time.getHour() );
+		map.put( KEY_RESERVEMINUTE, time.getMinute() );
 
 		PreferenceAccess.saveIntData( context, map );
 
@@ -43,14 +42,17 @@ public class PreferenceReserveTime
 	/**
 	 * 予約時間をプリファレンスからロードする
 	 * @param context コンテキスト
-	 * @param hour 予約時
-	 * @param minute 予約分
+	 * @return 予約時間
 	 */
-	public static void loadReserveTime( Context context, Integer hour, Integer minute )
+	public static ReserveTime loadReserveTime( Context context )
 	{
-		hour = PreferenceAccess.loadIntData( context, KEY_RESERVEHOUR );
-		minute = PreferenceAccess.loadIntData( context, KEY_RESERVEMINUTE );
-		return;
+		int hour = PreferenceAccess.loadIntData( context, KEY_RESERVEHOUR );
+		int minute = PreferenceAccess.loadIntData( context, KEY_RESERVEMINUTE );
+
+		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
+		time.setHour( hour );
+		time.setMinute( minute );
+		return time;
 	}
 
 	/**
@@ -64,4 +66,55 @@ public class PreferenceReserveTime
 		return;
 	}
 
+	/**
+	 * 予約時間
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	public class ReserveTime
+	{
+		/**
+		 * 時
+		 */
+		private int hour;
+
+		/**
+		 * 分
+		 */
+		private int minute;
+
+		/**
+		 * 時を取得する
+		 * @return
+		 */
+		public int getHour() {
+			return hour;
+		}
+
+		/**
+		 * 時を設定する
+		 * @param hour
+		 */
+		public void setHour(int hour) {
+			this.hour = hour;
+			return;
+		}
+
+		/**
+		 * 分を取得する
+		 * @return 分
+		 */
+		public int getMinute() {
+			return minute;
+		}
+
+		/**
+		 * 分を設定する
+		 * @param minute 分
+		 */
+		public void setMinute(int minute) {
+			this.minute = minute;
+			return;
+		}
+	}
 }

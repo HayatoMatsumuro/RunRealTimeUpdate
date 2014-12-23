@@ -904,7 +904,11 @@ public class Logic
 	public static void setReserveTime( Context context, int hour, int minute )
 	{
 		PreferenceReserveTime.deleteReserveTime( context );
-		PreferenceReserveTime.saveReserveTime( context, hour, minute );
+
+		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
+		time.setHour( hour );
+		time.setMinute( minute );
+		PreferenceReserveTime.saveReserveTime( context, time );
 		return;
 	}
 
@@ -916,10 +920,10 @@ public class Logic
 	 */
 	public static String getStringReserveTime( Context context ) throws LogicException
 	{
-		Integer hour = Integer.valueOf(0);
-		Integer minute = Integer.valueOf(0);
+		PreferenceReserveTime.ReserveTime time = PreferenceReserveTime.loadReserveTime( context );
 
-		PreferenceReserveTime.loadReserveTime( context, hour, minute );
+		int hour = time.getHour();
+		int minute = time.getMinute();
 
 		if( ( hour == Integer.MAX_VALUE) || ( minute == Integer.MAX_VALUE ) )
 		{
