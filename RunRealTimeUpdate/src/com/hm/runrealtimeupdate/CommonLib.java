@@ -160,6 +160,7 @@ public class CommonLib
 	/**
 	 * アラームの設定時間を取得する
 	 *  引数設定の次の時分で設定する
+	 *  引数の設定時間が現在の時間と10秒以内ならば、1日後とする
 	 * @param hourofday 時
 	 * @param minute 分
 	 * @return アラーム設定時間
@@ -167,7 +168,8 @@ public class CommonLib
 	public static long getAlarmTime( int hourOfDay, int minute )
 	{
 		Calendar cal = Calendar.getInstance();
-		Date nowDate = cal.getTime();
+		cal.add( Calendar.SECOND, 10 );
+		Date checkDate = cal.getTime();
 		
 		Date alarmDate = cal.getTime();
 		alarmDate.setHours( hourOfDay );
@@ -177,7 +179,7 @@ public class CommonLib
 		long msec = alarmDate.getTime();
 
 		// アラーム時間が現在よりも前だったら補正する
-		if( alarmDate.before( nowDate ) )
+		if( alarmDate.before( checkDate ) )
 		{
 			// 1日加算
 			msec = msec + 86400000;
