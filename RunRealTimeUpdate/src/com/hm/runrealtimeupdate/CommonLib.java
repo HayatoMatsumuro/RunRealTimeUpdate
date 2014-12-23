@@ -90,12 +90,13 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @param time　時間
 	 */
-	public static void setUpdateReserveAlarm( Context context, long time )
+	public static void setUpdateReserveAlarm( Context context, String raceId, long time )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
 		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
 		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
+		intent.putExtra( UpdateBroadcastReceiver.STR_INTENT_RACEID, raceId );
 
 		PendingIntent pendingIntent = PendingIntent.getBroadcast
 				(

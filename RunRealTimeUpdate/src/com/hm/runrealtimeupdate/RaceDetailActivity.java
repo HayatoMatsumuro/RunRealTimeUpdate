@@ -536,7 +536,7 @@ public class RaceDetailActivity extends Activity
 			long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
 
 			// アラームを設定する
-			CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, alarmTime );
+			CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, m_RaceInfo.getRaceId(), alarmTime );
 
 			// 大会を速報予約状態にする
 			Logic.setUpdateReserveRaceId( getContentResolver(), m_RaceInfo.getRaceId() );

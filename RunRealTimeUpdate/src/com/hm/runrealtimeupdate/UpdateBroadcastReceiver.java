@@ -1,5 +1,6 @@
 package com.hm.runrealtimeupdate;
 
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +17,11 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 	 */
 	public static final String STR_INTENT_ACTION_UPDATESTART = "updatestart";
 
+	/**
+	 *　インテント 大会ID
+	 */
+	public static final String STR_INTENT_RACEID = "raceid";
+
 	@Override
 	public void onReceive( Context context, Intent intent )
 	{
@@ -31,7 +37,16 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 			// 更新開始
 			else if( action.equals( STR_INTENT_ACTION_UPDATESTART ) )
 			{
-				// TODO: 更新開始
+				//String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+				//Logic.setUpdateOnRaceId( context.getContentResolver(), raceId );
+
+				Intent intents = new Intent( context, UpdateStartDialogActivity.class );
+				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );
+		        try {
+		            pendingIntent.send();
+		        } catch (PendingIntent.CanceledException e) {
+		            e.printStackTrace();
+		        }
 			}
 		}
 		return;
