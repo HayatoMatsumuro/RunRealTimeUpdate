@@ -68,6 +68,7 @@
     
     <!-- 大会タブ -->
     <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
+    <dimen name="dim_tabactivity_race_updatereserve_textview_height">30dp</dimen>
     
     <!-- ダイアログ -->
     <dimen name="dim_dialog_com_layout_padding">1dp</dimen>

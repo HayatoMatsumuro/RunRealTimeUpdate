@@ -71,6 +71,7 @@
     <string name="str_txt_lap">ラップ</string>
     <string name="str_txt_currenttime">通過時間 </string>
     <string name="str_txt_updateexe">この大会の速報中です</string>
+    <string name="str_txt_updatereserve"> に速報が開始します</string>
     <string name="str_txt_updatenew">New</string>
     <string name="str_txt_dot">■</string>
     <string name="str_txt_arrow">矢印</string>
