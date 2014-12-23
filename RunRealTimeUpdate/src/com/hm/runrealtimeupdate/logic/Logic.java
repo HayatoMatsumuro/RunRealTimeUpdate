@@ -23,6 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
+import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
 /**
@@ -892,6 +893,45 @@ public class Logic
 		}
 
 		return false;
+	}
+
+	/**
+	 * 予約時間を設定する
+	 * @param context コンテキスト
+	 * @param hour 時
+	 * @param minute 分
+	 */
+	public static void setReserveTime( Context context, int hour, int minute )
+	{
+		PreferenceReserveTime.deleteReserveTime( context );
+		PreferenceReserveTime.saveReserveTime( context, hour, minute );
+		return;
+	}
+
+	/**
+	 * 予約時間をHH:MM 形式で取得する
+	 * @param context コンテキスト
+	 * @return 予約時間
+	 * @throws LogicException 予約時間未設定
+	 */
+	public static String getStringReserveTime( Context context ) throws LogicException
+	{
+		Integer hour = Integer.valueOf(0);
+		Integer minute = Integer.valueOf(0);
+
+		PreferenceReserveTime.loadReserveTime( context, hour, minute );
+
+		if( ( hour == Integer.MAX_VALUE) || ( minute == Integer.MAX_VALUE ) )
+		{
+			throw new LogicException( "no ReserveTime" );
+		}
+
+		StringBuilder builder = new StringBuilder();
+		builder.append( hour );
+		builder.append( ":" );
+		builder.append( minute );
+
+		return builder.toString();
 	}
 
 	/**
