@@ -1,5 +1,7 @@
 package com.hm.runrealtimeupdate;
 
+import com.hm.runrealtimeupdate.logic.Logic;
+
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,8 +39,15 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 			// 更新開始
 			else if( action.equals( STR_INTENT_ACTION_UPDATESTART ) )
 			{
-				//String raceId = intent.getStringExtra( STR_INTENT_RACEID );
-				//Logic.setUpdateOnRaceId( context.getContentResolver(), raceId );
+				String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+				Logic.setUpdateOnRaceId( context.getContentResolver(), raceId );
+
+				// 速報開始
+				CommonLib.setUpdateAlarm( context, raceId, Common.INT_SERVICE_INTERVAL );
+
+				// 停止カウントを設定
+				Logic.setAutoStopCount( context, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+				Logic.setRegularStopCount( context, Common.INT_COUNT_REGULARSTOP );
 
 				Intent intents = new Intent( context, UpdateStartDialogActivity.class );
 				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );

@@ -262,6 +262,9 @@ public class RaceDetailActivity extends Activity
 					updateButton.setText( getString( R.string.str_btn_updatestop ) );
 					
 					manualButton.setEnabled( false );
+
+					// 速報中テキスト非表示
+					( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_ON );
 				}
 				updateButton.setEnabled( true );
 			}

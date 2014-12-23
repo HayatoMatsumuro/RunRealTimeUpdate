@@ -930,6 +930,7 @@ public class Logic
 			throw new LogicException( "no ReserveTime" );
 		}
 
+		// TODO: 0埋めして、2桁表示する
 		StringBuilder builder = new StringBuilder();
 		builder.append( hour );
 		builder.append( ":" );
