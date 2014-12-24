@@ -126,5 +126,10 @@
     <!-- リストアイテム 速報中 -->
     <dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
     <dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
+    
+    <!-- リストアイテム 予約中 -->
+    <dimen name="dim_list_item_com_reserve_layout_padding">5dp</dimen>
+    <dimen name="dim_list_item_com_reserve_textview_padding">5dp</dimen>
+    
 
 </resources>

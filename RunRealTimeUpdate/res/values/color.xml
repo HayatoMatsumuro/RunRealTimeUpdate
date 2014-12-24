@@ -34,6 +34,7 @@
     <color name="color_list_item_com_section_layout_back">#28ccc6</color>
     <color name="color_list_item_com_point_layout_back">#e6e6e6</color>
     <color name="color_list_item_com_update_textview_back">#e5b7e2</color>
+    <color name="color_list_item_com_reserve_textview_back">#e2d1e2</color>
     
     <!-- QRコード -->
     <color name="color_activity_raceentryqr_preview_frame_view_background_solid_color">#00dcdcdc</color>
