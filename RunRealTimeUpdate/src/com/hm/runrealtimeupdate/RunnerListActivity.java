@@ -2,10 +2,12 @@ package com.hm.runrealtimeupdate;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -204,6 +206,9 @@ public class RunnerListActivity extends Activity
 		runnerInfoListView.setTag( raceInfo );
 
 		setViewBody( raceId );
+
+		// 速報バーの表示更新
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
 
 		return;
 	}

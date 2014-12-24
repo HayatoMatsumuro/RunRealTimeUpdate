@@ -65,7 +65,7 @@ public class RaceDetailActivity extends Activity
 		TextView raceLocationTextView = ( TextView )findViewById( R.id.id_activity_racedetail_body_contents_detailbox_racelocation_title_textview );
 		raceLocationTextView.setText( raceInfo.getRaceLocation() );
 
-		// 速報ボタンの処理設定
+		// 速報ボタンの設定
 		Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
 		updateButton.setOnClickListener
 		(
@@ -77,6 +77,9 @@ public class RaceDetailActivity extends Activity
 					// 速報が自動停止した場合は速報が停止しているが表示は「速報停止」となっている
 					// 動作的に問題ないため、そのままとする
 					RaceInfo raceInfo = ( RaceInfo )v.getTag();
+
+					Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
+					Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 
 					// 速報停止中
 					if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
@@ -94,13 +97,15 @@ public class RaceDetailActivity extends Activity
 						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
 						// 速報中テキスト表示
-						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
+						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_ON );
 
 						// ボタン表示変更
 						( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
 
-						// 手動更新を無効化
-						Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+						// 予約ボタンを無効化
+						reserveButton.setEnabled( false );
+
+						// 手動ボタンを無効化
 						manualButton.setEnabled( false );
 
 						// Toast表示
@@ -118,7 +123,7 @@ public class RaceDetailActivity extends Activity
 						CommonLib.cancelUpdateAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
 
 						// 速報中テキスト非表示
-						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_ON );
+						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 
 						// ボタン表示変更
 						((Button)v).setText( getString( R.string.str_btn_updatestart ) );
@@ -126,8 +131,10 @@ public class RaceDetailActivity extends Activity
 						// Toast表示
 						Toast.makeText( RaceDetailActivity.this, "速報を停止しました！", Toast.LENGTH_SHORT ).show();
 
-						// 手動更新を有効化
-						Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+						// 予約ボタンを有効化
+						reserveButton.setEnabled( true );
+
+						// 手動ボタンを有効化
 						manualButton.setEnabled( true );
 					}
 
@@ -164,15 +171,22 @@ public class RaceDetailActivity extends Activity
 					else
 					{
 						// 予約をキャンセルする
-						CommonLib.cancelUpdateReserveAlarm( RaceDetailActivity.this );
+						CommonLib.cancelUpdateReserveAlarm( RaceDetailActivity.this, raceInfo.getRaceId() );
 
 						// 大会を速報停止状態にする
 						Logic.setUpdateOffRaceId( getContentResolver(), raceInfo.getRaceId() );
-
 						raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
 						// ボタン表示変更
 						( ( Button )v ).setText( getString( R.string.str_btn_reservestart ) );
+
+						// 自動ボタン
+						Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
+						updateButton.setEnabled( true );
+
+						// 手動ボタン
+						Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+						manualButton.setEnabled( true );
 
 						// 速報バーの表示更新
 						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
@@ -227,17 +241,22 @@ public class RaceDetailActivity extends Activity
 		RaceInfo updateRaceInfo = Logic.getUpdateRaceId( getContentResolver() );
 
 		Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
+		Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
 		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 
 		// 速報中の大会なし
 		if( updateRaceInfo == null )
 		{
+			// 速報ボタン
 			updateButton.setText( getString( R.string.str_btn_updatestart ) );
 			updateButton.setEnabled( true );
-			manualButton.setEnabled( true );
 
-			// 速報中テキスト非表示
-			( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
+			// 予約ボタン
+			reserveButton.setText( getString( R.string.str_btn_reservestart ) );
+			reserveButton.setEnabled( true );
+
+			// 手動ボタン
+			manualButton.setEnabled( true );
 		}
 		// 選択中の大会IDと速報中の大会が一致
 		else if( updateRaceInfo.getRaceId().equals( raceId ) )
@@ -248,45 +267,91 @@ public class RaceDetailActivity extends Activity
 				// アラーム停止中
 				if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
 				{
-					updateButton.setText( getString( R.string.str_btn_updatestart ) );
-
+					// 速報停止状態
 					Logic.setUpdateOffRaceId( getContentResolver(), updateRaceInfo.getRaceId() );
-
 					raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
-					updateButton.setText( getString( R.string.str_btn_updatestop ) );
-					manualButton.setEnabled( true );
+					// 速報ボタン
+					updateButton.setText( getString( R.string.str_btn_updatestart ) );
+					updateButton.setEnabled( true );
 
-					// 速報中テキスト非表示
-					( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
+					// 予約ボタン
+					reserveButton.setText( getString( R.string.str_btn_reservestart ) );
+					reserveButton.setEnabled( true );
+
+					// 手動ボタン
+					manualButton.setEnabled( true );
 				}
+				// アラーム起動中
 				else
 				{
+					// 速報ボタン
 					updateButton.setText( getString( R.string.str_btn_updatestop ) );
-					
-					manualButton.setEnabled( false );
+					updateButton.setEnabled( true );
 
-					// 速報中テキスト非表示
-					( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_ON );
+					// 予約ボタン
+					reserveButton.setText( getString( R.string.str_btn_reservestart ) );
+					reserveButton.setEnabled( false );
+
+					// 手動ボタン
+					manualButton.setEnabled( false );
 				}
-				updateButton.setEnabled( true );
 			}
 			// 予約中
-			else if( updateRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE ){
-				// TODO:処理を記載する
+			else if( updateRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE )
+			{
+				// アラーム停止中
+				if( !CommonLib.isUpdateReserveAlarm( RaceDetailActivity.this ) )
+				{
+					// 速報停止状態
+					Logic.setUpdateOffRaceId( getContentResolver(), updateRaceInfo.getRaceId() );
+					raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+
+					// 速報ボタン
+					updateButton.setText( getString( R.string.str_btn_updatestart ) );
+					updateButton.setEnabled( true );
+
+					// 予約ボタン
+					reserveButton.setText( getString( R.string.str_btn_reservestart ) );
+					reserveButton.setEnabled( true );
+
+					// 手動ボタン
+					manualButton.setEnabled( true );
+				}
+				// アラーム起動中
+				else
+				{
+					// 速報ボタン
+					updateButton.setText( getString( R.string.str_btn_updatestart ) );
+					updateButton.setEnabled( false );
+
+					// 予約ボタン
+					reserveButton.setText( getString( R.string.str_btn_reservecancel ) );
+					reserveButton.setEnabled( true );
+
+					// 手動ボタン
+					manualButton.setEnabled( false );
+				}
 			}
 			
 		}
 		// 他の大会が速報中
 		else
 		{
+			// 速報ボタン
 			updateButton.setText( getString( R.string.str_btn_updatestart ) );
 			updateButton.setEnabled( false );
-			manualButton.setEnabled( false );
 
-			// 速報中テキスト非表示
-			( ( RaceTabActivity )getParent()).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
+			// 予約ボタン
+			reserveButton.setText( getString( R.string.str_btn_reservestart ) );
+			reserveButton.setEnabled( false );
+
+			// 手動ボタン
+			manualButton.setEnabled( false );
 		}
+
+		// 速報バーの表示
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
 
 		updateButton.setTag( raceInfo );
 
@@ -549,15 +614,22 @@ public class RaceDetailActivity extends Activity
 
 			m_RaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_RESERVE );
 
-			// ボタン表示変更
-			( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
-
 			// アラーム時間の設定
 			Logic.setReserveTime( RaceDetailActivity.this, hourOfDay, minute );
 
 			// 速報バーの表示更新
 			( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_RESERVE );
 
+			// ボタン表示変更
+			( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
+
+			// 自動ボタン
+			Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
+			updateButton.setEnabled( false );
+
+			// 手動ボタン
+			Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+			manualButton.setEnabled( false );
 			return;
 		}	
 	}

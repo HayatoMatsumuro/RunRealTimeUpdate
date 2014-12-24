@@ -3,6 +3,7 @@
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.os.Bundle;
@@ -141,11 +142,16 @@ public class MainActivity extends Activity
 			// 予約中
 			else if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE )
 			{
-				// TODO:処理を記載する
+				// アラーム停止中
+				if( !CommonLib.isUpdateReserveAlarm( MainActivity.this ) )
+				{
+					// 予約状態停止
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
+					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+				}
 			}
 		}
 
-		// TODO:予約中の場合は何もしない
 		// 大会情報リスト設定
 		RaceListAdapter adapter = new RaceListAdapter( this, raceInfoList );
 		ListView raceInfoListView = ( ListView )findViewById( R.id.id_activity_main_body_contents_racelist_listview );
@@ -282,15 +288,38 @@ public class MainActivity extends Activity
 
 			// 速報中の表示
 			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
+			RelativeLayout raceReserveLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_layout );
 
-			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
+			switch( raceInfo.getRaceUpdate() )
 			{
+			// 速報中
+			case RaceInfo.INT_RACEUPDATE_ON:
 				raceUpdateLayout.setVisibility( View.VISIBLE );
-			}
-			else
-			{
-				// TODO:予約中の場合は表示を変更する
+				raceReserveLayout.setVisibility( View.GONE );
+				break;
+			// 予約中
+			case RaceInfo.INT_RACEUPDATE_RESERVE:
 				raceUpdateLayout.setVisibility( View.GONE );
+
+				try
+				{
+					String time = Logic.getStringReserveTime( MainActivity.this );
+					TextView textView = ( TextView )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_textview );
+					textView.setText( time + " " + getString( R.string.str_txt_updatereserve ) );
+					raceReserveLayout.setVisibility( View.VISIBLE );
+				}
+				catch( LogicException e )
+				{
+					e.printStackTrace();
+					raceReserveLayout.setVisibility( View.GONE );
+				}
+				break;
+			// 停止中
+			case RaceInfo.INT_RACEUPDATE_OFF:
+			default:
+				raceUpdateLayout.setVisibility( View.GONE );
+				raceReserveLayout.setVisibility( View.GONE );
+				break;
 			}
 
 			return convertView;

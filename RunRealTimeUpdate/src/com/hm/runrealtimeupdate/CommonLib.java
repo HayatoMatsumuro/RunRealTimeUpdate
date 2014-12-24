@@ -114,12 +114,15 @@ public class CommonLib
 	/**
 	 * 更新予約アラームを取り消す
 	 * @param context コンテキスト
+	 * @param raceId 大会ID
 	 */
-	public static void cancelUpdateReserveAlarm( Context context )
+	public static void cancelUpdateReserveAlarm( Context context, String raceId )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
 		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
+		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
+		intent.putExtra( UpdateBroadcastReceiver.STR_INTENT_RACEID, raceId );
 
 		PendingIntent pendingIntent = PendingIntent.getBroadcast
 				(
@@ -135,6 +138,34 @@ public class CommonLib
 	    return;
 	}
 
+	/**
+	 * 更新予約アラームが設定されているか確認する
+	 * @param context コンテキスト
+	 * @return　true:起動中/false:起動中でない
+	 */
+	public static boolean isUpdateReserveAlarm( Context context )
+	{
+		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
+		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
+
+		PendingIntent pendingIntent = PendingIntent.getBroadcast
+				(
+					context,
+					Common.INT_REQUESTCODE_UPDATERESERVE,
+					intent,
+					PendingIntent.FLAG_NO_CREATE
+				);
+
+		if( pendingIntent == null )
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
 	/**
 	 * 現在の時を取得する
 	 * @return 現在の時( 0 ～ 23 )
