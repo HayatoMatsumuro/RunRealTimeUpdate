@@ -173,6 +173,9 @@ public class RaceDetailActivity extends Activity
 
 						// ボタン表示変更
 						( ( Button )v ).setText( getString( R.string.str_btn_reservestart ) );
+
+						// 速報バーの表示更新
+						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 					}
 					return;
 				}
