@@ -88,9 +88,8 @@ public class RunnerEntryActivity extends Activity
 		}
 
 		// 速報中なら、メッセージを表示する
-		if( raceInfo.getRaceUpdate() != RaceInfo.INT_RACEUPDATE_OFF )
+		if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
 		{
-			// TODO:予約中のメッセージを考慮
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
 			messageTextView.setText( getString( R.string.str_msg_runnerupdateexe ) );
@@ -745,20 +744,31 @@ public class RunnerEntryActivity extends Activity
 		{
 			if( !Logic.checkEntryRunnerId( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() ) )
 			{
-				// データベース登録
-				Logic.entryRunnerInfo( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() );
+				// 最新の大会情報を取得
+				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
+
+				// 予約中→速報中となった場合
+				if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+				{
+					Toast.makeText( RunnerEntryActivity.this, "速報中のため登録できません。", Toast.LENGTH_SHORT ).show();
+				}
+				else
+				{
+					// データベース登録
+					Logic.entryRunnerInfo( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() );
+
+					Toast.makeText( RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
+				}
 
 				// キーボードを隠す
 				EditText numberEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
 		        InputMethodManager imm = ( InputMethodManager )getSystemService(Context.INPUT_METHOD_SERVICE );
 		        imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
-				
+
 				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
 				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().getRaceId() );
 				intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
 				startActivity( intent );
-
-				Toast.makeText( RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
 			}
 			else
 			{
