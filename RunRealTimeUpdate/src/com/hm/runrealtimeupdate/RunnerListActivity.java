@@ -307,21 +307,20 @@ public class RunnerListActivity extends Activity
 		{
 			// ポジティブボタン押し
 			// 速報中でないなら削除
-			RaceInfo raceInfo = info.getRaceInfo();
+			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
 			SectionRunnerElement element = info.getSectionRunnerElement();
-			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
+			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+			{
+				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
+			}
+			else
 			{
 				// 選手削除
 				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
 
 				setViewBody( raceInfo.getRaceId() );
-				
-    			Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
-			}
-			else
-			{
-				// TODO:予約中
-				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
+
+				Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
 			}
 
 			return;
