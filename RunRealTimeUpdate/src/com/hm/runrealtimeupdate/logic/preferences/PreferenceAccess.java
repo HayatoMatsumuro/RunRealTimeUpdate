@@ -29,7 +29,7 @@ public class PreferenceAccess {
 	}
 	
 	/**
-	 * 数値デーっ他をプリファレンスに保存する
+	 * 数値データをプリファレンスに保存する
 	 * @param context コンテキスト
 	 * @param saveData 保存データ
 	 */
