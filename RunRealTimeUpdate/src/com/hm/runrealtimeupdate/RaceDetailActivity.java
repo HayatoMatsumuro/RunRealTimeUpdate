@@ -188,6 +188,9 @@ public class RaceDetailActivity extends Activity
 						Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 						manualButton.setEnabled( true );
 
+						// Toast表示
+						Toast.makeText( RaceDetailActivity.this, "予約を解除しました！", Toast.LENGTH_SHORT ).show();
+
 						// 速報バーの表示更新
 						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_RACEUPDATE_OFF );
 					}
@@ -630,6 +633,10 @@ public class RaceDetailActivity extends Activity
 			// 手動ボタン
 			Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 			manualButton.setEnabled( false );
+
+			// Toast表示
+			Toast.makeText( RaceDetailActivity.this, "速報の予約をしました！", Toast.LENGTH_SHORT ).show();
+
 			return;
 		}	
 	}
