@@ -21,4 +21,15 @@ public class Common
 	 * 自動開始から停止までの更新確認回数( 24時間 )
 	 */
 	public static final int INT_COUNT_REGULARSTOP = 86400000 / INT_SERVICE_INTERVAL;
+
+	/**
+	 * リクエストコード 更新定期
+	 */
+	public static final int INT_REQUESTCODE_UPDATEPERIODIC = 1;
+
+	/**
+	 * リクエストコード 更新予約
+	 */
+	public static final int INT_REQUESTCODE_UPDATERESERVE = 2;
+
 }

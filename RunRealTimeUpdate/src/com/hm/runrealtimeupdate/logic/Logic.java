@@ -23,6 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
+import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
 /**
@@ -115,15 +116,9 @@ public class Logic
 		raceInfo.setRaceName( dbRaceInfo.getRaceName() );
 		raceInfo.setRaceDate( dbRaceInfo.getRaceDate() );
 		raceInfo.setRaceLocation( dbRaceInfo.getRaceLocation() );
-		
-		if( dbRaceInfo.getUpdateFlg().equals( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_ON ) )
-		{
-			raceInfo.setRaceUpdate( true );
-		}
-		else
-		{
-			raceInfo.setRaceUpdate( false );
-		}
+
+		int raceUpdate = Integer.parseInt( dbRaceInfo.getUpdateFlg() );
+		raceInfo.setRaceUpdate( raceUpdate );
 
 		return raceInfo;
 	}
@@ -195,6 +190,18 @@ public class Logic
 	}
 
 	/**
+	 * 師弟の大会の速報状態を予約にする
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 */
+	public static void setUpdateReserveRaceId( ContentResolver contentResolver, String raceId )
+	{
+		// 指定の大会を予約状態にする
+		DataBaseAccess.setRaceUpdate( contentResolver, raceId, DataBaseAccess.STR_DBA_RACE_UPDATEFLG_RESERVE );
+		return;
+	}
+
+	/**
 	 * 指定の大会IDが登録済みかどうかを検索する
 	 * @param raceId 大会ID
 	 * @return false:未登録/true:登録済み
@@ -232,7 +239,7 @@ public class Logic
 			raceInfo.setRaceName( parserRaceInfo.getName() );
 			raceInfo.setRaceDate( parserRaceInfo.getDate() );
 			raceInfo.setRaceLocation( parserRaceInfo.getLocation() );
-			raceInfo.setRaceUpdate( false );
+			raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
 
 			return raceInfo;
 		}
@@ -886,6 +893,50 @@ public class Logic
 		}
 
 		return false;
+	}
+
+	/**
+	 * 予約時間を設定する
+	 * @param context コンテキスト
+	 * @param hour 時
+	 * @param minute 分
+	 */
+	public static void setReserveTime( Context context, int hour, int minute )
+	{
+		PreferenceReserveTime.deleteReserveTime( context );
+
+		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
+		time.setHour( hour );
+		time.setMinute( minute );
+		PreferenceReserveTime.saveReserveTime( context, time );
+		return;
+	}
+
+	/**
+	 * 予約時間をHH:MM 形式で取得する
+	 * @param context コンテキスト
+	 * @return 予約時間
+	 * @throws LogicException 予約時間未設定
+	 */
+	public static String getStringReserveTime( Context context ) throws LogicException
+	{
+		PreferenceReserveTime.ReserveTime time = PreferenceReserveTime.loadReserveTime( context );
+
+		int hour = time.getHour();
+		int minute = time.getMinute();
+
+		if( ( hour == Integer.MAX_VALUE) || ( minute == Integer.MAX_VALUE ) )
+		{
+			throw new LogicException( "no ReserveTime" );
+		}
+
+		// 2桁で0埋めする
+		StringBuilder builder = new StringBuilder();
+		builder.append( String.format("%02d", hour ) );
+		builder.append( ":" );
+		builder.append( String.format("%02d", minute ) );
+
+		return builder.toString();
 	}
 
 	/**

@@ -54,6 +54,17 @@
         	android:background="@color/color_tabactivity_race_updateexe_textview_back"
         	android:textAppearance="?android:attr/textAppearanceMedium" />
         
+    	<!-- 予約中バー -->
+    	<TextView 
+    	    android:id="@+id/id_tabactivity_race_updatereserve_textview"
+    	    android:layout_width="match_parent"
+            android:layout_height="@dimen/dim_tabactivity_race_updatereserve_textview_height"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/str_txt_updatereserve"
+            android:background="@color/color_tabactivity_race_updatereserve_textview_back"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:visibility="gone" />
+    	
     	<!-- タブ本体 -->
         <TabWidget
       		android:id="@android:id/tabs"

@@ -75,9 +75,21 @@
            android:name="com.hm.runrealtimeupdate.PassListActivity"
            android:label="@string/app_name" >
         </activity>
+        <activity
+           android:name="com.hm.runrealtimeupdate.UpdateStartDialogActivity"
+           android:theme="@android:style/Theme.Translucent"
+           android:launchMode="singleInstance"
+           android:label="@string/app_name" >
+        </activity>
         <service
             android:enabled="true"
             android:name=".UpdateService" />
+        <receiver android:name=".UpdateBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPETED" />
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
         <provider
             android:exported="false"
             android:name="com.hm.runrealtimeupdate.logic.sqlite.RaceProvider"

@@ -29,11 +29,6 @@ public class UpdateService extends Service
 	public static final String STR_INTENT_RACEID = "raceid";
 
 	/**
-	 * リクエストコード スタート
-	 */
-	public static final int INT_REQUESTCODE_START = 1;
-
-	/**
 	 * バイブ 
 	 *  [ON時間, OFF時間, ・・・]
 	 */
