@@ -82,7 +82,7 @@
     <string name="str_btn_updatestop">自動更新を停止する</string>
     <string name="str_btn_reservestart">自動更新を予約する</string>
     <string name="str_btn_reservecancel">自動更新予約を解除する</string>
-    <string name="str_btn_manual">手動更新</string>
+    <string name="str_btn_manual">手動更新をする</string>
     <string name="str_btn_updatelist">速報リスト</string>
     <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>
