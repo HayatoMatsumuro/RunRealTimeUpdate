@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_list_item_raceinfo_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+	android:id="@+id/id_list_item_raceinfo_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-    <!-- 大会 -->
-    <RelativeLayout
-        android:id="@+id/id_list_item_raceinfo_race_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dim_list_item_com_race_layout_padding" >
+	<!-- 大会 -->
+	<RelativeLayout
+		android:id="@+id/id_list_item_raceinfo_race_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/dim_list_item_com_race_layout_padding" >
 
-        <!-- ドット -->
-        <TextView
-            android:id="@+id/id_list_item_raceinfo_race_dot_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:text="@string/str_txt_dot"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/color_list_item_com_dot_textview_text" />
-        
-        <!-- 大会名 -->
-        <TextView
-            android:id="@+id/id_list_item_raceinfo_race_name_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dim_list_item_com_race_name_textview_marginleft"
-            android:layout_toRightOf="@+id/id_list_item_raceinfo_race_dot_textview"
-            android:text="@string/str_txt_racename" />
-    </RelativeLayout>
-	
-	<!-- 速報中 -->
-   <RelativeLayout
-        android:id="@+id/id_list_item_raceinfo_update_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dim_list_item_com_update_layout_padding" >
-        
-        <TextView
-		    android:id="@+id/id_list_item_raceinfo_update_textview"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:background="@color/color_list_item_com_update_textview_back"
-		    android:gravity="center"
-		    android:padding="@dimen/dim_list_item_com_update_textview_padding"
-		    android:text="@string/str_txt_updateexe"
-		    android:textAppearance="?android:attr/textAppearanceMedium" />
+		<!-- ドット -->
+		<TextView
+			android:id="@+id/id_list_item_raceinfo_race_dot_textview"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:text="@string/str_txt_dot"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/color_list_item_com_dot_textview_text" />
+
+		<!-- 大会名 -->
+		<TextView
+			android:id="@+id/id_list_item_raceinfo_race_name_textview"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_marginLeft="@dimen/dim_list_item_com_race_name_textview_marginleft"
+			android:layout_toRightOf="@+id/id_list_item_raceinfo_race_dot_textview"
+			android:text="@string/str_txt_racename" />
 
 	</RelativeLayout>
-	
-   <!-- 予約中 -->
-   <RelativeLayout 
-       android:id="@+id/id_list_item_raceinfo_reserve_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dim_list_item_com_update_layout_padding" >
-        
-        <TextView
-            android:id="@+id/id_list_item_raceinfo_reserve_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/color_list_item_com_reserve_textview_back"
-            android:gravity="center"
-            android:padding="@dimen/dim_list_item_com_reserve_textview_padding"
-            android:text="@string/str_txt_updatereserve"
-            android:textAppearance="?android:attr/textAppearanceMedium" />    
-   </RelativeLayout>
+
+	<!-- 速報中 -->
+	<RelativeLayout
+		android:id="@+id/id_list_item_raceinfo_update_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/dim_list_item_com_update_layout_padding" >
+
+		<TextView
+			android:id="@+id/id_list_item_raceinfo_update_textview"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/color_list_item_com_update_textview_back"
+			android:gravity="center"
+			android:padding="@dimen/dim_list_item_com_update_textview_padding"
+			android:text="@string/str_txt_updateexe"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	</RelativeLayout>
+
+	<!-- 予約中 -->
+	<RelativeLayout 
+		android:id="@+id/id_list_item_raceinfo_reserve_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/dim_list_item_com_update_layout_padding" >
+
+		<TextView
+			android:id="@+id/id_list_item_raceinfo_reserve_textview"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:background="@color/color_list_item_com_reserve_textview_back"
+			android:gravity="center"
+			android:padding="@dimen/dim_list_item_com_reserve_textview_padding"
+			android:text="@string/str_txt_updatereserve"
+			android:textAppearance="?android:attr/textAppearanceMedium" />
+
+	</RelativeLayout>
+
 </LinearLayout>
