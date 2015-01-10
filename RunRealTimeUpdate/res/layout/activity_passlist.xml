@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_activity_passlist_body_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-   	android:orientation="vertical"
-    android:padding="@dimen/dim_com_body_layout_padding"
-    android:background="@color/color_com_body_layout_back" >
+	android:id="@+id/id_activity_passlist_body_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:padding="@dimen/dim_com_body_layout_padding"
+	android:background="@color/color_com_body_layout_back" >
 
 	<!-- コンテンツ -->
 	<RelativeLayout 
-	    android:id="@+id/id_activity_passlist_body_contents_layout"
-    	android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-        android:padding="@dimen/dim_com_body_contents_layout_padding"
-        android:background="@color/color_com_body_contents_layout_back" >
-	    
-	    <!-- 通過情報リスト-->
-	    <ListView
-        	android:id="@+id/id_activity_passlist_body_contents_passlist_listview"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content" />
-    
+		android:id="@+id/id_activity_passlist_body_contents_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/dim_com_body_contents_layout_padding"
+		android:background="@color/color_com_body_contents_layout_back" >
+
+		<!-- 通過情報リスト-->
+		<ListView
+			android:id="@+id/id_activity_passlist_body_contents_passlist_listview"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+
 	</RelativeLayout>
-    
-    <!-- メッセージ -->
-    <RelativeLayout 
-	    android:id="@+id/id_activity_passlist_body_message_layout"
-	    android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/dim_com_body_message_layout_padding"
-        android:background="@color/color_com_body_message_layout_back"
-        android:visibility="gone">
-    	
-        <!-- 通過情報なし -->
-        <TextView
-        	android:id="@+id/id_activity_passlist_body_message_passno_textview"
-        	android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:text="@string/str_msg_passno" />
-        
-    </RelativeLayout>
+
+	<!-- メッセージ -->
+	<RelativeLayout 
+		android:id="@+id/id_activity_passlist_body_message_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/dim_com_body_message_layout_padding"
+		android:background="@color/color_com_body_message_layout_back"
+		android:visibility="gone" >
+
+		<!-- 通過情報なし -->
+		<TextView
+			android:id="@+id/id_activity_passlist_body_message_passno_textview"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/str_msg_passno" />
+
+	</RelativeLayout>
 
 </RelativeLayout>
