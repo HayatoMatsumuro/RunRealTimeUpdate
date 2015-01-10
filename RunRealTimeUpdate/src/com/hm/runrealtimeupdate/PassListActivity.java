@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.PassRunnerInfo;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -133,6 +134,7 @@ public class PassListActivity extends Activity
 		// 大会Id取得
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+		RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId );
 
 		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_contents_layout );
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_message_layout );
@@ -197,6 +199,9 @@ public class PassListActivity extends Activity
 			adapter = new PassPointAdapter( this, passPointList );
 			listView.setAdapter( adapter );
 		}
+
+		// 速報バーの表示更新
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
 
 		return;
 	}

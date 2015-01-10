@@ -71,6 +71,7 @@
     <string name="str_txt_lap">ラップ</string>
     <string name="str_txt_currenttime">通過時間 </string>
     <string name="str_txt_updateexe">この大会の速報中です</string>
+    <string name="str_txt_updatereserve"> に速報が開始します</string>
     <string name="str_txt_updatenew">New</string>
     <string name="str_txt_dot">■</string>
     <string name="str_txt_arrow">矢印</string>
@@ -79,7 +80,9 @@
     <string name="str_btn_entry">大会登録</string>
     <string name="str_btn_updatestart">自動更新を開始する</string>
     <string name="str_btn_updatestop">自動更新を停止する</string>
-    <string name="str_btn_manual">手動更新</string>
+    <string name="str_btn_reservestart">自動更新を予約する</string>
+    <string name="str_btn_reservecancel">自動更新予約を解除する</string>
+    <string name="str_btn_manual">手動更新をする</string>
     <string name="str_btn_updatelist">速報リスト</string>
     <string name="str_btn_runnerentry">選手登録</string>
     <string name="str_btn_decide">決定</string>

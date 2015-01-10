@@ -105,6 +105,24 @@
     	    
     	</RelativeLayout>
     	
+    	<!-- 予約 -->
+    	<RelativeLayout 
+    	    android:id="@+id/id_activity_racedetail_body_contents_reserve_layout"
+    	    android:layout_width="match_parent"
+    	    android:layout_height="wrap_content" >
+        	
+    	    <!-- 予約ボタン -->
+    	    <Button
+    	        android:id="@+id/id_activity_racedetail_body_contents_reserve_button"
+    	        android:layout_width="@dimen/dim_activity_racedetail_body_contents_reserve_button_width"
+    	        android:layout_height="@dimen/dim_activity_racedetail_body_contents_reserve_button_height"
+    	        android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dim_activity_racedetail_body_contents_reserve_button_margintop"
+                android:background="@color/color_activity_racedetail_body_contents_com_button_back"
+                android:text="@string/str_btn_reservestart" />
+    	    
+    	</RelativeLayout>
+    	
     	<!-- 手動更新 -->
     	<RelativeLayout 
     	    android:id="@+id/id_activity_racedetail_body_contents_manual_layout"

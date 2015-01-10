@@ -58,13 +58,17 @@
     <!-- 大会詳細 -->
     <dimen name="dim_activity_racedetail_body_contents_update_button_margintop">30dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_update_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_update_button_width">150dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">40dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_update_button_width">170dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_reserve_button_margintop">20dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_reserve_button_height">40dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_reserve_button_width">170dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">20dp</dimen>
     <dimen name="dim_activity_racedetail_body_contents_manual_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_width">100dp</dimen>
+    <dimen name="dim_activity_racedetail_body_contents_manual_button_width">170dp</dimen>
     
     <!-- 大会タブ -->
     <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
+    <dimen name="dim_tabactivity_race_updatereserve_textview_height">30dp</dimen>
     
     <!-- ダイアログ -->
     <dimen name="dim_dialog_com_layout_padding">1dp</dimen>
@@ -122,5 +126,10 @@
     <!-- リストアイテム 速報中 -->
     <dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
     <dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
+    
+    <!-- リストアイテム 予約中 -->
+    <dimen name="dim_list_item_com_reserve_layout_padding">5dp</dimen>
+    <dimen name="dim_list_item_com_reserve_textview_padding">5dp</dimen>
+    
 
 </resources>

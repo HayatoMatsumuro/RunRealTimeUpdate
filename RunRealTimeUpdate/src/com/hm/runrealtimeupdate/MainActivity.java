@@ -3,6 +3,7 @@
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.os.Bundle;
@@ -114,25 +115,40 @@ public class MainActivity extends Activity
 		List<RaceInfo> raceInfoList = Logic.getRaceInfoList( getContentResolver() );
 
 		// 速報サービス停止状態ならば、データベースの速報状態を停止する
-		// TODO:この処理をLogic で行う
 		RaceInfo chkRaceInfo = null;
 		for( RaceInfo raceInfo : raceInfoList )
 		{
-			if( raceInfo.isRaceUpdate() )
+			if( raceInfo.getRaceUpdate() != RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				chkRaceInfo = raceInfo;
 				break;
 			}
 		}
 
+		// 予約中または速報中の大会あり
 		if( chkRaceInfo != null )
 		{
-			// アラーム停止中
-			if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) )
+			// 速報中
+			if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
 			{
-				// 速報状態停止
-				Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
-				chkRaceInfo.setRaceUpdate( false );
+				// アラーム停止中
+				if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) )
+				{
+					// 速報状態停止
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
+					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+				}
+			}
+			// 予約中
+			else if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE )
+			{
+				// アラーム停止中
+				if( !CommonLib.isUpdateReserveAlarm( MainActivity.this ) )
+				{
+					// 予約状態停止
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
+					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+				}
 			}
 		}
 
@@ -198,7 +214,7 @@ public class MainActivity extends Activity
 		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
 		{
 			// 速報中でない
-			if( !info.isRaceUpdate() )
+			if( info.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
 			{
 				// 大会削除
 				Logic.deleteRaceInfo( getContentResolver(), info.getRaceId() );
@@ -216,7 +232,7 @@ public class MainActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText( MainActivity.this, "速報中のため、削除できません。", Toast.LENGTH_SHORT ).show();
+				Toast.makeText( MainActivity.this, "速報中または予約中のため、削除できません。", Toast.LENGTH_SHORT ).show();
 			}
 
 			return;
@@ -272,14 +288,38 @@ public class MainActivity extends Activity
 
 			// 速報中の表示
 			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
+			RelativeLayout raceReserveLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_layout );
 
-			if(raceInfo.isRaceUpdate())
+			switch( raceInfo.getRaceUpdate() )
 			{
+			// 速報中
+			case RaceInfo.INT_RACEUPDATE_ON:
 				raceUpdateLayout.setVisibility( View.VISIBLE );
-			}
-			else
-			{
+				raceReserveLayout.setVisibility( View.GONE );
+				break;
+			// 予約中
+			case RaceInfo.INT_RACEUPDATE_RESERVE:
 				raceUpdateLayout.setVisibility( View.GONE );
+
+				try
+				{
+					String time = Logic.getStringReserveTime( MainActivity.this );
+					TextView textView = ( TextView )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_textview );
+					textView.setText( time + " " + getString( R.string.str_txt_updatereserve ) );
+					raceReserveLayout.setVisibility( View.VISIBLE );
+				}
+				catch( LogicException e )
+				{
+					e.printStackTrace();
+					raceReserveLayout.setVisibility( View.GONE );
+				}
+				break;
+			// 停止中
+			case RaceInfo.INT_RACEUPDATE_OFF:
+			default:
+				raceUpdateLayout.setVisibility( View.GONE );
+				raceReserveLayout.setVisibility( View.GONE );
+				break;
 			}
 
 			return convertView;

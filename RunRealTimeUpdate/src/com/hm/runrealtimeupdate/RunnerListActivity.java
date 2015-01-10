@@ -2,10 +2,12 @@ package com.hm.runrealtimeupdate;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.RunnerInfo;
 import com.hm.runrealtimeupdate.logic.SectionRunnerInfo;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -205,6 +207,9 @@ public class RunnerListActivity extends Activity
 
 		setViewBody( raceId );
 
+		// 速報バーの表示更新
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+
 		return;
 	}
 
@@ -302,20 +307,20 @@ public class RunnerListActivity extends Activity
 		{
 			// ポジティブボタン押し
 			// 速報中でないなら削除
-			RaceInfo raceInfo = info.getRaceInfo();
+			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
 			SectionRunnerElement element = info.getSectionRunnerElement();
-			if( !raceInfo.isRaceUpdate() )
+			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+			{
+				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
+			}
+			else
 			{
 				// 選手削除
 				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
 
 				setViewBody( raceInfo.getRaceId() );
-				
-    			Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
-			}
-			else
-			{
-				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
+
+				Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
 			}
 
 			return;

@@ -3,6 +3,7 @@ package com.hm.runrealtimeupdate;
 import java.util.List;
 
 import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
 import com.hm.runrealtimeupdate.logic.UpdateInfo;
 
 import android.app.Activity;
@@ -120,6 +121,7 @@ public class UpdateListActivity extends Activity
 		// 大会Id取得
 		Intent intent = getIntent();
 		String raceId = intent.getStringExtra( STR_INTENT_RACEID );
+		RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), raceId );
 
 		RelativeLayout contentsLayout = ( RelativeLayout )findViewById(R.id.id_activity_updatelist_body_contents_layout );
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_updatelist_body_message_layout );
@@ -149,6 +151,9 @@ public class UpdateListActivity extends Activity
 			updateListView.setAdapter(adapter);
 		}
 
+		// 速報バーの表示更新
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+	
 		return;
 	}
 
