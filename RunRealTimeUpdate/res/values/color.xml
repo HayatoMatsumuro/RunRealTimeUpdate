@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="white">#FFFFFF</color>
-    
-    <!-- ヘッダー -->
-    <color name="color_com_header_layout_back">#47cc59</color>
-    <color name="color_com_header_title_textview_text">#ffffff</color>
-    <color name="color_com_header_button_text">#ffffff</color>
-    <color name="color_com_header_button_back">#8eccad</color>
-    
-    <!-- ボーダー -->
-    <color name="color_com_border_layout_back">#c6cc28</color>
-    
-    <!-- ボディ -->
-    <color name="color_com_body_layout_back">#e5edf2</color>
-    <color name="color_com_body_contents_layout_back">#ffffff</color>
-    <color name="color_com_body_message_layout_back">#ffffff</color>
 
-    <!-- 大会タブ -->
-    <color name="color_tabactivity_race_updateexe_textview_back">#e5b7e2</color>
-    <color name="color_tabactivity_race_updatereserve_textview_back">#e2d1e2</color>
-    
-    <!-- 大会詳細 -->
-    <color name="color_activity_racedetail_body_contents_com_button_back">#e5b7e2</color>
-    
-    <!-- 選手詳細 -->
-    <color name="color_dialog_runnerinfodetail_layout_back">#ffffff</color>
-    <color name="color_dialog_runnerinfodetail_timelist_com_textview_back">#DDDDDD</color>
-    
-    <!-- リストアイテム -->
-    <color name="color_list_item_com_dot_textview_text">#c6cc28</color>
-    <color name="color_list_item_com_sub_textview_text">#555555</color>
-    <color name="color_list_item_com_new_textview_text">#cc2833</color>
-    <color name="color_list_item_com_section_layout_back">#28ccc6</color>
-    <color name="color_list_item_com_point_layout_back">#e6e6e6</color>
-    <color name="color_list_item_com_update_textview_back">#e5b7e2</color>
-    <color name="color_list_item_com_reserve_textview_back">#e2d1e2</color>
-    
-    <!-- QRコード -->
-    <color name="color_activity_raceentryqr_preview_frame_view_background_solid_color">#00dcdcdc</color>
-    <color name="color_activity_raceentryqr_preview_frame_view_background_stroke_color">#7747cc59</color>
-    <color name="color_activity_raceentryqr_menu_layout_background">#000000</color>
-    <color name="color_activity_raceentryqr_menu_textview_color">#FFFFFF</color>
+	<!-- ヘッダー -->
+	<color name="color_com_header_layout_back">#47cc59</color>
+	<color name="color_com_header_title_textview_text">#ffffff</color>
+	<color name="color_com_header_button_text">#ffffff</color>
+	<color name="color_com_header_button_back">#8eccad</color>
+
+	<!-- ボーダー -->
+	<color name="color_com_border_layout_back">#c6cc28</color>
+
+	<!-- ボディ -->
+	<color name="color_com_body_layout_back">#e5edf2</color>
+	<color name="color_com_body_contents_layout_back">#ffffff</color>
+	<color name="color_com_body_message_layout_back">#ffffff</color>
+
+	<!-- 大会タブ -->
+	<color name="color_tabactivity_race_updateexe_textview_back">#e5b7e2</color>
+	<color name="color_tabactivity_race_updatereserve_textview_back">#e2d1e2</color>
+
+	<!-- 大会詳細 -->
+	<color name="color_activity_racedetail_body_contents_com_button_back">#e5b7e2</color>
+
+	<!-- 選手詳細 -->
+	<color name="color_dialog_runnerinfodetail_layout_back">#ffffff</color>
+	<color name="color_dialog_runnerinfodetail_timelist_com_textview_back">#DDDDDD</color>
+
+	<!-- リストアイテム -->
+	<color name="color_list_item_com_dot_textview_text">#c6cc28</color>
+	<color name="color_list_item_com_sub_textview_text">#555555</color>
+	<color name="color_list_item_com_new_textview_text">#cc2833</color>
+	<color name="color_list_item_com_section_layout_back">#28ccc6</color>
+	<color name="color_list_item_com_point_layout_back">#e6e6e6</color>
+	<color name="color_list_item_com_update_textview_back">#e5b7e2</color>
+	<color name="color_list_item_com_reserve_textview_back">#e2d1e2</color>
+
+	<!-- QRコード -->
+	<color name="color_activity_raceentryqr_preview_frame_view_background_solid_color">#00dcdcdc</color>
+	<color name="color_activity_raceentryqr_preview_frame_view_background_stroke_color">#7747cc59</color>
+	<color name="color_activity_raceentryqr_menu_layout_background">#000000</color>
+	<color name="color_activity_raceentryqr_menu_textview_color">#FFFFFF</color>
+
 </resources>

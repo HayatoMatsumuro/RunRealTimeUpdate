@@ -1,135 +1,130 @@
 <resources>
 
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    
-    <!-- ヘッダー -->
-    <dimen name="dim_com_header_layout_height">40dp</dimen>
-    <dimen name="dim_com_header_layout_padding">5dp</dimen>
-    <dimen name="dim_com_header_button_padding">5dp</dimen>
-    
-    <!-- ボーダー -->
-    <dimen name="dim_com_border_layout_padding">5dp</dimen>
-    
-    <!-- ボディ -->
-    <dimen name="dim_com_body_layout_padding">10dp</dimen>
-    <dimen name="dim_com_body_contents_layout_padding">10dp</dimen>
-    <dimen name="dim_com_body_message_layout_padding">10dp</dimen>
-    
-    <!-- 大会登録 -->
-    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height">40dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width">200dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop">15dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft">10dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_marginleft">5dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_height">40dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_qr_button_marginTop">40dp</dimen>
-    <dimen name="dim_activity_raceentry_body_contents_qr_button_height">40dp</dimen>
-    
-    <!-- 大会登録QR -->
-    <dimen name="dim_activity_raceentryqr_preview_frame_view_width">300dp</dimen>
-    <dimen name="dim_activity_raceentryqr_preview_frame_view_height">180dp</dimen>
-    <dimen name="dim_activity_raceentryqr_preview_frame_view_background_stroke_width">5dp</dimen>
-    <dimen name="dim_activity_raceentryqr_preview_frame_view_background_corners_radius">2dp</dimen>
-    
-    <!-- 選手登録 -->
-    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_height">40dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_margintop">15dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_marginleft">10dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_marginleft">5dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_height">40dp</dimen>
-    
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_layout_margintop">15dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_sei_textview_marginleft">10dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_width">75dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_height">40dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_margintop">15dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_mei_textview_marginleft">10dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_width">75dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_height">40dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_margintop">15dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_marginleft">5dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_height">40dp</dimen>
-    
-    <dimen name="dim_activity_runnerentry_body_contents_namelist_listview_margintop">20dp</dimen>
-    <dimen name="dim_activity_runnerentry_body_contents_nosearchname_listview_margintop">40dp</dimen>
-    
-    <!-- 大会詳細 -->
-    <dimen name="dim_activity_racedetail_body_contents_update_button_margintop">30dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_update_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_update_button_width">170dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_reserve_button_margintop">20dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_reserve_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_reserve_button_width">170dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">20dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_height">40dp</dimen>
-    <dimen name="dim_activity_racedetail_body_contents_manual_button_width">170dp</dimen>
-    
-    <!-- 大会タブ -->
-    <dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
-    <dimen name="dim_tabactivity_race_updatereserve_textview_height">30dp</dimen>
-    
-    <!-- ダイアログ -->
-    <dimen name="dim_dialog_com_layout_padding">1dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingtop">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_number_layout_paddingbottom">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_number_text_marginLeft">15dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingtop">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_name_layout_paddingbottom">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_name_text_marginLeft">15dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingtop">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_section_layout_paddingbottom">5dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_section_text_marginLeft">15dp</dimen>
-    
-    <dimen name="dim_dialog_runnerinfodetail_timelist_com_layout_padding">1dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_timelist_com_textview_padding">1dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_timelist_point_layout_width">60dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_timelist_split_layout_width">80dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_timelist_lap_layout_width">65dp</dimen>
-    <dimen name="dim_dialog_runnerinfodetail_timelist_currenttime_layout_width">70dp</dimen>
-    
-    
-    <!-- リストアイテム -->
-    <!-- リストアイテム  大会-->
-    <dimen name="dim_list_item_com_race_layout_padding">2dp</dimen>
-    <dimen name="dim_list_item_com_race_name_textview_marginleft">5dp</dimen>
-    
-    <!-- リストアイテム 選手 -->
-    <dimen name="dim_list_item_com_runner_layout_padding">5dp</dimen>
-    <dimen name="dim_list_item_com_runner_number_textview_marginLeft">5dp</dimen>
-    <dimen name="dim_list_item_com_runner_name_textview_marginLeft">5dp</dimen>
-    
-    <!-- リストアイテム 速報情報 -->
-    <dimen name="dim_list_item_com_updateinfo_layout_padding">2dp</dimen>
-    <dimen name="dim_list_item_com_updateinfo_info_textview_marginLeft">5dp</dimen>
-    
-    <!-- リストアイテム 部門 -->
-    <dimen name="dim_list_item_com_section_layout_padding">5dp</dimen>
-    
-    <!-- リストアイテム地点 -->
-    <dimen name="dim_list_item_com_point_layout_padding">5dp</dimen>
-    
-    <!-- リストアイテム　スプリット -->
-    <dimen name="dim_list_item_com_split_layout_paddingtop">2dp</dimen>
-    <dimen name="dim_list_item_com_split_layout_paddingbottom">2dp</dimen>
-    <dimen name="dim_list_item_com_split_layout_paddingleft">15dp</dimen>
+	<!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name="activity_horizontal_margin">16dp</dimen>
+	<dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!-- リストアイテム　通過時間 -->
-    <dimen name="dim_list_item_com_currenttime_layout_paddingtop">2dp</dimen>
-    <dimen name="dim_list_item_com_currenttime_layout_paddingbottom">2dp</dimen>
-    <dimen name="dim_list_item_com_currenttime_layout_paddingleft">15dp</dimen>
-    
-    <!-- リストアイテム NEW -->
-    <dimen name="dim_list_item_com_new_layout_padding">5dp</dimen>
-    
-    <!-- リストアイテム 速報中 -->
-    <dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
-    <dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
-    
-    <!-- リストアイテム 予約中 -->
-    <dimen name="dim_list_item_com_reserve_layout_padding">5dp</dimen>
-    <dimen name="dim_list_item_com_reserve_textview_padding">5dp</dimen>
-    
+	<!-- ヘッダー -->
+	<dimen name="dim_com_header_layout_height">40dp</dimen>
+	<dimen name="dim_com_header_layout_padding">5dp</dimen>
+	<dimen name="dim_com_header_button_padding">5dp</dimen>
+
+	<!-- ボーダー -->
+	<dimen name="dim_com_border_layout_padding">5dp</dimen>
+
+	<!-- ボディ -->
+	<dimen name="dim_com_body_layout_padding">10dp</dimen>
+	<dimen name="dim_com_body_contents_layout_padding">10dp</dimen>
+	<dimen name="dim_com_body_message_layout_padding">10dp</dimen>
+
+	<!-- 大会登録 -->
+	<dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height">40dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width">200dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop">15dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft">10dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_marginleft">5dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_urlform_decide_button_height">40dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_qr_button_marginTop">40dp</dimen>
+	<dimen name="dim_activity_raceentry_body_contents_qr_button_height">40dp</dimen>
+
+	<!-- 大会登録QR -->
+	<dimen name="dim_activity_raceentryqr_preview_frame_view_width">300dp</dimen>
+	<dimen name="dim_activity_raceentryqr_preview_frame_view_height">180dp</dimen>
+	<dimen name="dim_activity_raceentryqr_preview_frame_view_background_stroke_width">5dp</dimen>
+	<dimen name="dim_activity_raceentryqr_preview_frame_view_background_corners_radius">2dp</dimen>
+
+	<!-- 選手登録 -->
+	<dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_height">40dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_margintop">15dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_runnerform_inputurl_edittext_marginleft">10dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_marginleft">5dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_runnerform_decide_button_height">40dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_layout_margintop">15dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_sei_textview_marginleft">10dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_width">75dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_height">40dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_sei_edittext_margintop">15dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_mei_textview_marginleft">10dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_width">75dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_height">40dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_mei_edittext_margintop">15dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_marginleft">5dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nameform_search_button_height">40dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_namelist_listview_margintop">20dp</dimen>
+	<dimen name="dim_activity_runnerentry_body_contents_nosearchname_listview_margintop">40dp</dimen>
+
+	<!-- 大会詳細 -->
+	<dimen name="dim_activity_racedetail_body_contents_update_button_margintop">30dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_update_button_height">40dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_update_button_width">170dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_reserve_button_margintop">20dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_reserve_button_height">40dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_reserve_button_width">170dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_manual_button_margintop">20dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_manual_button_height">40dp</dimen>
+	<dimen name="dim_activity_racedetail_body_contents_manual_button_width">170dp</dimen>
+
+	<!-- 大会タブ -->
+	<dimen name="dim_tabactivity_race_updateexe_textview_height">30dp</dimen>
+	<dimen name="dim_tabactivity_race_updatereserve_textview_height">30dp</dimen>
+
+	<!-- ダイアログ -->
+	<dimen name="dim_dialog_com_layout_padding">1dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_number_layout_paddingtop">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_number_layout_paddingbottom">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_number_text_marginLeft">15dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_name_layout_paddingtop">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_name_layout_paddingbottom">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_name_text_marginLeft">15dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_section_layout_paddingtop">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_section_layout_paddingbottom">5dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_section_text_marginLeft">15dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_com_layout_padding">1dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_com_textview_padding">1dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_point_layout_width">60dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_split_layout_width">80dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_lap_layout_width">65dp</dimen>
+	<dimen name="dim_dialog_runnerinfodetail_timelist_currenttime_layout_width">70dp</dimen>
+
+	<!-- リストアイテム -->
+	<!-- リストアイテム  大会-->
+	<dimen name="dim_list_item_com_race_layout_padding">2dp</dimen>
+	<dimen name="dim_list_item_com_race_name_textview_marginleft">5dp</dimen>
+
+	<!-- リストアイテム 選手 -->
+	<dimen name="dim_list_item_com_runner_layout_padding">5dp</dimen>
+	<dimen name="dim_list_item_com_runner_number_textview_marginLeft">5dp</dimen>
+	<dimen name="dim_list_item_com_runner_name_textview_marginLeft">5dp</dimen>
+
+	<!-- リストアイテム 速報情報 -->
+	<dimen name="dim_list_item_com_updateinfo_layout_padding">2dp</dimen>
+	<dimen name="dim_list_item_com_updateinfo_info_textview_marginLeft">5dp</dimen>
+
+	<!-- リストアイテム 部門 -->
+	<dimen name="dim_list_item_com_section_layout_padding">5dp</dimen>
+
+	<!-- リストアイテム地点 -->
+	<dimen name="dim_list_item_com_point_layout_padding">5dp</dimen>
+
+	<!-- リストアイテム　スプリット -->
+	<dimen name="dim_list_item_com_split_layout_paddingtop">2dp</dimen>
+	<dimen name="dim_list_item_com_split_layout_paddingbottom">2dp</dimen>
+	<dimen name="dim_list_item_com_split_layout_paddingleft">15dp</dimen>
+
+	<!-- リストアイテム　通過時間 -->
+	<dimen name="dim_list_item_com_currenttime_layout_paddingtop">2dp</dimen>
+	<dimen name="dim_list_item_com_currenttime_layout_paddingbottom">2dp</dimen>
+	<dimen name="dim_list_item_com_currenttime_layout_paddingleft">15dp</dimen>
+
+	<!-- リストアイテム NEW -->
+	<dimen name="dim_list_item_com_new_layout_padding">5dp</dimen>
+
+	<!-- リストアイテム 速報中 -->
+	<dimen name="dim_list_item_com_update_layout_padding">5dp</dimen>
+	<dimen name="dim_list_item_com_update_textview_padding">5dp</dimen>
+
+	<!-- リストアイテム 予約中 -->
+	<dimen name="dim_list_item_com_reserve_layout_padding">5dp</dimen>
+	<dimen name="dim_list_item_com_reserve_textview_padding">5dp</dimen>
 
 </resources>
