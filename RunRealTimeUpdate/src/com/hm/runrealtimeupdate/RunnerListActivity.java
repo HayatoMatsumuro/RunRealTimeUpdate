@@ -65,7 +65,7 @@ public class RunnerListActivity extends Activity
 
 					// 選手情報取得
 					SectionRunnerElement element = ( SectionRunnerElement )listView.getItemAtPosition( position );
-					RunnerInfo runnerInfo = element.getRunnerInfo();
+					RunnerInfo runnerInfo = element.runnerInfo;
 
 					if( runnerInfo == null )
 					{
@@ -102,7 +102,7 @@ public class RunnerListActivity extends Activity
 					// 選手情報取得
 					ListView listView = ( ListView )parent;
 					SectionRunnerElement element = ( SectionRunnerElement )listView.getItemAtPosition( position );
-					RunnerInfo runnerInfo = element.getRunnerInfo();
+					RunnerInfo runnerInfo = element.runnerInfo;
 
 					// 選手以外のクリックは、無視
 					if( runnerInfo == null )
@@ -281,13 +281,13 @@ public class RunnerListActivity extends Activity
 		for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList )
 		{
 			SectionRunnerElement sectionElement = new SectionRunnerElement();
-			sectionElement.setSection( sectionRunnerInfo.section );
+			sectionElement.section = sectionRunnerInfo.section;
 			sectionRunnerElementList.add( sectionElement );
 
 			for( RunnerInfo runnerInfo : sectionRunnerInfo.runnerInfoList )
 			{
 				SectionRunnerElement runnerElement = new SectionRunnerElement();
-				runnerElement.setRunnerInfo( runnerInfo );
+				runnerElement.runnerInfo = runnerInfo;
 				sectionRunnerElementList.add( runnerElement );
 			}
 		}
@@ -316,7 +316,7 @@ public class RunnerListActivity extends Activity
 			else
 			{
 				// 選手削除
-				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.id, element.getRunnerInfo().number );
+				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.id, element.runnerInfo.number );
 
 				setViewBody( raceInfo.id );
 
@@ -397,12 +397,12 @@ public class RunnerListActivity extends Activity
 			SectionRunnerElement item = getItem( position );
 
 			// 部門
-			if( item.getSection() != null )
+			if( item.section != null )
 			{
 				sectionLayout.setVisibility( View.VISIBLE );
 				runnerLayout.setVisibility( View.GONE );
 
-				runnerSectionTextView.setText( item.getSection() );
+				runnerSectionTextView.setText( item.section );
 			}
 			else
 			{
@@ -426,49 +426,11 @@ public class RunnerListActivity extends Activity
 		/**
 		 * 部門
 		 */
-		private String section = null;
+		public String section = null;
 
 		/**
 		 * 選手情報
 		 */
-		private RunnerInfo runnerInfo = null;
-
-		/**
-		 * 部門を取得する
-		 * @return 部門
-		 */
-		public String getSection()
-		{
-			return section;
-		}
-
-		/**
-		 * 部門を設定する
-		 * @param section 部門
-		 */
-		public void setSection( String section )
-		{
-			this.section = section;
-			return;
-		}
-
-		/**
-		 * 選手情報を取得する
-		 * @return 選手情報
-		 */
-		public RunnerInfo getRunnerInfo()
-		{
-			return runnerInfo;
-		}
-
-		/**
-		 * 選手情報を設定する
-		 * @param runnerInfo 選手情報
-		 */
-		public void setRunnerInfo( RunnerInfo runnerInfo )
-		{
-			this.runnerInfo = runnerInfo;
-			return;
-		}
+		public RunnerInfo runnerInfo = null;
 	}
 }

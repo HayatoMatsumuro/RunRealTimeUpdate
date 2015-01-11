@@ -70,7 +70,7 @@ public class PassListActivity extends Activity
 					ListView listView = ( ListView )parent;
 					PassPointListElement element = ( PassPointListElement )listView.getItemAtPosition( position );
 
-					if( PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER.equals( element.getSts() ) )
+					if( PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER.equals( element.sts ) )
 					{
 						AlertDialog.Builder dialog = new AlertDialog.Builder( PassListActivity.this );
 						dialog.setTitle( getString( R.string.str_dialog_title_updatedetail ) );
@@ -108,20 +108,20 @@ public class PassListActivity extends Activity
 	{
 		StringBuilder builder = new StringBuilder();
 
-		builder.append( element.getNumber() );
+		builder.append( element.number );
 		builder.append( "\n" );
-		builder.append( element.getName() );
+		builder.append( element.name );
 		builder.append( "\n\n" );
-		builder.append( element.getPoint() );
+		builder.append( element.point );
 		builder.append( "\n\n" );
 		builder.append( getString( R.string.str_dialog_msg_split ) );
-		builder.append( element.getSplit() );
+		builder.append( element.split );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_lap ) );
-		builder.append( element.getLap() );
+		builder.append( element.lap );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_currenttime ) );
-		builder.append( element.getCurrentTime() );
+		builder.append( element.currentTime );
 
 		return builder.toString();
 	}
@@ -158,30 +158,30 @@ public class PassListActivity extends Activity
 			{
 				// 部門
 				PassPointListElement element = new PassPointListElement();
-				element.setSts( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION );
-				element.setSection( passRunnerInfo.getSection() );
+				element.sts = PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION;
+				element.section = passRunnerInfo.getSection();
 				passPointList.add( element );
 
 				for( PassRunnerInfo.PassPointInfo passPointInfo:passRunnerInfo.getPassPointInfo() )
 				{
 					// 地点
 					PassPointListElement pElement = new PassPointListElement();
-					pElement.setSts( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT );
-					pElement.setPoint( passPointInfo.getPoint() );
+					pElement.sts = PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT;
+					pElement.point = passPointInfo.getPoint();
 					passPointList.add( pElement );
 
 					// 選手
 					for( PassRunnerInfo.PassPointInfo.PassPointRunnerInfo passPointRunnerInfo : passPointInfo.getPassPointRunnerInfoList() )
 					{
 						PassPointListElement rElement = new PassPointListElement();
-						rElement.setSts( PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER );
-						rElement.setName( passPointRunnerInfo.getName() );
-						rElement.setNumber( passPointRunnerInfo.getNumber() );
-						rElement.setPoint( passPointInfo.getPoint() );
-						rElement.setSplit( passPointRunnerInfo.getSplit() );
-						rElement.setLap( passPointRunnerInfo.getLap() );
-						rElement.setCurrentTime( passPointRunnerInfo.getCurrentTime() );
-						rElement.setRecentFlg( passPointRunnerInfo.isRecentFlg() );
+						rElement.sts = PassPointListElement.STR_PASSPOINTLISTELEMENT_RUNNER;
+						rElement.name = passPointRunnerInfo.getName();
+						rElement.number = passPointRunnerInfo.getNumber();
+						rElement.point = passPointInfo.getPoint();
+						rElement.split = passPointRunnerInfo.getSplit();
+						rElement.lap = passPointRunnerInfo.getLap();
+						rElement.currentTime = passPointRunnerInfo.getCurrentTime();
+						rElement.recentFlg = passPointRunnerInfo.isRecentFlg();
 						passPointList.add( rElement );
 					}
 				}
@@ -251,23 +251,23 @@ public class PassListActivity extends Activity
 			RelativeLayout newLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_passinfo_runnerinfo_sub_new_layout );
 			PassPointListElement element = getItem( position );
 
-			if( element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION ) )
+			if( element.sts.equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_SECTION ) )
 			{
 				// 部門表示
 				sectionLayout.setVisibility( View.VISIBLE );
 				pointLayout.setVisibility( View.GONE );
 				runnerInfoLayout.setVisibility( View.GONE );
 
-				sectionTextView.setText( element.getSection() );
+				sectionTextView.setText( element.section );
 			}
-			else if( element.getSts().equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT ) )
+			else if( element.sts.equals( PassPointListElement.STR_PASSPOINTLISTELEMENT_POINT ) )
 			{
 				// 地点情報表示
 				sectionLayout.setVisibility( View.GONE );
 				pointLayout.setVisibility( View.VISIBLE );
 				runnerInfoLayout.setVisibility( View.GONE );
 
-				pointTextView.setText( element.getPoint() );
+				pointTextView.setText( element.point );
 			}
 			else
 			{
@@ -276,12 +276,12 @@ public class PassListActivity extends Activity
 				pointLayout.setVisibility( View.GONE );
 				runnerInfoLayout.setVisibility( View.VISIBLE );
 
-				nameTextView.setText( element.getName() );
-				numberTextView.setText( element.getNumber() );
-				splitTextView.setText( getString( R.string.str_txt_split ) + " " + element.getSplit() );
-				currentTimeTextView.setText( getString( R.string.str_txt_currenttime ) + " " + element.getCurrentTime() );
+				nameTextView.setText( element.name );
+				numberTextView.setText( element.number );
+				splitTextView.setText( getString( R.string.str_txt_split ) + " " + element.split );
+				currentTimeTextView.setText( getString( R.string.str_txt_currenttime ) + " " + element.currentTime );
 				
-				if( element.isRecentFlg() )
+				if( element.recentFlg )
 				{
 					newLayout.setVisibility( View.VISIBLE );
 				}
@@ -320,217 +320,46 @@ public class PassListActivity extends Activity
 		/**
 		 * 通過地点リスト要素 状態
 		 */
-		private String sts;
+		public String sts;
 
 		/**
 		 * 部門
 		 */
-		private String section;
+		public String section;
 
 		/**
 		 * 地点
 		 */
-		private String point;
+		public String point;
 
 		/**
 		 * ゼッケン番号
 		 */
-		private String number;
+		public String number;
 
 		/**
 		 * 名前
 		 */
-		private String name;
+		public String name;
 
 		/**
 		 * スプリット
 		 */
-		private String split;
+		public String split;
 
 		/**
 		 * ラップ
 		 */
-		private String lap;
+		public String lap;
 
 		/**
 		 * 現在の時刻
 		 */
-		private String currentTime;
+		public String currentTime;
 
 		/**
 		 * 最近の更新
 		 */
-		private boolean recentFlg;
-
-		/**
-		 * 状態を取得する
-		 * @return 状態
-		 */
-		public String getSts()
-		{
-			return sts;
-		}
-
-		/**
-		 * 状態を設定する
-		 * @param sts 状態
-		 */
-		public void setSts( String sts )
-		{
-			this.sts = sts;
-			return;
-		}
-
-		/**
-		 * 部門を取得する
-		 * @return 部門
-		 */
-		public String getSection()
-		{
-			return section;
-		}
-
-		/**
-		 * 部門を設定する
-		 * @param section 部門
-		 */
-		public void setSection( String section )
-		{
-			this.section = section;
-			return;
-		}
-
-		/**
-		 * 地点を取得する
-		 * @return 地点
-		 */
-		public String getPoint()
-		{
-			return point;
-		}
-
-		/**
-		 * 地点を設定する
-		 * @param point 地点
-		 */
-		public void setPoint( String point )
-		{
-			this.point = point;
-			return;
-		}
-
-		/**
-		 * ゼッケン番号を取得する
-		 * @return ゼッケン番号
-		 */
-		public String getNumber()
-		{
-			return number;
-		}
-
-		/**
-		 * ゼッケン番号を設定する
-		 * @param number ゼッケン番号
-		 */
-		public void setNumber( String number )
-		{
-			this.number = number;
-			return;
-		}
-
-		/**
-		 * 名前を取得する
-		 * @return　名前
-		 */
-		public String getName()
-		{
-			return name;
-		}
-
-		/**
-		 * 名前を設定する
-		 * @param name　名前
-		 */
-		public void setName( String name )
-		{
-			this.name = name;
-			return;
-		}
-
-		/**
-		 * スプリットを取得する
-		 * @return スプリット
-		 */
-		public String getSplit()
-		{
-			return split;
-		}
-
-		/**
-		 * スプリットを設定する
-		 * @param split スプリット
-		 */
-		public void setSplit( String split )
-		{
-			this.split = split;
-			return;
-		}
-
-		/**
-		 * ラップを取得する
-		 * @return ラップ
-		 */
-		public String getLap()
-		{
-			return lap;
-		}
-
-		/**
-		 * ラップを設定する
-		 * @param lap ラップ
-		 */
-		public void setLap( String lap )
-		{
-			this.lap = lap;
-			return;
-		}
-
-		/**
-		 * 現在の時刻を取得する
-		 * @return 現在の時刻
-		 */
-		public String getCurrentTime()
-		{
-			return currentTime;
-		}
-
-		/**
-		 * 現在の時刻を設定する
-		 * @param currentTime 現在の時刻
-		 */
-		public void setCurrentTime( String currentTime )
-		{
-			this.currentTime = currentTime;
-			return;
-		}
-
-		/**
-		 * 最近の更新の判定をする
-		 * @return true:最近/false:最近でない
-		 */
-		public boolean isRecentFlg()
-		{
-			return recentFlg;
-		}
-
-		/**
-		 * 最近の更新を設定する
-		 * @param recentFlg true:最近/false:最近でない
-		 */
-		public void setRecentFlg( boolean recentFlg )
-		{
-			this.recentFlg = recentFlg;
-			return;
-		}
+		public boolean recentFlg;
 	}
 }

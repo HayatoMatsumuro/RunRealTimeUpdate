@@ -368,8 +368,8 @@ public class RunnerEntryActivity extends Activity
 			}
 
 			RunnerEntryDialogInfo info = new RunnerEntryDialogInfo();
-			info.setRaceInfo( m_RaceInfo );
-			info.setRunnerInfo( runnerInfo );
+			info.raceInfo = m_RaceInfo;
+			info.runnerInfo = runnerInfo;
 
 			// 選手情報ダイアログ表示
 			InfoDialog<RunnerEntryDialogInfo> runnerEntryDialogInfo = new InfoDialog<RunnerEntryDialogInfo>( info, new RunnerEntryButtonCallbackImpl() );
@@ -666,10 +666,10 @@ public class RunnerEntryActivity extends Activity
 		@Override
 		public void onClickPositiveButton( DialogInterface dialog, int which, RunnerEntryDialogInfo info )
 		{
-			if( !Logic.checkEntryRunnerId( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() ) )
+			if( !Logic.checkEntryRunnerId( getContentResolver(), info.raceInfo, info.runnerInfo ) )
 			{
 				// 最新の大会情報を取得
-				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().id );
+				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.raceInfo.id );
 
 				// 予約中→速報中となった場合
 				if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
@@ -679,7 +679,7 @@ public class RunnerEntryActivity extends Activity
 				else
 				{
 					// データベース登録
-					Logic.entryRunnerInfo( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() );
+					Logic.entryRunnerInfo( getContentResolver(), info.raceInfo, info.runnerInfo );
 
 					Toast.makeText( RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
 				}
@@ -690,7 +690,7 @@ public class RunnerEntryActivity extends Activity
 		        imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 
 				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
-				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().id );
+				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.raceInfo.id );
 				intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
 				startActivity( intent );
 			}
@@ -770,43 +770,11 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * 大会情報
 		 */
-		private RaceInfo raceInfo;
+		public RaceInfo raceInfo;
 
 		/**
 		 * 選手情報
 		 */
-		private RunnerInfo runnerInfo;
-
-		/**
-		 * 大会情報を取得する
-		 * @return 大会情報
-		 */
-		public RaceInfo getRaceInfo() {
-			return raceInfo;
-		}
-
-		/**
-		 * 大会情報を設定する
-		 * @param raceInfo
-		 */
-		public void setRaceInfo(RaceInfo raceInfo) {
-			this.raceInfo = raceInfo;
-		}
-
-		/**
-		 * 選手情報を取得する
-		 * @return 選手情報
-		 */
-		public RunnerInfo getRunnerInfo() {
-			return runnerInfo;
-		}
-
-		/**
-		 * 選手情報を設定する
-		 * @param runnerInfo 選手情報
-		 */
-		public void setRunnerInfo(RunnerInfo runnerInfo) {
-			this.runnerInfo = runnerInfo;
-		}
+		public RunnerInfo runnerInfo;
 	}
 }
