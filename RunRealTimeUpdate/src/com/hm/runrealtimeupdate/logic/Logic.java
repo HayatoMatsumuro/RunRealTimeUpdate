@@ -526,13 +526,13 @@ public class Logic
 		{
 			UpdateInfo updateInfo = new UpdateInfo();
 
-			updateInfo.setName( dbUpdateData.getName() );
-			updateInfo.setNumber( dbUpdateData.getNumber() );
-			updateInfo.setSection( dbUpdateData.getSection() );
-			updateInfo.setPoint( dbUpdateData.getPoint() );
-			updateInfo.setSplit( dbUpdateData.getSplit() );
-			updateInfo.setLap( dbUpdateData.getLap() );
-			updateInfo.setCurrentTime( dbUpdateData.getCurrentTime() );
+			updateInfo.name = dbUpdateData.getName();
+			updateInfo.number = dbUpdateData.getNumber();
+			updateInfo.section = dbUpdateData.getSection();
+			updateInfo.point = dbUpdateData.getPoint();
+			updateInfo.split = dbUpdateData.getSplit();
+			updateInfo.lap = dbUpdateData.getLap();
+			updateInfo.currentTime = dbUpdateData.getCurrentTime();
 
 			try
 			{
@@ -541,17 +541,17 @@ public class Logic
 
 				if( nowTime - updateTime < recentTime )
 				{
-					updateInfo.setRecentFlg( true );
+					updateInfo.recentFlg = true;
 				}
 				else
 				{
-					updateInfo.setRecentFlg( false );
+					updateInfo.recentFlg =  false;
 				}
 			}
 			catch( ParseException e )
 			{
 				e.printStackTrace();
-				updateInfo.setRecentFlg( false );
+				updateInfo.recentFlg =  false;
 			}
 
 			updateInfoList.add( updateInfo );
