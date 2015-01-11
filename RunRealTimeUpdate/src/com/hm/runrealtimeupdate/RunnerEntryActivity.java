@@ -179,10 +179,10 @@ public class RunnerEntryActivity extends Activity
 					// 名前検索タスク起動
 					RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
 					RunnerInfoByNameLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.id );
-					param.setSei( seiEdit.getText().toString() );
-					param.setMei( meiEdit.getText().toString() );
+					param.url = getString( R.string.str_txt_defaulturl );
+					param.raceId = raceInfo.id;
+					param.sei = seiEdit.getText().toString();
+					param.mei =  meiEdit.getText().toString();
 					task.execute( param );
 
 					return;
@@ -528,10 +528,10 @@ public class RunnerEntryActivity extends Activity
 			List<RunnerInfo> runnerInfoList = null;
 
 			// 名前から選手情報を検索する
-			String url = params[0].getUrl();
-			String raceId = params[0].getRaceId();
-			String mei = params[0].getMei();
-			String sei = params[0].getSei();
+			String url = params[0].url;
+			String raceId = params[0].raceId;
+			String mei = params[0].mei;
+			String sei = params[0].sei;
 			runnerInfoList = Logic.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			return runnerInfoList;
@@ -612,98 +612,22 @@ public class RunnerEntryActivity extends Activity
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
+			public String raceId;
 
 			/**
 			 * 姓
 			 */
-			private String sei;
+			public String sei;
 
 			/**
 			 * 名
 			 */
-			private String mei;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId(String raceId)
-			{
-				this.raceId = raceId;
-				return;
-			}
-
-			/**
-			 * 姓を取得する
-			 * @return 姓
-			 */
-			public String getSei()
-			{
-				return sei;
-			}
-
-			/**
-			 * 姓を設定する
-			 * @param sei 姓
-			 */
-			public void setSei(String sei)
-			{
-				this.sei = sei;
-				return;
-			}
-
-			/**
-			 * 名を取得する
-			 * @return 名
-			 */
-			public String getMei()
-			{
-				return mei;
-			}
-
-			/**
-			 * 名を設定する
-			 * @param mei 名
-			 */
-			public void setMei( String mei )
-			{
-				this.mei = mei;
-				return;
-			}
+			public String mei;
 		}
 	}
 

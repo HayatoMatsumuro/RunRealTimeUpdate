@@ -74,8 +74,8 @@ public class RunnerListActivity extends Activity
 
 					// 削除ダイアログ表示
 					RunnerDeleteInfo runnerDeleteInfo = new RunnerDeleteInfo();
-					runnerDeleteInfo.setRaceInfo(raceInfo);
-					runnerDeleteInfo.setSectionRunnerElement(element);
+					runnerDeleteInfo.raceInfo = raceInfo;
+					runnerDeleteInfo.sectionRunnerElement = element;
 
 					InfoDialog<RunnerDeleteInfo> runnerDeleteDialog = new InfoDialog<RunnerDeleteInfo>( runnerDeleteInfo, new RunnerDeleteButtonCallbackImpl() );
 					runnerDeleteDialog.onDialog(
@@ -307,8 +307,8 @@ public class RunnerListActivity extends Activity
 		{
 			// ポジティブボタン押し
 			// 速報中でないなら削除
-			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().id );
-			SectionRunnerElement element = info.getSectionRunnerElement();
+			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.raceInfo.id );
+			SectionRunnerElement element = info.sectionRunnerElement;
 			if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 			{
 				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
@@ -350,44 +350,6 @@ public class RunnerListActivity extends Activity
 		 * リストビューの要素
 		 */
 		private SectionRunnerElement sectionRunnerElement;
-
-		/**
-		 * 大会情報を取得する
-		 * @return 大会情報
-		 */
-		public RaceInfo getRaceInfo()
-		{
-			return raceInfo;
-		}
-
-		/**
-		 * 大会情報を設定する
-		 * @param raceInfo 大会情報
-		 */
-		public void setRaceInfo(RaceInfo raceInfo)
-		{
-			this.raceInfo = raceInfo;
-			return;
-		}
-
-		/**
-		 * 部門選手要素を取得する
-		 * @return 部門選手要素
-		 */
-		public SectionRunnerElement getSectionRunnerElement()
-		{
-			return sectionRunnerElement;
-		}
-
-		/**
-		 * 部門選手要素を設定する
-		 * @param sectionRunnerElement 部門選手要素
-		 */
-		public void setSectionRunnerElement( SectionRunnerElement sectionRunnerElement )
-		{
-			this.sectionRunnerElement = sectionRunnerElement;
-			return;
-		}
 	}
 
 	/**

@@ -218,9 +218,9 @@ public class RaceDetailActivity extends Activity
 					// 手動更新タスク起動
 					ManualUpdateTask task = new ManualUpdateTask( getContentResolver(), raceInfo.id );
 					ManualUpdateTask.TaskParam param = task.new TaskParam();
-					param.setRaceId( raceInfo.id );
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRunnerInfoList( runnerInfoList );
+					param.raceId = raceInfo.id;
+					param.url = getString( R.string.str_txt_defaulturl );
+					param.runnerInfoList = runnerInfoList;
 					task.execute( param );
 				}
 			}
@@ -432,9 +432,9 @@ public class RaceDetailActivity extends Activity
 		protected List<RunnerInfo> doInBackground( TaskParam... params )
 		{
 			// ネットワークから選手情報取得
-			String url = params[0].getUrl();
-			String raceId = params[0].getRaceId();
-			List<RunnerInfo> runnerInfoList = params[0].getRunnerInfoList();
+			String url = params[0].url;
+			String raceId = params[0].raceId;
+			List<RunnerInfo> runnerInfoList = params[0].runnerInfoList;
 
 			// 最新の選手情報を取得する
 			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
@@ -496,82 +496,22 @@ public class RaceDetailActivity extends Activity
 		 * @author Hayato Matsumuro
 		 *
 		 */
-		public class TaskParam{
-
+		private class TaskParam
+		{
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
+			public String raceId;
 
 			/**
 			 * 選手リスト
 			 */
-			private List<RunnerInfo> runnerInfoList;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return　アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId( String raceId )
-			{
-				this.raceId = raceId;
-
-				return;
-			}
-
-			/**
-			 * 選手情報リストを取得する
-			 * @return 選手情報リスト
-			 */
-			public List<RunnerInfo> getRunnerInfoList()
-			{
-				return runnerInfoList;
-			}
-
-			/**
-			 * 選手情報リストを設定する
-			 * @param runnerInfoList 選手情報リスト
-			 */
-			public void setRunnerInfoList( List<RunnerInfo> runnerInfoList )
-			{
-				this.runnerInfoList = runnerInfoList;
-
-				return;
-			}
+			public List<RunnerInfo> runnerInfoList;
 		}
 	}
 

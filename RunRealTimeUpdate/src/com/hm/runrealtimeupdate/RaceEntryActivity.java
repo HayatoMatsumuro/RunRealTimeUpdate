@@ -110,8 +110,8 @@ public class RaceEntryActivity extends Activity
 					// 大会情報取得タスクの起動
 					RaceInfoLoaderTask task = new RaceInfoLoaderTask();
 					RaceInfoLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceId );
+					param.url = getString( R.string.str_txt_defaulturl );
+					param.raceId = raceId;
 					task.execute( param );
 
 					return;
@@ -211,10 +211,9 @@ public class RaceEntryActivity extends Activity
 			try
 			{
 				// 大会情報取得
-				String url = params[0].getUrl();
-				String raceId = params[0].getRaceId();
+				String url = params[0].url;
+				String raceId = params[0].raceId;
 				raceInfo = Logic.getNetRaceInfo( url, raceId );
-
 			}
 			catch ( LogicException e )
 			{
@@ -275,57 +274,17 @@ public class RaceEntryActivity extends Activity
 		 * @author Hayato Matsumuro
 		 *
 		 */
-		public class TaskParam{
-
+		private class TaskParam
+		{
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId( String raceId )
-			{
-				this.raceId = raceId;
-
-				return;
-			}
+			public String raceId;
 		}
 	}
 
