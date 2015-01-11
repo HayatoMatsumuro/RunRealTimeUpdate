@@ -3,27 +3,20 @@ package com.hm.runrealtimeupdate.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SectionRunnerInfo {
-	
-	private String section;
-	
-	private List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
+/**
+ * 部門選手情報
+ * @author Hayato Matsumuro
+ *
+ */
+public class SectionRunnerInfo
+{
+	/**
+	 * 部門
+	 */
+	public String section;
 
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
-
-	public List<RunnerInfo> getRunnerInfoList() {
-		return runnerInfoList;
-	}
-
-	public void setRunnerInfoList(List<RunnerInfo> runnerInfoList) {
-		this.runnerInfoList = runnerInfoList;
-	}
-	
-	
+	/**
+	 * 選手情報リスト
+	 */
+	public List<RunnerInfo> runnerInfoList = new ArrayList<RunnerInfo>();
 }

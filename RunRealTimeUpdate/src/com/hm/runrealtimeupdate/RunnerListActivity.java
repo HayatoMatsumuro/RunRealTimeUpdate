@@ -281,10 +281,10 @@ public class RunnerListActivity extends Activity
 		for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList )
 		{
 			SectionRunnerElement sectionElement = new SectionRunnerElement();
-			sectionElement.setSection( sectionRunnerInfo.getSection() );
+			sectionElement.setSection( sectionRunnerInfo.section );
 			sectionRunnerElementList.add( sectionElement );
 
-			for( RunnerInfo runnerInfo : sectionRunnerInfo.getRunnerInfoList() )
+			for( RunnerInfo runnerInfo : sectionRunnerInfo.runnerInfoList )
 			{
 				SectionRunnerElement runnerElement = new SectionRunnerElement();
 				runnerElement.setRunnerInfo( runnerInfo );

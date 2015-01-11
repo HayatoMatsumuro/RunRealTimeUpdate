@@ -588,19 +588,19 @@ public class Logic
 			for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList )
 			{
 				// 部門名が一致する
-				if( sectionRunnerInfo.getSection().equals( dbRunnerInfo.getSection() ) )
+				if( sectionRunnerInfo.section.equals( dbRunnerInfo.getSection() ) )
 				{
-					sectionRunnerInfo.getRunnerInfoList().add( runnerInfo );
+					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 					searchFlg = true;
 					break;
 				}
 
 				// 部門名がない場合
-				if( sectionRunnerInfo.getSection().equals( noSectionName ) )
+				if( sectionRunnerInfo.section.equals( noSectionName ) )
 				{
 					if( ( dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals( "" ) )
 					{
-						sectionRunnerInfo.getRunnerInfoList().add( runnerInfo );
+						sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 						searchFlg = true;
 						break;
 					}
@@ -614,14 +614,14 @@ public class Logic
 
 				if( ( dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals( "" ) )
 				{
-					sectionRunnerInfo.setSection( noSectionName );
-					sectionRunnerInfo.getRunnerInfoList().add( runnerInfo );
+					sectionRunnerInfo.section = noSectionName;
+					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 					sectionRunnerInfoList.add( sectionRunnerInfo );
 				}
 				else
 				{
-					sectionRunnerInfo.setSection( dbRunnerInfo.getSection() );
-					sectionRunnerInfo.getRunnerInfoList().add( runnerInfo );
+					sectionRunnerInfo.section = dbRunnerInfo.getSection();
+					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 					sectionRunnerInfoList.add( 0, sectionRunnerInfo );
 				}
 			}
