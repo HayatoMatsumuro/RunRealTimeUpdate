@@ -74,7 +74,7 @@ public class UpdateService extends Service
 		RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
 
 		param.setUrl( getString( R.string.str_txt_defaulturl ) );
-		param.setRaceId( raceInfo.getRaceId() );
+		param.setRaceId( raceInfo.id );
 		param.setRunnerInfoList( runnerInfoList );
 
 		m_UpdateTask.execute( param );
@@ -147,7 +147,7 @@ public class UpdateService extends Service
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList )
 		{
 			// データアップデート
-			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
+			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.id, runnerInfoList );
 
 			// 停止フラグ
 			boolean stopFlg = false;
@@ -159,7 +159,7 @@ public class UpdateService extends Service
 				notification.flags = Notification.FLAG_AUTO_CANCEL;
 
 				Intent notifiIntent = new Intent( UpdateService.this, RaceTabActivity.class );
-				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
+				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.id );
 				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_UPDATE );
 
 				PendingIntent pendIntent = PendingIntent.getActivity( UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -216,10 +216,10 @@ public class UpdateService extends Service
 			// 更新を停止する
 			if( stopFlg )
 			{
-				CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.getRaceId() );
+				CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.id );
 
 				// データベース変更
-				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.getRaceId() );
+				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.id );
 
 				return;
 			}

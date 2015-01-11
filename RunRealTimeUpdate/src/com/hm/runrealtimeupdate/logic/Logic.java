@@ -46,10 +46,10 @@ public class Logic
 		// 登録情報設定
 		DataBaseRaceInfo dbRaceInfo = new DataBaseRaceInfo();
 
-		dbRaceInfo.setRaceId( raceInfo.getRaceId() );
-		dbRaceInfo.setRaceName( raceInfo.getRaceName() );
-		dbRaceInfo.setRaceDate( raceInfo.getRaceDate() );
-		dbRaceInfo.setRaceLocation( raceInfo.getRaceLocation() );
+		dbRaceInfo.setRaceId( raceInfo.id );
+		dbRaceInfo.setRaceName( raceInfo.name );
+		dbRaceInfo.setRaceDate( raceInfo.date );
+		dbRaceInfo.setRaceLocation( raceInfo.location );
 		dbRaceInfo.setUpdateFlg( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF );
 
 		// 日付設定
@@ -112,13 +112,13 @@ public class Logic
 	private static RaceInfo getRaceInfoBydbRaceInfo( DataBaseRaceInfo dbRaceInfo )
 	{
 		RaceInfo raceInfo = new RaceInfo();
-		raceInfo.setRaceId( dbRaceInfo.getRaceId() );
-		raceInfo.setRaceName( dbRaceInfo.getRaceName() );
-		raceInfo.setRaceDate( dbRaceInfo.getRaceDate() );
-		raceInfo.setRaceLocation( dbRaceInfo.getRaceLocation() );
+		raceInfo.id = dbRaceInfo.getRaceId();
+		raceInfo.name = dbRaceInfo.getRaceName();
+		raceInfo.date = dbRaceInfo.getRaceDate();
+		raceInfo.location = dbRaceInfo.getRaceLocation();
 
-		int raceUpdate = Integer.parseInt( dbRaceInfo.getUpdateFlg() );
-		raceInfo.setRaceUpdate( raceUpdate );
+		int updateSts = Integer.parseInt( dbRaceInfo.getUpdateFlg() );
+		raceInfo.updateSts = updateSts;
 
 		return raceInfo;
 	}
@@ -235,11 +235,11 @@ public class Logic
 
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
-			raceInfo.setRaceId( raceId );
-			raceInfo.setRaceName( parserRaceInfo.getName() );
-			raceInfo.setRaceDate( parserRaceInfo.getDate() );
-			raceInfo.setRaceLocation( parserRaceInfo.getLocation() );
-			raceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+			raceInfo.id = raceId;
+			raceInfo.name = parserRaceInfo.getName();
+			raceInfo.date = parserRaceInfo.getDate();
+			raceInfo.location = parserRaceInfo.getLocation();
+			raceInfo.updateSts = RaceInfo.INT_UPDATESTS_OFF;
 
 			return raceInfo;
 		}
@@ -410,7 +410,7 @@ public class Logic
 		// 登録情報設定
 		DataBaseRunnerInfo dbRunnerInfo = new DataBaseRunnerInfo();
 
-		dbRunnerInfo.setRaceId( raceInfo.getRaceId() );
+		dbRunnerInfo.setRaceId( raceInfo.id );
 		dbRunnerInfo.setName( runnerInfo.name );
 		dbRunnerInfo.setNumber( runnerInfo.number );
 		dbRunnerInfo.setSection( runnerInfo.section );
@@ -458,7 +458,7 @@ public class Logic
 	public static boolean checkEntryRunnerId( ContentResolver contentResolver, RaceInfo raceInfo, RunnerInfo runnerInfo )
 	{
 		// 選手情報未取得
-		DataBaseRunnerInfo info = DataBaseAccess.getRunnerInfoByRaceIdAndNumber( contentResolver, raceInfo.getRaceId(), runnerInfo.number );
+		DataBaseRunnerInfo info = DataBaseAccess.getRunnerInfoByRaceIdAndNumber( contentResolver, raceInfo.id, runnerInfo.number );
 		
 		if( info == null )
 		{

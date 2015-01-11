@@ -201,7 +201,7 @@ public class PassListActivity extends Activity
 		}
 
 		// 速報バーの表示更新
-		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.updateSts );
 
 		return;
 	}

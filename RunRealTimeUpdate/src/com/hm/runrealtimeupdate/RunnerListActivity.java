@@ -208,7 +208,7 @@ public class RunnerListActivity extends Activity
 		setViewBody( raceId );
 
 		// 速報バーの表示更新
-		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.updateSts );
 
 		return;
 	}
@@ -307,18 +307,18 @@ public class RunnerListActivity extends Activity
 		{
 			// ポジティブボタン押し
 			// 速報中でないなら削除
-			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
+			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().id );
 			SectionRunnerElement element = info.getSectionRunnerElement();
-			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+			if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 			{
 				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
 			}
 			else
 			{
 				// 選手削除
-				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().number );
+				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.id, element.getRunnerInfo().number );
 
-				setViewBody( raceInfo.getRaceId() );
+				setViewBody( raceInfo.id );
 
 				Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
 			}

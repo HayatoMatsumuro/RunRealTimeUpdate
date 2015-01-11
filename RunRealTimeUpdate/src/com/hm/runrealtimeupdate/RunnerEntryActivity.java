@@ -88,7 +88,7 @@ public class RunnerEntryActivity extends Activity
 		}
 
 		// 速報中なら、メッセージを表示する
-		if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+		if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 		{
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
@@ -149,7 +149,7 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
+					param.setRaceId( raceInfo.id );
 					param.setNumber( number );
 					task.execute( param );
 
@@ -180,7 +180,7 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
 					RunnerInfoByNameLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
+					param.setRaceId( raceInfo.id );
 					param.setSei( seiEdit.getText().toString() );
 					param.setMei( meiEdit.getText().toString() );
 					task.execute( param );
@@ -209,7 +209,7 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
+					param.setRaceId( raceInfo.id );
 					param.setNumber( runnerInfo.number );
 					task.execute( param );
 
@@ -745,10 +745,10 @@ public class RunnerEntryActivity extends Activity
 			if( !Logic.checkEntryRunnerId( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() ) )
 			{
 				// 最新の大会情報を取得
-				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
+				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().id );
 
 				// 予約中→速報中となった場合
-				if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+				if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 				{
 					Toast.makeText( RunnerEntryActivity.this, "速報中のため登録できません。", Toast.LENGTH_SHORT ).show();
 				}
@@ -766,7 +766,7 @@ public class RunnerEntryActivity extends Activity
 		        imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 
 				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
-				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().getRaceId() );
+				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().id );
 				intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
 				startActivity( intent );
 			}

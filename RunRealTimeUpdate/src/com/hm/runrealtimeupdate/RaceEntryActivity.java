@@ -339,15 +339,15 @@ public class RaceEntryActivity extends Activity
 		StringBuilder builder = new StringBuilder();
 		builder.append( getString( R.string.str_dialog_msg_name ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceName() );
+		builder.append( raceInfo.name );
 		builder.append( "\n");
 		builder.append( getString( R.string.str_dialog_msg_date ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceDate() );
+		builder.append( raceInfo.date );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_location ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceLocation() );
+		builder.append( raceInfo.location );
 
 		return builder.toString();
 	}
@@ -362,7 +362,7 @@ public class RaceEntryActivity extends Activity
 		@Override
 		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
 		{
-			if( Logic.checkEntryRaceId( getContentResolver(), info.getRaceId() ) )
+			if( Logic.checkEntryRaceId( getContentResolver(), info.id ) )
 			{
 				// すでに大会が登録済み
 				Toast.makeText( RaceEntryActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT ).show();
