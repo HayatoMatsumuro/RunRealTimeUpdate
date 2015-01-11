@@ -210,7 +210,7 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
 					param.setRaceId( raceInfo.getRaceId() );
-					param.setNumber( runnerInfo.getNumber() );
+					param.setNumber( runnerInfo.number );
 					task.execute( param );
 
 					return;
@@ -718,15 +718,15 @@ public class RunnerEntryActivity extends Activity
 
 		builder.append( getString(R.string.str_txt_runnername ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getName() );
+		builder.append( runnerInfo.name );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_txt_no ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getNumber() );
+		builder.append( runnerInfo.number );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_txt_section ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getSection() );
+		builder.append( runnerInfo.section );
 		builder.append( "\n" );
 
 		return builder.toString();
@@ -829,8 +829,8 @@ public class RunnerEntryActivity extends Activity
 
 			sectionLayout.setVisibility( View.GONE );
 			runnerLayout.setVisibility( View.VISIBLE );
-			runnerNameTextView.setText( item.getName() );
-			runnerNumberTextView.setText( item.getNumber() );
+			runnerNameTextView.setText( item.name );
+			runnerNumberTextView.setText( item.number );
 
 			return convertView;
 		}

@@ -117,43 +117,43 @@ public class RunnerListActivity extends Activity
 
 					// ゼッケン番号
 					TextView numberTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_number_text_textview );
-					numberTextView.setText( runnerInfo.getNumber() );
+					numberTextView.setText( runnerInfo.number );
 
 					// 選手名
 					TextView nameTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_name_text_textview );
-					nameTextView.setText( runnerInfo.getName() );
+					nameTextView.setText( runnerInfo.name );
 
 					// 部門
 					TextView sectionTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_section_text_textview );
-					sectionTextView.setText( runnerInfo.getSection() );
+					sectionTextView.setText( runnerInfo.section );
 
 					// タイムリスト
 					TableLayout tableLayout = ( TableLayout )inputView.findViewById( R.id.id_dialog_runnerinfodetail_timelist_layout );
 
-					for( RunnerInfo.TimeList timelist : runnerInfo.getTimeList() )
+					for( RunnerInfo.TimeInfo timeInfo : runnerInfo.timeInfoList )
 					{
 						TableRow tableRow = new TableRow( getParent() );
 
 						// 地点
 						TextView pointTextView = new TextView( getParent() );
-						pointTextView.setText( timelist.getPoint() );
+						pointTextView.setText( timeInfo.point );
 						pointTextView.setPadding( 1, 1, 1, 1 );
 
 						// スプリット
 						TextView splitTextView = new TextView( getParent() );
-						splitTextView.setText( timelist.getSplit() );
+						splitTextView.setText( timeInfo.split );
 						splitTextView.setGravity( Gravity.CENTER );
 						splitTextView.setPadding( 1, 1, 1, 1 );
 
 						// ラップ
 						TextView lapTextView = new TextView( getParent() );
-						lapTextView.setText( timelist.getLap() );
+						lapTextView.setText( timeInfo.lap );
 						lapTextView.setGravity( Gravity.CENTER );
 						lapTextView.setPadding( 1, 1, 1, 1 );
 
 						// カレントタイム
 						TextView currentTimeView = new TextView( getParent() );
-						currentTimeView.setText( timelist.getCurrentTime() );
+						currentTimeView.setText( timeInfo.currentTime );
 						currentTimeView.setGravity( Gravity.CENTER );
 						lapTextView.setPadding( 1, 1, 1, 1 );
 
@@ -261,11 +261,11 @@ public class RunnerListActivity extends Activity
 	private String createDialogMessage( RunnerInfo runnerInfo )
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append(runnerInfo.getName());
-		builder.append("\n");
-		builder.append(runnerInfo.getNumber());
-		builder.append("\n");
-		builder.append(runnerInfo.getSection());
+		builder.append( runnerInfo.name );
+		builder.append( "\n" );
+		builder.append( runnerInfo.number );
+		builder.append( "\n" );
+		builder.append( runnerInfo.section );
 
 		return builder.toString();
 	}
@@ -316,7 +316,7 @@ public class RunnerListActivity extends Activity
 			else
 			{
 				// 選手削除
-				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
+				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().number );
 
 				setViewBody( raceInfo.getRaceId() );
 
@@ -446,8 +446,8 @@ public class RunnerListActivity extends Activity
 			{
 				sectionLayout.setVisibility( View.GONE );
 				runnerLayout.setVisibility( View.VISIBLE );
-				runnerNameTextView.setText( item.runnerInfo.getName() );
-				runnerNumberTextView.setText( item.runnerInfo.getNumber() );
+				runnerNameTextView.setText( item.runnerInfo.name );
+				runnerNumberTextView.setText( item.runnerInfo.number );
 			}
 
 			return convertView;
