@@ -46,17 +46,17 @@ public class Logic
 		// 登録情報設定
 		DataBaseRaceInfo dbRaceInfo = new DataBaseRaceInfo();
 
-		dbRaceInfo.setRaceId( raceInfo.id );
-		dbRaceInfo.setRaceName( raceInfo.name );
-		dbRaceInfo.setRaceDate( raceInfo.date );
-		dbRaceInfo.setRaceLocation( raceInfo.location );
-		dbRaceInfo.setUpdateFlg( DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF );
+		dbRaceInfo.id = raceInfo.id;
+		dbRaceInfo.name = raceInfo.name;
+		dbRaceInfo.date = raceInfo.date;
+		dbRaceInfo.location = raceInfo.location;
+		dbRaceInfo.updateFlg =  DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF;
 
 		// 日付設定
 		Calendar cal = Calendar.getInstance();
 		Date date = cal.getTime();
 		String dateStr = DATEFORMAT.format( date );
-		dbRaceInfo.setDate( dateStr );
+		dbRaceInfo.updateDate = dateStr;
 
 		// データベース登録
 		DataBaseAccess.entryRace( contentResolver, dbRaceInfo );
@@ -112,12 +112,12 @@ public class Logic
 	private static RaceInfo getRaceInfoBydbRaceInfo( DataBaseRaceInfo dbRaceInfo )
 	{
 		RaceInfo raceInfo = new RaceInfo();
-		raceInfo.id = dbRaceInfo.getRaceId();
-		raceInfo.name = dbRaceInfo.getRaceName();
-		raceInfo.date = dbRaceInfo.getRaceDate();
-		raceInfo.location = dbRaceInfo.getRaceLocation();
+		raceInfo.id = dbRaceInfo.id;
+		raceInfo.name = dbRaceInfo.name;
+		raceInfo.date = dbRaceInfo.date;
+		raceInfo.location = dbRaceInfo.location;
 
-		int updateSts = Integer.parseInt( dbRaceInfo.getUpdateFlg() );
+		int updateSts = Integer.parseInt( dbRaceInfo.updateFlg );
 		raceInfo.updateSts = updateSts;
 
 		return raceInfo;
@@ -363,26 +363,26 @@ public class Logic
 
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
-					dbTimeList.setRaceId( raceId );
-					dbTimeList.setNumber( newInfo.number );
-					dbTimeList.setPoint( point );
-					dbTimeList.setSplit( split );
-					dbTimeList.setLap( lap );
-					dbTimeList.setCurrentTime( currentTime );
-					dbTimeList.setDate( dateStr );
+					dbTimeList.raceId = raceId;
+					dbTimeList.number = newInfo.number;
+					dbTimeList.point = point;
+					dbTimeList.split = split;
+					dbTimeList.lap = lap;
+					dbTimeList.currentTime = currentTime;
+					dbTimeList.updateDate = dateStr;
 					DataBaseAccess.entryTimeList( contentResolver, dbTimeList );
 
 					// 速報データ書き込み
 					DataBaseUpdateData dbUpdateData = new DataBaseUpdateData();
-					dbUpdateData.setRaceId( raceId );
-					dbUpdateData.setName( newInfo.name );
-					dbUpdateData.setNumber( newInfo.number );
-					dbUpdateData.setSection( newInfo.section );
-					dbUpdateData.setPoint( point );
-					dbUpdateData.setSplit( split );
-					dbUpdateData.setLap( lap );
-					dbUpdateData.setCurrentTime( currentTime );
-					dbUpdateData.setDate( dateStr );
+					dbUpdateData.raceId = raceId;
+					dbUpdateData.name = newInfo.name;
+					dbUpdateData.number = newInfo.number;
+					dbUpdateData.section = newInfo.section;
+					dbUpdateData.point = point;
+					dbUpdateData.split = split;
+					dbUpdateData.lap = lap;
+					dbUpdateData.currentTime = currentTime;
+					dbUpdateData.updateDate = dateStr;
 					DataBaseAccess.entryUpdateData( contentResolver, dbUpdateData );
 				}
 
@@ -410,16 +410,16 @@ public class Logic
 		// 登録情報設定
 		DataBaseRunnerInfo dbRunnerInfo = new DataBaseRunnerInfo();
 
-		dbRunnerInfo.setRaceId( raceInfo.id );
-		dbRunnerInfo.setName( runnerInfo.name );
-		dbRunnerInfo.setNumber( runnerInfo.number );
-		dbRunnerInfo.setSection( runnerInfo.section );
+		dbRunnerInfo.raceId = raceInfo.id;
+		dbRunnerInfo.name = runnerInfo.name;
+		dbRunnerInfo.number = runnerInfo.number;
+		dbRunnerInfo.section = runnerInfo.section;
 
 		// 日付設定
 		Calendar cal = Calendar.getInstance();
 		Date date = cal.getTime();
 		String dateStr = DATEFORMAT.format( date );
-		dbRunnerInfo.setDate( dateStr );
+		dbRunnerInfo.updateDate = dateStr;
 
 		// データベース登録
 		DataBaseAccess.entryRunner( contentResolver, dbRunnerInfo );
@@ -526,17 +526,17 @@ public class Logic
 		{
 			UpdateInfo updateInfo = new UpdateInfo();
 
-			updateInfo.name = dbUpdateData.getName();
-			updateInfo.number = dbUpdateData.getNumber();
-			updateInfo.section = dbUpdateData.getSection();
-			updateInfo.point = dbUpdateData.getPoint();
-			updateInfo.split = dbUpdateData.getSplit();
-			updateInfo.lap = dbUpdateData.getLap();
-			updateInfo.currentTime = dbUpdateData.getCurrentTime();
+			updateInfo.name = dbUpdateData.name;
+			updateInfo.number = dbUpdateData.number;
+			updateInfo.section = dbUpdateData.section;
+			updateInfo.point = dbUpdateData.point;
+			updateInfo.split = dbUpdateData.split;
+			updateInfo.lap = dbUpdateData.lap;
+			updateInfo.currentTime = dbUpdateData.currentTime;
 
 			try
 			{
-				Date date = DATEFORMAT.parse( dbUpdateData.getDate() );
+				Date date = DATEFORMAT.parse( dbUpdateData.updateDate );
 				long updateTime = date.getTime();
 
 				if( nowTime - updateTime < recentTime )
@@ -588,7 +588,7 @@ public class Logic
 			for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList )
 			{
 				// 部門名が一致する
-				if( sectionRunnerInfo.section.equals( dbRunnerInfo.getSection() ) )
+				if( sectionRunnerInfo.section.equals( dbRunnerInfo.section ) )
 				{
 					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 					searchFlg = true;
@@ -598,7 +598,7 @@ public class Logic
 				// 部門名がない場合
 				if( sectionRunnerInfo.section.equals( noSectionName ) )
 				{
-					if( ( dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals( "" ) )
+					if( ( dbRunnerInfo.section == null ) || dbRunnerInfo.section.equals( "" ) )
 					{
 						sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 						searchFlg = true;
@@ -612,7 +612,7 @@ public class Logic
 			{
 				SectionRunnerInfo sectionRunnerInfo = new SectionRunnerInfo();
 
-				if( ( dbRunnerInfo.getSection() == null ) || dbRunnerInfo.getSection().equals( "" ) )
+				if( ( dbRunnerInfo.section == null ) || dbRunnerInfo.section.equals( "" ) )
 				{
 					sectionRunnerInfo.section = noSectionName;
 					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
@@ -620,7 +620,7 @@ public class Logic
 				}
 				else
 				{
-					sectionRunnerInfo.section = dbRunnerInfo.getSection();
+					sectionRunnerInfo.section = dbRunnerInfo.section;
 					sectionRunnerInfo.runnerInfoList.add( runnerInfo );
 					sectionRunnerInfoList.add( 0, sectionRunnerInfo );
 				}
@@ -674,19 +674,19 @@ public class Logic
 	private static RunnerInfo getRunnerInfoByDBRunnerInfo( ContentResolver contentResolver, DataBaseRunnerInfo dbRunnerInfo )
 	{
 		RunnerInfo runnerInfo = new RunnerInfo();
-		runnerInfo.name = dbRunnerInfo.getName();
-		runnerInfo.number = dbRunnerInfo.getNumber();
-		runnerInfo.section = dbRunnerInfo.getSection();
+		runnerInfo.name = dbRunnerInfo.name;
+		runnerInfo.number = dbRunnerInfo.number;
+		runnerInfo.section = dbRunnerInfo.section;
 
-		List<DataBaseTimeList> dbTimelistList = DataBaseAccess.getTimeListByRaceIdAndNumber( contentResolver, dbRunnerInfo.getRaceId(), dbRunnerInfo.getNumber() );
+		List<DataBaseTimeList> dbTimelistList = DataBaseAccess.getTimeListByRaceIdAndNumber( contentResolver, dbRunnerInfo.raceId, dbRunnerInfo.number );
 
 		for( DataBaseTimeList dbTimeList : dbTimelistList )
 		{
 			RunnerInfo.TimeInfo timeInfo = new RunnerInfo().new TimeInfo();
-			timeInfo.point = dbTimeList.getPoint();
-			timeInfo.split = dbTimeList.getSplit();
-			timeInfo.lap = dbTimeList.getLap();
-			timeInfo.currentTime = dbTimeList.getCurrentTime();
+			timeInfo.point = dbTimeList.point;
+			timeInfo.split = dbTimeList.split;
+			timeInfo.lap = dbTimeList.lap;
+			timeInfo.currentTime = dbTimeList.currentTime;
 
 			runnerInfo.timeInfoList.add( timeInfo );
 		}
@@ -757,7 +757,7 @@ public class Logic
 			passPointRunnerInfo.setCurrentTime( timeList.currentTime );
 
         	try {
-				Date date = DATEFORMAT.parse( dbInfo.getDate() );
+				Date date = DATEFORMAT.parse( dbInfo.updateDate );
 				long updateTime = date.getTime();
 
 				if( nowTime - updateTime < recentTime )
