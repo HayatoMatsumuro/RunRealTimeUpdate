@@ -1,15 +1,21 @@
 package com.hm.runrealtimeupdate.logic;
 
 @SuppressWarnings("serial")
-public class LogicException extends Exception {
+public class LogicException extends Exception
+{
+	/**
+	 * メッセージ
+	 */
+	public String message;
 
-	private String message;
-	public LogicException(String message){
-		super(message);
+	/**
+	 * コンストラクタ
+	 * @param message メッセージ
+	 */
+	public LogicException( String message )
+	{
+		super( message );
 		this.message = message;
-	}
-	
-	public String getMessage(){
-		return message;
+		return;
 	}
 }

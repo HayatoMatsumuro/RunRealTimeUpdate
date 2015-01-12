@@ -99,8 +99,8 @@ public class RunnerEntryActivity extends Activity
 		Button backButton =( Button )findViewById( R.id.id_activity_runnerentry_header_back_button );
 
 		BackButtonTag backButtonTag = new BackButtonTag();
-		backButtonTag.setRaceId( raceId );
-		backButtonTag.setCurrentTab( currentTab );
+		backButtonTag.raceId = raceId;
+		backButtonTag.currentTab = currentTab;
 		backButton.setTag( backButtonTag );
 
 		backButton.setOnClickListener(
@@ -113,8 +113,8 @@ public class RunnerEntryActivity extends Activity
 
 					// 大会画面遷移
 					Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
-					intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, backButtonTag.getRaceId() );
-					intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, backButtonTag.getCurrentTab() );
+					intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, backButtonTag.raceId );
+					intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, backButtonTag.currentTab );
 					startActivity( intent );
 
 					return;
@@ -161,7 +161,7 @@ public class RunnerEntryActivity extends Activity
 		// 検索ボタン
 		Button searchButton = ( Button )findViewById( R.id.id_activity_runnerentry_body_contens_nameform_search_button );
 		searchButton.setTag( raceInfo );
-        searchButton.setOnClickListener(
+		searchButton.setOnClickListener(
 			new OnClickListener()
 			{
 				@Override
@@ -231,46 +231,12 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * 大会ID
 		 */
-		private String raceId;
+		public String raceId;
 
 		/**
 		 * カレントタブ
 		 */
-		private int currentTab;
-
-		/**
-		 * 大会IDを取得する
-		 * @return 大会ID
-		 */
-		public String getRaceId() {
-			return raceId;
-		}
-
-		/**
-		 * 大会IDを設定する
-		 * @param raceId 大会ID
-		 */
-		public void setRaceId(String raceId) {
-			this.raceId = raceId;
-			return;
-		}
-
-		/**
-		 * カレントタブを取得する
-		 * @return カレントタブ
-		 */
-		public int getCurrentTab() {
-			return currentTab;
-		}
-
-		/**
-		 * カレントタブを設定する
-		 * @param currentTab カレントタブ
-		 */
-		public void setCurrentTab(int currentTab) {
-			this.currentTab = currentTab;
-			return;
-		}
+		public int currentTab;
 	}
 
 	/**

@@ -292,7 +292,7 @@ public class RunnerListActivity extends Activity
 			}
 		}
 
-        return sectionRunnerElementList;
+		return sectionRunnerElementList;
 	}
 
 	/**
