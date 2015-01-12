@@ -45,18 +45,12 @@ public class Logic
 	{
 		// 登録情報設定
 		DataBaseRaceInfo dbRaceInfo = new DataBaseRaceInfo();
-
 		dbRaceInfo.id = raceInfo.id;
 		dbRaceInfo.name = raceInfo.name;
 		dbRaceInfo.date = raceInfo.date;
 		dbRaceInfo.location = raceInfo.location;
 		dbRaceInfo.updateFlg =  DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF;
-
-		// 日付設定
-		Calendar cal = Calendar.getInstance();
-		Date date = cal.getTime();
-		String dateStr = DATEFORMAT.format( date );
-		dbRaceInfo.updateDate = dateStr;
+		dbRaceInfo.updateDate = getDateString();
 
 		// データベース登録
 		DataBaseAccess.entryRace( contentResolver, dbRaceInfo );
@@ -357,9 +351,7 @@ public class Logic
 					String currentTime = newInfo.timeInfoList.get( oldInfoTimeListSize + j ).currentTime;
 
 					// 日付設定
-					Calendar cal = Calendar.getInstance();
-					Date date = cal.getTime();
-					String dateStr = DATEFORMAT.format( date );
+					String dateStr = getDateString();
 
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
@@ -414,12 +406,7 @@ public class Logic
 		dbRunnerInfo.name = runnerInfo.name;
 		dbRunnerInfo.number = runnerInfo.number;
 		dbRunnerInfo.section = runnerInfo.section;
-
-		// 日付設定
-		Calendar cal = Calendar.getInstance();
-		Date date = cal.getTime();
-		String dateStr = DATEFORMAT.format( date );
-		dbRunnerInfo.updateDate = dateStr;
+		dbRunnerInfo.updateDate = getDateString();
 
 		// データベース登録
 		DataBaseAccess.entryRunner( contentResolver, dbRunnerInfo );
@@ -502,6 +489,17 @@ public class Logic
 		DataBaseAccess.deleteRunnerInfoByRaceIdAndNumber( contentResolver, raceId, number );
 
 		return;
+	}
+
+	/**
+	 * 現在の時刻の文字列を取得する
+	 * @return 現在の時刻
+	 */
+	private static String getDateString()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		return DATEFORMAT.format( date );
 	}
 
 	/**
@@ -906,8 +904,8 @@ public class Logic
 		PreferenceReserveTime.deleteReserveTime( context );
 
 		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
-		time.setHour( hour );
-		time.setMinute( minute );
+		time.hour = hour;
+		time.minute = minute;
 		PreferenceReserveTime.saveReserveTime( context, time );
 		return;
 	}
@@ -922,8 +920,8 @@ public class Logic
 	{
 		PreferenceReserveTime.ReserveTime time = PreferenceReserveTime.loadReserveTime( context );
 
-		int hour = time.getHour();
-		int minute = time.getMinute();
+		int hour = time.hour;
+		int minute = time.minute;
 
 		if( ( hour == Integer.MAX_VALUE) || ( minute == Integer.MAX_VALUE ) )
 		{

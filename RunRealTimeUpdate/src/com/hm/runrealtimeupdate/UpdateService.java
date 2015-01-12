@@ -251,7 +251,7 @@ public class UpdateService extends Service
 			 * 大会ID
 			 */
 			public String raceId;
-			
+
 			/**
 			 * 選手リスト
 			 */
