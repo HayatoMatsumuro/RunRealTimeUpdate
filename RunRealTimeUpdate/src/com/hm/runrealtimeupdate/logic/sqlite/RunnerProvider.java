@@ -9,18 +9,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 /**
+ * 選手プロパイダー
  * DB名:runner
  * | key                 | raceid | number | name | section | date                        |
  * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT | TEXT    | TEXT( YYYY-MM-DD hh:mm:ss ) |
  * @author Hayato Matsumuro
  *
  */
-public class RunnerProvider extends ContentProvider {
-
+public class RunnerProvider extends ContentProvider
+{
 	private RunnerDatabaseHelper runnerDatabaseHelper = null;
-	
+
 	public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.logic.sqlite.runnerprovider");
-	
+
 	public static final String STR_DB_NAME = "runner";
 	public static final String STR_DB_COLUMN_KEY = "key";
 	public static final String STR_DB_COLUMN_RACEID = "raceid";
@@ -28,76 +29,83 @@ public class RunnerProvider extends ContentProvider {
 	public static final String STR_DB_COLUMN_NAME = "name";
 	public static final String STR_DB_COLUMN_SECTION = "section";
 	public static final String STR_DB_COLUMN_DATE = "date";
-	
+
 	private static final int VERSION = 2;
-	
+
 	@Override
-	public boolean onCreate() {
-		runnerDatabaseHelper = new RunnerDatabaseHelper(getContext());
+	public boolean onCreate()
+	{
+		runnerDatabaseHelper = new RunnerDatabaseHelper( getContext() );
 		return false;
 	}
-	
+
 	@Override
-	public int delete(Uri arg0, String selection, String[] selectionArgs) {
-		
+	public int delete( Uri arg0, String selection, String[] selectionArgs )
+	{
 		SQLiteDatabase db = runnerDatabaseHelper.getWritableDatabase();
-		
-		int numDeleted = db.delete(STR_DB_NAME, selection, selectionArgs);
+
+		int numDeleted = db.delete( STR_DB_NAME, selection, selectionArgs );
 		return numDeleted;
 	}
 
 	@Override
-	public String getType(Uri uri) {
-		// TODO 自動生成されたメソッド・スタブ
+	public String getType( Uri uri )
+	{
 		return null;
 	}
 
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
-		
+	public Uri insert( Uri uri, ContentValues values )
+	{
 		SQLiteDatabase db = runnerDatabaseHelper.getWritableDatabase();
-		
-		long newId = db.insert(STR_DB_NAME, null, values);
-		
-		Uri newUri = Uri.parse(uri+"/"+newId);
-		
+
+		long newId = db.insert( STR_DB_NAME, null, values );
+
+		Uri newUri = Uri.parse( uri + "/" + newId );
+
 		return newUri;
 	}
 
-	
-
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		
+	public Cursor query( Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder )
+	{
 		SQLiteDatabase db = runnerDatabaseHelper.getReadableDatabase();
-		
-		Cursor c = db.query(STR_DB_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-		
+
+		Cursor c = db.query( STR_DB_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
 		return c;
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
-		
+	public int update( Uri uri, ContentValues values, String selection, String[] selectionArgs )
+	{
 		SQLiteDatabase db = runnerDatabaseHelper.getWritableDatabase();
-		
-		int numUpdated = db.update(STR_DB_NAME, values, selection, selectionArgs);
-		
+
+		int numUpdated = db.update( STR_DB_NAME, values, selection, selectionArgs );
+
 		return numUpdated;
 	}
-	
-	public class RunnerDatabaseHelper extends SQLiteOpenHelper{
 
-		public RunnerDatabaseHelper(Context context) {
-			// TODO バージョン考察
+	/**
+	 * 選手ヘルパー
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	public class RunnerDatabaseHelper extends SQLiteOpenHelper
+	{
+		/**
+		 * コンストラクタ
+		 * @param context コンテキスト
+		 */
+		public RunnerDatabaseHelper( Context context )
+		{
 			super(context, STR_DB_NAME+".db", null, VERSION);
-			
+			return;
 		}
 
 		@Override
-		public void onCreate(SQLiteDatabase db) {
+		public void onCreate( SQLiteDatabase db )
+		{
 			String sql = "CREATE TABLE " + STR_DB_NAME + "("
 					+ STR_DB_COLUMN_KEY + " INTEGER PRIMARY KEY,"
 					+ STR_DB_COLUMN_RACEID + " TEXT,"
@@ -106,16 +114,16 @@ public class RunnerProvider extends ContentProvider {
 					+ STR_DB_COLUMN_SECTION + " TEXT,"
 					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
-			db.execSQL(sql);
+			db.execSQL( sql );
+			return;
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS " + STR_DB_NAME);
-			onCreate(db);
-			
+		public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion )
+		{
+			db.execSQL( "DROP TABLE IF EXISTS " + STR_DB_NAME );
+			onCreate( db );
+			return;
 		}
-		
 	}
-
 }
