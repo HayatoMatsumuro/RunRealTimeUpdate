@@ -1,94 +1,54 @@
 package com.hm.runrealtimeupdate.logic.dbaccess;
 
-public class DataBaseUpdateData {
-	
-	private String raceId;
-	
-	private String number;
-	
-	private String name;
-	
-	private String section;
-	
-	private String point;
-	
-	private String split;
-	
-	private String lap;
-	
-	private String currentTime;
-	
-	private String date;
+/**
+ * 速報データデータベース
+ * @author Hayato Matsumuro
+ *
+ */
+public class DataBaseUpdateData
+{
+	/**
+	 * 大会ID
+	 */
+	public String raceId;
 
-	public String getRaceId() {
-		return raceId;
-	}
+	/**
+	 * ゼッケン番号
+	 */
+	public String number;
 
-	public void setRaceId(String raceId) {
-		this.raceId = raceId;
-	}
+	/**
+	 * 選手名
+	 */
+	public String name;
 
-	public String getNumber() {
-		return number;
-	}
+	/**
+	 * 部門
+	 */
+	public String section;
 
-	public void setNumber(String number) {
-		this.number = number;
-	}
+	/**
+	 * 地点
+	 */
+	public String point;
 
-	public String getName() {
-		return name;
-	}
+	/**
+	 * スプリット
+	 */
+	public String split;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	/**
+	 * ラップ
+	 */
+	public String lap;
 
-	public String getSection() {
-		return section;
-	}
+	/**
+	 * 通過時間
+	 */
+	public String currentTime;
 
-	public void setSection(String section) {
-		this.section = section;
-	}
-
-	public String getPoint() {
-		return point;
-	}
-
-	public void setPoint(String point) {
-		this.point = point;
-	}
-
-	public String getSplit() {
-		return split;
-	}
-
-	public void setSplit(String split) {
-		this.split = split;
-	}
-
-	public String getLap() {
-		return lap;
-	}
-
-	public void setLap(String lap) {
-		this.lap = lap;
-	}
-
-	public String getCurrentTime() {
-		return currentTime;
-	}
-
-	public void setCurrentTime(String currentTime) {
-		this.currentTime = currentTime;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
+	/**
+	 * 更新日
+	 */
+	public String updateDate;
 }

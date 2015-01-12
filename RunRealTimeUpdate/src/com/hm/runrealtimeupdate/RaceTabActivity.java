@@ -73,7 +73,7 @@ public class RaceTabActivity extends TabActivity
 		int currentTab = intent.getIntExtra( STR_INTENT_CURRENTTAB, INT_INTENT_VAL_CURRENTTAB_DETAIL );
 
 		// 速報中テキスト
-		setDispUpdateBar( raceInfo.getRaceUpdate() );
+		setDispUpdateBar( raceInfo.updateSts );
 
 		// 大会一覧ボタン
 		Button raceListButton = ( Button )findViewById( R.id.id_tabactivity_race_header_racelist_button );
@@ -161,12 +161,12 @@ public class RaceTabActivity extends TabActivity
 		switch( raceUpdate )
 		{
 		// 速報中
-		case RaceInfo.INT_RACEUPDATE_ON:
+		case RaceInfo.INT_UPDATESTS_ON:
 			updateExeTextView.setVisibility( View.VISIBLE );
 			updateReserveTextView.setVisibility( View.GONE );
 			break;
 		// 予約中
-		case RaceInfo.INT_RACEUPDATE_RESERVE:
+		case RaceInfo.INT_UPDATESTS_RESERVE:
 			try
 			{
 				String time = Logic.getStringReserveTime( RaceTabActivity.this );
@@ -183,7 +183,7 @@ public class RaceTabActivity extends TabActivity
 
 			break;
 		// 指定なし
-		case RaceInfo.INT_RACEUPDATE_OFF:
+		case RaceInfo.INT_UPDATESTS_OFF:
 		default:
 			updateExeTextView.setVisibility( View.GONE );
 			updateReserveTextView.setVisibility( View.GONE );

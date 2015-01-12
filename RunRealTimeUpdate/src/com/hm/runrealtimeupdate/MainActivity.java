@@ -54,7 +54,7 @@ public class MainActivity extends Activity
 
 					// 画面遷移
 					Intent intent = new Intent( MainActivity.this, RaceTabActivity.class );
-					intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, raceInfo.getRaceId() );
+					intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, raceInfo.id );
 					intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_DETAIL );
 					startActivity( intent );
 				}
@@ -118,7 +118,7 @@ public class MainActivity extends Activity
 		RaceInfo chkRaceInfo = null;
 		for( RaceInfo raceInfo : raceInfoList )
 		{
-			if( raceInfo.getRaceUpdate() != RaceInfo.INT_RACEUPDATE_OFF )
+			if( raceInfo.updateSts != RaceInfo.INT_UPDATESTS_OFF )
 			{
 				chkRaceInfo = raceInfo;
 				break;
@@ -129,25 +129,25 @@ public class MainActivity extends Activity
 		if( chkRaceInfo != null )
 		{
 			// 速報中
-			if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+			if( chkRaceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 			{
 				// アラーム停止中
 				if( !CommonLib.isSetUpdateAlarm( MainActivity.this ) )
 				{
 					// 速報状態停止
-					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
-					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.id );
+					chkRaceInfo.updateSts = RaceInfo.INT_UPDATESTS_OFF;
 				}
 			}
 			// 予約中
-			else if( chkRaceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_RESERVE )
+			else if( chkRaceInfo.updateSts == RaceInfo.INT_UPDATESTS_RESERVE )
 			{
 				// アラーム停止中
 				if( !CommonLib.isUpdateReserveAlarm( MainActivity.this ) )
 				{
 					// 予約状態停止
-					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.getRaceId() );
-					chkRaceInfo.setRaceUpdate( RaceInfo.INT_RACEUPDATE_OFF );
+					Logic.setUpdateOffRaceId( getContentResolver(), chkRaceInfo.id );
+					chkRaceInfo.updateSts = RaceInfo.INT_UPDATESTS_OFF;
 				}
 			}
 		}
@@ -197,7 +197,7 @@ public class MainActivity extends Activity
 		StringBuilder builder = new StringBuilder();
 		builder.append( getString( R.string.str_dialog_msg_name ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceName() );
+		builder.append( raceInfo.name );
 		builder.append( "\n" );
 
 		return builder.toString();
@@ -214,10 +214,10 @@ public class MainActivity extends Activity
 		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
 		{
 			// 速報中でない
-			if( info.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_OFF )
+			if( info.updateSts == RaceInfo.INT_UPDATESTS_OFF )
 			{
 				// 大会削除
-				Logic.deleteRaceInfo( getContentResolver(), info.getRaceId() );
+				Logic.deleteRaceInfo( getContentResolver(), info.id );
 				
 				// リストから大会削除
 				ListView raceInfoListView = ( ListView )findViewById( R.id.id_activity_main_body_contents_racelist_listview );
@@ -284,21 +284,21 @@ public class MainActivity extends Activity
 
 			// 大会名表示
 			TextView raceNameTextView = ( TextView )convertView.findViewById( R.id.id_list_item_raceinfo_race_name_textview );
-			raceNameTextView.setText( raceInfo.getRaceName() );
+			raceNameTextView.setText( raceInfo.name );
 
 			// 速報中の表示
 			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
 			RelativeLayout raceReserveLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_layout );
 
-			switch( raceInfo.getRaceUpdate() )
+			switch( raceInfo.updateSts )
 			{
 			// 速報中
-			case RaceInfo.INT_RACEUPDATE_ON:
+			case RaceInfo.INT_UPDATESTS_ON:
 				raceUpdateLayout.setVisibility( View.VISIBLE );
 				raceReserveLayout.setVisibility( View.GONE );
 				break;
 			// 予約中
-			case RaceInfo.INT_RACEUPDATE_RESERVE:
+			case RaceInfo.INT_UPDATESTS_RESERVE:
 				raceUpdateLayout.setVisibility( View.GONE );
 
 				try
@@ -315,7 +315,7 @@ public class MainActivity extends Activity
 				}
 				break;
 			// 停止中
-			case RaceInfo.INT_RACEUPDATE_OFF:
+			case RaceInfo.INT_UPDATESTS_OFF:
 			default:
 				raceUpdateLayout.setVisibility( View.GONE );
 				raceReserveLayout.setVisibility( View.GONE );

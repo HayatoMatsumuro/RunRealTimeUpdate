@@ -65,7 +65,7 @@ public class RunnerListActivity extends Activity
 
 					// 選手情報取得
 					SectionRunnerElement element = ( SectionRunnerElement )listView.getItemAtPosition( position );
-					RunnerInfo runnerInfo = element.getRunnerInfo();
+					RunnerInfo runnerInfo = element.runnerInfo;
 
 					if( runnerInfo == null )
 					{
@@ -74,8 +74,8 @@ public class RunnerListActivity extends Activity
 
 					// 削除ダイアログ表示
 					RunnerDeleteInfo runnerDeleteInfo = new RunnerDeleteInfo();
-					runnerDeleteInfo.setRaceInfo(raceInfo);
-					runnerDeleteInfo.setSectionRunnerElement(element);
+					runnerDeleteInfo.raceInfo = raceInfo;
+					runnerDeleteInfo.sectionRunnerElement = element;
 
 					InfoDialog<RunnerDeleteInfo> runnerDeleteDialog = new InfoDialog<RunnerDeleteInfo>( runnerDeleteInfo, new RunnerDeleteButtonCallbackImpl() );
 					runnerDeleteDialog.onDialog(
@@ -102,7 +102,7 @@ public class RunnerListActivity extends Activity
 					// 選手情報取得
 					ListView listView = ( ListView )parent;
 					SectionRunnerElement element = ( SectionRunnerElement )listView.getItemAtPosition( position );
-					RunnerInfo runnerInfo = element.getRunnerInfo();
+					RunnerInfo runnerInfo = element.runnerInfo;
 
 					// 選手以外のクリックは、無視
 					if( runnerInfo == null )
@@ -117,43 +117,43 @@ public class RunnerListActivity extends Activity
 
 					// ゼッケン番号
 					TextView numberTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_number_text_textview );
-					numberTextView.setText( runnerInfo.getNumber() );
+					numberTextView.setText( runnerInfo.number );
 
 					// 選手名
 					TextView nameTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_name_text_textview );
-					nameTextView.setText( runnerInfo.getName() );
+					nameTextView.setText( runnerInfo.name );
 
 					// 部門
 					TextView sectionTextView = ( TextView )inputView.findViewById( R.id.id_dialog_runnerinfodetail_section_text_textview );
-					sectionTextView.setText( runnerInfo.getSection() );
+					sectionTextView.setText( runnerInfo.section );
 
 					// タイムリスト
 					TableLayout tableLayout = ( TableLayout )inputView.findViewById( R.id.id_dialog_runnerinfodetail_timelist_layout );
 
-					for( RunnerInfo.TimeList timelist : runnerInfo.getTimeList() )
+					for( RunnerInfo.TimeInfo timeInfo : runnerInfo.timeInfoList )
 					{
 						TableRow tableRow = new TableRow( getParent() );
 
 						// 地点
 						TextView pointTextView = new TextView( getParent() );
-						pointTextView.setText( timelist.getPoint() );
+						pointTextView.setText( timeInfo.point );
 						pointTextView.setPadding( 1, 1, 1, 1 );
 
 						// スプリット
 						TextView splitTextView = new TextView( getParent() );
-						splitTextView.setText( timelist.getSplit() );
+						splitTextView.setText( timeInfo.split );
 						splitTextView.setGravity( Gravity.CENTER );
 						splitTextView.setPadding( 1, 1, 1, 1 );
 
 						// ラップ
 						TextView lapTextView = new TextView( getParent() );
-						lapTextView.setText( timelist.getLap() );
+						lapTextView.setText( timeInfo.lap );
 						lapTextView.setGravity( Gravity.CENTER );
 						lapTextView.setPadding( 1, 1, 1, 1 );
 
 						// カレントタイム
 						TextView currentTimeView = new TextView( getParent() );
-						currentTimeView.setText( timelist.getCurrentTime() );
+						currentTimeView.setText( timeInfo.currentTime );
 						currentTimeView.setGravity( Gravity.CENTER );
 						lapTextView.setPadding( 1, 1, 1, 1 );
 
@@ -208,7 +208,7 @@ public class RunnerListActivity extends Activity
 		setViewBody( raceId );
 
 		// 速報バーの表示更新
-		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.updateSts );
 
 		return;
 	}
@@ -261,11 +261,11 @@ public class RunnerListActivity extends Activity
 	private String createDialogMessage( RunnerInfo runnerInfo )
 	{
 		StringBuilder builder = new StringBuilder();
-		builder.append(runnerInfo.getName());
-		builder.append("\n");
-		builder.append(runnerInfo.getNumber());
-		builder.append("\n");
-		builder.append(runnerInfo.getSection());
+		builder.append( runnerInfo.name );
+		builder.append( "\n" );
+		builder.append( runnerInfo.number );
+		builder.append( "\n" );
+		builder.append( runnerInfo.section );
 
 		return builder.toString();
 	}
@@ -281,13 +281,13 @@ public class RunnerListActivity extends Activity
 		for( SectionRunnerInfo sectionRunnerInfo : sectionRunnerInfoList )
 		{
 			SectionRunnerElement sectionElement = new SectionRunnerElement();
-			sectionElement.setSection( sectionRunnerInfo.getSection() );
+			sectionElement.section = sectionRunnerInfo.section;
 			sectionRunnerElementList.add( sectionElement );
 
-			for( RunnerInfo runnerInfo : sectionRunnerInfo.getRunnerInfoList() )
+			for( RunnerInfo runnerInfo : sectionRunnerInfo.runnerInfoList )
 			{
 				SectionRunnerElement runnerElement = new SectionRunnerElement();
-				runnerElement.setRunnerInfo( runnerInfo );
+				runnerElement.runnerInfo = runnerInfo;
 				sectionRunnerElementList.add( runnerElement );
 			}
 		}
@@ -307,18 +307,18 @@ public class RunnerListActivity extends Activity
 		{
 			// ポジティブボタン押し
 			// 速報中でないなら削除
-			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
-			SectionRunnerElement element = info.getSectionRunnerElement();
-			if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+			RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.raceInfo.id );
+			SectionRunnerElement element = info.sectionRunnerElement;
+			if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 			{
 				Toast.makeText( RunnerListActivity.this, "速報中は削除できません", Toast.LENGTH_SHORT ).show();
 			}
 			else
 			{
 				// 選手削除
-				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.getRaceId(), element.getRunnerInfo().getNumber() );
+				Logic.deleteRunnerInfo( getContentResolver(), raceInfo.id, element.runnerInfo.number );
 
-				setViewBody( raceInfo.getRaceId() );
+				setViewBody( raceInfo.id );
 
 				Toast.makeText( RunnerListActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
 			}
@@ -350,44 +350,6 @@ public class RunnerListActivity extends Activity
 		 * リストビューの要素
 		 */
 		private SectionRunnerElement sectionRunnerElement;
-
-		/**
-		 * 大会情報を取得する
-		 * @return 大会情報
-		 */
-		public RaceInfo getRaceInfo()
-		{
-			return raceInfo;
-		}
-
-		/**
-		 * 大会情報を設定する
-		 * @param raceInfo 大会情報
-		 */
-		public void setRaceInfo(RaceInfo raceInfo)
-		{
-			this.raceInfo = raceInfo;
-			return;
-		}
-
-		/**
-		 * 部門選手要素を取得する
-		 * @return 部門選手要素
-		 */
-		public SectionRunnerElement getSectionRunnerElement()
-		{
-			return sectionRunnerElement;
-		}
-
-		/**
-		 * 部門選手要素を設定する
-		 * @param sectionRunnerElement 部門選手要素
-		 */
-		public void setSectionRunnerElement( SectionRunnerElement sectionRunnerElement )
-		{
-			this.sectionRunnerElement = sectionRunnerElement;
-			return;
-		}
 	}
 
 	/**
@@ -435,19 +397,19 @@ public class RunnerListActivity extends Activity
 			SectionRunnerElement item = getItem( position );
 
 			// 部門
-			if( item.getSection() != null )
+			if( item.section != null )
 			{
 				sectionLayout.setVisibility( View.VISIBLE );
 				runnerLayout.setVisibility( View.GONE );
 
-				runnerSectionTextView.setText( item.getSection() );
+				runnerSectionTextView.setText( item.section );
 			}
 			else
 			{
 				sectionLayout.setVisibility( View.GONE );
 				runnerLayout.setVisibility( View.VISIBLE );
-				runnerNameTextView.setText( item.runnerInfo.getName() );
-				runnerNumberTextView.setText( item.runnerInfo.getNumber() );
+				runnerNameTextView.setText( item.runnerInfo.name );
+				runnerNumberTextView.setText( item.runnerInfo.number );
 			}
 
 			return convertView;
@@ -464,49 +426,11 @@ public class RunnerListActivity extends Activity
 		/**
 		 * 部門
 		 */
-		private String section = null;
+		public String section = null;
 
 		/**
 		 * 選手情報
 		 */
-		private RunnerInfo runnerInfo = null;
-
-		/**
-		 * 部門を取得する
-		 * @return 部門
-		 */
-		public String getSection()
-		{
-			return section;
-		}
-
-		/**
-		 * 部門を設定する
-		 * @param section 部門
-		 */
-		public void setSection( String section )
-		{
-			this.section = section;
-			return;
-		}
-
-		/**
-		 * 選手情報を取得する
-		 * @return 選手情報
-		 */
-		public RunnerInfo getRunnerInfo()
-		{
-			return runnerInfo;
-		}
-
-		/**
-		 * 選手情報を設定する
-		 * @param runnerInfo 選手情報
-		 */
-		public void setRunnerInfo( RunnerInfo runnerInfo )
-		{
-			this.runnerInfo = runnerInfo;
-			return;
-		}
+		public RunnerInfo runnerInfo = null;
 	}
 }

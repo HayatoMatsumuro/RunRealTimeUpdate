@@ -88,7 +88,7 @@ public class RunnerEntryActivity extends Activity
 		}
 
 		// 速報中なら、メッセージを表示する
-		if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+		if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 		{
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
@@ -149,7 +149,7 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
+					param.setRaceId( raceInfo.id );
 					param.setNumber( number );
 					task.execute( param );
 
@@ -179,10 +179,10 @@ public class RunnerEntryActivity extends Activity
 					// 名前検索タスク起動
 					RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
 					RunnerInfoByNameLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
-					param.setSei( seiEdit.getText().toString() );
-					param.setMei( meiEdit.getText().toString() );
+					param.url = getString( R.string.str_txt_defaulturl );
+					param.raceId = raceInfo.id;
+					param.sei = seiEdit.getText().toString();
+					param.mei =  meiEdit.getText().toString();
 					task.execute( param );
 
 					return;
@@ -209,8 +209,8 @@ public class RunnerEntryActivity extends Activity
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.getRaceId() );
-					param.setNumber( runnerInfo.getNumber() );
+					param.setRaceId( raceInfo.id );
+					param.setNumber( runnerInfo.number );
 					task.execute( param );
 
 					return;
@@ -368,8 +368,8 @@ public class RunnerEntryActivity extends Activity
 			}
 
 			RunnerEntryDialogInfo info = new RunnerEntryDialogInfo();
-			info.setRaceInfo( m_RaceInfo );
-			info.setRunnerInfo( runnerInfo );
+			info.raceInfo = m_RaceInfo;
+			info.runnerInfo = runnerInfo;
 
 			// 選手情報ダイアログ表示
 			InfoDialog<RunnerEntryDialogInfo> runnerEntryDialogInfo = new InfoDialog<RunnerEntryDialogInfo>( info, new RunnerEntryButtonCallbackImpl() );
@@ -528,10 +528,10 @@ public class RunnerEntryActivity extends Activity
 			List<RunnerInfo> runnerInfoList = null;
 
 			// 名前から選手情報を検索する
-			String url = params[0].getUrl();
-			String raceId = params[0].getRaceId();
-			String mei = params[0].getMei();
-			String sei = params[0].getSei();
+			String url = params[0].url;
+			String raceId = params[0].raceId;
+			String mei = params[0].mei;
+			String sei = params[0].sei;
 			runnerInfoList = Logic.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			return runnerInfoList;
@@ -612,98 +612,22 @@ public class RunnerEntryActivity extends Activity
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
+			public String raceId;
 
 			/**
 			 * 姓
 			 */
-			private String sei;
+			public String sei;
 
 			/**
 			 * 名
 			 */
-			private String mei;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId(String raceId)
-			{
-				this.raceId = raceId;
-				return;
-			}
-
-			/**
-			 * 姓を取得する
-			 * @return 姓
-			 */
-			public String getSei()
-			{
-				return sei;
-			}
-
-			/**
-			 * 姓を設定する
-			 * @param sei 姓
-			 */
-			public void setSei(String sei)
-			{
-				this.sei = sei;
-				return;
-			}
-
-			/**
-			 * 名を取得する
-			 * @return 名
-			 */
-			public String getMei()
-			{
-				return mei;
-			}
-
-			/**
-			 * 名を設定する
-			 * @param mei 名
-			 */
-			public void setMei( String mei )
-			{
-				this.mei = mei;
-				return;
-			}
+			public String mei;
 		}
 	}
 
@@ -718,15 +642,15 @@ public class RunnerEntryActivity extends Activity
 
 		builder.append( getString(R.string.str_txt_runnername ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getName() );
+		builder.append( runnerInfo.name );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_txt_no ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getNumber() );
+		builder.append( runnerInfo.number );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_txt_section ) );
 		builder.append( ":" );
-		builder.append( runnerInfo.getSection() );
+		builder.append( runnerInfo.section );
 		builder.append( "\n" );
 
 		return builder.toString();
@@ -742,20 +666,20 @@ public class RunnerEntryActivity extends Activity
 		@Override
 		public void onClickPositiveButton( DialogInterface dialog, int which, RunnerEntryDialogInfo info )
 		{
-			if( !Logic.checkEntryRunnerId( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() ) )
+			if( !Logic.checkEntryRunnerId( getContentResolver(), info.raceInfo, info.runnerInfo ) )
 			{
 				// 最新の大会情報を取得
-				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.getRaceInfo().getRaceId() );
+				RaceInfo raceInfo = Logic.getRaceInfo( getContentResolver(), info.raceInfo.id );
 
 				// 予約中→速報中となった場合
-				if( raceInfo.getRaceUpdate() == RaceInfo.INT_RACEUPDATE_ON )
+				if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
 				{
 					Toast.makeText( RunnerEntryActivity.this, "速報中のため登録できません。", Toast.LENGTH_SHORT ).show();
 				}
 				else
 				{
 					// データベース登録
-					Logic.entryRunnerInfo( getContentResolver(), info.getRaceInfo(), info.getRunnerInfo() );
+					Logic.entryRunnerInfo( getContentResolver(), info.raceInfo, info.runnerInfo );
 
 					Toast.makeText( RunnerEntryActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
 				}
@@ -766,7 +690,7 @@ public class RunnerEntryActivity extends Activity
 		        imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 
 				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
-				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.getRaceInfo().getRaceId() );
+				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.raceInfo.id );
 				intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_RUNNER );
 				startActivity( intent );
 			}
@@ -829,8 +753,8 @@ public class RunnerEntryActivity extends Activity
 
 			sectionLayout.setVisibility( View.GONE );
 			runnerLayout.setVisibility( View.VISIBLE );
-			runnerNameTextView.setText( item.getName() );
-			runnerNumberTextView.setText( item.getNumber() );
+			runnerNameTextView.setText( item.name );
+			runnerNumberTextView.setText( item.number );
 
 			return convertView;
 		}
@@ -846,43 +770,11 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * 大会情報
 		 */
-		private RaceInfo raceInfo;
+		public RaceInfo raceInfo;
 
 		/**
 		 * 選手情報
 		 */
-		private RunnerInfo runnerInfo;
-
-		/**
-		 * 大会情報を取得する
-		 * @return 大会情報
-		 */
-		public RaceInfo getRaceInfo() {
-			return raceInfo;
-		}
-
-		/**
-		 * 大会情報を設定する
-		 * @param raceInfo
-		 */
-		public void setRaceInfo(RaceInfo raceInfo) {
-			this.raceInfo = raceInfo;
-		}
-
-		/**
-		 * 選手情報を取得する
-		 * @return 選手情報
-		 */
-		public RunnerInfo getRunnerInfo() {
-			return runnerInfo;
-		}
-
-		/**
-		 * 選手情報を設定する
-		 * @param runnerInfo 選手情報
-		 */
-		public void setRunnerInfo(RunnerInfo runnerInfo) {
-			this.runnerInfo = runnerInfo;
-		}
+		public RunnerInfo runnerInfo;
 	}
 }
