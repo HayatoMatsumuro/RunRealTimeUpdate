@@ -236,9 +236,9 @@ public class Logic
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
 			raceInfo.id = raceId;
-			raceInfo.name = parserRaceInfo.getName();
-			raceInfo.date = parserRaceInfo.getDate();
-			raceInfo.location = parserRaceInfo.getLocation();
+			raceInfo.name = parserRaceInfo.name;
+			raceInfo.date = parserRaceInfo.date;
+			raceInfo.location = parserRaceInfo.location;
 			raceInfo.updateSts = RaceInfo.INT_UPDATESTS_OFF;
 
 			return raceInfo;
@@ -266,16 +266,16 @@ public class Logic
 
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();
-			runnerInfo.name = parserRunnerInfo.getName();
-			runnerInfo.number = parserRunnerInfo.getNumber();
-			runnerInfo.section = parserRunnerInfo.getSection();
-			for( ParserRunnerInfo.TimeList timelist : parserRunnerInfo.getTimeList() )
+			runnerInfo.name = parserRunnerInfo.name;
+			runnerInfo.number = parserRunnerInfo.number;
+			runnerInfo.section = parserRunnerInfo.section;
+			for( ParserRunnerInfo.TimeInfo timelist : parserRunnerInfo.timeList )
 			{
 				RunnerInfo.TimeInfo infoTimeList = new RunnerInfo().new TimeInfo();
-				infoTimeList.point = timelist.getPoint();
-				infoTimeList.split = timelist.getSplit();
-				infoTimeList.lap = timelist.getLap();
-				infoTimeList.currentTime = timelist.getCurrentTime();
+				infoTimeList.point = timelist.point;
+				infoTimeList.split = timelist.split;
+				infoTimeList.lap = timelist.lap;
+				infoTimeList.currentTime = timelist.currentTime;
 				
 				runnerInfo.timeInfoList.add( infoTimeList );
 			}
@@ -652,8 +652,8 @@ public class Logic
 			for( ParserRunnerInfo parserRunnerInfo : parserRunnerInfoList )
 			{
 				RunnerInfo runnerInfo = new RunnerInfo();
-				runnerInfo.number = parserRunnerInfo.getNumber();
-				runnerInfo.name = parserRunnerInfo.getName();
+				runnerInfo.number = parserRunnerInfo.number;
+				runnerInfo.name = parserRunnerInfo.name;
 				runnerInfoList.add( runnerInfo );
 			}
 		}

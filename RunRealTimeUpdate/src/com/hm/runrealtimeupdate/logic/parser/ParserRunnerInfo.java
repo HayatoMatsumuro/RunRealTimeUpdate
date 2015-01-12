@@ -3,123 +3,65 @@ package com.hm.runrealtimeupdate.logic.parser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParserRunnerInfo {
-	
+public class ParserRunnerInfo
+{	
 	/**
 	 * 名前
 	 */
-	private String name;
+	public String name;
 
 	/**
 	 * ゼッケン番号
 	 */
-	private String number;
+	public String number;
 	
 	/**
 	 * 部門
 	 */
-	private String section;
+	public String section;
 	
 	/**
 	 * タイムリスト
 	 */
-	private List<TimeList> timeList;
+	public List<TimeInfo> timeList;
 
 	/**
 	 * コンストラクタ
 	 */
-	public ParserRunnerInfo(){
+	public ParserRunnerInfo()
+	{
 		this.name = null;
 		this.number = null;
 		this.section = null;
-		this.timeList = new ArrayList<TimeList>();
-	}
-	
-	public String getName() {
-		return name;
+		this.timeList = new ArrayList<TimeInfo>();
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getNumber() {
-		return number;
-	}
-
-	public void setNumber(String number) {
-		this.number = number;
-	}
-
-	public String getSection() {
-		return section;
-	}
-
-	public void setSection(String section) {
-		this.section = section;
-	}
-	
-
-	public List<TimeList> getTimeList() {
-		return timeList;
-	}
-	
-	public void addTimeList( TimeList timeList){
-		this.timeList.add(timeList);
-	}
-	
-	public class TimeList{
-		
+	/**
+	 * タイム情報
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	public class TimeInfo
+	{	
 		/**
 		 * 計測ポイント
 		 */
-		private String point;
+		public String point;
 
 		/**
 		 * スプリット
 		 */
-		private String split;
-		
+		public String split;
+	
 		/**
 		 * ラップ
 		 */
-		private String lap;
-		
+		public String lap;
+
 		/**
 		 * 通過時刻
 		 */
-		private String currentTime;
-		
-		public String getPoint() {
-			return point;
-		}
-
-		public void setPoint(String point) {
-			this.point = point;
-		}
-
-		public String getSplit() {
-			return split;
-		}
-
-		public void setSplit(String split) {
-			this.split = split;
-		}
-
-		public String getLap() {
-			return lap;
-		}
-
-		public void setLap(String lap) {
-			this.lap = lap;
-		}
-
-		public String getCurrentTime() {
-			return currentTime;
-		}
-
-		public void setCurrentTime(String currentTime) {
-			this.currentTime = currentTime;
-		}
+		public String currentTime;
 	}
 }
+

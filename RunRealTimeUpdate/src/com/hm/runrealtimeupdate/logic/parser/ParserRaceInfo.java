@@ -1,34 +1,24 @@
 package com.hm.runrealtimeupdate.logic.parser;
 
-public class ParserRaceInfo {
-	
-	private String name;
-	
-	private String date;
-	
-	private String location;
+/**
+ * 大会情報パーサー
+ * @author Hayato Matsumuro
+ *
+ */
+public class ParserRaceInfo
+{
+	/**
+	 * 大会名
+	 */
+	public String name;
 
-	public String getName() {
-		return name;
-	}
+	/**
+	 * 開催日
+	 */
+	public String date;
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
+	/**
+	 * 開催地
+	 */
+	public String location;
 }

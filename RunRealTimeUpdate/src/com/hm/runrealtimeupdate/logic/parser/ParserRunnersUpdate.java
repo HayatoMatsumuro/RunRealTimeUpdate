@@ -60,9 +60,9 @@ public class ParserRunnersUpdate {
 			
 			// 大会情報設定
 			ParserRaceInfo parserRaceInfo = new ParserRaceInfo();
-			parserRaceInfo.setName(title);
-			parserRaceInfo.setDate(date);
-			parserRaceInfo.setLocation(location);
+			parserRaceInfo.name = title;
+			parserRaceInfo.date = date;
+			parserRaceInfo.location = location;
 			
 			return parserRaceInfo;
 			
@@ -121,17 +121,17 @@ public class ParserRunnersUpdate {
 			// 名前取得
 			StringBuilder strName = new StringBuilder( ddElements.get(0).text() );
 			strName.delete(0, 2);
-			parserRunnerInfo.setName(strName.toString());
+			parserRunnerInfo.name = strName.toString();
 									
 			// ゼッケンNO取得
 			StringBuilder strNo = new StringBuilder( ddElements.get(1).text() );
 			strNo.delete(0, 2);
-			parserRunnerInfo.setNumber(strNo.toString());
+			parserRunnerInfo.number = strNo.toString();
 									
 			// 部門取得
 			StringBuilder strSection = new StringBuilder( ddElements.get(2).text() );
 			strSection.delete(0, 2);
-			parserRunnerInfo.setSection(strSection.toString());
+			parserRunnerInfo.section = strSection.toString();
 									
 			// スプリット情報取得
 			Elements mainBlock = doc.select("div#mainBlock");
@@ -151,14 +151,14 @@ public class ParserRunnersUpdate {
 			for(Element trElement:trElements){
 				Elements tdElements = trElement.getElementsByTag("td");
 										
-				ParserRunnerInfo.TimeList timeList = new ParserRunnerInfo().new TimeList();
+				ParserRunnerInfo.TimeInfo timeInfo = new ParserRunnerInfo().new TimeInfo();
 									
-				timeList.setPoint(tdElements.get(0).text());
-				timeList.setSplit(tdElements.get(1).text());
-				timeList.setLap(tdElements.get(2).text());
-				timeList.setCurrentTime(tdElements.get(3).text());
+				timeInfo.point = tdElements.get( 0 ).text();
+				timeInfo.split = tdElements.get( 1 ).text();
+				timeInfo.lap = tdElements.get( 2 ).text();
+				timeInfo.currentTime = tdElements.get(3).text();
 							
-				parserRunnerInfo.addTimeList(timeList);
+				parserRunnerInfo.timeList.add( timeInfo );
 			}
 			
 			return parserRunnerInfo;
@@ -272,15 +272,14 @@ public class ParserRunnersUpdate {
 				String number = aNumberElement.text();
 				
 				ParserRunnerInfo pRunnerInfo = new ParserRunnerInfo();
-				pRunnerInfo.setName(name);
-				pRunnerInfo.setNumber(number);
+				pRunnerInfo.name = name;
+				pRunnerInfo.number = number;
 				parserRunnerInfoList.add( pRunnerInfo );
 			}
 		} catch (ParserException e) {
 			e.printStackTrace();
 			throw new ParserException("Exception.");
 		} catch (IOException e) {
-			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 			throw new ParserException("IOException.");
 		}
