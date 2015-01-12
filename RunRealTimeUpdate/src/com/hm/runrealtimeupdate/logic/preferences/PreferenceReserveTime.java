@@ -21,7 +21,7 @@ public class PreferenceReserveTime
 	 * キー 予約分
 	 */
 	private static final String KEY_RESERVEMINUTE = "reserveminute";
-	
+
 	/**
 	 * 予約時間をプリファレンスに保存する
 	 * @param context コンテキスト
@@ -112,7 +112,8 @@ public class PreferenceReserveTime
 		 * 分を設定する
 		 * @param minute 分
 		 */
-		public void setMinute(int minute) {
+		public void setMinute(int minute)
+		{
 			this.minute = minute;
 			return;
 		}
