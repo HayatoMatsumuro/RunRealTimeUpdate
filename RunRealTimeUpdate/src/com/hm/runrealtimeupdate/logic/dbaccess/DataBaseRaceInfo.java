@@ -1,64 +1,39 @@
 package com.hm.runrealtimeupdate.logic.dbaccess;
 
-public class DataBaseRaceInfo {
+/**
+ * データベース 大会情報
+ * @author Hayato Matsumuro
+ *
+ */
+public class DataBaseRaceInfo
+{
+	/**
+	 * ID
+	 */
+	public String id;
 
-	private String raceId;
-	
-	private String raceDate;
-	
-	private String raceLocation;
-	
-	private String raceName;
-	
-	private String updateFlg;
-	
-	private String date;
+	/**
+	 * 大会名
+	 */
+	public String name;
 
-	public String getRaceId() {
-		return raceId;
-	}
+	/**
+	 * 開催日
+	 */
+	public String date;
 
-	public void setRaceId(String raceId) {
-		this.raceId = raceId;
-	}
+	/**
+	 * 開催地
+	 */
+	public String location;
 
-	public String getRaceName() {
-		return raceName;
-	}
+	/**
+	 * 更新フラグ
+	 */
+	public String updateFlg;
 
-	public void setRaceName(String raceName) {
-		this.raceName = raceName;
-	}
-
-	public String getRaceDate() {
-		return raceDate;
-	}
-
-	public void setRaceDate(String raceDate) {
-		this.raceDate = raceDate;
-	}
-
-	public String getRaceLocation() {
-		return raceLocation;
-	}
-
-	public void setRaceLocation(String raceLocation) {
-		this.raceLocation = raceLocation;
-	}
-
-	public String getUpdateFlg() {
-		return updateFlg;
-	}
-
-	public void setUpdateFlg(String updateFlg) {
-		this.updateFlg = updateFlg;
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
+	/**
+	 * データ更新日
+	 */
+	public String updateDate;
 }

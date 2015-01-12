@@ -41,12 +41,12 @@ public class DataBaseAccess {
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(RaceProvider.STR_DB_COLUMN_RACEID, dbRaceInfo.getRaceId() );
-		values.put(RaceProvider.STR_DB_COLUMN_RACENAME, dbRaceInfo.getRaceName());
-		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, dbRaceInfo.getRaceDate());
-		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, dbRaceInfo.getRaceLocation());
-		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, dbRaceInfo.getUpdateFlg());
-		values.put(RaceProvider.STR_DB_COLUMN_DATE, dbRaceInfo.getDate());
+		values.put(RaceProvider.STR_DB_COLUMN_RACEID, dbRaceInfo.id );
+		values.put(RaceProvider.STR_DB_COLUMN_RACENAME, dbRaceInfo.name );
+		values.put(RaceProvider.STR_DB_COLUMN_RACEDATE, dbRaceInfo.date );
+		values.put(RaceProvider.STR_DB_COLUMN_RACELOCATION, dbRaceInfo.location );
+		values.put(RaceProvider.STR_DB_COLUMN_UPDATEFLG, dbRaceInfo.updateFlg );
+		values.put(RaceProvider.STR_DB_COLUMN_DATE, dbRaceInfo.updateDate );
 		
 		contentResolver.insert(RaceProvider.URI_DB, values);
 		return;
@@ -188,11 +188,11 @@ public class DataBaseAccess {
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(RunnerProvider.STR_DB_COLUMN_RACEID, dbRunnerInfo.getRaceId());
-		values.put(RunnerProvider.STR_DB_COLUMN_NUMBER, dbRunnerInfo.getNumber());
-		values.put(RunnerProvider.STR_DB_COLUMN_NAME, dbRunnerInfo.getName());
-		values.put(RunnerProvider.STR_DB_COLUMN_SECTION, dbRunnerInfo.getSection());
-		values.put(RunnerProvider.STR_DB_COLUMN_DATE, dbRunnerInfo.getDate());
+		values.put( RunnerProvider.STR_DB_COLUMN_RACEID, dbRunnerInfo.raceId );
+		values.put( RunnerProvider.STR_DB_COLUMN_NUMBER, dbRunnerInfo.number );
+		values.put( RunnerProvider.STR_DB_COLUMN_NAME, dbRunnerInfo.name );
+		values.put( RunnerProvider.STR_DB_COLUMN_SECTION, dbRunnerInfo.section );
+		values.put( RunnerProvider.STR_DB_COLUMN_DATE, dbRunnerInfo.updateDate );
 		
 		contentResolver.insert(RunnerProvider.URI_DB, values);
 		return;
@@ -338,13 +338,13 @@ public class DataBaseAccess {
 		// データベースに登録
 		ContentValues values = new ContentValues();
 		
-		values.put(TimelistProvider.STR_DB_COLUMN_RACEID, dbTimeList.getRaceId());
-		values.put(TimelistProvider.STR_DB_COLUMN_NUMBER, dbTimeList.getNumber());
-		values.put(TimelistProvider.STR_DB_COLUMN_POINT, dbTimeList.getPoint());
-		values.put(TimelistProvider.STR_DB_COLUMN_SPLIT, dbTimeList.getSplit());
-		values.put(TimelistProvider.STR_DB_COLUMN_LAP, dbTimeList.getLap());
-		values.put(TimelistProvider.STR_DB_COLUMN_CURRENTTIME, dbTimeList.getCurrentTime());
-		values.put(TimelistProvider.STR_DB_COLUMN_DATE, dbTimeList.getDate());
+		values.put( TimelistProvider.STR_DB_COLUMN_RACEID, dbTimeList.raceId );
+		values.put( TimelistProvider.STR_DB_COLUMN_NUMBER, dbTimeList.number );
+		values.put( TimelistProvider.STR_DB_COLUMN_POINT, dbTimeList.point );
+		values.put( TimelistProvider.STR_DB_COLUMN_SPLIT, dbTimeList.split );
+		values.put( TimelistProvider.STR_DB_COLUMN_LAP, dbTimeList.lap );
+		values.put( TimelistProvider.STR_DB_COLUMN_CURRENTTIME, dbTimeList.currentTime );
+		values.put( TimelistProvider.STR_DB_COLUMN_DATE, dbTimeList.updateDate );
 		
 		contentResolver.insert(TimelistProvider.URI_DB, values);
 		return;
@@ -421,18 +421,18 @@ public class DataBaseAccess {
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
-		
-		values.put( UpdateDataProvider.STR_DB_COLUMN_RACEID, dbUpdateData.getRaceId() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_NUMBER, dbUpdateData.getNumber() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_NAME, dbUpdateData.getName() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_SECTION, dbUpdateData.getSection());
-		values.put( UpdateDataProvider.STR_DB_COLUMN_POINT, dbUpdateData.getPoint() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, dbUpdateData.getSplit() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, dbUpdateData.getLap() );
-		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, dbUpdateData.getCurrentTime());
-		values.put( UpdateDataProvider.STR_DB_COLUMN_DATE, dbUpdateData.getDate());
+
+		values.put( UpdateDataProvider.STR_DB_COLUMN_RACEID, dbUpdateData.raceId );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NUMBER, dbUpdateData.number );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_NAME, dbUpdateData.name );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SECTION, dbUpdateData.section );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_POINT, dbUpdateData.point );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_SPLIT, dbUpdateData.split );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_LAP, dbUpdateData.lap );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME, dbUpdateData.currentTime );
+		values.put( UpdateDataProvider.STR_DB_COLUMN_DATE, dbUpdateData.updateDate );
 		contentResolver.insert(UpdateDataProvider.URI_DB, values);
-		
+
 		return;
 	}
 	
@@ -498,28 +498,20 @@ public class DataBaseAccess {
 	
 	/**
 	 * 大会情報取得
-	 * @param c
-	 * @return
+	 * @param c　カーソル
+	 * @return データベース大会情報
 	 */
-	private static DataBaseRaceInfo getRaceInfoByCursor(Cursor c){
-		
-		// データ取り出し
-		String id = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEID));
-		String raceName = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACENAME));
-		String raceDate = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACEDATE));
-		String raceLocation = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_RACELOCATION));
-		String updateFlg = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_UPDATEFLG));
-		String date = c.getString(c.getColumnIndex(RaceProvider.STR_DB_COLUMN_DATE));
-		
+	private static DataBaseRaceInfo getRaceInfoByCursor( Cursor c )
+	{	
 		// データ設定
 		DataBaseRaceInfo info = new DataBaseRaceInfo();
-		info.setRaceId(id);
-		info.setRaceName(raceName);
-		info.setRaceDate(raceDate);
-		info.setRaceLocation(raceLocation);
-		info.setUpdateFlg(updateFlg);
-		info.setDate(date);
-		
+		info.id = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_RACEID ) );
+		info.name = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_RACENAME ) );
+		info.date = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_RACEDATE ) );
+		info.location = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_RACELOCATION ) );
+		info.updateFlg = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_UPDATEFLG ) );
+		info.updateDate = c.getString( c.getColumnIndex( RaceProvider.STR_DB_COLUMN_DATE ) );
+
 		return info;
 	}
 	
@@ -528,24 +520,17 @@ public class DataBaseAccess {
 	 * @param c
 	 * @return
 	 */
-	private static DataBaseRunnerInfo getRunnerInfoByCursor(Cursor c){
-		// データ取り出し
-		String raceId = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_RACEID));
-		String number = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NUMBER));
-		String name = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_NAME));
-		String section = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_SECTION));
-		String date = c.getString(c.getColumnIndex(RunnerProvider.STR_DB_COLUMN_DATE));
-		
+	private static DataBaseRunnerInfo getRunnerInfoByCursor( Cursor c )
+	{
 		// データ設定
 		DataBaseRunnerInfo info = new DataBaseRunnerInfo();
-		info.setRaceId(raceId);
-		info.setNumber(number);
-		info.setName(name);
-		info.setSection(section);
-		info.setDate(date);
-		
-		return info;
-		
+		info.raceId = c.getString( c.getColumnIndex( RunnerProvider.STR_DB_COLUMN_RACEID ) );
+		info.number = c.getString( c.getColumnIndex( RunnerProvider.STR_DB_COLUMN_NUMBER ) );
+		info.name = c.getString( c.getColumnIndex( RunnerProvider.STR_DB_COLUMN_NAME ) );
+		info.section = c.getString( c.getColumnIndex( RunnerProvider.STR_DB_COLUMN_SECTION ) );
+		info.updateDate = c.getString( c.getColumnIndex( RunnerProvider.STR_DB_COLUMN_DATE ) );
+
+		return info;		
 	}
 	
 	/**
@@ -553,26 +538,18 @@ public class DataBaseAccess {
 	　* @param c
 	 * @return
 	 */
-	private static DataBaseTimeList getTimeListByCursor( Cursor c ){
-		// データ取り出し
-		String raceId = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_RACEID));
-		String number = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_NUMBER));
-		String point = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_POINT));
-		String split = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_SPLIT));
-		String lap = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_LAP));
-		String currentTime = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_CURRENTTIME));
-		String date = c.getString(c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_DATE));
-		
+	private static DataBaseTimeList getTimeListByCursor( Cursor c )
+	{
 		// データ設定
 		DataBaseTimeList timelist = new DataBaseTimeList();
-		timelist.setRaceId(raceId);
-		timelist.setNumber(number);
-		timelist.setPoint(point);
-		timelist.setSplit(split);
-		timelist.setLap(lap);
-		timelist.setCurrentTime(currentTime);
-		timelist.setDate(date);
-		
+		timelist.raceId = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_RACEID ) );
+		timelist.number = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_NUMBER ) );
+		timelist.point = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_POINT ) );
+		timelist.split = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_SPLIT ) );
+		timelist.lap = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_LAP ) );
+		timelist.currentTime = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_CURRENTTIME ) );
+		timelist.updateDate = c.getString( c.getColumnIndex(TimelistProvider.STR_DB_COLUMN_DATE ) );
+
 		return timelist;
 	}
 	
@@ -581,31 +558,20 @@ public class DataBaseAccess {
 	 * @param c
 	 * @return
 	 */
-	private static DataBaseUpdateData getUpdateDataByCursor( Cursor c){
-		
-		// データ取り出し
-		String raceId = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_RACEID));
-		String number = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NUMBER));
-		String name = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NAME));
-		String section = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SECTION));
-		String point = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_POINT));
-		String split = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SPLIT));
-		String lap = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_LAP));
-		String currentTime = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME));
-		String date = c.getString(c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_DATE));
-		
+	private static DataBaseUpdateData getUpdateDataByCursor( Cursor c )
+	{	
 		// データ設定
 		DataBaseUpdateData updateData = new DataBaseUpdateData();
-		updateData.setRaceId(raceId);
-		updateData.setNumber(number);
-		updateData.setName(name);
-		updateData.setSection(section);
-		updateData.setPoint(point);
-		updateData.setSplit(split);
-		updateData.setLap(lap);
-		updateData.setCurrentTime(currentTime);
-		updateData.setDate(date);
-		
+		updateData.raceId = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_RACEID ) );
+		updateData.number = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NUMBER ) );
+		updateData.name = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_NAME ) );
+		updateData.section = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SECTION ) );
+		updateData.point = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_POINT ) );
+		updateData.split = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_SPLIT ) );
+		updateData.lap = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_LAP ) );
+		updateData.currentTime = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_CURRENTTIME ) );
+		updateData.updateDate = c.getString( c.getColumnIndex(UpdateDataProvider.STR_DB_COLUMN_DATE ) );
+
 		return updateData;
 	}
 }

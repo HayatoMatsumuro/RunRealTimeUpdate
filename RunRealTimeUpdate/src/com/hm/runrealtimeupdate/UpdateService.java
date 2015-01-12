@@ -73,9 +73,9 @@ public class UpdateService extends Service
 		m_UpdateTask = new RunnerInfoUpdateTask( raceInfo, getContentResolver() );
 		RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
 
-		param.setUrl( getString( R.string.str_txt_defaulturl ) );
-		param.setRaceId( raceInfo.getRaceId() );
-		param.setRunnerInfoList( runnerInfoList );
+		param.url = getString( R.string.str_txt_defaulturl );
+		param.raceId = raceInfo.id;
+		param.runnerInfoList = runnerInfoList;
 
 		m_UpdateTask.execute( param );
 
@@ -136,9 +136,9 @@ public class UpdateService extends Service
 		protected List<RunnerInfo> doInBackground( TaskParam... params )
 		{
 			// ネットワークから選手情報取得
-			String url = params[0].getUrl();
-			String raceId = params[0].getRaceId();
-			List<RunnerInfo> runnerInfoList = params[0].getRunnerInfoList();
+			String url = params[0].url;
+			String raceId = params[0].raceId;
+			List<RunnerInfo> runnerInfoList = params[0].runnerInfoList;
 
 			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
 		}
@@ -147,7 +147,7 @@ public class UpdateService extends Service
 		protected void onPostExecute( List<RunnerInfo> runnerInfoList )
 		{
 			// データアップデート
-			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.getRaceId(), runnerInfoList );
+			boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceInfo.id, runnerInfoList );
 
 			// 停止フラグ
 			boolean stopFlg = false;
@@ -159,7 +159,7 @@ public class UpdateService extends Service
 				notification.flags = Notification.FLAG_AUTO_CANCEL;
 
 				Intent notifiIntent = new Intent( UpdateService.this, RaceTabActivity.class );
-				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.getRaceId() );
+				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_RACEID, m_RaceInfo.id );
 				notifiIntent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, RaceTabActivity.INT_INTENT_VAL_CURRENTTAB_UPDATE );
 
 				PendingIntent pendIntent = PendingIntent.getActivity( UpdateService.this, 0, notifiIntent, PendingIntent.FLAG_UPDATE_CURRENT );
@@ -216,10 +216,10 @@ public class UpdateService extends Service
 			// 更新を停止する
 			if( stopFlg )
 			{
-				CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.getRaceId() );
+				CommonLib.cancelUpdateAlarm( UpdateService.this, m_RaceInfo.id );
 
 				// データベース変更
-				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.getRaceId() );
+				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.id );
 
 				return;
 			}
@@ -240,79 +240,22 @@ public class UpdateService extends Service
 		 * @author Hayato Matsumuro
 		 *
 		 */
-		public class TaskParam
+		private class TaskParam
 		{
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
+			public String raceId;
 			
 			/**
 			 * 選手リスト
 			 */
-			private List<RunnerInfo> runnerInfoList;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId( String raceId )
-			{
-				this.raceId = raceId;
-				return;
-			}
-
-			/**
-			 * 選手情報リストを取得する
-			 * @return 選手情報リスト
-			 */
-			public List<RunnerInfo> getRunnerInfoList()
-			{
-				return runnerInfoList;
-			}
-
-			/**
-			 * 選手情報リストを設定する
-			 * @param runnerInfo 選手情報リスト
-			 */
-			public void setRunnerInfoList( List<RunnerInfo> runnerInfo )
-			{
-				this.runnerInfoList = runnerInfo;
-				return;
-			}
+			public List<RunnerInfo> runnerInfoList;
 		}
 	}
 }

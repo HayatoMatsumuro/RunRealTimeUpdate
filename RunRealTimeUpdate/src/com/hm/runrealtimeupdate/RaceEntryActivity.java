@@ -110,8 +110,8 @@ public class RaceEntryActivity extends Activity
 					// 大会情報取得タスクの起動
 					RaceInfoLoaderTask task = new RaceInfoLoaderTask();
 					RaceInfoLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceId );
+					param.url = getString( R.string.str_txt_defaulturl );
+					param.raceId = raceId;
 					task.execute( param );
 
 					return;
@@ -211,10 +211,9 @@ public class RaceEntryActivity extends Activity
 			try
 			{
 				// 大会情報取得
-				String url = params[0].getUrl();
-				String raceId = params[0].getRaceId();
+				String url = params[0].url;
+				String raceId = params[0].raceId;
 				raceInfo = Logic.getNetRaceInfo( url, raceId );
-
 			}
 			catch ( LogicException e )
 			{
@@ -275,57 +274,17 @@ public class RaceEntryActivity extends Activity
 		 * @author Hayato Matsumuro
 		 *
 		 */
-		public class TaskParam{
-
+		private class TaskParam
+		{
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
 			 * 大会ID
 			 */
-			private String raceId;
-
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId( String raceId )
-			{
-				this.raceId = raceId;
-
-				return;
-			}
+			public String raceId;
 		}
 	}
 
@@ -339,15 +298,15 @@ public class RaceEntryActivity extends Activity
 		StringBuilder builder = new StringBuilder();
 		builder.append( getString( R.string.str_dialog_msg_name ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceName() );
+		builder.append( raceInfo.name );
 		builder.append( "\n");
 		builder.append( getString( R.string.str_dialog_msg_date ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceDate() );
+		builder.append( raceInfo.date );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_location ) );
 		builder.append( "\n" );
-		builder.append( raceInfo.getRaceLocation() );
+		builder.append( raceInfo.location );
 
 		return builder.toString();
 	}
@@ -362,7 +321,7 @@ public class RaceEntryActivity extends Activity
 		@Override
 		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
 		{
-			if( Logic.checkEntryRaceId( getContentResolver(), info.getRaceId() ) )
+			if( Logic.checkEntryRaceId( getContentResolver(), info.id ) )
 			{
 				// すでに大会が登録済み
 				Toast.makeText( RaceEntryActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT ).show();
