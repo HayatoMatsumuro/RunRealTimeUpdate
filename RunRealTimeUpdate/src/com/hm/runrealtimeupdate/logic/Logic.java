@@ -756,7 +756,7 @@ public class Logic
 			passPointRunnerInfo.setLap( timeList.lap );
 			passPointRunnerInfo.setCurrentTime( timeList.currentTime );
 
-        	try {
+			try {
 				Date date = DATEFORMAT.parse( dbInfo.updateDate );
 				long updateTime = date.getTime();
 
