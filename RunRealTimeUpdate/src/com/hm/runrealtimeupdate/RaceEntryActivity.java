@@ -62,6 +62,22 @@ public class RaceEntryActivity extends Activity
 			}
 		);
 
+		// 都市型ボタン
+		Button cityButton = ( Button )findViewById( R.id.id_activity_raceentry_header_city_button );
+		cityButton.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				@Override
+				public void onClick( View v )
+				{
+					// 都市型マラソン大会登録画面遷移
+					Intent intent = new Intent( RaceEntryActivity.this, RaceEntryCityActivity.class );
+					startActivity( intent );
+				}
+			}
+		);
+
 		// 大会数
 		int raceNum = Logic.getRaceInfoList( getContentResolver() ).size();
 
@@ -72,6 +88,9 @@ public class RaceEntryActivity extends Activity
 			// 最大を上回っていたら、メッセージを表示
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
+
+			// 都市型ボタンを無効化
+			cityButton.setEnabled( false );
 		}
 		else
 		{
