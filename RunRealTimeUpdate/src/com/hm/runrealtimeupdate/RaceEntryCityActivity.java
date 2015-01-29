@@ -1,11 +1,20 @@
 package com.hm.runrealtimeupdate;
 
+import java.util.List;
+
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class RaceEntryCityActivity extends Activity
 {
@@ -29,6 +38,56 @@ public class RaceEntryCityActivity extends Activity
 				}
 			}
 		);
+
+		// ファイル読み込み
+		List<CommonLib.CityProperties> propertiesList = CommonLib.getCityProperties( this );
+
+		// 大会情報リスト設定
+		CityRaceListAdapter adapter = new CityRaceListAdapter( this, propertiesList );
+		ListView cityRaceListView = ( ListView )findViewById( R.id.id_activity_raceentrycity_body_contents_city_listview );
+		cityRaceListView.setAdapter( adapter );
+
+		return;
 	}
-	
+
+	private class CityRaceListAdapter extends ArrayAdapter<CommonLib.CityProperties>
+	{
+		/**
+		 * レイアウトインフレータ
+		 */
+		LayoutInflater m_Inflater;
+
+		public CityRaceListAdapter( Context context, List<CommonLib.CityProperties> cityPropertiesList )
+		{
+			super( context, 0, cityPropertiesList );
+
+			m_Inflater = ( LayoutInflater )context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
+
+			return;
+		}
+
+		@Override
+		public View getView( int position, View convertView, ViewGroup parent )
+		{
+			if( convertView == null )
+			{
+				convertView = m_Inflater.inflate( R.layout.list_item_raceinfo, parent, false );
+			}
+
+			// 大会情報取得
+			CommonLib.CityProperties cityProperties = getItem( position );
+
+			// 大会名表示
+			TextView raceNameTextView = ( TextView )convertView.findViewById( R.id.id_list_item_raceinfo_race_name_textview );
+			raceNameTextView.setText( cityProperties.raceName );
+
+			// 速報中の表示( 非表示 )
+			RelativeLayout raceUpdateLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_update_layout );
+			RelativeLayout raceReserveLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_raceinfo_reserve_layout );
+			raceUpdateLayout.setVisibility( View.GONE );
+			raceReserveLayout.setVisibility( View.GONE );
+
+			return convertView;
+		}
+	}
 }
