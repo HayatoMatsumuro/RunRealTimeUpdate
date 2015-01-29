@@ -1,12 +1,18 @@
 package com.hm.runrealtimeupdate;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetManager;
 
 /**
  * 共通ライブラリ
@@ -15,6 +21,13 @@ import android.content.Intent;
  */
 public class CommonLib
 {
+	private static final String STR_PROPERTIES_KEY_STATUS = "status";
+	private static final String STR_PROPERTIES_KEY_RACEID = "raceid";
+	private static final String STR_PROPERTIES_KEY_RACENAME = "racename";
+	
+	private static final String STR_PROPERTIES_STATUS_CITY = "city";
+
+
 	/**
 	 * 定期更新アラームを設定する
 	 * @param context コンテキスト
@@ -217,5 +230,90 @@ public class CommonLib
 		}
 
 		return msec;
+	}
+
+	/**
+	 * 都市型マラソンのプロパティファイルを読み込む
+	 * @param context コンテキスト
+	 * @return 都市型マラソンのプロパティファイルリスト
+	 */
+	public static List<CityProperties> getCityProperties( Context context )
+	{
+		List<CityProperties> cityPropertiesList = new ArrayList<CityProperties>();
+
+		AssetManager assetManager = context.getResources().getAssets();
+
+		try
+		{
+			Properties properties = null;
+			InputStream inputStream = null;
+
+			String[] filelist = assetManager.list("");
+
+			for( String str : filelist )
+			{
+				// プロパティファイルからデータ読み込み
+				if( str.endsWith( ".properties" ) )
+				{
+					try
+					{
+						inputStream = assetManager.open( str );
+						properties = new Properties();
+						properties.load( inputStream );
+
+						String status = properties.get( STR_PROPERTIES_KEY_STATUS ).toString();
+
+						// 都市型のみ読み込み
+						if( ( status != null ) && ( status.equals( STR_PROPERTIES_STATUS_CITY ) ) )
+						{
+							CommonLib.CityProperties city = new CommonLib().new CityProperties();
+							city.raceId = properties.get( STR_PROPERTIES_KEY_RACEID ).toString();
+							city.raceName = properties.get( STR_PROPERTIES_KEY_RACENAME ).toString();
+
+							cityPropertiesList.add( city );
+						}
+					}
+					catch( IOException e )
+					{
+						return null;
+					}
+					finally
+					{
+						try
+						{
+							inputStream.close();
+						}
+						catch( IOException e )
+						{
+							return null;
+						}
+					}
+				}
+			}
+		}
+		catch( IOException e )
+		{
+			return null;
+		}
+
+		return cityPropertiesList;
+	}
+
+	/**
+	 * 都市型マラソンプロパティ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	public class CityProperties
+	{
+		/**
+		 * 大会ID
+		 */
+		public String raceId;
+
+		/**
+		 * 大会名
+		 */
+		public String raceName;
 	}
 }
