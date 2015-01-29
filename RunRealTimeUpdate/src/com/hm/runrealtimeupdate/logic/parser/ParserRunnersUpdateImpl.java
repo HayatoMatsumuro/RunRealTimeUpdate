@@ -15,7 +15,7 @@ import org.jsoup.select.Elements;
  * @author Hayato Matsumuro
  *
  */
-public class ParserRunnersUpdate
+public class ParserRunnersUpdateImpl implements ParserUpdate
 {
 	/**
 	 * ランナーズアップデートのサイトから大会情報を取得する
@@ -24,7 +24,7 @@ public class ParserRunnersUpdate
 	 * @return 大会情報
 	 * @throws ParserException
 	 */
-	public static ParserRaceInfo getRaceInfo( String url, String raceId ) throws ParserException
+	public ParserRaceInfo getRaceInfo( String url, String raceId ) throws ParserException
 	{
 		try
 		{
@@ -89,7 +89,7 @@ public class ParserRunnersUpdate
 	 * @return 取得した選手情報
 	 * @throws ParserException
 	 */
-	public static ParserRunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException
+	public ParserRunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException
 	{
 		try
 		{
@@ -195,7 +195,7 @@ public class ParserRunnersUpdate
 	 * @return 選手情報リスト
 	 * @throws ParserException 
 	 */
-	public static List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ) throws ParserException
+	public List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ) throws ParserException
 	{
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
 

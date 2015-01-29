@@ -22,7 +22,8 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
-import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
+import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdateImpl;
+import com.hm.runrealtimeupdate.logic.parser.ParserUpdate;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
@@ -225,7 +226,8 @@ public class Logic
 		try
 		{
 			// 大会情報取得
-			ParserRaceInfo parserRaceInfo = ParserRunnersUpdate.getRaceInfo( url, raceId );
+			ParserUpdate parser = new ParserRunnersUpdateImpl();
+			ParserRaceInfo parserRaceInfo = parser.getRaceInfo( url, raceId );
 
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
@@ -256,7 +258,8 @@ public class Logic
 		try
 		{
 			// 選手情報取得
-			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo( url, raceId, number );
+			ParserUpdate parser = new ParserRunnersUpdateImpl();
+			ParserRunnerInfo parserRunnerInfo = parser.getRunnerInfo( url, raceId, number );
 
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();
@@ -643,7 +646,8 @@ public class Logic
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
 		try
 		{
-			parserRunnerInfoList = ParserRunnersUpdate.searchRunnerInfoByName( url, raceId, sei, mei );
+			ParserUpdate parser = new ParserRunnersUpdateImpl();
+			parserRunnerInfoList = parser.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			runnerInfoList = new ArrayList<RunnerInfo>();
 
