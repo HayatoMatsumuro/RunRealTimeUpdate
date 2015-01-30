@@ -185,7 +185,7 @@ public class Logic
 	}
 
 	/**
-	 * 師弟の大会の速報状態を予約にする
+	 * 指定の大会の速報状態を予約にする
 	 * @param contentResolver コンテントリゾルバ
 	 * @param raceId 大会ID
 	 */
@@ -217,21 +217,44 @@ public class Logic
 	/**
 	 * ネットワークから大会情報を取得する
 	 * @param url アップデートサイトURL
-	 * @param raceId 大会ID
+	 * @param pass パス
 	 * @return　取得した大会情報
 	 * @throws LogicException 大会情報取得失敗
 	 */
-	public static RaceInfo getNetRaceInfo( String url, String raceId ) throws LogicException
+	public static RaceInfo getNetRaceInfo( String url, String pass ) throws LogicException
+	{
+		return getNetRaceInfo( url, pass, null );
+	}
+
+	/**
+	 * ネットワークから大会情報を取得する
+	 * @param url アップデートサイトURL
+	 * @param pass パス
+	 * @param parserClassName パーサークラス名
+	 * @return　取得した大会情報
+	 * @throws LogicException 大会情報取得失敗
+	 */
+	public static RaceInfo getNetRaceInfo( String url, String pass, String parserClassName ) throws LogicException
 	{
 		try
 		{
+			ParserUpdate parser;
+
+			if( parserClassName == null || parserClassName.equals("") )
+			{
+				parser = new ParserRunnersUpdateImpl();
+			}
+			else
+			{
+				parser = ( ParserUpdate )Class.forName( parserClassName ).newInstance();
+			}
+
 			// 大会情報取得
-			ParserUpdate parser = new ParserRunnersUpdateImpl();
-			ParserRaceInfo parserRaceInfo = parser.getRaceInfo( url, raceId );
+			ParserRaceInfo parserRaceInfo = parser.getRaceInfo( url, pass );
 
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
-			raceInfo.id = raceId;
+			raceInfo.id = pass;
 			raceInfo.name = parserRaceInfo.name;
 			raceInfo.date = parserRaceInfo.date;
 			raceInfo.location = parserRaceInfo.location;
@@ -244,8 +267,23 @@ public class Logic
 			e.printStackTrace();
 			throw new LogicException( e.getMessage() );
 		}
+		catch( InstantiationException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( IllegalAccessException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( ClassNotFoundException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
 	}
-	
+
 	/**
 	 * ネットワークから選手情報を取得する
 	 * @param url アップデートサイトのURL
