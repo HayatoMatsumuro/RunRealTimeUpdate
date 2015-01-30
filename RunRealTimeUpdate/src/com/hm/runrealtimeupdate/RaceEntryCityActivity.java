@@ -2,9 +2,16 @@ package com.hm.runrealtimeupdate;
 
 import java.util.List;
 
+import com.hm.runrealtimeupdate.logic.Logic;
+import com.hm.runrealtimeupdate.logic.LogicException;
+import com.hm.runrealtimeupdate.logic.RaceInfo;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +22,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RaceEntryCityActivity extends Activity
 {
@@ -88,6 +96,198 @@ public class RaceEntryCityActivity extends Activity
 			raceReserveLayout.setVisibility( View.GONE );
 
 			return convertView;
+		}
+	}
+
+	/**
+	 * 大会情報取得タスク
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo>
+	{
+		/**
+		 * 進捗ダイアログ
+		 */
+		private ProgressDialog m_ProgressDialog = null;
+
+		/**
+		 * 大会名
+		 */
+		private String m_RaceName;
+
+		public RaceInfoLoaderTask( String raceName )
+		{
+			m_RaceName = raceName;
+		}
+
+		@Override
+		protected void onPreExecute()
+		{
+			super.onPreExecute();
+
+			// 進捗ダイアログ作成
+			m_ProgressDialog = new ProgressDialog( RaceEntryCityActivity.this );
+			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_raceinfo ) );
+			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
+			m_ProgressDialog.setCancelable( true );
+			m_ProgressDialog.setButton
+			(
+				DialogInterface.BUTTON_NEGATIVE,
+				getResources().getString( R.string.str_dialog_msg_cancel ),
+				new DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick( DialogInterface dialog, int which )
+					{
+						cancel( true );
+
+						return;
+					}
+				}
+			);
+
+			m_ProgressDialog.show();
+
+			return;
+		}
+
+		@Override
+		protected RaceInfo doInBackground( TaskParam... params )
+		{
+			RaceInfo raceInfo = null;
+
+			try
+			{
+				// 大会情報取得
+				String url = params[0].url;
+				String parserUpdate = params[0].parserUpdate;
+				raceInfo = Logic.getNetRaceInfo( url, null, parserUpdate );
+			}
+			catch ( LogicException e )
+			{
+				e.printStackTrace();
+			}
+
+			return raceInfo;
+		}
+
+		@Override
+		protected void onPostExecute( RaceInfo raceInfo )
+		{
+			if( m_ProgressDialog != null )
+			{
+				// ダイアログ削除
+				m_ProgressDialog.dismiss();
+			}
+
+			if( raceInfo == null )
+			{
+				// 大会情報取得失敗
+				Toast.makeText( RaceEntryCityActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT ).show();
+				return;
+			}
+			else
+			{
+				raceInfo.name = m_RaceName;
+				InfoDialog<RaceInfo> raceEntryInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceEntryCityButtonCallbackImpl() );
+				raceEntryInfoDialog.onDialog(
+					RaceEntryCityActivity.this,
+					getString( R.string.str_dialog_title_race ),
+					createDialogMessage( raceInfo ),
+					getString( R.string.str_dialog_msg_OK ),
+					getString( R.string.str_dialog_msg_NG )
+				);
+			}
+
+			return;
+		}
+
+		@Override
+		protected void onCancelled()
+		{
+			super.onCancelled();
+
+			// ダイアログ削除
+			if( m_ProgressDialog != null )
+			{
+				m_ProgressDialog.dismiss();
+			}
+
+			Toast.makeText( RaceEntryCityActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT ).show();
+
+			return;
+		}
+
+		/**
+		 * タスクパラメータ
+		 * @author Hayato Matsumuro
+		 *
+		 */
+		private class TaskParam
+		{
+			/**
+			 * アップデートサイトURL
+			 */
+			public String url;
+
+			/**
+			 * パーサーのクラス名
+			 */
+			public String parserUpdate;
+		}
+	}
+
+	/**
+	 * 登録ダイアログのメッセージを作成する
+	 * @param raceInfo 大会情報
+	 * @return メッセージ
+	 */
+	private String createDialogMessage( RaceInfo raceInfo )
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append( getString( R.string.str_dialog_msg_name ) );
+		builder.append( "\n" );
+		builder.append( raceInfo.name );
+		builder.append( "\n");
+
+		return builder.toString();
+	}
+
+	/**
+	 * 大会登録ダイアログのボタン押しのコールバック
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	private class RaceEntryCityButtonCallbackImpl implements InfoDialog.ButtonCallback<RaceInfo>
+	{
+		@Override
+		public void onClickPositiveButton( DialogInterface dialog, int which, RaceInfo info )
+		{
+			if( Logic.checkEntryRaceId( getContentResolver(), info.id ) )
+			{
+				// すでに大会が登録済み
+				Toast.makeText( RaceEntryCityActivity.this, "この大会はすでに登録済みです。", Toast.LENGTH_SHORT ).show();
+			}
+			else
+			{
+				// データベース登録
+				Logic.entryRaceInfo( getContentResolver(), info );
+
+				Toast.makeText( RaceEntryCityActivity.this, "登録しました", Toast.LENGTH_SHORT ).show();
+
+				// メイン画面に遷移
+				Intent intent = new Intent( RaceEntryCityActivity.this, MainActivity.class );
+				startActivity( intent );
+			}
+
+			return;
+		}
+
+		@Override
+		public void onClickNegativeButton( DialogInterface dialog, int which, RaceInfo info )
+		{
+			return;
 		}
 	}
 }
