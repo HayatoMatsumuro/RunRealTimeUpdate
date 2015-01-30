@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 public class ParserCityUpdateImpl implements ParserUpdate
 {
 	@Override
-	public ParserRaceInfo getRaceInfo( String url, String raceId ) throws ParserException
+	public ParserRaceInfo getRaceInfo( String url, String pass ) throws ParserException
 	{
 		try
 		{
@@ -47,13 +47,13 @@ public class ParserCityUpdateImpl implements ParserUpdate
 	}
 
 	@Override
-	public ParserRunnerInfo getRunnerInfo( String url, String raceId, String no ) throws ParserException
+	public ParserRunnerInfo getRunnerInfo( String url, String pass, String no ) throws ParserException
 	{
 		return null;
 	}
 
 	@Override
-	public List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ) throws ParserException
+	public List<ParserRunnerInfo> searchRunnerInfoByName( String url, String pass, String sei, String mei ) throws ParserException
 	{
 		return null;
 	}
