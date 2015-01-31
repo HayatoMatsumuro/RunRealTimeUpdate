@@ -270,6 +270,7 @@ public class CommonLib
 							city.raceId = properties.get( STR_PROPERTIES_KEY_RACEID ).toString();
 							city.raceName = properties.get( STR_PROPERTIES_KEY_RACENAME ).toString();
 
+							city.parserInfo = getParserInfoByRaceId( city.raceId );
 							cityPropertiesList.add( city );
 						}
 					}
@@ -300,6 +301,29 @@ public class CommonLib
 	}
 
 	/**
+	 * 大会IDからパーサー情報を取得する。
+	 * 大会IDがpassの場合は、null を返す
+	 * @param raceId
+	 * @return　パーサー情報( null は大会情報なし )
+	 */
+	public static ParserInfo getParserInfoByRaceId( String raceId )
+	{
+		String[] strArray = raceId.split( "," );
+
+		if( strArray.length == 1 )
+		{
+			return null;
+		}
+		else
+		{
+			CommonLib.ParserInfo parserInfo = new CommonLib().new ParserInfo();
+			parserInfo.url = strArray[0];
+			parserInfo.parserClassName = strArray[1];
+			return parserInfo;
+		}
+	}
+
+	/**
 	 * 都市型マラソンプロパティ
 	 * @author Hayato Matsumuro
 	 *
@@ -315,5 +339,31 @@ public class CommonLib
 		 * 大会名
 		 */
 		public String raceName;
+
+		/**
+		 * パーサー情報
+		 */
+		public ParserInfo parserInfo;
+
+		/**
+		 * コンストラクタ
+		 */
+		public CityProperties()
+		{
+			parserInfo = new ParserInfo();
+		}
+	}
+
+	public class ParserInfo
+	{
+		/**
+		 * URL
+		 */
+		public String url;
+
+		/**
+		 * パーサー名
+		 */
+		public String parserClassName;
 	}
 }

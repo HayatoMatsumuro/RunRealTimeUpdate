@@ -17,12 +17,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class RaceEntryCityActivity extends Activity
 {
@@ -55,6 +57,28 @@ public class RaceEntryCityActivity extends Activity
 		ListView cityRaceListView = ( ListView )findViewById( R.id.id_activity_raceentrycity_body_contents_city_listview );
 		cityRaceListView.setAdapter( adapter );
 
+		cityRaceListView.setOnItemClickListener
+		(
+			new OnItemClickListener()
+			{
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View v, int position, long id )
+				{
+					// 選択した大会情報を取得する
+					ListView listView = ( ListView )parent;
+					CommonLib.CityProperties properties = ( CommonLib.CityProperties )listView.getItemAtPosition( position );
+
+					// 大会情報取得タスクの起動
+					RaceInfoLoaderTask task = new RaceInfoLoaderTask( properties.raceName, properties.raceId );
+					RaceInfoLoaderTask.TaskParam param = task.new TaskParam();
+					param.url = properties.parserInfo.url;
+					param.parserUpdate = properties.parserInfo.parserClassName;
+					task.execute( param );
+				}
+				
+			}
+		);
 		return;
 	}
 
@@ -116,9 +140,20 @@ public class RaceEntryCityActivity extends Activity
 		 */
 		private String m_RaceName;
 
-		public RaceInfoLoaderTask( String raceName )
+		/**
+		 * 大会ID
+		 */
+		private String m_RaceId;
+
+		/**
+		 * コンストラクタ
+		 * @param raceName 大会名
+		 * @param raceId 大会ID
+		 */
+		public RaceInfoLoaderTask( String raceName, String raceId )
 		{
 			m_RaceName = raceName;
+			m_RaceId = raceId;
 		}
 
 		@Override
@@ -190,6 +225,7 @@ public class RaceEntryCityActivity extends Activity
 			else
 			{
 				raceInfo.name = m_RaceName;
+				raceInfo.id = m_RaceId;
 				InfoDialog<RaceInfo> raceEntryInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceEntryCityButtonCallbackImpl() );
 				raceEntryInfoDialog.onDialog(
 					RaceEntryCityActivity.this,
