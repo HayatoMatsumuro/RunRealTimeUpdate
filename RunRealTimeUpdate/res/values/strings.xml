@@ -50,6 +50,7 @@
 	<string name="str_msg_updaterunner">速報リストを更新しました。</string>
 	<string name="str_msg_readqr">枠内にQRコードを表示して、画面をタッチしてください。</string>
 	<string name="str_txt_defaulturl">http://update.runnet.jp/</string>
+	<string name="str_txt_defaultupdateparser">com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdateImpl</string>
 	<string name="str_txt_logo">ロゴ</string>
 	<string name="str_txt_racename">大会名</string>
 	<string name="str_txt_racedate">開催日</string>

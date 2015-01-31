@@ -1,14 +1,11 @@
 ﻿package com.hm.runrealtimeupdate;
 
 import com.hm.runrealtimeupdate.logic.Logic;
-import com.hm.runrealtimeupdate.logic.LogicException;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -115,22 +112,23 @@ public class RaceEntryActivity extends Activity
 					EditText urlEdit = ( EditText )findViewById( R.id.id_activity_raceentry_body_contents_urlform_inputurl_edittext );
 
 					// 何も入力してないならば、以降の処理をしない
-					String inputRaceId = urlEdit.getText().toString();
-					if( inputRaceId == null || inputRaceId.equals("") )
+					String inputPass = urlEdit.getText().toString();
+					if( inputPass == null || inputPass.equals("") )
 					{
 						Toast.makeText( RaceEntryActivity.this, "urlを入力してください。", Toast.LENGTH_SHORT ).show();
 
 						return;
 					}
 
-					// 取得した大会IDのフォーマット
-					String raceId = formatRaceId( inputRaceId );
+					// 取得したパスのフォーマット
+					String pass = formatPass( inputPass );
 
 					// 大会情報取得タスクの起動
-					RaceInfoLoaderTask task = new RaceInfoLoaderTask();
+					RaceInfoLoaderTask task = new RaceInfoLoaderTask( RaceEntryActivity.this, new RaceEntryButtonCallbackImpl() );
 					RaceInfoLoaderTask.TaskParam param = task.new TaskParam();
 					param.url = getString( R.string.str_txt_defaulturl );
-					param.raceId = raceId;
+					param.pass = pass;
+					param.parserUpdate = getString( R.string.str_txt_defaultupdateparser );
 					task.execute( param );
 
 					return;
@@ -162,172 +160,21 @@ public class RaceEntryActivity extends Activity
 	/**
 	 * 入力された大会IDのフォーマットをする
 	 *  最後の"/" を削除する
-	 * @param inputRaceId　入力された大会ID
-	 * @return　大会ID
+	 * @param inputPass　入力されたパス
+	 * @return　フォーマット後のパス
 	 */
-	private String formatRaceId( String inputRaceId )
+	private String formatPass( String inputPass )
 	{
-		String raceId = inputRaceId;
+		String raceId = inputPass;
 
 		// 最後が/だった場合は取り除く
-		String lastStr = inputRaceId.substring( inputRaceId.length() - 1, inputRaceId.length() );
+		String lastStr = inputPass.substring( inputPass.length() - 1, inputPass.length() );
 		if( lastStr.equals( "/" ) )
 		{
-			raceId = inputRaceId.substring( 0, inputRaceId.length() - 1 );
+			raceId = inputPass.substring( 0, inputPass.length() - 1 );
 		}
 
 		return raceId;
-	}
-
-	/**
-	 * 大会情報取得タスク
-	 * @author Hayato Matsumuro
-	 *
-	 */
-	class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo>
-	{
-		/**
-		 * 進捗ダイアログ
-		 */
-		private ProgressDialog m_ProgressDialog = null;
-
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-
-			// 進捗ダイアログ作成
-			m_ProgressDialog = new ProgressDialog( RaceEntryActivity.this );
-			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_raceinfo ) );
-			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
-			m_ProgressDialog.setCancelable( true );
-			m_ProgressDialog.setButton
-			(
-				DialogInterface.BUTTON_NEGATIVE,
-				getResources().getString( R.string.str_dialog_msg_cancel ),
-				new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick( DialogInterface dialog, int which )
-					{
-						cancel( true );
-
-						return;
-					}
-				}
-			);
-
-			m_ProgressDialog.show();
-
-			return;
-		}
-
-		@Override
-		protected RaceInfo doInBackground( TaskParam... params )
-		{
-			RaceInfo raceInfo = null;
-
-			try
-			{
-				// 大会情報取得
-				String url = params[0].url;
-				String raceId = params[0].raceId;
-				raceInfo = Logic.getNetRaceInfo( url, raceId );
-			}
-			catch ( LogicException e )
-			{
-				e.printStackTrace();
-			}
-
-			return raceInfo;
-		}
-
-		@Override
-		protected void onPostExecute( RaceInfo raceInfo )
-		{
-			if( m_ProgressDialog != null )
-			{
-				// ダイアログ削除
-				m_ProgressDialog.dismiss();
-			}
-
-			if( raceInfo == null )
-			{
-				// 大会情報取得失敗
-				Toast.makeText( RaceEntryActivity.this, "大会情報取得に失敗しました。", Toast.LENGTH_SHORT ).show();
-				return;
-			}
-			else
-			{
-				InfoDialog<RaceInfo> raceEntryInfoDialog = new InfoDialog<RaceInfo>( raceInfo, new RaceEntryButtonCallbackImpl() );
-				raceEntryInfoDialog.onDialog(
-					RaceEntryActivity.this,
-					getString( R.string.str_dialog_title_race ),
-					createDialogMessage( raceInfo ),
-					getString( R.string.str_dialog_msg_OK ),
-					getString( R.string.str_dialog_msg_NG )
-				);
-			}
-
-			return;
-		}
-
-		@Override
-		protected void onCancelled()
-		{
-			super.onCancelled();
-
-			// ダイアログ削除
-			if( m_ProgressDialog != null )
-			{
-				m_ProgressDialog.dismiss();
-			}
-
-			Toast.makeText( RaceEntryActivity.this, "大会情報取得をキャンセルしました。", Toast.LENGTH_SHORT ).show();
-
-			return;
-		}
-
-		/**
-		 * タスクパラメータ
-		 * @author Hayato Matsumuro
-		 *
-		 */
-		private class TaskParam
-		{
-			/**
-			 * アップデートサイトURL
-			 */
-			public String url;
-
-			/**
-			 * 大会ID
-			 */
-			public String raceId;
-		}
-	}
-
-	/**
-	 * 登録ダイアログのメッセージを作成する
-	 * @param raceInfo 大会情報
-	 * @return メッセージ
-	 */
-	private String createDialogMessage( RaceInfo raceInfo )
-	{
-		StringBuilder builder = new StringBuilder();
-		builder.append( getString( R.string.str_dialog_msg_name ) );
-		builder.append( "\n" );
-		builder.append( raceInfo.name );
-		builder.append( "\n");
-		builder.append( getString( R.string.str_dialog_msg_date ) );
-		builder.append( "\n" );
-		builder.append( raceInfo.date );
-		builder.append( "\n" );
-		builder.append( getString( R.string.str_dialog_msg_location ) );
-		builder.append( "\n" );
-		builder.append( raceInfo.location );
-
-		return builder.toString();
 	}
 
 	/**
