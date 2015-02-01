@@ -2,7 +2,7 @@ package com.hm.runrealtimeupdate.logic.parser;
 
 import java.util.List;
 
-public interface ParserUpdate
+public interface IParserUpdate
 {
 	/**
 	 * アップデートのサイトから大会情報を取得する

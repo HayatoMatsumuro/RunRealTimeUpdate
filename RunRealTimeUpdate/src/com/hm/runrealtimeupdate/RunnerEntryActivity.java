@@ -145,12 +145,16 @@ public class RunnerEntryActivity extends Activity
 						return;
 					}
 
+					// パーサー情報取得
+					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RunnerEntryActivity.this, raceInfo.id );
+
 					// 選手情報取得タスク起動
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.id );
-					param.setNumber( number );
+					param.url = parserInfo.url;
+					param.pass = parserInfo.pass;
+					param.parserClassName = parserInfo.parserClassName;
+					param.number = number;
 					task.execute( param );
 
 					return;
@@ -205,12 +209,15 @@ public class RunnerEntryActivity extends Activity
 
 					RunnerInfo runnerInfo = ( RunnerInfo )listView.getItemAtPosition( position );
 
+					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RunnerEntryActivity.this, raceInfo.id );
+
 					// 選手情報取得タスク起動
 					RunnerInfoLoaderTask task = new RunnerInfoLoaderTask( raceInfo );
 					RunnerInfoLoaderTask.TaskParam param = task.new TaskParam();
-					param.setUrl( getString( R.string.str_txt_defaulturl ) );
-					param.setRaceId( raceInfo.id );
-					param.setNumber( runnerInfo.number );
+					param.url = parserInfo.url;
+					param.pass = parserInfo.pass;
+					param.parserClassName = parserInfo.parserClassName;
+					param.number = runnerInfo.number;
 					task.execute( param );
 
 					return;
@@ -299,16 +306,18 @@ public class RunnerEntryActivity extends Activity
 		}
 
 		@Override
-		protected RunnerInfo doInBackground(TaskParam... params)
+		protected RunnerInfo doInBackground( TaskParam... params )
 		{
 			RunnerInfo runnerInfo = null;
 
 			try
 			{
-				String url = params[0].getUrl();
-				String raceId = params[0].getRaceId();
-				String number = params[0].getNumber();
-				runnerInfo = Logic.getNetRunnerInfo( url, raceId, number );
+				runnerInfo = Logic.getNetRunnerInfo(
+								params[0].url,
+								params[0].pass,
+								params[0].number,
+								params[0].parserClassName
+				);
 			}
 			catch (LogicException e)
 			{
@@ -376,74 +385,23 @@ public class RunnerEntryActivity extends Activity
 			/**
 			 * アップデートサイトURL
 			 */
-			private String url;
+			public String url;
 
 			/**
-			 * 大会ID
+			 * パス
 			 */
-			private String raceId;
+			public String pass;
+
+			/**
+			 * パーサークラス名
+			 */
+			public String parserClassName;
 
 			/**
 			 * ゼッケン番号
 			 */
-			private String number;
+			public String number;
 
-			/**
-			 * アップデートサイトURLを取得する
-			 * @return アップデートサイトURL
-			 */
-			public String getUrl()
-			{
-				return url;
-			}
-
-			/**
-			 * アップデートサイトURLを設定する
-			 * @param url アップデートサイトURL
-			 */
-			public void setUrl( String url )
-			{
-				this.url = url;
-				return;
-			}
-
-			/**
-			 * 大会IDを取得する
-			 * @return 大会ID
-			 */
-			public String getRaceId()
-			{
-				return raceId;
-			}
-
-			/**
-			 * 大会IDを設定する
-			 * @param raceId 大会ID
-			 */
-			public void setRaceId( String raceId )
-			{
-				this.raceId = raceId;
-				return;
-			}
-
-			/**
-			 * ゼッケン番号を取得する
-			 * @return ゼッケン番号
-			 */
-			public String getNumber()
-			{
-				return number;
-			}
-
-			/**
-			 * ゼッケン番号を設定する
-			 * @param number ゼッケン番号
-			 */
-			public void setNumber( String number )
-			{
-				this.number = number;
-				return;
-			}
 		}
 	}
 
@@ -652,8 +610,8 @@ public class RunnerEntryActivity extends Activity
 
 				// キーボードを隠す
 				EditText numberEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_numberform_number_edittext );
-		        InputMethodManager imm = ( InputMethodManager )getSystemService(Context.INPUT_METHOD_SERVICE );
-		        imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
+				InputMethodManager imm = ( InputMethodManager )getSystemService(Context.INPUT_METHOD_SERVICE );
+				imm.hideSoftInputFromWindow( numberEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 
 				Intent intent = new Intent( RunnerEntryActivity.this, RaceTabActivity.class );
 				intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, info.raceInfo.id );

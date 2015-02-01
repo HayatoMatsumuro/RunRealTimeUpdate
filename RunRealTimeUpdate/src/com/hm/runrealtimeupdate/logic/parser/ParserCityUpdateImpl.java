@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ParserCityUpdateImpl implements ParserUpdate
+public class ParserCityUpdateImpl implements IParserUpdate
 {
 	@Override
 	public ParserRaceInfo getRaceInfo( String url, String pass ) throws ParserException
@@ -53,7 +53,7 @@ public class ParserCityUpdateImpl implements ParserUpdate
 	{
 		try
 		{
-			String runnerInfoUrl = createRunnerInfoURL( url, pass, no );
+			String runnerInfoUrl = createRunnerInfoURL( url, no );
 
 			Connection connection = Jsoup.connect( runnerInfoUrl );
 			if( connection == null )
@@ -155,16 +155,14 @@ public class ParserCityUpdateImpl implements ParserUpdate
 	/**
 	 * ランナー情報を取得するURLを作成する
 	 * @param url アップデートサイトURL
-	 * @param raceId　大会ID
 	 * @param no　ゼッケンNo.
 	 * @return　選手情報アクセスURL
 	 */
-	private static String createRunnerInfoURL( String url, String raceId, String no )
+	private static String createRunnerInfoURL( String url, String no )
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append( url );
-		builder.append( raceId );
-		builder.append( "/numberfile/" );
+		builder.append( "numberfile/" );
 		builder.append( no );
 		builder.append( ".html" );
 

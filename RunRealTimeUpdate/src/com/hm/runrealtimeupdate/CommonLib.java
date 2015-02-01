@@ -270,7 +270,7 @@ public class CommonLib
 							city.raceId = properties.get( STR_PROPERTIES_KEY_RACEID ).toString();
 							city.raceName = properties.get( STR_PROPERTIES_KEY_RACENAME ).toString();
 
-							city.parserInfo = getParserInfoByRaceId( city.raceId );
+							city.parserInfo = getParserInfoByRaceId( context, city.raceId );
 							cityPropertiesList.add( city );
 						}
 					}
@@ -306,21 +306,26 @@ public class CommonLib
 	 * @param raceId
 	 * @return　パーサー情報( null は大会情報なし )
 	 */
-	public static ParserInfo getParserInfoByRaceId( String raceId )
+	public static ParserInfo getParserInfoByRaceId( Context context, String raceId )
 	{
 		String[] strArray = raceId.split( "," );
 
+		CommonLib.ParserInfo parserInfo = new CommonLib().new ParserInfo();
+
 		if( strArray.length == 1 )
 		{
-			return null;
+			parserInfo.url = context.getResources().getString( R.string.str_txt_defaulturl );
+			parserInfo.pass = raceId;
+			parserInfo.parserClassName = context.getResources().getString( R.string.str_txt_defaultupdateparser );
 		}
 		else
 		{
-			CommonLib.ParserInfo parserInfo = new CommonLib().new ParserInfo();
 			parserInfo.url = strArray[0];
+			parserInfo.pass = null;
 			parserInfo.parserClassName = strArray[1];
-			return parserInfo;
 		}
+
+		return parserInfo;
 	}
 
 	/**
@@ -360,6 +365,11 @@ public class CommonLib
 		 * URL
 		 */
 		public String url;
+
+		/**
+		 * パス
+		 */
+		public String pass;
 
 		/**
 		 * パーサー名

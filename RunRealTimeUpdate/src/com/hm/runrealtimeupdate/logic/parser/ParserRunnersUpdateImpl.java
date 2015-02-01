@@ -15,7 +15,7 @@ import org.jsoup.select.Elements;
  * @author Hayato Matsumuro
  *
  */
-public class ParserRunnersUpdateImpl implements ParserUpdate
+public class ParserRunnersUpdateImpl implements IParserUpdate
 {
 	@Override
 	public ParserRaceInfo getRaceInfo( String url, String pass ) throws ParserException

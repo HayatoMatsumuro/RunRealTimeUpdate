@@ -23,7 +23,7 @@ import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdateImpl;
-import com.hm.runrealtimeupdate.logic.parser.ParserUpdate;
+import com.hm.runrealtimeupdate.logic.parser.IParserUpdate;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
@@ -226,7 +226,7 @@ public class Logic
 	{
 		try
 		{
-			ParserUpdate parser = ( ParserUpdate )Class.forName( parserClassName ).newInstance();
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
 
 			// 大会情報取得
 			ParserRaceInfo parserRaceInfo = parser.getRaceInfo( url, pass );
@@ -266,17 +266,19 @@ public class Logic
 	/**
 	 * ネットワークから選手情報を取得する
 	 * @param url アップデートサイトのURL
-	 * @param raceId 大会ID
+	 * @param pass パス
 	 * @param number ゼッケン番号
+	 * @param parserClassName パーサークラス名
 	 * @throws LogicException 選手情報取得失敗
 	 */
-	public static RunnerInfo getNetRunnerInfo( String url, String raceId, String number ) throws LogicException
+	public static RunnerInfo getNetRunnerInfo( String url, String pass, String number, String parserClassName ) throws LogicException
 	{
 		try
 		{
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
+
 			// 選手情報取得
-			ParserUpdate parser = new ParserRunnersUpdateImpl();
-			ParserRunnerInfo parserRunnerInfo = parser.getRunnerInfo( url, raceId, number );
+			ParserRunnerInfo parserRunnerInfo = parser.getRunnerInfo( url, pass, number );
 
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();
@@ -301,16 +303,32 @@ public class Logic
 			e.printStackTrace();
 			throw new LogicException( e.getMessage() );
 		}
+		catch ( InstantiationException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( IllegalAccessException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( ClassNotFoundException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
 	}
 
 	/**
 	 * ネットワークから指定の大会のゼッケン番号の選手情報を取得する
 	 * @param url　アップデートサイトURL
-	 * @param raceId 大会ID
+	 * @param pass 大会ID
 	 * @param runnerList 選手情報リスト
+	 * @param parserClassName パーサークラス名
 	 * @return 選手情報リスト
 	 */
-	public static List<RunnerInfo> getNetRunnerInfoList( String url, String raceId, List<RunnerInfo> runnerInfoList )
+	public static List<RunnerInfo> getNetRunnerInfoList( String url, String pass, List<RunnerInfo> runnerInfoList, String parserClassName )
 	{
 		List<RunnerInfo> netRunnerInfoList = new ArrayList<RunnerInfo>();
 
@@ -320,7 +338,7 @@ public class Logic
 
 			try
 			{
-				netRunnerInfo = getNetRunnerInfo( url, raceId, runnerInfo.number );
+				netRunnerInfo = getNetRunnerInfo( url, pass, runnerInfo.number, parserClassName );
 			}
 			catch( LogicException e )
 			{
@@ -663,7 +681,7 @@ public class Logic
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
 		try
 		{
-			ParserUpdate parser = new ParserRunnersUpdateImpl();
+			IParserUpdate parser = new ParserRunnersUpdateImpl();
 			parserRunnerInfoList = parser.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			runnerInfoList = new ArrayList<RunnerInfo>();

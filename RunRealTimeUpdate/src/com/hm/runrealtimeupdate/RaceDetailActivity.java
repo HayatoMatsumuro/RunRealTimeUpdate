@@ -215,11 +215,15 @@ public class RaceDetailActivity extends Activity
 					// 選手情報を取得する
 					List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), raceId );
 
+					// パーサー情報取得
+					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RaceDetailActivity.this, raceId );
+
 					// 手動更新タスク起動
 					ManualUpdateTask task = new ManualUpdateTask( getContentResolver(), raceInfo.id );
 					ManualUpdateTask.TaskParam param = task.new TaskParam();
-					param.raceId = raceInfo.id;
-					param.url = getString( R.string.str_txt_defaulturl );
+					param.url = parserInfo.url;
+					param.pass = parserInfo.pass;
+					param.parserClassName = parserInfo.parserClassName;
 					param.runnerInfoList = runnerInfoList;
 					task.execute( param );
 				}
@@ -433,11 +437,12 @@ public class RaceDetailActivity extends Activity
 		{
 			// ネットワークから選手情報取得
 			String url = params[0].url;
-			String raceId = params[0].raceId;
+			String raceId = params[0].pass;
+			String parserClassNane = params[0].parserClassName;
 			List<RunnerInfo> runnerInfoList = params[0].runnerInfoList;
 
 			// 最新の選手情報を取得する
-			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
+			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList, parserClassNane );
 		}
 
 		@Override
@@ -506,7 +511,12 @@ public class RaceDetailActivity extends Activity
 			/**
 			 * 大会ID
 			 */
-			public String raceId;
+			public String pass;
+
+			/**
+			 * パーサークラス名
+			 */
+			public String parserClassName;
 
 			/**
 			 * 選手リスト
