@@ -9,7 +9,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class ParserCityUpdateImpl implements IParserUpdate
+public class ParserKobeUpdateImpl implements IParserUpdate
 {
 	@Override
 	public ParserRaceInfo getRaceInfo( String url, String pass ) throws ParserException
