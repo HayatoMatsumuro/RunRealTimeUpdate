@@ -180,13 +180,17 @@ public class RunnerEntryActivity extends Activity
 					// 名取得
 					EditText meiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_mei_edittext );
 
+					// パーサー情報取得
+					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RunnerEntryActivity.this, raceInfo.id );
+
 					// 名前検索タスク起動
 					RunnerInfoByNameLoaderTask task = new RunnerInfoByNameLoaderTask();
 					RunnerInfoByNameLoaderTask.TaskParam param = task.new TaskParam();
-					param.url = getString( R.string.str_txt_defaulturl );
-					param.raceId = raceInfo.id;
+					param.url = parserInfo.url;
+					param.pass = parserInfo.pass;
 					param.sei = seiEdit.getText().toString();
 					param.mei =  meiEdit.getText().toString();
+					param.parserClassName = parserInfo.parserClassName;
 					task.execute( param );
 
 					return;
@@ -452,11 +456,13 @@ public class RunnerEntryActivity extends Activity
 			List<RunnerInfo> runnerInfoList = null;
 
 			// 名前から選手情報を検索する
-			String url = params[0].url;
-			String raceId = params[0].raceId;
-			String mei = params[0].mei;
-			String sei = params[0].sei;
-			runnerInfoList = Logic.searchRunnerInfoByName( url, raceId, sei, mei );
+			runnerInfoList = Logic.searchRunnerInfoByName(
+									params[0].url,
+									params[0].pass,
+									params[0].sei,
+									params[0].mei,
+									params[0].parserClassName
+								);
 
 			return runnerInfoList;
 		}
@@ -499,8 +505,8 @@ public class RunnerEntryActivity extends Activity
 			}
 
 			// キーボードを隠す
-	        InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
-	        
+			InputMethodManager imm = ( InputMethodManager )getSystemService( Context.INPUT_METHOD_SERVICE );
+
 			EditText seiEdit = ( EditText )findViewById( R.id.id_activity_runnerentry_body_contents_nameform_sei_edittext );
 			imm.hideSoftInputFromWindow( seiEdit.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
 
@@ -539,9 +545,14 @@ public class RunnerEntryActivity extends Activity
 			public String url;
 
 			/**
-			 * 大会ID
+			 * パス
 			 */
-			public String raceId;
+			public String pass;
+
+			/**
+			 * パーサークラス名
+			 */
+			public String parserClassName;
 
 			/**
 			 * 姓

@@ -672,16 +672,19 @@ public class Logic
 	 * @param raceId 大会ID
 	 * @param sei 姓
 	 * @param mei 名
+	 * @param parserClassName パーサークラス名
 	 * @return 選手情報
 	 */
-	public static List<RunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei )
+	public static List<RunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei, String parserClassName )
 	{
 		List<RunnerInfo> runnerInfoList = null;
 
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
+
 		try
 		{
-			IParserUpdate parser = new ParserRunnersUpdateImpl();
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
+
 			parserRunnerInfoList = parser.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			runnerInfoList = new ArrayList<RunnerInfo>();
@@ -696,6 +699,15 @@ public class Logic
 		}
 		catch( ParserException e )
 		{
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
 

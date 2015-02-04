@@ -1,6 +1,7 @@
 package com.hm.runrealtimeupdate.logic.parser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jsoup.Connection;
@@ -149,7 +150,84 @@ public class ParserKobeUpdateImpl implements IParserUpdate
 	@Override
 	public List<ParserRunnerInfo> searchRunnerInfoByName( String url, String pass, String sei, String mei ) throws ParserException
 	{
-		return null;
+		List<ParserRunnerInfo> parserRunnerInfoList = null;
+
+		String runnerinfoUrl = createRunnerInfoByNameURL( url );
+
+		try
+		{
+			Connection connection = Jsoup.connect( runnerinfoUrl );
+			if( connection == null )
+			{
+				throw new ParserException( "接続に失敗しました。" );
+			}
+
+			Document doc = connection.data( "name1", sei, "name2", mei ).get();
+			if( doc == null )
+			{
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+
+			// メインブロック取得
+			Elements mainBlock = doc.select("div#contentsBlock");
+			if( ( mainBlock == null ) || ( mainBlock.isEmpty() ) )
+			{
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+
+			Element mainBlockElement = mainBlock.get(0);
+			if( mainBlockElement == null)
+			{
+				throw new ParserException( "データ取得に失敗しました。" );
+			}
+
+			// 選手情報を取得
+			Elements aElements = mainBlockElement.getElementsByTag( "a" );
+			if( aElements == null )
+			{
+				throw new ParserException( "選手情報取得に失敗しました。" );
+			}
+			if( aElements.isEmpty() ){
+				throw new ParserException( "選手情報がありません。" );
+			}
+
+			Element aElement = aElements.get( 0 );
+			if( aElement == null )
+			{
+				throw new ParserException( "選手情報が不正です。" );
+			}
+			String number = aElement.text();
+
+			// 数値変換できないならば、情報不正
+			try
+			{
+				Integer.parseInt( number );
+			}
+			catch( NumberFormatException e )
+			{
+				throw new ParserException( "選手情報が不正です。" );
+			}
+
+			ParserRunnerInfo pRunnerInfo = new ParserRunnerInfo();
+			pRunnerInfo.name = " ";
+			pRunnerInfo.number = number;
+
+			parserRunnerInfoList = new ArrayList<ParserRunnerInfo>();
+			parserRunnerInfoList.add( pRunnerInfo );
+
+		}
+		catch( ParserException e )
+		{
+			e.printStackTrace();
+			throw new ParserException( "Exception." );
+		}
+		catch( IOException e )
+		{
+			e.printStackTrace();
+			throw new ParserException( "IOException." );
+		}
+
+		return parserRunnerInfoList;
 	}
 
 	/**
@@ -169,4 +247,11 @@ public class ParserKobeUpdateImpl implements IParserUpdate
 		return builder.toString();
 	}
 
+	private static String createRunnerInfoByNameURL( String url )
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append( url );
+		builder.append( "/php/name.php" );
+		return builder.toString();
+	}
 }
