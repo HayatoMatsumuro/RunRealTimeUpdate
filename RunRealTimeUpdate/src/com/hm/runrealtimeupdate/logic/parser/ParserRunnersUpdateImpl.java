@@ -15,21 +15,15 @@ import org.jsoup.select.Elements;
  * @author Hayato Matsumuro
  *
  */
-public class ParserRunnersUpdate
+public class ParserRunnersUpdateImpl implements IParserUpdate
 {
-	/**
-	 * ランナーズアップデートのサイトから大会情報を取得する
-	 * @param url アップデートサイトのURL
-	 * @param raceId 大会ID
-	 * @return 大会情報
-	 * @throws ParserException
-	 */
-	public static ParserRaceInfo getRaceInfo( String url, String raceId ) throws ParserException
+	@Override
+	public ParserRaceInfo getRaceInfo( String url, String pass ) throws ParserException
 	{
 		try
 		{
 			// ランネットサーバーアクセス
-			String raceInfoUrl = createRaceInfoURL( url, raceId );
+			String raceInfoUrl = createRaceInfoURL( url, pass );
 
 			Connection connection = Jsoup.connect( raceInfoUrl );
 			if( connection == null )
@@ -81,19 +75,12 @@ public class ParserRunnersUpdate
 		}
 	}
 
-	/**
-	 * ランナーズアップデートのサイトからランナー情報を取得する
-	 * @param url アップデートサイトURL
-	 * @param raceId　大会ID
-	 * @param no ゼッケンNo.
-	 * @return 取得した選手情報
-	 * @throws ParserException
-	 */
-	public static ParserRunnerInfo getRunnerInfo( String url, String raceId, String no) throws ParserException
+	@Override
+	public ParserRunnerInfo getRunnerInfo( String url, String pass, String no) throws ParserException
 	{
 		try
 		{
-			String runnerInfoUrl = createRunnerInfoURL( url, raceId, no );
+			String runnerInfoUrl = createRunnerInfoURL( url, pass, no );
 
 			Connection connection = Jsoup.connect( runnerInfoUrl );
 			if( connection == null )
@@ -187,19 +174,12 @@ public class ParserRunnersUpdate
 		}
 	}
 
-	/**
-	 * 名前から選手情報を検索し取得する
-	 * @param url アップデートサイトURL
-	 * @param sei 姓
-	 * @param mei 名
-	 * @return 選手情報リスト
-	 * @throws ParserException 
-	 */
-	public static List<ParserRunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei ) throws ParserException
+	@Override
+	public List<ParserRunnerInfo> searchRunnerInfoByName( String url, String pass, String sei, String mei ) throws ParserException
 	{
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
 
-		String runnerinfoUrl = createRunnerInfoByNameURL( url, raceId );
+		String runnerinfoUrl = createRunnerInfoByNameURL( url, pass );
 
 		try
 		{

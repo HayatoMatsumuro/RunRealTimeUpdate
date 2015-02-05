@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
+
+	<!-- ヘッダー -->
+	<RelativeLayout
+		android:id="@+id/id_activity_raceentrycity_header_layout"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/dim_com_header_layout_height"
+		android:background="@color/color_com_header_layout_back"
+		android:padding="@dimen/dim_com_header_layout_padding" >
+
+		<!-- タイトル -->
+		<TextView
+			android:id="@+id/id_activity_raceentrycity_header_title_textview"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			android:text="@string/str_title_entrycity"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/color_com_header_title_textview_text" />
+
+		<!-- 戻るボタン -->
+		<Button
+			android:id="@+id/id_activity_raceentrycity_header_back_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/dim_com_header_button_padding"
+			android:background="@color/color_com_header_button_back"
+			android:textColor="@color/color_com_header_button_text"
+			android:text="@string/str_btn_back" />
+
+	</RelativeLayout>
+
+	<!-- ボディ -->
+	<LinearLayout
+		android:id="@+id/id_activity_raceentrycity_body_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:background="@color/color_com_body_layout_back"
+		android:padding="@dimen/dim_com_body_layout_padding" >
+
+		<!-- コンテンツ -->
+		<LinearLayout 
+			android:id="@+id/id_activity_raceentrycity_body_contents_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/dim_com_body_contents_layout_padding"
+			android:background="@color/color_com_body_contents_layout_back"
+			android:orientation="vertical" >
+
+			<!-- リスト -->
+			<ListView
+				android:id="@+id/id_activity_raceentrycity_body_contents_city_listview"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" />
+
+		</LinearLayout>
+
+	</LinearLayout>
+
+</LinearLayout>

@@ -69,13 +69,17 @@ public class UpdateService extends Service
 		// 選手情報取得
 		List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), raceId );
 
+		// パーサー情報取得
+		CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( UpdateService.this, raceId );
+
 		// 更新タスク開始
 		m_UpdateTask = new RunnerInfoUpdateTask( raceInfo, getContentResolver() );
 		RunnerInfoUpdateTask.TaskParam param = m_UpdateTask.new TaskParam();
 
-		param.url = getString( R.string.str_txt_defaulturl );
-		param.raceId = raceInfo.id;
+		param.url = parserInfo.url;
+		param.pass = parserInfo.pass;
 		param.runnerInfoList = runnerInfoList;
+		param.parserClassName = parserInfo.parserClassName;
 
 		m_UpdateTask.execute( param );
 
@@ -136,11 +140,11 @@ public class UpdateService extends Service
 		protected List<RunnerInfo> doInBackground( TaskParam... params )
 		{
 			// ネットワークから選手情報取得
-			String url = params[0].url;
-			String raceId = params[0].raceId;
-			List<RunnerInfo> runnerInfoList = params[0].runnerInfoList;
-
-			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList );
+			return Logic.getNetRunnerInfoList(
+						params[0].url,
+						params[0].pass,
+						params[0].runnerInfoList,
+						params[0].parserClassName );
 		}
 
 		@Override
@@ -248,14 +252,19 @@ public class UpdateService extends Service
 			public String url;
 
 			/**
-			 * 大会ID
+			 * パス
 			 */
-			public String raceId;
+			public String pass;
 
 			/**
 			 * 選手リスト
 			 */
 			public List<RunnerInfo> runnerInfoList;
+
+			/**
+			 * パーサークラス名
+			 */
+			public String parserClassName;
 		}
 	}
 }
