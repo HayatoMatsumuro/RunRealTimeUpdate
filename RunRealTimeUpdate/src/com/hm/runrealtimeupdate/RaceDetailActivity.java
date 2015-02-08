@@ -1,19 +1,12 @@
 package com.hm.runrealtimeupdate;
 
-import java.util.List;
-
 import com.hm.runrealtimeupdate.logic.Logic;
 import com.hm.runrealtimeupdate.logic.RaceInfo;
-import com.hm.runrealtimeupdate.logic.RunnerInfo;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -210,22 +203,15 @@ public class RaceDetailActivity extends Activity
 				public void onClick( View v )
 				{
 					RaceInfo raceInfo = ( RaceInfo )v.getTag();
-					String raceId = raceInfo.id;
 
-					// 選手情報を取得する
-					List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoNOTFinish( getContentResolver(), raceId );
+					// 速報開始
+					CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
 
-					// パーサー情報取得
-					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RaceDetailActivity.this, raceId );
+					// 停止カウントを設定
+					Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
+					Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
 
-					// 手動更新タスク起動
-					ManualUpdateTask task = new ManualUpdateTask( getContentResolver(), raceInfo.id );
-					ManualUpdateTask.TaskParam param = task.new TaskParam();
-					param.url = parserInfo.url;
-					param.pass = parserInfo.pass;
-					param.parserClassName = parserInfo.parserClassName;
-					param.runnerInfoList = runnerInfoList;
-					task.execute( param );
+					Toast.makeText( RaceDetailActivity.this, "手動更新を開始しました。", Toast.LENGTH_SHORT ).show();
 				}
 			}
 		);
@@ -363,166 +349,6 @@ public class RaceDetailActivity extends Activity
 		updateButton.setTag( raceInfo );
 
 		return;
-	}
-
-	/**
-	 * 手動更新タスク
-	 * @author Hayato Matsumuro
-	 *
-	 */
-	class ManualUpdateTask extends AsyncTask< ManualUpdateTask.TaskParam, Void, List<RunnerInfo> >{
-
-		/**
-		 * コンテントリゾルバ
-		 */
-		private ContentResolver m_ContentResolver;
-
-		/**
-		 * 大会ID
-		 */
-		private String m_RaceId = null;
-
-		/**
-		 * 進捗ダイアログ
-		 */
-		private ProgressDialog m_ProgressDialog = null;
-
-		/**
-		 * コンストラクタ
-		 * @param contentResolver コンテントリゾルバ
-		 * @param raceId 大会ID
-		 */
-		public ManualUpdateTask( ContentResolver contentResolver, String raceId )
-		{
-			super();
-			m_ContentResolver = contentResolver;
-			m_RaceId = raceId;
-
-			return;
-		}
-
-		@Override
-		protected void onPreExecute()
-		{
-			super.onPreExecute();
-
-			// ダイアログ作成
-			m_ProgressDialog = new ProgressDialog( RaceDetailActivity.this );
-			m_ProgressDialog.setTitle( getResources().getString( R.string.str_dialog_title_progress_manual ) );
-			m_ProgressDialog.setMessage( getResources().getString( R.string.str_dialog_msg_get ) );
-			m_ProgressDialog.setCancelable( true );
-			m_ProgressDialog.setButton
-			(
-				DialogInterface.BUTTON_NEGATIVE,
-				getResources().getString( R.string.str_dialog_msg_cancel ),
-				new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick( DialogInterface dialog, int which )
-					{
-						cancel( true );
-
-						return;
-					}
-				}
-			);
-
-			m_ProgressDialog.show();
-
-			return;
-		}
-
-		@Override
-		protected List<RunnerInfo> doInBackground( TaskParam... params )
-		{
-			// ネットワークから選手情報取得
-			String url = params[0].url;
-			String raceId = params[0].pass;
-			String parserClassNane = params[0].parserClassName;
-			List<RunnerInfo> runnerInfoList = params[0].runnerInfoList;
-
-			// 最新の選手情報を取得する
-			return Logic.getNetRunnerInfoList( url, raceId, runnerInfoList, parserClassNane );
-		}
-
-		@Override
-		protected void onPostExecute( List<RunnerInfo> runnerInfoList )
-		{
-			String message = null;
-
-			if( runnerInfoList != null )
-			{
-				// データアップデート
-				boolean updateFlg = Logic.updateRunnerInfo( m_ContentResolver, m_RaceId, runnerInfoList );
-				
-				if( updateFlg )
-				{
-					message = "★★★更新情報があります★★★";
-				}
-				else
-				{
-					message = "更新情報はありません。";
-				}
-			}
-			else
-			{
-				message = "手動更新に失敗しました。";
-			}
-
-			// ダイアログ削除
-			if( m_ProgressDialog != null )
-			{
-				m_ProgressDialog.dismiss();
-			}
-
-			Toast.makeText( RaceDetailActivity.this, message, Toast.LENGTH_SHORT ).show();
-
-			return;
-		}
-
-		@Override
-		protected void onCancelled()
-		{
-			super.onCancelled();
-
-			// ダイアログ削除
-			if( m_ProgressDialog != null )
-			{
-				m_ProgressDialog.dismiss();
-			}
-
-			Toast.makeText( RaceDetailActivity.this, "手動更新をキャンセルしました。", Toast.LENGTH_SHORT ).show();
-
-			return;
-		}
-
-		/**
-		 * タスクパラメータ
-		 * @author Hayato Matsumuro
-		 *
-		 */
-		private class TaskParam
-		{
-			/**
-			 * アップデートサイトURL
-			 */
-			public String url;
-
-			/**
-			 * 大会ID
-			 */
-			public String pass;
-
-			/**
-			 * パーサークラス名
-			 */
-			public String parserClassName;
-
-			/**
-			 * 選手リスト
-			 */
-			public List<RunnerInfo> runnerInfoList;
-		}
 	}
 
 	/**

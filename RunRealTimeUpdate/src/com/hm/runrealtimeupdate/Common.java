@@ -23,6 +23,11 @@ public class Common
 	public static final int INT_COUNT_REGULARSTOP = 86400000 / INT_SERVICE_INTERVAL;
 
 	/**
+	 * 手動更新の更新確認回数( 1回のみ )
+	 */
+	public static final int INT_COUNT_MANUALSTOP = 1;
+
+	/**
 	 * リクエストコード 更新定期
 	 */
 	public static final int INT_REQUESTCODE_UPDATEPERIODIC = 1;
