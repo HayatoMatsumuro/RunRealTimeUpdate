@@ -22,7 +22,6 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
-import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdateImpl;
 import com.hm.runrealtimeupdate.logic.parser.IParserUpdate;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
@@ -367,7 +366,10 @@ public class Logic
 	{
 		boolean updateFlg = false;
 
-		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoList( contentResolver, raceId );
+		// 本来ならば、引数の選手情報リストの選手を取得するべき
+		// ただし、ここはNOTFinish の選手を取得するときのみ呼ばれる。
+		// データベースアクセスの観点から、このインターフェースを使用する。
+		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoNOTFinish( contentResolver, raceId );
 		for( int i = 0; i < oldRunnerInfoList.size(); i++ )
 		{
 			RunnerInfo newInfo = newRunnerInfoList.get( i );
@@ -508,6 +510,31 @@ public class Logic
 		RunnerInfo runnerInfo = getRunnerInfoByDBRunnerInfo( contentResolver, dbRunnerInfo );
 
 		return runnerInfo;
+	}
+
+	/**
+	 * Finishを通過していない選手情報取得
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 * @return Finishを通過していない選手情報
+	 */
+	public static List<RunnerInfo> getRunnerInfoNOTFinish( ContentResolver contentResolver, String raceId )
+	{
+		List<RunnerInfo> runnerInfoNOTFinishList = new ArrayList<RunnerInfo>();
+
+		List<RunnerInfo> runnerInfoList = getRunnerInfoList( contentResolver, raceId );
+
+		for( RunnerInfo runnerInfo : runnerInfoList )
+		{
+			List<DataBaseTimeList> dbFinishTimeList = DataBaseAccess.getTimeListByPoint( contentResolver, raceId, runnerInfo.number, "Finish" );
+
+			if( dbFinishTimeList.isEmpty() )
+			{
+				runnerInfoNOTFinishList.add( runnerInfo );
+			}
+		}
+
+		return runnerInfoNOTFinishList;
 	}
 
 	/**
@@ -700,14 +727,17 @@ public class Logic
 		catch( ParserException e )
 		{
 			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO 自動生成された catch ブロック
+		}
+		catch( InstantiationException e )
+		{
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO 自動生成された catch ブロック
+		}
+		catch( IllegalAccessException e )
+		{
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO 自動生成された catch ブロック
+		}
+		catch( ClassNotFoundException e )
+		{
 			e.printStackTrace();
 		}
 

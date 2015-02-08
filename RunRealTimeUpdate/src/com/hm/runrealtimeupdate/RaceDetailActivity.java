@@ -213,7 +213,7 @@ public class RaceDetailActivity extends Activity
 					String raceId = raceInfo.id;
 
 					// 選手情報を取得する
-					List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), raceId );
+					List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoNOTFinish( getContentResolver(), raceId );
 
 					// パーサー情報取得
 					CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( RaceDetailActivity.this, raceId );
