@@ -77,32 +77,41 @@ public class RaceDetailActivity extends Activity
 					// 速報停止中
 					if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_OFF )
 					{
-						// 大会を速報状態にする
-						Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
+						// アラーム停止中
+						if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
+						{
+							// 大会を速報状態にする
+							Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
 
-						raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
+							raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
 
-						// 速報開始
-						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
+							// 速報開始
+							CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
 
-						// 停止カウントを設定
-						Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
-						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
+							// 停止カウントを設定
+							Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+							Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
-						// 速報中テキスト表示
-						( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
+							// 速報中テキスト表示
+							( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
 
-						// ボタン表示変更
-						( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
+							// ボタン表示変更
+							( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
 
-						// 予約ボタンを無効化
-						reserveButton.setEnabled( false );
+							// 予約ボタンを無効化
+							reserveButton.setEnabled( false );
 
-						// 手動ボタンを無効化
-						manualButton.setEnabled( false );
+							// 手動ボタンを無効化
+							manualButton.setEnabled( false );
 
-						// Toast表示
-						Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+							// Toast表示
+							Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+						}
+						else
+						{
+							// Toast表示
+							Toast.makeText( RaceDetailActivity.this, "手動更新中です。", Toast.LENGTH_SHORT ).show();
+						}
 					}
 					// 速報中( 予約中の場合は、ボタンは無効になる )
 					else
@@ -151,15 +160,24 @@ public class RaceDetailActivity extends Activity
 					// 停止中
 					if( raceInfo.updateSts == RaceInfo.INT_UPDATESTS_OFF )
 					{
-						TimePickerDialog dialog = new TimePickerDialog
-							(
-								RaceDetailActivity.this,
-								new OnReserveTimeSetListener( raceInfo, v ),
-								CommonLib.getHourOfDay(),
-								CommonLib.getMinute(),
-								true
-							);
-						dialog.show();
+						// アラーム停止中
+						if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
+						{
+							TimePickerDialog dialog = new TimePickerDialog
+									(
+											RaceDetailActivity.this,
+											new OnReserveTimeSetListener( raceInfo, v ),
+											CommonLib.getHourOfDay(),
+											CommonLib.getMinute(),
+											true
+									);
+							dialog.show();
+						}
+						else
+						{
+							// Toast表示
+							Toast.makeText( RaceDetailActivity.this, "手動更新中です。", Toast.LENGTH_SHORT ).show();
+						}
 					}
 					else
 					{
@@ -202,16 +220,25 @@ public class RaceDetailActivity extends Activity
 				@Override
 				public void onClick( View v )
 				{
-					RaceInfo raceInfo = ( RaceInfo )v.getTag();
+					// アラーム停止中
+					if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
+					{
+						RaceInfo raceInfo = ( RaceInfo )v.getTag();
 
-					// 速報開始
-					CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
+						// 速報開始
+						CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
 
-					// 停止カウントを設定
-					Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
-					Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
+						// 停止カウントを設定
+						Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
+						Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_MANUALSTOP );
 
-					Toast.makeText( RaceDetailActivity.this, "手動更新を開始しました。", Toast.LENGTH_SHORT ).show();
+						Toast.makeText( RaceDetailActivity.this, "手動更新を開始しました。", Toast.LENGTH_SHORT ).show();
+					}
+					else
+					{
+						// Toast表示
+						Toast.makeText( RaceDetailActivity.this, "手動更新中です。", Toast.LENGTH_SHORT ).show();
+					}
 				}
 			}
 		);
