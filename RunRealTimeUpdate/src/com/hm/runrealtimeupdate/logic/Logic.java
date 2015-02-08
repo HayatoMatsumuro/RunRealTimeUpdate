@@ -366,7 +366,10 @@ public class Logic
 	{
 		boolean updateFlg = false;
 
-		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoList( contentResolver, raceId );
+		// 本来ならば、引数の選手情報リストの選手を取得するべき
+		// ただし、ここはNOTFinish の選手を取得するときのみ呼ばれる。
+		// データベースアクセスの観点から、このインターフェースを使用する。
+		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoNOTFinish( contentResolver, raceId );
 		for( int i = 0; i < oldRunnerInfoList.size(); i++ )
 		{
 			RunnerInfo newInfo = newRunnerInfoList.get( i );
