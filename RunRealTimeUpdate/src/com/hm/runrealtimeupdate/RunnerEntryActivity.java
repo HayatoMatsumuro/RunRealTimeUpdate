@@ -49,7 +49,7 @@ public class RunnerEntryActivity extends Activity
 	/**
 	 * 登録できる選手の数
 	 */
-	private static int INT_RUNNER_NUM_MAX = 30;
+	private static int INT_RUNNER_NUM_MAX = 20;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )

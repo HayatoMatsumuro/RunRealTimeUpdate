@@ -406,6 +406,43 @@ public class DataBaseAccess
 	}
 
 	/**
+	 * 指定の地点名のタイムリスト情報を取得する。( リストアイテムは1つのはず )
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 * @param number ゼッケン番号
+	 * @param point 地点名
+	 * @return タイムリスト
+	 */
+	public static List<DataBaseTimeList> getTimeListByPoint( ContentResolver contentResolver, String raceId, String number, String point )
+	{
+		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
+
+		String[] projection = {
+			TimelistProvider.STR_DB_COLUMN_RACEID,
+			TimelistProvider.STR_DB_COLUMN_NUMBER,
+			TimelistProvider.STR_DB_COLUMN_POINT,
+			TimelistProvider.STR_DB_COLUMN_SPLIT,
+			TimelistProvider.STR_DB_COLUMN_LAP,
+			TimelistProvider.STR_DB_COLUMN_CURRENTTIME,
+			TimelistProvider.STR_DB_COLUMN_DATE
+		};
+
+		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "' AND " + TimelistProvider.STR_DB_COLUMN_POINT + "='" + point + "'";
+
+		Cursor c = contentResolver.query( TimelistProvider.URI_DB, projection, selection, null, null );
+
+		while( c.moveToNext() )
+		{
+			DataBaseTimeList timeList = getTimeListByCursor( c );
+			list.add( timeList );
+		}
+
+		c.close();
+
+		return list;
+	}
+
+	/**
 	 * 大会IDからタイムリストを削除する
 	 * @param contentResolver コンテントリゾルバ
 	 * @param raceId 大会ID

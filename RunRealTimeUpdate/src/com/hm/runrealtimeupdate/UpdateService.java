@@ -67,7 +67,7 @@ public class UpdateService extends Service
 		}
 
 		// 選手情報取得
-		List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoList( getContentResolver(), raceId );
+		List<RunnerInfo> runnerInfoList = Logic.getRunnerInfoNOTFinish( getContentResolver(), raceId );
 
 		// パーサー情報取得
 		CommonLib.ParserInfo parserInfo = CommonLib.getParserInfoByRaceId( UpdateService.this, raceId );
