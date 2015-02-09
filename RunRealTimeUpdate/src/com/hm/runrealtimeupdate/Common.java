@@ -10,7 +10,12 @@ public class Common
 	/**
 	 * サービスの起動間隔
 	 */
-	public static final int INT_SERVICE_INTERVAL = 120000;
+	public static final int INT_SERVICE_INTERVAL = 180000;
+
+	/**
+	 * 選手情報取得のネットアクセス間隔
+	 */
+	public static final int INT_SERVICE_NETGET_INTERVAL = 700;
 
 	/**
 	 * 最後の更新から自動停止までの更新確認回数( 7時間 )

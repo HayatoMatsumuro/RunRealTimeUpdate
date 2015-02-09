@@ -348,6 +348,16 @@ public class Logic
 			}
 
 			netRunnerInfoList.add( netRunnerInfo );
+
+			// 700ms 間隔で取得する
+			try
+			{
+				Thread.sleep( 700 );
+			}
+			catch( InterruptedException e )
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return netRunnerInfoList;
