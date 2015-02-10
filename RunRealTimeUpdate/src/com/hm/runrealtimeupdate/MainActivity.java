@@ -106,7 +106,7 @@ public class MainActivity extends Activity
 		return;
 	}
 
-    @Override
+	@Override
 	protected void onResume()
 	{
 		super.onResume();
@@ -226,7 +226,7 @@ public class MainActivity extends Activity
 				adapter.notifyDataSetChanged();
 
 				// 表示状態設定
-		        setViewBody( raceInfoListView.getCount() );
+				setViewBody( raceInfoListView.getCount() );
 
 				Toast.makeText( MainActivity.this, "削除しました", Toast.LENGTH_SHORT ).show();
 			}

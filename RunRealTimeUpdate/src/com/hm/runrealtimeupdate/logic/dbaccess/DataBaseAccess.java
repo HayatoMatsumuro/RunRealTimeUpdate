@@ -91,11 +91,11 @@ public class DataBaseAccess
 				RaceProvider.STR_DB_COLUMN_UPDATEFLG,
 				RaceProvider.STR_DB_COLUMN_DATE
 		};
-		
+
 		String selection = RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_ON +"'" + " OR " + RaceProvider.STR_DB_COLUMN_UPDATEFLG + "='" + RaceProvider.STR_UPDATEFLG_RESERVE +"'";
-		
+
 		Cursor c = contentResolver.query( RaceProvider.URI_DB, projection, selection, null, null );
-		
+
 		while( c.moveToNext() )
 		{
 			// データ設定
@@ -356,7 +356,7 @@ public class DataBaseAccess
 	{
 		// データベースに登録
 		ContentValues values = new ContentValues();
-		
+
 		values.put( TimelistProvider.STR_DB_COLUMN_RACEID, dbTimeList.raceId );
 		values.put( TimelistProvider.STR_DB_COLUMN_NUMBER, dbTimeList.number );
 		values.put( TimelistProvider.STR_DB_COLUMN_POINT, dbTimeList.point );
@@ -364,7 +364,7 @@ public class DataBaseAccess
 		values.put( TimelistProvider.STR_DB_COLUMN_LAP, dbTimeList.lap );
 		values.put( TimelistProvider.STR_DB_COLUMN_CURRENTTIME, dbTimeList.currentTime );
 		values.put( TimelistProvider.STR_DB_COLUMN_DATE, dbTimeList.updateDate );
-		
+
 		contentResolver.insert(TimelistProvider.URI_DB, values);
 		return;
 	}
@@ -379,7 +379,7 @@ public class DataBaseAccess
 	public static List<DataBaseTimeList> getTimeListByRaceIdAndNumber( ContentResolver contentResolver, String raceId, String number )
 	{
 		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
-		
+
 		String[] projection = {
 			TimelistProvider.STR_DB_COLUMN_RACEID,
 			TimelistProvider.STR_DB_COLUMN_NUMBER,
@@ -391,9 +391,46 @@ public class DataBaseAccess
 		};
 
 		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
-		
+
 		Cursor c = contentResolver.query( TimelistProvider.URI_DB, projection, selection, null, null );
-		
+
+		while( c.moveToNext() )
+		{
+			DataBaseTimeList timeList = getTimeListByCursor( c );
+			list.add( timeList );
+		}
+
+		c.close();
+
+		return list;
+	}
+
+	/**
+	 * 指定の地点名のタイムリスト情報を取得する。( リストアイテムは1つのはず )
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 * @param number ゼッケン番号
+	 * @param point 地点名
+	 * @return タイムリスト
+	 */
+	public static List<DataBaseTimeList> getTimeListByPoint( ContentResolver contentResolver, String raceId, String number, String point )
+	{
+		List<DataBaseTimeList> list = new ArrayList<DataBaseTimeList>();
+
+		String[] projection = {
+			TimelistProvider.STR_DB_COLUMN_RACEID,
+			TimelistProvider.STR_DB_COLUMN_NUMBER,
+			TimelistProvider.STR_DB_COLUMN_POINT,
+			TimelistProvider.STR_DB_COLUMN_SPLIT,
+			TimelistProvider.STR_DB_COLUMN_LAP,
+			TimelistProvider.STR_DB_COLUMN_CURRENTTIME,
+			TimelistProvider.STR_DB_COLUMN_DATE
+		};
+
+		String selection = TimelistProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + TimelistProvider.STR_DB_COLUMN_NUMBER + "='" + number + "' AND " + TimelistProvider.STR_DB_COLUMN_POINT + "='" + point + "'";
+
+		Cursor c = contentResolver.query( TimelistProvider.URI_DB, projection, selection, null, null );
+
 		while( c.moveToNext() )
 		{
 			DataBaseTimeList timeList = getTimeListByCursor( c );
@@ -512,7 +549,6 @@ public class DataBaseAccess
 	{
 		String selection = UpdateDataProvider.STR_DB_COLUMN_RACEID + "='" + raceId + "' AND " + UpdateDataProvider.STR_DB_COLUMN_NUMBER + "='" + number + "'";
 		contentResolver.delete( UpdateDataProvider.URI_DB, selection, null );
-
 		return;
 	}
 

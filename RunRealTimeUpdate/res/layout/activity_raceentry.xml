@@ -36,6 +36,18 @@
 			android:textColor="@color/color_com_header_button_text"
 			android:text="@string/str_btn_back" />
 
+		<!-- 都市型マラソンボタン -->
+		<Button
+			android:id="@+id/id_activity_raceentry_header_city_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/dim_com_header_button_padding"
+			android:background="@color/color_com_header_button_back"
+			android:textColor="@color/color_com_header_button_text"
+			android:text="@string/str_btn_city" />
+
 	</RelativeLayout>
 
 	<!-- ボディ -->

@@ -105,7 +105,8 @@ public class PreferenceAccess
 	{
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences( context );
 		SharedPreferences.Editor editor = pref.edit();
-		for( String key : keyList ){
+		for( String key : keyList )
+		{
 			editor.remove( key );
 		}
 		editor.commit();
@@ -121,7 +122,7 @@ public class PreferenceAccess
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences( context );
 		SharedPreferences.Editor editor = pref.edit();
 		editor.clear();
-        editor.commit();
+		editor.commit();
 		return;
 	}
 }

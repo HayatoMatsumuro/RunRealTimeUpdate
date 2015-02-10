@@ -22,7 +22,7 @@ import com.hm.runrealtimeupdate.logic.dbaccess.DataBaseUpdateData;
 import com.hm.runrealtimeupdate.logic.parser.ParserException;
 import com.hm.runrealtimeupdate.logic.parser.ParserRaceInfo;
 import com.hm.runrealtimeupdate.logic.parser.ParserRunnerInfo;
-import com.hm.runrealtimeupdate.logic.parser.ParserRunnersUpdate;
+import com.hm.runrealtimeupdate.logic.parser.IParserUpdate;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceReserveTime;
 import com.hm.runrealtimeupdate.logic.preferences.PreferenceStopCount;
 
@@ -45,18 +45,12 @@ public class Logic
 	{
 		// 登録情報設定
 		DataBaseRaceInfo dbRaceInfo = new DataBaseRaceInfo();
-
 		dbRaceInfo.id = raceInfo.id;
 		dbRaceInfo.name = raceInfo.name;
 		dbRaceInfo.date = raceInfo.date;
 		dbRaceInfo.location = raceInfo.location;
 		dbRaceInfo.updateFlg =  DataBaseAccess.STR_DBA_RACE_UPDATEFLG_OFF;
-
-		// 日付設定
-		Calendar cal = Calendar.getInstance();
-		Date date = cal.getTime();
-		String dateStr = DATEFORMAT.format( date );
-		dbRaceInfo.updateDate = dateStr;
+		dbRaceInfo.updateDate = getDateString();
 
 		// データベース登録
 		DataBaseAccess.entryRace( contentResolver, dbRaceInfo );
@@ -190,7 +184,7 @@ public class Logic
 	}
 
 	/**
-	 * 師弟の大会の速報状態を予約にする
+	 * 指定の大会の速報状態を予約にする
 	 * @param contentResolver コンテントリゾルバ
 	 * @param raceId 大会ID
 	 */
@@ -222,20 +216,23 @@ public class Logic
 	/**
 	 * ネットワークから大会情報を取得する
 	 * @param url アップデートサイトURL
-	 * @param raceId 大会ID
+	 * @param pass パス
+	 * @param parserClassName パーサークラス名
 	 * @return　取得した大会情報
 	 * @throws LogicException 大会情報取得失敗
 	 */
-	public static RaceInfo getNetRaceInfo( String url, String raceId ) throws LogicException
+	public static RaceInfo getNetRaceInfo( String url, String pass, String parserClassName ) throws LogicException
 	{
 		try
 		{
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
+
 			// 大会情報取得
-			ParserRaceInfo parserRaceInfo = ParserRunnersUpdate.getRaceInfo( url, raceId );
+			ParserRaceInfo parserRaceInfo = parser.getRaceInfo( url, pass );
 
 			// 大会情報設定
 			RaceInfo raceInfo = new RaceInfo();
-			raceInfo.id = raceId;
+			raceInfo.id = pass;
 			raceInfo.name = parserRaceInfo.name;
 			raceInfo.date = parserRaceInfo.date;
 			raceInfo.location = parserRaceInfo.location;
@@ -248,21 +245,39 @@ public class Logic
 			e.printStackTrace();
 			throw new LogicException( e.getMessage() );
 		}
+		catch( InstantiationException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( IllegalAccessException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( ClassNotFoundException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
 	}
-	
+
 	/**
 	 * ネットワークから選手情報を取得する
 	 * @param url アップデートサイトのURL
-	 * @param raceId 大会ID
+	 * @param pass パス
 	 * @param number ゼッケン番号
+	 * @param parserClassName パーサークラス名
 	 * @throws LogicException 選手情報取得失敗
 	 */
-	public static RunnerInfo getNetRunnerInfo( String url, String raceId, String number ) throws LogicException
+	public static RunnerInfo getNetRunnerInfo( String url, String pass, String number, String parserClassName ) throws LogicException
 	{
 		try
 		{
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
+
 			// 選手情報取得
-			ParserRunnerInfo parserRunnerInfo = ParserRunnersUpdate.getRunnerInfo( url, raceId, number );
+			ParserRunnerInfo parserRunnerInfo = parser.getRunnerInfo( url, pass, number );
 
 			//　選手情報設定
 			RunnerInfo runnerInfo = new RunnerInfo();
@@ -287,16 +302,32 @@ public class Logic
 			e.printStackTrace();
 			throw new LogicException( e.getMessage() );
 		}
+		catch ( InstantiationException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( IllegalAccessException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
+		catch( ClassNotFoundException e )
+		{
+			e.printStackTrace();
+			throw new LogicException( e.getMessage() );
+		}
 	}
 
 	/**
 	 * ネットワークから指定の大会のゼッケン番号の選手情報を取得する
 	 * @param url　アップデートサイトURL
-	 * @param raceId 大会ID
+	 * @param pass 大会ID
 	 * @param runnerList 選手情報リスト
+	 * @param parserClassName パーサークラス名
 	 * @return 選手情報リスト
 	 */
-	public static List<RunnerInfo> getNetRunnerInfoList( String url, String raceId, List<RunnerInfo> runnerInfoList )
+	public static List<RunnerInfo> getNetRunnerInfoList( String url, String pass, List<RunnerInfo> runnerInfoList, String parserClassName )
 	{
 		List<RunnerInfo> netRunnerInfoList = new ArrayList<RunnerInfo>();
 
@@ -306,7 +337,7 @@ public class Logic
 
 			try
 			{
-				netRunnerInfo = getNetRunnerInfo( url, raceId, runnerInfo.number );
+				netRunnerInfo = getNetRunnerInfo( url, pass, runnerInfo.number, parserClassName );
 			}
 			catch( LogicException e )
 			{
@@ -317,6 +348,16 @@ public class Logic
 			}
 
 			netRunnerInfoList.add( netRunnerInfo );
+
+			// 700ms 間隔で取得する
+			try
+			{
+				Thread.sleep( 700 );
+			}
+			catch( InterruptedException e )
+			{
+				e.printStackTrace();
+			}
 		}
 
 		return netRunnerInfoList;
@@ -335,7 +376,10 @@ public class Logic
 	{
 		boolean updateFlg = false;
 
-		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoList( contentResolver, raceId );
+		// 本来ならば、引数の選手情報リストの選手を取得するべき
+		// ただし、ここはNOTFinish の選手を取得するときのみ呼ばれる。
+		// データベースアクセスの観点から、このインターフェースを使用する。
+		List<RunnerInfo> oldRunnerInfoList = getRunnerInfoNOTFinish( contentResolver, raceId );
 		for( int i = 0; i < oldRunnerInfoList.size(); i++ )
 		{
 			RunnerInfo newInfo = newRunnerInfoList.get( i );
@@ -357,9 +401,7 @@ public class Logic
 					String currentTime = newInfo.timeInfoList.get( oldInfoTimeListSize + j ).currentTime;
 
 					// 日付設定
-					Calendar cal = Calendar.getInstance();
-					Date date = cal.getTime();
-					String dateStr = DATEFORMAT.format( date );
+					String dateStr = getDateString();
 
 					// タイムリスト書き込み
 					DataBaseTimeList dbTimeList = new DataBaseTimeList();
@@ -414,12 +456,7 @@ public class Logic
 		dbRunnerInfo.name = runnerInfo.name;
 		dbRunnerInfo.number = runnerInfo.number;
 		dbRunnerInfo.section = runnerInfo.section;
-
-		// 日付設定
-		Calendar cal = Calendar.getInstance();
-		Date date = cal.getTime();
-		String dateStr = DATEFORMAT.format( date );
-		dbRunnerInfo.updateDate = dateStr;
+		dbRunnerInfo.updateDate = getDateString();
 
 		// データベース登録
 		DataBaseAccess.entryRunner( contentResolver, dbRunnerInfo );
@@ -486,6 +523,31 @@ public class Logic
 	}
 
 	/**
+	 * Finishを通過していない選手情報取得
+	 * @param contentResolver コンテントリゾルバ
+	 * @param raceId 大会ID
+	 * @return Finishを通過していない選手情報
+	 */
+	public static List<RunnerInfo> getRunnerInfoNOTFinish( ContentResolver contentResolver, String raceId )
+	{
+		List<RunnerInfo> runnerInfoNOTFinishList = new ArrayList<RunnerInfo>();
+
+		List<RunnerInfo> runnerInfoList = getRunnerInfoList( contentResolver, raceId );
+
+		for( RunnerInfo runnerInfo : runnerInfoList )
+		{
+			List<DataBaseTimeList> dbFinishTimeList = DataBaseAccess.getTimeListByPoint( contentResolver, raceId, runnerInfo.number, "Finish" );
+
+			if( dbFinishTimeList.isEmpty() )
+			{
+				runnerInfoNOTFinishList.add( runnerInfo );
+			}
+		}
+
+		return runnerInfoNOTFinishList;
+	}
+
+	/**
 	 * 選手情報を削除する
 	 * @param contentResolver コンテントリゾルバ
 	 * @param runnerInfo 選手情報
@@ -502,6 +564,17 @@ public class Logic
 		DataBaseAccess.deleteRunnerInfoByRaceIdAndNumber( contentResolver, raceId, number );
 
 		return;
+	}
+
+	/**
+	 * 現在の時刻の文字列を取得する
+	 * @return 現在の時刻
+	 */
+	private static String getDateString()
+	{
+		Calendar cal = Calendar.getInstance();
+		Date date = cal.getTime();
+		return DATEFORMAT.format( date );
 	}
 
 	/**
@@ -636,16 +709,20 @@ public class Logic
 	 * @param raceId 大会ID
 	 * @param sei 姓
 	 * @param mei 名
+	 * @param parserClassName パーサークラス名
 	 * @return 選手情報
 	 */
-	public static List<RunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei )
+	public static List<RunnerInfo> searchRunnerInfoByName( String url, String raceId, String sei, String mei, String parserClassName )
 	{
 		List<RunnerInfo> runnerInfoList = null;
 
 		List<ParserRunnerInfo> parserRunnerInfoList = null;
+
 		try
 		{
-			parserRunnerInfoList = ParserRunnersUpdate.searchRunnerInfoByName( url, raceId, sei, mei );
+			IParserUpdate parser = ( IParserUpdate )Class.forName( parserClassName ).newInstance();
+
+			parserRunnerInfoList = parser.searchRunnerInfoByName( url, raceId, sei, mei );
 
 			runnerInfoList = new ArrayList<RunnerInfo>();
 
@@ -658,6 +735,18 @@ public class Logic
 			}
 		}
 		catch( ParserException e )
+		{
+			e.printStackTrace();
+		}
+		catch( InstantiationException e )
+		{
+			e.printStackTrace();
+		}
+		catch( IllegalAccessException e )
+		{
+			e.printStackTrace();
+		}
+		catch( ClassNotFoundException e )
 		{
 			e.printStackTrace();
 		}
@@ -906,8 +995,8 @@ public class Logic
 		PreferenceReserveTime.deleteReserveTime( context );
 
 		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
-		time.setHour( hour );
-		time.setMinute( minute );
+		time.hour = hour;
+		time.minute = minute;
 		PreferenceReserveTime.saveReserveTime( context, time );
 		return;
 	}
@@ -922,8 +1011,8 @@ public class Logic
 	{
 		PreferenceReserveTime.ReserveTime time = PreferenceReserveTime.loadReserveTime( context );
 
-		int hour = time.getHour();
-		int minute = time.getMinute();
+		int hour = time.hour;
+		int minute = time.minute;
 
 		if( ( hour == Integer.MAX_VALUE) || ( minute == Integer.MAX_VALUE ) )
 		{
