@@ -116,6 +116,7 @@ public class RunnerEntryActivity extends Activity
 					intent.putExtra( RaceTabActivity.STR_INTENT_RACEID, backButtonTag.raceId );
 					intent.putExtra( RaceTabActivity.STR_INTENT_CURRENTTAB, backButtonTag.currentTab );
 					startActivity( intent );
+					finish();
 
 					return;
 				}
