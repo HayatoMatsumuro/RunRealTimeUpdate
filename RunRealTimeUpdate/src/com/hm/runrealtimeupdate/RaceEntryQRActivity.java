@@ -96,6 +96,7 @@ public class RaceEntryQRActivity extends Activity implements AutoFocusCallback, 
 			public void onClick(View v) {
 				Intent intent = new Intent( RaceEntryQRActivity.this, RaceEntryActivity.class );
 				startActivity( intent );
+				finish();
 			}
 		});
 	}
