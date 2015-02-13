@@ -95,20 +95,20 @@ public class UpdateListActivity extends Activity
 	{
 		StringBuilder builder = new StringBuilder();
 
-		builder.append( updateInfo.getNumber() );
+		builder.append( updateInfo.number );
 		builder.append( "\n" );
-		builder.append( updateInfo.getName() );
+		builder.append( updateInfo.name );
 		builder.append( "\n\n" );
-		builder.append( updateInfo.getPoint() );
+		builder.append( updateInfo.point );
 		builder.append( "\n\n" );
 		builder.append( getString( R.string.str_dialog_msg_split ) );
-		builder.append( updateInfo.getSplit() );
+		builder.append( updateInfo.split );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_lap ) );
-		builder.append( updateInfo.getLap() );
+		builder.append( updateInfo.lap );
 		builder.append( "\n" );
 		builder.append( getString( R.string.str_dialog_msg_currenttime ) );
-		builder.append( updateInfo.getCurrentTime() );
+		builder.append( updateInfo.currentTime );
 
 		return builder.toString();
 	}
@@ -152,7 +152,7 @@ public class UpdateListActivity extends Activity
 		}
 
 		// 速報バーの表示更新
-		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.getRaceUpdate() );
+		( ( RaceTabActivity )getParent() ).setDispUpdateBar( raceInfo.updateSts );
 	
 		return;
 	}
@@ -197,16 +197,16 @@ public class UpdateListActivity extends Activity
 			RelativeLayout newLayout = ( RelativeLayout )convertView.findViewById( R.id.id_list_item_updatedata_sub_new_layout );			
 			UpdateInfo updateInfo = getItem( position );
 
-			String infoStr = updateInfo.getName() + getString( R.string.str_txt_updaterunner ) + updateInfo.getPoint() + " " + getString( R.string.str_txt_updatepass );
-			String splitStr = getString( R.string.str_txt_split ) + " " + updateInfo.getSplit();
-			String currentTimeStr = getString( R.string.str_txt_currenttime ) + " " + updateInfo.getCurrentTime();
+			String infoStr = updateInfo.name + getString( R.string.str_txt_updaterunner ) + updateInfo.point + " " + getString( R.string.str_txt_updatepass );
+			String splitStr = getString( R.string.str_txt_split ) + " " + updateInfo.split;
+			String currentTimeStr = getString( R.string.str_txt_currenttime ) + " " + updateInfo.currentTime;
 
 			infoTextView.setText( infoStr );
 			splitTextView.setText( splitStr );
 			currentTimeTextView.setText( currentTimeStr );
 
 			// New 表示
-			if( updateInfo.isRecentFlg() )
+			if( updateInfo.recentFlg )
 			{
 				newLayout.setVisibility( View.VISIBLE );
 			}

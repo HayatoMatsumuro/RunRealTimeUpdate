@@ -1,143 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_activity_raceentry_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
-    <!-- ヘッダー -->
+	android:id="@+id/id_activity_raceentry_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical" >
+
+	<!-- ヘッダー -->
 	<RelativeLayout
-        android:id="@+id/id_activity_raceentry_header_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dim_com_header_layout_height"
-        android:background="@color/color_com_header_layout_back"
-        android:padding="@dimen/dim_com_header_layout_padding" >
+		android:id="@+id/id_activity_raceentry_header_layout"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/dim_com_header_layout_height"
+		android:background="@color/color_com_header_layout_back"
+		android:padding="@dimen/dim_com_header_layout_padding" >
 
-	    <!-- タイトル -->
-        <TextView
-            android:id="@+id/id_activity_raceentry_header_title_textview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:text="@string/str_title_raceentry"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/color_com_header_title_textview_text" />
+		<!-- タイトル -->
+		<TextView
+			android:id="@+id/id_activity_raceentry_header_title_textview"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
+			android:text="@string/str_title_raceentry"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:textColor="@color/color_com_header_title_textview_text" />
 
-        <!-- 戻るボタン -->
-        <Button
-            android:id="@+id/id_activity_raceentry_header_back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:padding="@dimen/dim_com_header_button_padding"
-            android:background="@color/color_com_header_button_back"
-            android:textColor="@color/color_com_header_button_text"
-            android:text="@string/str_btn_back" />
+		<!-- 戻るボタン -->
+		<Button
+			android:id="@+id/id_activity_raceentry_header_back_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/dim_com_header_button_padding"
+			android:background="@color/color_com_header_button_back"
+			android:textColor="@color/color_com_header_button_text"
+			android:text="@string/str_btn_back" />
 
-    </RelativeLayout>
+		<!-- 都市型マラソンボタン -->
+		<Button
+			android:id="@+id/id_activity_raceentry_header_city_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
+			android:padding="@dimen/dim_com_header_button_padding"
+			android:background="@color/color_com_header_button_back"
+			android:textColor="@color/color_com_header_button_text"
+			android:text="@string/str_btn_city" />
+
+	</RelativeLayout>
 
 	<!-- ボディ -->
 	<LinearLayout
-	    android:id="@+id/id_activity_raceentry_body_layout"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:orientation="vertical"
-	    android:background="@color/color_com_body_layout_back"
-	    android:padding="@dimen/dim_com_body_layout_padding" >
+		android:id="@+id/id_activity_raceentry_body_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical"
+		android:background="@color/color_com_body_layout_back"
+		android:padding="@dimen/dim_com_body_layout_padding" >
 
-	    <!-- コンテンツ -->
-	    <RelativeLayout 
-	        android:id="@+id/id_activity_raceentry_body_contents_layout"
-	    	android:layout_width="match_parent"
-	    	android:layout_height="wrap_content"
-        	android:padding="@dimen/dim_com_body_contents_layout_padding"
-    		android:background="@color/color_com_body_contents_layout_back"
-	    	android:orientation="vertical" >
-	        
-	        <!-- 入力フォーム -->
-	        <RelativeLayout
-	        	android:id="@+id/id_activity_raceentry_body_contents_urlform_layout"
-	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content" >
+		<!-- コンテンツ -->
+		<RelativeLayout 
+			android:id="@+id/id_activity_raceentry_body_contents_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/dim_com_body_contents_layout_padding"
+			android:background="@color/color_com_body_contents_layout_back"
+			android:orientation="vertical" >
 
-	            <!-- デフォルトURL -->
-	        	<TextView
-	            	android:id="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
-	            	android:layout_width="wrap_content"
-	            	android:layout_height="wrap_content"
-	            	android:layout_alignParentLeft="true"
-	            	android:layout_alignParentTop="true"
-	            	android:text="@string/str_txt_defaulturl" />
+			<!-- 入力フォーム -->
+			<RelativeLayout
+				android:id="@+id/id_activity_raceentry_body_contents_urlform_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content" >
 
-	        	<!-- URL入力のメッセージ -->
-	        	<TextView
-	            	android:id="@+id/id_activity_raceentry_body_contents_urlform_inputurl_textview"
-	            	android:layout_width="wrap_content"
-	            	android:layout_height="wrap_content"
-	            	android:layout_toRightOf="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
-	            	android:text="@string/str_msg_inputurl" />
-	        	
-	        	<!-- URL入力ボックス -->
-	        	<EditText
-	            	android:id="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
-	            	android:layout_width="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
-	            	android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
-	            	android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
-	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft"
-	            	android:ems="20"
-	            	android:inputType="textPersonName" />
+				<!-- デフォルトURL -->
+				<TextView
+					android:id="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_alignParentLeft="true"
+					android:layout_alignParentTop="true"
+					android:text="@string/str_txt_defaulturl" />
 
-	        	<!-- 決定ボタン -->
-	        	<Button
-	           		android:id="@+id/id_activity_raceentry_body_contenturl_inputform_decide_button"
-	            	android:layout_width="wrap_content"
-	            	android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
-	            	android:layout_toRightOf="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
-	            	android:layout_alignTop="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
-	            	android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
-	            	android:text="@string/str_btn_decide" />
-	        	
+				<!-- URL入力のメッセージ -->
+				<TextView
+					android:id="@+id/id_activity_raceentry_body_contents_urlform_inputurl_textview"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_toRightOf="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
+					android:text="@string/str_msg_inputurl" />
+
+				<!-- URL入力ボックス -->
+				<EditText
+					android:id="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
+					android:layout_width="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_width"
+					android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_height"
+					android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_url_textview"
+					android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_margintop"
+					android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_inputurl_edittext_marginleft"
+					android:ems="20"
+					android:inputType="textPersonName" />
+
+				<!-- 決定ボタン -->
+				<Button
+					android:id="@+id/id_activity_raceentry_body_contenturl_inputform_decide_button"
+					android:layout_width="wrap_content"
+					android:layout_height="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_height"
+					android:layout_toRightOf="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
+					android:layout_alignTop="@+id/id_activity_raceentry_body_contents_urlform_inputurl_edittext"
+					android:layout_marginLeft="@dimen/dim_activity_raceentry_body_contents_urlform_decide_button_marginleft"
+					android:text="@string/str_btn_decide" />
+
 			</RelativeLayout>
-			
-	        <!-- QRコード検索ボタン -->
-	        <RelativeLayout
-	        	android:id="@+id/id_activity_raceentry_body_contents_qr_layout"
-	        	android:layout_width="match_parent"
-	        	android:layout_height="wrap_content"
-	        	android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_layout" >
-	        	
-	            <Button 
-	                android:id="@+id/id_activity_raceentry_body_contents_qr_button"
-	                android:layout_width="wrap_content"
-	                android:layout_height="@dimen/dim_activity_raceentry_body_contents_qr_button_height"
-	                android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_qr_button_marginTop"
-	                android:text="@string/str_btn_qr"/>
-	        </RelativeLayout>
-	        
-	    </RelativeLayout>
-	    
-	    <!-- メッセージ -->
-	    <RelativeLayout 
-	        android:id="@+id/id_activity_raceentry_body_message_layout"
-	        android:layout_width="match_parent"
-        	android:layout_height="wrap_content"
-        	android:padding="@dimen/dim_com_body_message_layout_padding"
-        	android:background="@color/color_com_body_message_layout_back"
-        	android:visibility="gone">
-	        
-	        <!-- 大会登録最大 -->
-        	<TextView
-        	    android:id="@+id/id_activity_raceentry_body_message_norace_textview"
-        	    android:layout_width="match_parent"
-        	   	android:layout_height="wrap_content"
-        	    android:text="@string/str_msg_racefull" />
-        	
-	    </RelativeLayout>
-	    
-	</LinearLayout>
-	
-</LinearLayout>
 
+			<!-- QRコード検索ボタン -->
+			<RelativeLayout
+				android:id="@+id/id_activity_raceentry_body_contents_qr_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/id_activity_raceentry_body_contents_urlform_layout" >
+
+				<Button 
+					android:id="@+id/id_activity_raceentry_body_contents_qr_button"
+					android:layout_width="wrap_content"
+					android:layout_height="@dimen/dim_activity_raceentry_body_contents_qr_button_height"
+					android:layout_marginTop="@dimen/dim_activity_raceentry_body_contents_qr_button_marginTop"
+					android:text="@string/str_btn_qr"/>
+
+			</RelativeLayout>
+
+		</RelativeLayout>
+
+		<!-- メッセージ -->
+		<RelativeLayout 
+			android:id="@+id/id_activity_raceentry_body_message_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:padding="@dimen/dim_com_body_message_layout_padding"
+			android:background="@color/color_com_body_message_layout_back"
+			android:visibility="gone">
+
+			<!-- 大会登録最大 -->
+			<TextView
+				android:id="@+id/id_activity_raceentry_body_message_norace_textview"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="@string/str_msg_racefull" />
+
+		</RelativeLayout>
+
+	</LinearLayout>
+
+</LinearLayout>

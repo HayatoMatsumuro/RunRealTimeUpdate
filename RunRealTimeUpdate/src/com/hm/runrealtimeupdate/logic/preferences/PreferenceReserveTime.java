@@ -21,7 +21,7 @@ public class PreferenceReserveTime
 	 * キー 予約分
 	 */
 	private static final String KEY_RESERVEMINUTE = "reserveminute";
-	
+
 	/**
 	 * 予約時間をプリファレンスに保存する
 	 * @param context コンテキスト
@@ -31,8 +31,8 @@ public class PreferenceReserveTime
 	{
 		Map< String, Integer > map = new HashMap< String, Integer>();
 
-		map.put( KEY_RESERVEHOUR, time.getHour() );
-		map.put( KEY_RESERVEMINUTE, time.getMinute() );
+		map.put( KEY_RESERVEHOUR, time.hour );
+		map.put( KEY_RESERVEMINUTE, time.minute );
 
 		PreferenceAccess.saveIntData( context, map );
 
@@ -46,12 +46,9 @@ public class PreferenceReserveTime
 	 */
 	public static ReserveTime loadReserveTime( Context context )
 	{
-		int hour = PreferenceAccess.loadIntData( context, KEY_RESERVEHOUR );
-		int minute = PreferenceAccess.loadIntData( context, KEY_RESERVEMINUTE );
-
 		PreferenceReserveTime.ReserveTime time = new PreferenceReserveTime().new ReserveTime();
-		time.setHour( hour );
-		time.setMinute( minute );
+		time.hour = PreferenceAccess.loadIntData( context, KEY_RESERVEHOUR );
+		time.minute = PreferenceAccess.loadIntData( context, KEY_RESERVEMINUTE );
 		return time;
 	}
 
@@ -76,45 +73,11 @@ public class PreferenceReserveTime
 		/**
 		 * 時
 		 */
-		private int hour;
+		public int hour;
 
 		/**
 		 * 分
 		 */
-		private int minute;
-
-		/**
-		 * 時を取得する
-		 * @return
-		 */
-		public int getHour() {
-			return hour;
-		}
-
-		/**
-		 * 時を設定する
-		 * @param hour
-		 */
-		public void setHour(int hour) {
-			this.hour = hour;
-			return;
-		}
-
-		/**
-		 * 分を取得する
-		 * @return 分
-		 */
-		public int getMinute() {
-			return minute;
-		}
-
-		/**
-		 * 分を設定する
-		 * @param minute 分
-		 */
-		public void setMinute(int minute) {
-			this.minute = minute;
-			return;
-		}
+		public int minute;
 	}
 }

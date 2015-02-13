@@ -9,16 +9,17 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
 /**
+ * 更新データ
  * DB名:updatedata
  * | key                 | raceid | number | name | section | point | split | lap  | currenttime | date                        |
  * | INTEGER PRIMARY KEY | TEXT   | TEXT   | TEXT | TEXT    | TEXT  | TEXT  | TEXT | TEXT        | TEXT( YYYY-MM-DD hh:mm:ss ) |
  * @author Hayato Matsumuro
  *
  */
-public class UpdateDataProvider extends ContentProvider {
+public class UpdateDataProvider extends ContentProvider
+{
+	public static final Uri URI_DB = Uri.parse( "content://com.hm.runrealtimeupdate.logic.sqlite.updatedataprovider" );
 
-public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.logic.sqlite.updatedataprovider");
-	
 	public static final String STR_DB_NAME = "updatedata";
 	public static final String STR_DB_COLUMN_KEY = "key";
 	public static final String STR_DB_COLUMN_RACEID = "raceid";
@@ -30,73 +31,84 @@ public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.l
 	public static final String STR_DB_COLUMN_LAP = "lap";
 	public static final String STR_DB_COLUMN_CURRENTTIME = "currenttime";
 	public static final String STR_DB_COLUMN_DATE = "date";
-	
-	private UpdateInfoDatabaseHelper updateinfoDatabaseHelper = null;
-	
+
+	private UpdateDatabaseHelper updateinfoDatabaseHelper = null;
+
 	private static final int VERSION = 2;
-	
+
 	@Override
-	public int delete(Uri arg0, String selection, String[] selectionArgs) {
+	public int delete( Uri arg0, String selection, String[] selectionArgs )
+	{
 		SQLiteDatabase db = updateinfoDatabaseHelper.getWritableDatabase();
-		
-		int numDeleted = db.delete(STR_DB_NAME, selection, selectionArgs);
+
+		int numDeleted = db.delete( STR_DB_NAME, selection, selectionArgs );
 		return numDeleted;
 	}
 
 	@Override
-	public String getType(Uri uri) {
+	public String getType( Uri uri )
+	{
 		return null;
 	}
 
 	@Override
-    public Uri insert(Uri uri, ContentValues values) {
-		
+    public Uri insert( Uri uri, ContentValues values )
+	{
 		SQLiteDatabase db = updateinfoDatabaseHelper.getWritableDatabase();
-		
-		long newId = db.insert(STR_DB_NAME, null, values);
-		
-		Uri newUri = Uri.parse(uri+"/"+newId);
-		
+
+		long newId = db.insert( STR_DB_NAME, null, values );
+
+		Uri newUri = Uri.parse( uri + "/" + newId );
+
 		return newUri;
 	}
 
 	@Override
-	public boolean onCreate() {
-		updateinfoDatabaseHelper = new UpdateInfoDatabaseHelper(getContext());
+	public boolean onCreate()
+	{
+		updateinfoDatabaseHelper = new UpdateDatabaseHelper( getContext() );
 		return false;
 	}
 
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
-		
+	public Cursor query( Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder )
+	{
 		SQLiteDatabase db = updateinfoDatabaseHelper.getReadableDatabase();
-		
-		Cursor c = db.query(STR_DB_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-		
+
+		Cursor c = db.query( STR_DB_NAME, projection, selection, selectionArgs, null, null, sortOrder );
+
 		return c;
 	}
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
-		
+	public int update( Uri uri, ContentValues values, String selection, String[] selectionArgs )
+	{
 		SQLiteDatabase db = updateinfoDatabaseHelper.getWritableDatabase();
-		
-		int numUpdated = db.update(STR_DB_NAME, values, selection, selectionArgs);
-		
+
+		int numUpdated = db.update( STR_DB_NAME, values, selection, selectionArgs );
+
 		return numUpdated;
 	}
 
-	public class UpdateInfoDatabaseHelper extends SQLiteOpenHelper{
-
-		public UpdateInfoDatabaseHelper(Context context) {
-			
-			super(context,STR_DB_NAME+".db",null,VERSION);
+	/**
+	 * 更新データヘルパー
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	public class UpdateDatabaseHelper extends SQLiteOpenHelper
+	{
+		/**
+		 * コンストラクタ
+		 * @param context コンテキスト
+		 */
+		public UpdateDatabaseHelper( Context context )
+		{
+			super( context, STR_DB_NAME + ".db", null, VERSION );
 		}
 
 		@Override
-		public void onCreate(SQLiteDatabase db) {
+		public void onCreate( SQLiteDatabase db )
+		{
 			String sql = "CREATE TABLE " + STR_DB_NAME + "("
 					+ STR_DB_COLUMN_KEY + " INTEGER PRIMARY KEY,"
 					+ STR_DB_COLUMN_RACEID + " TEXT,"
@@ -110,16 +122,15 @@ public static final Uri URI_DB = Uri.parse("content://com.hm.runrealtimeupdate.l
 					+ STR_DB_COLUMN_DATE + " TEXT"
 					+ ")";
 			db.execSQL(sql);
-			
+			return;
 		}
 
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			db.execSQL("DROP TABLE IF EXISTS " + STR_DB_NAME);
-			onCreate(db);
-			
+		public void onUpgrade( SQLiteDatabase db, int oldVersion, int newVersion )
+		{
+			db.execSQL( "DROP TABLE IF EXISTS " + STR_DB_NAME );
+			onCreate( db );
+			return;
 		}
-		
 	}
-
 }

@@ -51,11 +51,14 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 
 				Intent intents = new Intent( context, UpdateStartDialogActivity.class );
 				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );
-		        try {
-		            pendingIntent.send();
-		        } catch (PendingIntent.CanceledException e) {
-		            e.printStackTrace();
-		        }
+				try
+				{
+					pendingIntent.send();
+				}
+				catch( PendingIntent.CanceledException e )
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 		return;

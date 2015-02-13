@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/id_error_txt_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="19dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/str_title_error"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+	<!-- タイトル -->
+	<TextView
+		android:id="@+id/id_error_txt_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:layout_marginLeft="19dp"
+		android:layout_marginTop="20dp"
+		android:text="@string/str_title_error"
+		android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/id_error_txt_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_error_txt_title"
-        android:layout_below="@+id/id_error_txt_title"
-        android:layout_marginTop="20dp"
-        android:text="" />
+	<!-- メッセージ -->
+	<TextView
+		android:id="@+id/id_error_txt_message"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@+id/id_error_txt_title"
+		android:layout_below="@+id/id_error_txt_title"
+		android:layout_marginTop="20dp"
+		android:text="" />
 
-    <Button
-        android:id="@+id/id_error_btn_backstart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/id_error_txt_message"
-        android:layout_below="@+id/id_error_txt_message"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/str_btn_backstart" />
+	<!-- スタート戻るボタン -->
+	<Button
+		android:id="@+id/id_error_btn_backstart"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignLeft="@+id/id_error_txt_message"
+		android:layout_below="@+id/id_error_txt_message"
+		android:layout_marginLeft="30dp"
+		android:layout_marginTop="30dp"
+		android:text="@string/str_btn_backstart" />
 
 </RelativeLayout>
