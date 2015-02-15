@@ -26,7 +26,7 @@ public class UpdateService extends Service
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	/**
 	 * 選手情報更新タスク
@@ -243,22 +243,22 @@ public class UpdateService extends Service
 			/**
 			 * アップデートサイトURL
 			 */
-			public String url;
+			private String url;
 
 			/**
 			 * パス
 			 */
-			public String pass;
+			private String pass;
 
 			/**
 			 * 選手リスト
 			 */
-			public List<RunnerInfo> runnerInfoList;
+			private List<RunnerInfo> runnerInfoList;
 
 			/**
 			 * パーサークラス名
 			 */
-			public String parserClassName;
+			private String parserClassName;
 		}
 	}
 }

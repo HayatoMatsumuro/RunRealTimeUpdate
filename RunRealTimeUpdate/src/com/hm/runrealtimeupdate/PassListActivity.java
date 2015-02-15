@@ -34,7 +34,7 @@ public class PassListActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -215,7 +215,7 @@ public class PassListActivity extends Activity
 		 * @param context コンテキスト
 		 * @param passPointListElement 通過地点リスト要素
 		 */
-		public PassPointAdapter( Context context, List<PassPointListElement> passPointListElement )
+		private PassPointAdapter( Context context, List<PassPointListElement> passPointListElement )
 		{
 			super( context, 0, passPointListElement );
 
@@ -300,47 +300,47 @@ public class PassListActivity extends Activity
 		/**
 		 * 通過地点リスト要素 部門
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_SECTION = "section";
+		private static final String STR_PASSPOINTLISTELEMENT_SECTION = "section";
 
 		/**
 		 * 通過地点リスト要素 地点
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_POINT = "point";
+		private static final String STR_PASSPOINTLISTELEMENT_POINT = "point";
 
 		/**
 		 * 通過地点リスト要素 選手
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
+		private static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
 
 		/**
 		 * 通過地点リスト要素 状態
 		 */
-		public String sts;
+		private String sts;
 
 		/**
 		 * 部門
 		 */
-		public String section;
+		private String section;
 
 		/**
 		 * 地点
 		 */
-		public String point;
+		private String point;
 
 		/**
 		 * ゼッケン番号
 		 */
-		public String number;
+		private String number;
 
 		/**
 		 * 名前
 		 */
-		public String name;
+		private String name;
 
 		/**
 		 * スプリット
 		 */
-		public String split;
+		private String split;
 
 		/**
 		 * ラップ
@@ -350,11 +350,11 @@ public class PassListActivity extends Activity
 		/**
 		 * 現在の時刻
 		 */
-		public String currentTime;
+		private String currentTime;
 
 		/**
 		 * 最近の更新
 		 */
-		public boolean recentFlg;
+		private boolean recentFlg;
 	}
 }

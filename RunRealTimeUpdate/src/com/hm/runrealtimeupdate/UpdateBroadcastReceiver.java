@@ -17,12 +17,12 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 	/**
 	 * インテント アクション 更新開始
 	 */
-	public static final String STR_INTENT_ACTION_UPDATESTART = "updatestart";
+	static final String STR_INTENT_ACTION_UPDATESTART = "updatestart";
 
 	/**
 	 *　インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	public void onReceive( Context context, Intent intent )
