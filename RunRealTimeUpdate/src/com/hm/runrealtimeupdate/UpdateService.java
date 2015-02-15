@@ -231,6 +231,21 @@ public class UpdateService extends Service
 				// データベース変更
 				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.id );
 
+				if( m_RaceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
+				{
+					Intent intents = new Intent( UpdateService.this, UpdateDialogActivity.class );
+					intents.putExtra( UpdateDialogActivity.STR_INTENT_TITLE, "自動更新を停止しました" );
+
+					PendingIntent pendingIntent = PendingIntent.getActivity( UpdateService.this, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );
+					try
+					{
+						pendingIntent.send();
+					}
+					catch( PendingIntent.CanceledException e )
+					{
+						e.printStackTrace();
+					}
+				}
 				return;
 			}
 			stopSelf();
