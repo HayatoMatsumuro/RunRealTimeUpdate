@@ -80,32 +80,42 @@ public class RaceDetailActivity extends Activity
 						// アラーム停止中
 						if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
 						{
-							// 大会を速報状態にする
-							Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
+							int hour = CommonLib.getHourOfDay();
 
-							raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
+							if( hour >= Common.INT_PARMIT_AUTOSTART && hour < Common.INT_PARMIT_AUTOSTOP )
+							{
+								// 大会を速報状態にする
+								Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
 
-							// 速報開始
-							CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
+								raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
 
-							// 停止カウントを設定
-							Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
-							Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
+								// 速報開始
+								CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
 
-							// 速報中テキスト表示
-							( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
+								// 停止カウントを設定
+								Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+								Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
-							// ボタン表示変更
-							( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
+								// 速報中テキスト表示
+								( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
 
-							// 予約ボタンを無効化
-							reserveButton.setEnabled( false );
+								// ボタン表示変更
+								( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
 
-							// 手動ボタンを無効化
-							manualButton.setEnabled( false );
+								// 予約ボタンを無効化
+								reserveButton.setEnabled( false );
 
-							// Toast表示
-							Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+								// 手動ボタンを無効化
+								manualButton.setEnabled( false );
+
+								// Toast表示
+								Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+							}
+							else
+							{
+								// Toast表示
+								Toast.makeText( RaceDetailActivity.this, "手動更新は、"+Common.INT_PARMIT_AUTOSTART+":00"+"～"+Common.INT_PARMIT_AUTOSTOP+":00 の間でできます。", Toast.LENGTH_SHORT ).show();
+							}
 						}
 						else
 						{

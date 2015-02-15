@@ -63,4 +63,14 @@ class Common
 	 */
 	static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
 
+	/**
+	 * 自動更新の許可 開始時間( 時 )
+	 */
+	static final int INT_PARMIT_AUTOSTART = 8;
+
+	/**
+	 * 自動更新の許可 停止時間( 時 )
+	 */
+	static final int INT_PARMIT_AUTOSTOP = 19;
+
 }
