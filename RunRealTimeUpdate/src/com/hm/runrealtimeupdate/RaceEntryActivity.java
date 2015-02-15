@@ -53,6 +53,7 @@ public class RaceEntryActivity extends Activity
 					// 大会登録画面遷移
 					Intent intent = new Intent( RaceEntryActivity.this, MainActivity.class );
 					startActivity( intent );
+					finish();
 
 					return;
 				}

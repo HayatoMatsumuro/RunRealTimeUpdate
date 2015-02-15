@@ -86,6 +86,7 @@ public class RaceTabActivity extends TabActivity
 					// メイン画面遷移
 					Intent intent = new Intent( RaceTabActivity.this, MainActivity.class );
 					startActivity( intent );
+					finish();
 				}
 			}
 		);

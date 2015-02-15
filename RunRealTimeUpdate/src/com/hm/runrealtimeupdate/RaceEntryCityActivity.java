@@ -42,6 +42,7 @@ public class RaceEntryCityActivity extends Activity
 				{
 					Intent intent = new Intent( RaceEntryCityActivity.this, RaceEntryActivity.class );
 					startActivity( intent );
+					finish();
 				}
 			}
 		);
