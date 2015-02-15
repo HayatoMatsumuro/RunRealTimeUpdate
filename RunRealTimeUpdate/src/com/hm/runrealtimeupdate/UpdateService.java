@@ -26,13 +26,7 @@ public class UpdateService extends Service
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
-
-	/**
-	 * バイブ 
-	 *  [ON時間, OFF時間, ・・・]
-	 */
-	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
+	static final String STR_INTENT_RACEID = "raceid";
 
 	/**
 	 * 選手情報更新タスク
@@ -177,7 +171,7 @@ public class UpdateService extends Service
 				);
 
 				// バイブ
-				notification.vibrate = LONG_BIVRATION;
+				notification.vibrate = Common.LONG_BIVRATION;
 
 				NotificationManager manager = ( NotificationManager )getSystemService( NOTIFICATION_SERVICE );
 				manager.notify( R.string.app_name, notification );
@@ -249,22 +243,22 @@ public class UpdateService extends Service
 			/**
 			 * アップデートサイトURL
 			 */
-			public String url;
+			private String url;
 
 			/**
 			 * パス
 			 */
-			public String pass;
+			private String pass;
 
 			/**
 			 * 選手リスト
 			 */
-			public List<RunnerInfo> runnerInfoList;
+			private List<RunnerInfo> runnerInfoList;
 
 			/**
 			 * パーサークラス名
 			 */
-			public String parserClassName;
+			private String parserClassName;
 		}
 	}
 }

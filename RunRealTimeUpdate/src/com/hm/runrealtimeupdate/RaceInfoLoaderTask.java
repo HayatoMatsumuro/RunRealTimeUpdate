@@ -15,7 +15,7 @@ import android.widget.Toast;
  * @author Hayato Matsumuro
  *
  */
-public class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo>
+class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, Void, RaceInfo>
 {
 	/**
 	 * 進捗ダイアログ
@@ -196,21 +196,21 @@ public class RaceInfoLoaderTask extends AsyncTask<RaceInfoLoaderTask.TaskParam, 
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	public class TaskParam
+	class TaskParam
 	{
 		/**
 		 * アップデートサイトURL
 		 */
-		public String url;
+		String url;
 
 		/**
 		 * パス
 		 */
-		public String pass;
+		String pass;
 
 		/**
 		 * アップデートパーサークラス名
 		 */
-		public String parserUpdate;
+		String parserUpdate;
 	}
 }

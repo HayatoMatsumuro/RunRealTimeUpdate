@@ -23,32 +23,32 @@ public class RaceTabActivity extends TabActivity
 	/**
 	 * インテント  大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	/**
 	 * インテント カレントタブ
 	 */
-	public static final String STR_INTENT_CURRENTTAB = "currenttab";
+	static final String STR_INTENT_CURRENTTAB = "currenttab";
 
 	/**
 	 * インテント カレントタブ 詳細
 	 */
-	public static final int INT_INTENT_VAL_CURRENTTAB_DETAIL = 0;
+	static final int INT_INTENT_VAL_CURRENTTAB_DETAIL = 0;
 
 	/**
 	 * インテント カレントタブ 選手
 	 */
-	public static final int INT_INTENT_VAL_CURRENTTAB_RUNNER = 1;
+	static final int INT_INTENT_VAL_CURRENTTAB_RUNNER = 1;
 
 	/**
 	 * インテント カレントタブ 更新
 	 */
-	public static final int INT_INTENT_VAL_CURRENTTAB_UPDATE = 2;
+	static final int INT_INTENT_VAL_CURRENTTAB_UPDATE = 2;
 
 	/**
 	 * インテント カレントタブ 地点
 	 */
-	public static final int INT_INTENT_VAL_CURRENTTAB_PASS = 3;
+	static final int INT_INTENT_VAL_CURRENTTAB_PASS = 3;
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -153,7 +153,7 @@ public class RaceTabActivity extends TabActivity
 	 * 速報中バーの表示切替
 	 * @param raceUpdate　表示指定( INT_RACEUPDATE_ON, INT_RACEUPDATE_RESERVE, INT_RACEUPDATE_OFF )
 	 */
-	public void setDispUpdateBar( int raceUpdate )
+	void setDispUpdateBar( int raceUpdate )
 	{
 		TextView updateExeTextView = ( TextView )findViewById( R.id.id_tabactivity_race_updateexe_textview );
 		TextView updateReserveTextView = ( TextView )findViewById( R.id.id_tabactivity_race_updatereserve_textview );

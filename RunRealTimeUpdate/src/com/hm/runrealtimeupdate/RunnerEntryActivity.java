@@ -39,17 +39,12 @@ public class RunnerEntryActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	/**
 	 * インテント カレントタブ
 	 */
-	public static final String STR_INTENT_CURRENTTAB = "currenttab";
-
-	/**
-	 * 登録できる選手の数
-	 */
-	private static int INT_RUNNER_NUM_MAX = 20;
+	static final String STR_INTENT_CURRENTTAB = "currenttab";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -80,7 +75,7 @@ public class RunnerEntryActivity extends Activity
 		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
 		TextView messageTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_message_norunner_textview );
-		if( runnerNum >= INT_RUNNER_NUM_MAX ){
+		if( runnerNum >= Common.INT_RUNNER_NUM_MAX ){
 			// 最大を上回っていたら、メッセージを表示
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );
@@ -243,12 +238,12 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * 大会ID
 		 */
-		public String raceId;
+		private String raceId;
 
 		/**
 		 * カレントタブ
 		 */
-		public int currentTab;
+		private int currentTab;
 	}
 
 	/**
@@ -256,7 +251,7 @@ public class RunnerEntryActivity extends Activity
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	class RunnerInfoLoaderTask extends AsyncTask<RunnerInfoLoaderTask.TaskParam, Void, RunnerInfo>
+	private class RunnerInfoLoaderTask extends AsyncTask<RunnerInfoLoaderTask.TaskParam, Void, RunnerInfo>
 	{
 		/**
 		 * 進捗ダイアログ
@@ -272,7 +267,7 @@ public class RunnerEntryActivity extends Activity
 		 * コンストラクタ
 		 * @param raceInfo 大会情報
 		 */
-		public RunnerInfoLoaderTask( RaceInfo raceInfo )
+		private RunnerInfoLoaderTask( RaceInfo raceInfo )
 		{
 			super();
 			m_RaceInfo = raceInfo;
@@ -385,27 +380,27 @@ public class RunnerEntryActivity extends Activity
 		 * @author Hayato Matsumuro
 		 *
 		 */
-		public class TaskParam
+		private class TaskParam
 		{
 			/**
 			 * アップデートサイトURL
 			 */
-			public String url;
+			private String url;
 
 			/**
 			 * パス
 			 */
-			public String pass;
+			private String pass;
 
 			/**
 			 * パーサークラス名
 			 */
-			public String parserClassName;
+			private String parserClassName;
 
 			/**
 			 * ゼッケン番号
 			 */
-			public String number;
+			private String number;
 
 		}
 	}
@@ -543,27 +538,27 @@ public class RunnerEntryActivity extends Activity
 			/**
 			 * アップデートサイトURL
 			 */
-			public String url;
+			private String url;
 
 			/**
 			 * パス
 			 */
-			public String pass;
+			private String pass;
 
 			/**
 			 * パーサークラス名
 			 */
-			public String parserClassName;
+			private String parserClassName;
 
 			/**
 			 * 姓
 			 */
-			public String sei;
+			private String sei;
 
 			/**
 			 * 名
 			 */
-			public String mei;
+			private String mei;
 		}
 	}
 
@@ -656,14 +651,14 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * レイアウトインフライヤー
 		 */
-		LayoutInflater m_Inflater;
+		private LayoutInflater m_Inflater;
 
 		/**
 		 * コンストラクタ
 		 * @param context コンテキスト
 		 * @param runnerInfoList 選手情報リスト
 		 */
-		public RunnerListAdapter( Context context, List<RunnerInfo> runnerInfoList )
+		private RunnerListAdapter( Context context, List<RunnerInfo> runnerInfoList )
 		{
 			super( context, 0, runnerInfoList );
 
@@ -706,11 +701,11 @@ public class RunnerEntryActivity extends Activity
 		/**
 		 * 大会情報
 		 */
-		public RaceInfo raceInfo;
+		private RaceInfo raceInfo;
 
 		/**
 		 * 選手情報
 		 */
-		public RunnerInfo runnerInfo;
+		private RunnerInfo runnerInfo;
 	}
 }
