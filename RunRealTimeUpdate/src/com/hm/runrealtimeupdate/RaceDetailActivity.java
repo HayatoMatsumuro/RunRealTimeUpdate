@@ -25,7 +25,7 @@ public class RaceDetailActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )

@@ -34,12 +34,7 @@ public class PassListActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
-
-	/**
-	 * NEWの表示時間( ms )
-	 */
-	private static final long LONG_RESENT_TIME = 300000;
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -140,7 +135,7 @@ public class PassListActivity extends Activity
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_message_layout );
 
 		// 地点通過情報取得
-		List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
+		List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList( getContentResolver(), raceId, Common.LONG_RESENT_TIME );
 
 		if( passRunnerInfoList.isEmpty() )
 		{
@@ -220,7 +215,7 @@ public class PassListActivity extends Activity
 		 * @param context コンテキスト
 		 * @param passPointListElement 通過地点リスト要素
 		 */
-		public PassPointAdapter( Context context, List<PassPointListElement> passPointListElement )
+		private PassPointAdapter( Context context, List<PassPointListElement> passPointListElement )
 		{
 			super( context, 0, passPointListElement );
 
@@ -305,47 +300,47 @@ public class PassListActivity extends Activity
 		/**
 		 * 通過地点リスト要素 部門
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_SECTION = "section";
+		private static final String STR_PASSPOINTLISTELEMENT_SECTION = "section";
 
 		/**
 		 * 通過地点リスト要素 地点
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_POINT = "point";
+		private static final String STR_PASSPOINTLISTELEMENT_POINT = "point";
 
 		/**
 		 * 通過地点リスト要素 選手
 		 */
-		public static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
+		private static final String STR_PASSPOINTLISTELEMENT_RUNNER = "runner";
 
 		/**
 		 * 通過地点リスト要素 状態
 		 */
-		public String sts;
+		private String sts;
 
 		/**
 		 * 部門
 		 */
-		public String section;
+		private String section;
 
 		/**
 		 * 地点
 		 */
-		public String point;
+		private String point;
 
 		/**
 		 * ゼッケン番号
 		 */
-		public String number;
+		private String number;
 
 		/**
 		 * 名前
 		 */
-		public String name;
+		private String name;
 
 		/**
 		 * スプリット
 		 */
-		public String split;
+		private String split;
 
 		/**
 		 * ラップ
@@ -355,11 +350,11 @@ public class PassListActivity extends Activity
 		/**
 		 * 現在の時刻
 		 */
-		public String currentTime;
+		private String currentTime;
 
 		/**
 		 * 最近の更新
 		 */
-		public boolean recentFlg;
+		private boolean recentFlg;
 	}
 }

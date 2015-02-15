@@ -18,7 +18,7 @@ public class ErrorActivity extends Activity
 	/**
 	 * インテント メッセージ
 	 */
-	public static final String STR_INTENT_MESSAGE = "message";
+	static final String STR_INTENT_MESSAGE = "message";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )

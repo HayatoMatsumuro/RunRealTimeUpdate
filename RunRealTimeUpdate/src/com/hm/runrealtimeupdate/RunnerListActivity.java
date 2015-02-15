@@ -41,7 +41,7 @@ public class RunnerListActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -426,11 +426,11 @@ public class RunnerListActivity extends Activity
 		/**
 		 * 部門
 		 */
-		public String section = null;
+		private String section = null;
 
 		/**
 		 * 選手情報
 		 */
-		public RunnerInfo runnerInfo = null;
+		private RunnerInfo runnerInfo = null;
 	}
 }
