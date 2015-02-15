@@ -49,7 +49,9 @@ public class UpdateBroadcastReceiver extends BroadcastReceiver
 				Logic.setAutoStopCount( context, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
 				Logic.setRegularStopCount( context, Common.INT_COUNT_REGULARSTOP );
 
-				Intent intents = new Intent( context, UpdateStartDialogActivity.class );
+				Intent intents = new Intent( context, UpdateDialogActivity.class );
+				intents.putExtra( UpdateDialogActivity.STR_INTENT_TITLE, "速報を開始しました" );
+
 				PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );
 				try
 				{
