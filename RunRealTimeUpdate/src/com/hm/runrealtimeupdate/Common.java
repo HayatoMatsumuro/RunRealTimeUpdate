@@ -42,4 +42,25 @@ public class Common
 	 */
 	public static final int INT_REQUESTCODE_UPDATERESERVE = 2;
 
+	/**
+	 * NEWの表示時間( ms )
+	 */
+	static final long LONG_RESENT_TIME = 300000;
+
+	/**
+	 * 登録できる大会の最大数
+	 */
+	static final int INT_RACEINFO_NUM_MAX = 5;
+
+	/**
+	 * 登録できる選手の数
+	 */
+	static int INT_RUNNER_NUM_MAX = 20;
+
+	/**
+	 * バイブ 
+	 *  [ON時間, OFF時間, ・・・]
+	 */
+	static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
+
 }

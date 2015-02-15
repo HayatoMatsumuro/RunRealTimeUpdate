@@ -46,11 +46,6 @@ public class RunnerEntryActivity extends Activity
 	 */
 	public static final String STR_INTENT_CURRENTTAB = "currenttab";
 
-	/**
-	 * 登録できる選手の数
-	 */
-	private static int INT_RUNNER_NUM_MAX = 20;
-
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
 	{
@@ -80,7 +75,7 @@ public class RunnerEntryActivity extends Activity
 		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_contents_layout );
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_runnerentry_body_message_layout );
 		TextView messageTextView = ( TextView )findViewById( R.id.id_activity_runnerentry_body_message_norunner_textview );
-		if( runnerNum >= INT_RUNNER_NUM_MAX ){
+		if( runnerNum >= Common.INT_RUNNER_NUM_MAX ){
 			// 最大を上回っていたら、メッセージを表示
 			contentsLayout.setVisibility( View.GONE );
 			messageLayout.setVisibility( View.VISIBLE );

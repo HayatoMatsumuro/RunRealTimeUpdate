@@ -29,12 +29,6 @@ public class UpdateService extends Service
 	public static final String STR_INTENT_RACEID = "raceid";
 
 	/**
-	 * バイブ 
-	 *  [ON時間, OFF時間, ・・・]
-	 */
-	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
-
-	/**
 	 * 選手情報更新タスク
 	 */
 	private RunnerInfoUpdateTask m_UpdateTask = null;
@@ -177,7 +171,7 @@ public class UpdateService extends Service
 				);
 
 				// バイブ
-				notification.vibrate = LONG_BIVRATION;
+				notification.vibrate = Common.LONG_BIVRATION;
 
 				NotificationManager manager = ( NotificationManager )getSystemService( NOTIFICATION_SERVICE );
 				manager.notify( R.string.app_name, notification );

@@ -26,11 +26,6 @@ public class RaceEntryActivity extends Activity
 	 */
 	public static final String STR_INTENT_RACEID = "raceid";
 
-	/**
-	 * 登録できる大会の最大数
-	 */
-	private static final int INT_RACEINFO_NUM_MAX = 5;
-
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
 	{
@@ -81,7 +76,7 @@ public class RaceEntryActivity extends Activity
 
 		RelativeLayout contentsLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_contents_layout );
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_raceentry_body_message_layout );
-		if( raceNum >= INT_RACEINFO_NUM_MAX )
+		if( raceNum >= Common.INT_RACEINFO_NUM_MAX )
 		{
 			// 最大を上回っていたら、メッセージを表示
 			contentsLayout.setVisibility( View.GONE );

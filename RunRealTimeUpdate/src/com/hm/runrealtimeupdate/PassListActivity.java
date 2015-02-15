@@ -36,11 +36,6 @@ public class PassListActivity extends Activity
 	 */
 	public static final String STR_INTENT_RACEID = "raceid";
 
-	/**
-	 * NEWの表示時間( ms )
-	 */
-	private static final long LONG_RESENT_TIME = 300000;
-
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
 	{
@@ -140,7 +135,7 @@ public class PassListActivity extends Activity
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_passlist_body_message_layout );
 
 		// 地点通過情報取得
-		List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
+		List<PassRunnerInfo> passRunnerInfoList = Logic.getPassRunnerInfoList( getContentResolver(), raceId, Common.LONG_RESENT_TIME );
 
 		if( passRunnerInfoList.isEmpty() )
 		{
