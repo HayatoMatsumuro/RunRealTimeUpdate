@@ -18,14 +18,14 @@ class Common
 	static final int INT_SERVICE_NETGET_INTERVAL = 700;
 
 	/**
-	 * 最後の更新から自動停止までの更新確認回数( 7時間 )
+	 * 最後の更新から自動停止までの更新確認回数( 2時間 )
 	 */
-	static final int INT_COUNT_AUTOSTOP_LASTUPDATE = 25200000 / INT_SERVICE_INTERVAL;
+	static final int INT_COUNT_AUTOSTOP_LASTUPDATE = 7200000 / INT_SERVICE_INTERVAL;
 
 	/**
-	 * 自動開始から停止までの更新確認回数( 24時間 )
+	 * 自動開始から停止までの更新確認回数( 11時間 )
 	 */
-	static final int INT_COUNT_REGULARSTOP = 86400000 / INT_SERVICE_INTERVAL;
+	static final int INT_COUNT_REGULARSTOP = 39600000 / INT_SERVICE_INTERVAL;
 
 	/**
 	 * 手動更新の更新確認回数( 1回のみ )
@@ -62,5 +62,15 @@ class Common
 	 *  [ON時間, OFF時間, ・・・]
 	 */
 	static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
+
+	/**
+	 * 自動更新の許可 開始時間( 時 )
+	 */
+	static final int INT_PARMIT_AUTOSTART = 8;
+
+	/**
+	 * 自動更新の許可 停止時間( 時 )
+	 */
+	static final int INT_PARMIT_AUTOSTOP = 19;
 
 }

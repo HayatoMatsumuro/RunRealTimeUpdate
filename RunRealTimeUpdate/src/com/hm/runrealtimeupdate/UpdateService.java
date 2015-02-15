@@ -211,6 +211,18 @@ public class UpdateService extends Service
 				}
 			}
 
+			// 範囲外の時間ならば、自動停止
+			if( !stopFlg )
+			{
+				int hour = CommonLib.getHourOfDay();
+
+				if( hour < Common.INT_PARMIT_AUTOSTART || hour >= Common.INT_PARMIT_AUTOSTOP )
+				{
+					// 更新を停止する
+					stopFlg = true;
+				}
+			}
+
 			// 更新を停止する
 			if( stopFlg )
 			{
