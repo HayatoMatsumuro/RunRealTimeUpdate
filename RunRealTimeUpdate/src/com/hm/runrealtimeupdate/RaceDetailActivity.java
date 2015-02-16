@@ -274,6 +274,11 @@ public class RaceDetailActivity extends Activity
 		Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
 		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 
+		// タグの設定しなおし
+		updateButton.setTag( raceInfo );
+		reserveButton.setTag( raceInfo );
+		manualButton.setTag( raceInfo );
+
 		// 速報中の大会なし
 		if( updateRaceInfo == null )
 		{
