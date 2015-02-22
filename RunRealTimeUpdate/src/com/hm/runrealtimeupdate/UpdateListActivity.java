@@ -32,12 +32,7 @@ public class UpdateListActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
-
-	/**
-	 * NEWの表示時間( ms )
-	 */
-	private static final long LONG_RESENT_TIME = 300000;
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -127,7 +122,7 @@ public class UpdateListActivity extends Activity
 		RelativeLayout messageLayout = ( RelativeLayout )findViewById( R.id.id_activity_updatelist_body_message_layout );
 
 		// 速報データ取得
-		List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, LONG_RESENT_TIME );
+		List<UpdateInfo> updateInfoList = Logic.getUpdateInfoList( getContentResolver(), raceId, Common.LONG_RESENT_TIME );
 
 		if( updateInfoList.isEmpty() ){
 			contentsLayout.setVisibility( View.GONE );
@@ -167,14 +162,14 @@ public class UpdateListActivity extends Activity
 		/**
 		 * レイアウトインフライヤー
 		 */
-		LayoutInflater m_Inflater;
+		private LayoutInflater m_Inflater;
 
 		/**
 		 * コンストラクタ
 		 * @param context コンテキスト
 		 * @param updateInfoList 更新情報リスト
 		 */
-		public UpdateDataAdapter( Context context, List<UpdateInfo> updateInfoList )
+		private UpdateDataAdapter( Context context, List<UpdateInfo> updateInfoList )
 		{
 			super( context, 0, updateInfoList );
 

@@ -25,7 +25,7 @@ public class RaceDetailActivity extends Activity
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
+	static final String STR_INTENT_RACEID = "raceid";
 
 	@Override
 	protected void onCreate( Bundle savedInstanceState )
@@ -80,32 +80,42 @@ public class RaceDetailActivity extends Activity
 						// アラーム停止中
 						if( !CommonLib.isSetUpdateAlarm( RaceDetailActivity.this ) )
 						{
-							// 大会を速報状態にする
-							Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
+							int hour = CommonLib.getHourOfDay();
 
-							raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
+							if( hour >= Common.INT_PARMIT_AUTOSTART && hour < Common.INT_PARMIT_AUTOSTOP )
+							{
+								// 大会を速報状態にする
+								Logic.setUpdateOnRaceId( getContentResolver(), raceInfo.id );
 
-							// 速報開始
-							CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
+								raceInfo.updateSts = RaceInfo.INT_UPDATESTS_ON;
 
-							// 停止カウントを設定
-							Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
-							Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
+								// 速報開始
+								CommonLib.setUpdateAlarm( RaceDetailActivity.this, raceInfo.id, Common.INT_SERVICE_INTERVAL );
 
-							// 速報中テキスト表示
-							( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
+								// 停止カウントを設定
+								Logic.setAutoStopCount( RaceDetailActivity.this, Common.INT_COUNT_AUTOSTOP_LASTUPDATE );
+								Logic.setRegularStopCount( RaceDetailActivity.this, Common.INT_COUNT_REGULARSTOP );
 
-							// ボタン表示変更
-							( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
+								// 速報中テキスト表示
+								( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_ON );
 
-							// 予約ボタンを無効化
-							reserveButton.setEnabled( false );
+								// ボタン表示変更
+								( ( Button )v ).setText( getString( R.string.str_btn_updatestop ) );
 
-							// 手動ボタンを無効化
-							manualButton.setEnabled( false );
+								// 予約ボタンを無効化
+								reserveButton.setEnabled( false );
 
-							// Toast表示
-							Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+								// 手動ボタンを無効化
+								manualButton.setEnabled( false );
+
+								// Toast表示
+								Toast.makeText( RaceDetailActivity.this, "速報を開始しました！", Toast.LENGTH_SHORT ).show();
+							}
+							else
+							{
+								// Toast表示
+								Toast.makeText( RaceDetailActivity.this, "自動更新は、"+Common.INT_PARMIT_AUTOSTART+":00"+"～"+Common.INT_PARMIT_AUTOSTOP+":00 の間でできます。", Toast.LENGTH_SHORT ).show();
+							}
 						}
 						else
 						{
@@ -264,6 +274,11 @@ public class RaceDetailActivity extends Activity
 		Button reserveButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_reserve_button );
 		Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
 
+		// タグの設定しなおし
+		updateButton.setTag( raceInfo );
+		reserveButton.setTag( raceInfo );
+		manualButton.setTag( raceInfo );
+
 		// 速報中の大会なし
 		if( updateRaceInfo == null )
 		{
@@ -410,35 +425,43 @@ public class RaceDetailActivity extends Activity
 		@Override
 		public void onTimeSet( TimePicker view, int hourOfDay, int minute )
 		{
-			long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
+			if( hourOfDay >= Common.INT_PARMIT_AUTOSTART && hourOfDay < Common.INT_PARMIT_AUTOSTOP )
+			{
+				long alarmTime = CommonLib.getAlarmTime( hourOfDay, minute );
 
-			// アラームを設定する
-			CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, m_RaceInfo.id, alarmTime );
+				// アラームを設定する
+				CommonLib.setUpdateReserveAlarm( RaceDetailActivity.this, m_RaceInfo.id, alarmTime );
 
-			// 大会を速報予約状態にする
-			Logic.setUpdateReserveRaceId( getContentResolver(), m_RaceInfo.id );
+				// 大会を速報予約状態にする
+				Logic.setUpdateReserveRaceId( getContentResolver(), m_RaceInfo.id );
 
-			m_RaceInfo.updateSts = RaceInfo.INT_UPDATESTS_RESERVE;
+				m_RaceInfo.updateSts = RaceInfo.INT_UPDATESTS_RESERVE;
 
-			// アラーム時間の設定
-			Logic.setReserveTime( RaceDetailActivity.this, hourOfDay, minute );
+				// アラーム時間の設定
+				Logic.setReserveTime( RaceDetailActivity.this, hourOfDay, minute );
 
-			// 速報バーの表示更新
-			( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_RESERVE );
+				// 速報バーの表示更新
+				( ( RaceTabActivity )getParent() ).setDispUpdateBar( RaceInfo.INT_UPDATESTS_RESERVE );
 
-			// ボタン表示変更
-			( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
+				// ボタン表示変更
+				( ( Button )m_View ).setText( getString( R.string.str_btn_reservecancel ) );
 
-			// 自動ボタン
-			Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
-			updateButton.setEnabled( false );
+				// 自動ボタン
+				Button updateButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_update_button );
+				updateButton.setEnabled( false );
 
-			// 手動ボタン
-			Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
-			manualButton.setEnabled( false );
+				// 手動ボタン
+				Button manualButton = ( Button )findViewById( R.id.id_activity_racedetail_body_contents_manual_button );
+				manualButton.setEnabled( false );
 
-			// Toast表示
-			Toast.makeText( RaceDetailActivity.this, "速報の予約をしました！", Toast.LENGTH_SHORT ).show();
+				// Toast表示
+				Toast.makeText( RaceDetailActivity.this, "速報の予約をしました！", Toast.LENGTH_SHORT ).show();
+			}
+			else
+			{
+				// Toast表示
+				Toast.makeText( RaceDetailActivity.this, "自動更新予約は、"+Common.INT_PARMIT_AUTOSTART+":00"+"～"+Common.INT_PARMIT_AUTOSTOP+":00 の間でできます。", Toast.LENGTH_SHORT ).show();
+			}
 
 			return;
 		}	

@@ -118,6 +118,11 @@ public class RaceEntryCityActivity extends Activity
 		}
 	}
 
+	/**
+	 * 都市型マラソンリストアダプタ
+	 * @author Hayato Matsumuro
+	 *
+	 */
 	private class CityRaceListAdapter extends ArrayAdapter<CommonLib.CityProperties>
 	{
 		/**
@@ -125,7 +130,7 @@ public class RaceEntryCityActivity extends Activity
 		 */
 		LayoutInflater m_Inflater;
 
-		public CityRaceListAdapter( Context context, List<CommonLib.CityProperties> cityPropertiesList )
+		private CityRaceListAdapter( Context context, List<CommonLib.CityProperties> cityPropertiesList )
 		{
 			super( context, 0, cityPropertiesList );
 

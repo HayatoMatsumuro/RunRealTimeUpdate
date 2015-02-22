@@ -19,14 +19,27 @@ import android.content.res.AssetManager;
  * @author Hayato Matsumuro
  *
  */
-public class CommonLib
+class CommonLib
 {
+	/**
+	 * プロパティファイル キー ステータス
+	 */
 	private static final String STR_PROPERTIES_KEY_STATUS = "status";
-	private static final String STR_PROPERTIES_KEY_RACEID = "raceid";
-	private static final String STR_PROPERTIES_KEY_RACENAME = "racename";
-	
-	private static final String STR_PROPERTIES_STATUS_CITY = "city";
 
+	/**
+	 * プロパティファイル キー 大会ID
+	 */
+	private static final String STR_PROPERTIES_KEY_RACEID = "raceid";
+
+	/**
+	 * プロパティファイル キー 大会名
+	 */
+	private static final String STR_PROPERTIES_KEY_RACENAME = "racename";
+
+	/**
+	 * プロパティファイル ステータス 都市型
+	 */
+	private static final String STR_PROPERTIES_STATUS_CITY = "city";
 
 	/**
 	 * 定期更新アラームを設定する
@@ -34,7 +47,7 @@ public class CommonLib
 	 * @param raceId 大会ID
 	 * @param interval 更新間隔
 	 */
-	public static void setUpdateAlarm( Context context, String raceId, int interval )
+	static void setUpdateAlarm( Context context, String raceId, int interval )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
@@ -55,7 +68,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @param raceId 大会ID
 	 */
-	public static void cancelUpdateAlarm( Context context, String raceId )
+	static void cancelUpdateAlarm( Context context, String raceId )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
@@ -65,10 +78,10 @@ public class CommonLib
 		PendingIntent pendingIntent = PendingIntent.getService( context, Common.INT_REQUESTCODE_UPDATEPERIODIC, intent, PendingIntent.FLAG_CANCEL_CURRENT );
 
 		alarmManager.cancel( pendingIntent );
-	    pendingIntent.cancel();
+		pendingIntent.cancel();
 		context.stopService( intent );
 
-	    return;
+		return;
 	}
 
 	/**
@@ -76,7 +89,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @return true:起動中/false:起動中でない
 	 */
-	public static boolean isSetUpdateAlarm( Context context )
+	static boolean isSetUpdateAlarm( Context context )
 	{
 		Intent intent = new Intent( context, UpdateService.class );
 
@@ -103,7 +116,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @param time　時間
 	 */
-	public static void setUpdateReserveAlarm( Context context, String raceId, long time )
+	static void setUpdateReserveAlarm( Context context, String raceId, long time )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
@@ -129,7 +142,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @param raceId 大会ID
 	 */
-	public static void cancelUpdateReserveAlarm( Context context, String raceId )
+	static void cancelUpdateReserveAlarm( Context context, String raceId )
 	{
 		AlarmManager alarmManager = ( AlarmManager )context.getSystemService( Context.ALARM_SERVICE );
 
@@ -146,9 +159,9 @@ public class CommonLib
 				);
 
 		alarmManager.cancel( pendingIntent );
-	    pendingIntent.cancel();
+		pendingIntent.cancel();
 
-	    return;
+		return;
 	}
 
 	/**
@@ -156,7 +169,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @return　true:起動中/false:起動中でない
 	 */
-	public static boolean isUpdateReserveAlarm( Context context )
+	static boolean isUpdateReserveAlarm( Context context )
 	{
 		Intent intent = new Intent( context, UpdateBroadcastReceiver.class );
 		intent.setAction( UpdateBroadcastReceiver.STR_INTENT_ACTION_UPDATESTART );
@@ -178,12 +191,12 @@ public class CommonLib
 			return true;
 		}
 	}
-	
+
 	/**
 	 * 現在の時を取得する
 	 * @return 現在の時( 0 ～ 23 )
 	 */
-	public static int getHourOfDay()
+	static int getHourOfDay()
 	{
 		Calendar cal = Calendar.getInstance();
 		Date date = cal.getTime();
@@ -194,7 +207,7 @@ public class CommonLib
 	 * 現在の分を取得する
 	 * @return 現在の分( 0～59 )
 	 */
-	public static int getMinute()
+	static int getMinute()
 	{
 		Calendar cal = Calendar.getInstance();
 		Date date = cal.getTime();
@@ -209,7 +222,7 @@ public class CommonLib
 	 * @param minute 分
 	 * @return アラーム設定時間
 	 */
-	public static long getAlarmTime( int hourOfDay, int minute )
+	static long getAlarmTime( int hourOfDay, int minute )
 	{
 		Calendar cal = Calendar.getInstance();
 		cal.add( Calendar.SECOND, 10 );
@@ -237,7 +250,7 @@ public class CommonLib
 	 * @param context コンテキスト
 	 * @return 都市型マラソンのプロパティファイルリスト
 	 */
-	public static List<CityProperties> getCityProperties( Context context )
+	static List<CityProperties> getCityProperties( Context context )
 	{
 		List<CityProperties> cityPropertiesList = new ArrayList<CityProperties>();
 
@@ -306,7 +319,7 @@ public class CommonLib
 	 * @param raceId
 	 * @return　パーサー情報( null は大会情報なし )
 	 */
-	public static ParserInfo getParserInfoByRaceId( Context context, String raceId )
+	static ParserInfo getParserInfoByRaceId( Context context, String raceId )
 	{
 		String[] strArray = raceId.split( "," );
 
@@ -329,51 +342,56 @@ public class CommonLib
 	}
 
 	/**
-	 * 都市型マラソンプロパティ
+	 * パーサー情報
 	 * @author Hayato Matsumuro
 	 *
 	 */
-	public class CityProperties
-	{
-		/**
-		 * 大会ID
-		 */
-		public String raceId;
-
-		/**
-		 * 大会名
-		 */
-		public String raceName;
-
-		/**
-		 * パーサー情報
-		 */
-		public ParserInfo parserInfo;
-
-		/**
-		 * コンストラクタ
-		 */
-		public CityProperties()
-		{
-			parserInfo = new ParserInfo();
-		}
-	}
-
-	public class ParserInfo
+	class ParserInfo
 	{
 		/**
 		 * URL
 		 */
-		public String url;
+		String url;
 
 		/**
 		 * パス
 		 */
-		public String pass;
+		String pass;
 
 		/**
 		 * パーサー名
 		 */
-		public String parserClassName;
+		String parserClassName;
+	}
+
+	/**
+	 * 都市型マラソンプロパティ
+	 * @author Hayato Matsumuro
+	 *
+	 */
+	class CityProperties
+	{
+		/**
+		 * 大会ID
+		 */
+		String raceId;
+
+		/**
+		 * 大会名
+		 */
+		String raceName;
+
+		/**
+		 * パーサー情報
+		 */
+		ParserInfo parserInfo;
+
+		/**
+		 * コンストラクタ
+		 */
+		CityProperties()
+		{
+			parserInfo = new ParserInfo();
+		}
 	}
 }

@@ -26,13 +26,7 @@ public class UpdateService extends Service
 	/**
 	 * インテント 大会ID
 	 */
-	public static final String STR_INTENT_RACEID = "raceid";
-
-	/**
-	 * バイブ 
-	 *  [ON時間, OFF時間, ・・・]
-	 */
-	private static long[] LONG_BIVRATION = {0, 100, 100, 100, 100, 100};
+	static final String STR_INTENT_RACEID = "raceid";
 
 	/**
 	 * 選手情報更新タスク
@@ -177,7 +171,7 @@ public class UpdateService extends Service
 				);
 
 				// バイブ
-				notification.vibrate = LONG_BIVRATION;
+				notification.vibrate = Common.LONG_BIVRATION;
 
 				NotificationManager manager = ( NotificationManager )getSystemService( NOTIFICATION_SERVICE );
 				manager.notify( R.string.app_name, notification );
@@ -217,6 +211,18 @@ public class UpdateService extends Service
 				}
 			}
 
+			// 範囲外の時間ならば、自動停止
+			if( !stopFlg )
+			{
+				int hour = CommonLib.getHourOfDay();
+
+				if( hour < Common.INT_PARMIT_AUTOSTART || hour >= Common.INT_PARMIT_AUTOSTOP )
+				{
+					// 更新を停止する
+					stopFlg = true;
+				}
+			}
+
 			// 更新を停止する
 			if( stopFlg )
 			{
@@ -225,6 +231,21 @@ public class UpdateService extends Service
 				// データベース変更
 				Logic.setUpdateOffRaceId( getContentResolver(), m_RaceInfo.id );
 
+				if( m_RaceInfo.updateSts == RaceInfo.INT_UPDATESTS_ON )
+				{
+					Intent intents = new Intent( UpdateService.this, UpdateDialogActivity.class );
+					intents.putExtra( UpdateDialogActivity.STR_INTENT_TITLE, "自動更新を停止しました" );
+
+					PendingIntent pendingIntent = PendingIntent.getActivity( UpdateService.this, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT );
+					try
+					{
+						pendingIntent.send();
+					}
+					catch( PendingIntent.CanceledException e )
+					{
+						e.printStackTrace();
+					}
+				}
 				return;
 			}
 			stopSelf();
@@ -249,22 +270,22 @@ public class UpdateService extends Service
 			/**
 			 * アップデートサイトURL
 			 */
-			public String url;
+			private String url;
 
 			/**
 			 * パス
 			 */
-			public String pass;
+			private String pass;
 
 			/**
 			 * 選手リスト
 			 */
-			public List<RunnerInfo> runnerInfoList;
+			private List<RunnerInfo> runnerInfoList;
 
 			/**
 			 * パーサークラス名
 			 */
-			public String parserClassName;
+			private String parserClassName;
 		}
 	}
 }
