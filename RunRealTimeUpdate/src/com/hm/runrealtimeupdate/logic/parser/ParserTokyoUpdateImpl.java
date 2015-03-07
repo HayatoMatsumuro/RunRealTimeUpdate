@@ -256,7 +256,7 @@ public class ParserTokyoUpdateImpl implements IParserUpdate
 	{
 		StringBuilder builder = new StringBuilder();
 		builder.append( url );
-		builder.append( "/php/name.php" );
+		builder.append( "php/name.php" );
 		return builder.toString();
 	}
 }
